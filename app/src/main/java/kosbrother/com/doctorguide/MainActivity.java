@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView = (RecyclerView)findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(new CategoryAdapter(this,myStringArray));
-
     }
 
     @Override
@@ -87,8 +86,9 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.my_collections) {
             Intent intent = new Intent(this, MyCollectionActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
-
+        } else if (id == R.id.my_comments) {
+            Intent intent = new Intent(this, MyCommnetActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_share) {
