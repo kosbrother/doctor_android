@@ -1,5 +1,7 @@
 package kosbrother.com.doctorguide;
 
+import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,16 +9,16 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import kosbrother.com.doctorguide.fragments.DoctorFragment;
-import kosbrother.com.doctorguide.fragments.HospitalFragment;
+import kosbrother.com.doctorguide.fragments.DoctorMyCollectionFragment;
+import kosbrother.com.doctorguide.fragments.HospitalMyCollecionFragment;
+import kosbrother.com.doctorguide.fragments.dummy.DummyContent;
 
-public class MyCollectionActivity extends AppCompatActivity {
+public class MyCollectionActivity extends AppCompatActivity implements DoctorMyCollectionFragment.OnListFragmentInteractionListener, HospitalMyCollecionFragment.OnListFragmentInteractionListener {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -41,9 +43,17 @@ public class MyCollectionActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new HospitalFragment(), "收藏醫院");
-        adapter.addFragment(new DoctorFragment(), "收藏醫生");
+        adapter.addFragment(new HospitalMyCollecionFragment(), "收藏醫院");
+        adapter.addFragment(new DoctorMyCollectionFragment(), "收藏醫生");
         viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+        Snackbar snackbar = Snackbar
+                .make(tabLayout, "Welcome to AndroidHive", Snackbar.LENGTH_LONG);
+
+        snackbar.show();
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
