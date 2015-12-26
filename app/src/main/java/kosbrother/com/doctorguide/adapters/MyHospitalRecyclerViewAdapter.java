@@ -1,4 +1,4 @@
-package kosbrother.com.doctorguide.fragments;
+package kosbrother.com.doctorguide.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

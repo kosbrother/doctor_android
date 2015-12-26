@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
 import kosbrother.com.doctorguide.fragments.dummy.DummyContent;
 import kosbrother.com.doctorguide.fragments.dummy.DummyContent.DummyItem;
 

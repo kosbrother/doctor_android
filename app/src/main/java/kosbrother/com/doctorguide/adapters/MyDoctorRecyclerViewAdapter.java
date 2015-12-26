@@ -1,4 +1,4 @@
-package kosbrother.com.doctorguide.fragments;
+package kosbrother.com.doctorguide.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.fragments.DoctorFragment;
 import kosbrother.com.doctorguide.fragments.dummy.DummyContent.DummyItem;
 
 
