@@ -1,12 +1,14 @@
 package kosbrother.com.doctorguide.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import kosbrother.com.doctorguide.HospitalDoctorActivity;
 import kosbrother.com.doctorguide.R;
 
 /**
@@ -15,7 +17,7 @@ import kosbrother.com.doctorguide.R;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>{
 
     private final LayoutInflater mLayoutInflater;
-    private final Context mContext;
+    private static Context mContext;
     private String[] mTitles;
 
     public CategoryAdapter(Context context,String[] titles) {
@@ -45,6 +47,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         CategoryViewHolder(View view) {
             super(view);
             mTextView = (TextView)view.findViewById(R.id.text_view);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, HospitalDoctorActivity.class);
+                    mContext.startActivity(intent);
+                }
+            });
         }
     }
 }
