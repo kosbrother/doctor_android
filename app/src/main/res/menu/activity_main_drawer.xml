@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single"
+    <group android:checkableBehavior="none"
         android:id="@+id/account_menu">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/my_collections"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/my_collections" />
         <item
@@ -13,7 +13,7 @@
             android:title="@string/my_reviews" />
     </group>
 
-    <group android:checkableBehavior="single"
+    <group android:checkableBehavior="none"
         android:id="@+id/other_menu">
         <item
             android:id="@+id/nav_share"
