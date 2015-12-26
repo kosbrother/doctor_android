@@ -2,10 +2,12 @@ package kosbrother.com.doctorguide.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import kosbrother.com.doctorguide.HospitalDoctorActivity;
@@ -43,10 +45,23 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public static class CategoryViewHolder extends RecyclerView.ViewHolder {
         TextView mTextView;
+        Button mButton;
 
         CategoryViewHolder(View view) {
             super(view);
             mTextView = (TextView)view.findViewById(R.id.text_view);
+            mButton = (Button)view.findViewById(R.id.detail_button);
+            mButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder =
+                            new AlertDialog.Builder(mContext, R.style.AppCompatAlertDialogStyle);
+                    builder.setTitle("一般內科");
+                    builder.setMessage("感染，發燒，腹痛，頭痛，胸痛，喘，水腫，頭暈，心悸，腹瀉，失眠，虛弱，體重減輕，便秘，黃疸...等");
+                    builder.setPositiveButton("確定", null);
+                    builder.show();
+                }
+            });
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
