@@ -11,17 +11,17 @@ import java.util.Map;
  * <p>
  * TODO: Replace all uses of this class before publishing your app.
  */
-public class DummyContent {
+public class DummyHospitalContent {
 
     /**
      * An array of sample (dummy) items.
      */
-    public static final List<DummyItem> ITEMS = new ArrayList<DummyItem>();
+    public static final List<DummyHospital> ITEMS = new ArrayList<DummyHospital>();
 
     /**
      * A map of sample (dummy) items, by ID.
      */
-    public static final Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
+    public static final Map<String, DummyHospital> ITEM_MAP = new HashMap<String, DummyHospital>();
 
     private static final int COUNT = 25;
 
@@ -32,13 +32,13 @@ public class DummyContent {
         }
     }
 
-    private static void addItem(DummyItem item) {
+    private static void addItem(DummyHospital item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }
 
-    private static DummyItem createDummyItem(int position) {
-        return new DummyItem(String.valueOf(position), "Item " + position, makeDetails(position));
+    private static DummyHospital createDummyItem(int position) {
+        return new DummyHospital(String.valueOf(position), "台北市立聯合醫院 ", "教學醫院", "台北市大同醫鄭州路45號", "1.6km", 9, 12, 4.2);
     }
 
     private static String makeDetails(int position) {
@@ -53,20 +53,26 @@ public class DummyContent {
     /**
      * A dummy item representing a piece of content.
      */
-    public static class DummyItem {
+    public static class DummyHospital {
         public final String id;
-        public final String content;
-        public final String details;
+        public final String name;
+        public final String grade;
+        public final String address;
+        public final String distance;
+        public final int recommend;
+        public final int comment;
+        public final double score;
 
-        public DummyItem(String id, String content, String details) {
+
+        public DummyHospital(String id, String name, String grade, String address, String distance, int recommend, int comment, double score) {
             this.id = id;
-            this.content = content;
-            this.details = details;
-        }
-
-        @Override
-        public String toString() {
-            return content;
+            this.name = name;
+            this.grade = grade;
+            this.address = address;
+            this.distance = distance;
+            this.recommend = recommend;
+            this.comment = comment;
+            this.score = score;
         }
     }
 }

@@ -14,10 +14,12 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import kosbrother.com.doctorguide.fragments.DoctorFragment;
 import kosbrother.com.doctorguide.fragments.HospitalFragment;
 import kosbrother.com.doctorguide.fragments.dummy.DummyContent;
+import kosbrother.com.doctorguide.fragments.dummy.DummyHospitalContent;
 
-public class HospitalDoctorActivity extends AppCompatActivity implements HospitalFragment.OnListFragmentInteractionListener {
+public class HospitalDoctorActivity extends AppCompatActivity implements HospitalFragment.OnListFragmentInteractionListener,DoctorFragment.OnListFragmentInteractionListener {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -43,14 +45,22 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new HospitalFragment(), "醫院");
-        adapter.addFragment(new HospitalFragment(), "醫生");
+        adapter.addFragment(new DoctorFragment(), "醫生");
         viewPager.setAdapter(adapter);
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyHospital item) {
+    public void onListFragmentInteraction(DummyHospitalContent.DummyHospital item) {
         Snackbar snackbar = Snackbar
                 .make(tabLayout, "Welcome to AndroidHive", Snackbar.LENGTH_LONG);
+
+        snackbar.show();
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+        Snackbar snackbar = Snackbar
+                .make(tabLayout, "Welcome to Doctor", Snackbar.LENGTH_LONG);
 
         snackbar.show();
     }

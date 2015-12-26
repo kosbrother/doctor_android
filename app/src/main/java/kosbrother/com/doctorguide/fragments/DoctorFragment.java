@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import kosbrother.com.doctorguide.R;
-import kosbrother.com.doctorguide.fragments.dummy.DummyHospitalContent;
-import kosbrother.com.doctorguide.fragments.dummy.DummyHospitalContent.DummyHospital;
+import kosbrother.com.doctorguide.fragments.dummy.DummyContent;
+import kosbrother.com.doctorguide.fragments.dummy.DummyContent.DummyItem;
 
 /**
  * A fragment representing a list of Items.
@@ -20,7 +20,7 @@ import kosbrother.com.doctorguide.fragments.dummy.DummyHospitalContent.DummyHosp
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class HospitalFragment extends Fragment {
+public class DoctorFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -32,13 +32,13 @@ public class HospitalFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public HospitalFragment() {
+    public DoctorFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static HospitalFragment newInstance(int columnCount) {
-        HospitalFragment fragment = new HospitalFragment();
+    public static DoctorFragment newInstance(int columnCount) {
+        DoctorFragment fragment = new DoctorFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -57,7 +57,7 @@ public class HospitalFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_hospital_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_doctor_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -68,7 +68,7 @@ public class HospitalFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyHospitalRecyclerViewAdapter(DummyHospitalContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyDoctorRecyclerViewAdapter(DummyContent.ITEMS, mListener));
         }
         return view;
     }
@@ -103,6 +103,6 @@ public class HospitalFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyHospital item);
+        void onListFragmentInteraction(DummyItem item);
     }
 }

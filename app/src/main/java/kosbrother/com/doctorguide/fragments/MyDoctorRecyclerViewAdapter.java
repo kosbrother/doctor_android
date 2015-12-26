@@ -8,21 +8,16 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import kosbrother.com.doctorguide.R;
-import kosbrother.com.doctorguide.fragments.HospitalFragment.OnListFragmentInteractionListener;
-import kosbrother.com.doctorguide.fragments.dummy.DummyHospitalContent;
-import kosbrother.com.doctorguide.fragments.dummy.DummyHospitalContent.DummyHospital;
+import kosbrother.com.doctorguide.fragments.dummy.DummyContent.DummyItem;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyHospital} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
-public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospitalRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyHospital> mValues;
-    private final OnListFragmentInteractionListener mListener;
+public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<MyDoctorRecyclerViewAdapter.ViewHolder> {
 
-    public MyHospitalRecyclerViewAdapter(List<DummyHospitalContent.DummyHospital> items, OnListFragmentInteractionListener listener) {
+    private final List<DummyItem> mValues;
+    private final DoctorFragment.OnListFragmentInteractionListener mListener;
+
+
+    public MyDoctorRecyclerViewAdapter(List<DummyItem> items, DoctorFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -30,13 +25,13 @@ public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospit
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_hospital, parent, false);
+                .inflate(R.layout.fragment_doctor, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-//        holder.mItem = mValues.get(position);
+        holder.mItem = mValues.get(position);
 //        holder.mIdView.setText(mValues.get(position).id);
 //        holder.mContentView.setText(mValues.get(position).content);
 
@@ -61,7 +56,7 @@ public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospit
         public final View mView;
 //        public final TextView mIdView;
 //        public final TextView mContentView;
-        public DummyHospital mItem;
+        public DummyItem mItem;
 
         public ViewHolder(View view) {
             super(view);
