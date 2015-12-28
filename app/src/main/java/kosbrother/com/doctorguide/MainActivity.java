@@ -89,9 +89,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.my_comments) {
             Intent intent = new Intent(this, MyCommnetActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.setting) {
+            Intent intent = new Intent(this, SettingActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.setting) {
 
         } else if (id == R.id.nav_send) {
 

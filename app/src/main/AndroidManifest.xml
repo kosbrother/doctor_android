@@ -20,7 +20,8 @@
         </activity>
         <activity android:name=".HospitalDoctorActivity" />
         <activity android:name=".MyCollectionActivity" />
-        <activity android:name=".MyCommnetActivity"></activity>
+        <activity android:name=".MyCommnetActivity" />
+        <activity android:name=".SettingActivity"></activity>
     </application>
 
 </manifest>
