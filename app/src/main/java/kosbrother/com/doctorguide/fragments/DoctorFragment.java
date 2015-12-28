@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
@@ -58,19 +60,30 @@ public class DoctorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_doctor_list, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MyDoctorRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+        View view = inflater.inflate(R.layout.fragment_doctor_list, container, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        Context context = view.getContext();
+
+        if (mColumnCount <= 1) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        } else {
+            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
+        recyclerView.setAdapter(new MyDoctorRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+
+        Spinner spinner = (Spinner) view.findViewById(R.id.area);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.areas, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        Spinner sort = (Spinner) view.findViewById(R.id.sort);
+        ArrayAdapter<CharSequence> sort_adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.sort_options, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sort.setAdapter(sort_adapter);
+
         return view;
     }
 

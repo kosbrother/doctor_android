@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="areas">
+        <item>全部</item>
+        <item>台北市</item>
+        <item>台中市</item>
+    </string-array>
+    <string-array name="sort_options">
+        <item>排序</item>
+        <item>距離</item>
+        <item>推薦數</item>
+        <item>評論數</item>
+        <item>分數</item>
+    </string-array>
+</resources>
