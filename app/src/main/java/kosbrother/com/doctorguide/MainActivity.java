@@ -92,9 +92,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.setting) {
             Intent intent = new Intent(this, SettingActivity.class);
             startActivity(intent);
-        } else if (id == R.id.setting) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.feedback) {
+            Intent intent = new Intent(this, FeedbackActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.play_store) {
 
         }
 

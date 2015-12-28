@@ -21,7 +21,8 @@
         <activity android:name=".HospitalDoctorActivity" />
         <activity android:name=".MyCollectionActivity" />
         <activity android:name=".MyCommnetActivity" />
-        <activity android:name=".SettingActivity"></activity>
+        <activity android:name=".SettingActivity" />
+        <activity android:name=".FeedbackActivity"></activity>
     </application>
 
 </manifest>
