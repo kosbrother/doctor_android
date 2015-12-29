@@ -16,17 +16,25 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<MyDoctorRe
 
     private final List<DummyItem> mValues;
     private final DoctorFragment.OnListFragmentInteractionListener mListener;
+    private int mFragmentViewType;
+    public static final int DISTANCETYPE = 0;
+    public static final int HEARTTYPE = 1;
 
 
-    public MyDoctorRecyclerViewAdapter(List<DummyItem> items, DoctorFragment.OnListFragmentInteractionListener listener) {
+    public MyDoctorRecyclerViewAdapter(List<DummyItem> items, DoctorFragment.OnListFragmentInteractionListener listener, int fragmentViewType) {
         mValues = items;
         mListener = listener;
+        mFragmentViewType = fragmentViewType;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_doctor, parent, false);
+        if(mFragmentViewType == DISTANCETYPE)
+            view.findViewById(R.id.heart).setVisibility(View.GONE);
+        else
+            view.findViewById(R.id.distance).setVisibility(View.GONE);
         return new ViewHolder(view);
     }
 

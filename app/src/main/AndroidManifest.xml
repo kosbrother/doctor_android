@@ -22,7 +22,8 @@
         <activity android:name=".MyCollectionActivity" />
         <activity android:name=".MyCommnetActivity" />
         <activity android:name=".SettingActivity" />
-        <activity android:name=".FeedbackActivity"></activity>
+        <activity android:name=".FeedbackActivity" />
+        <activity android:name=".DivisionActivity"></activity>
     </application>
 
 </manifest>

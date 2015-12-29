@@ -3,7 +3,6 @@ package kosbrother.com.doctorguide.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,9 +25,9 @@ import kosbrother.com.doctorguide.fragments.dummy.DummyContent.DummyItem;
 public class DoctorFragment extends Fragment {
 
     // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
+    private static final String ARG_TYPE = "ARG_TYPE";
     // TODO: Customize parameters
-    private int mColumnCount = 1;
+    private int fragmentType;
     private OnListFragmentInteractionListener mListener;
 
     /**
@@ -40,10 +39,10 @@ public class DoctorFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static DoctorFragment newInstance(int columnCount) {
+    public static DoctorFragment newInstance(int fragmentType) {
         DoctorFragment fragment = new DoctorFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
+        args.putInt(ARG_TYPE, fragmentType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,7 +52,7 @@ public class DoctorFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            fragmentType = getArguments().getInt(ARG_TYPE);
         }
     }
 
@@ -65,12 +64,13 @@ public class DoctorFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
         Context context = view.getContext();
 
-        if (mColumnCount <= 1) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        } else {
-            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        recyclerView.setAdapter(new MyDoctorRecyclerViewAdapter(DummyContent.ITEMS, mListener,fragmentType));
+
+        if(fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE){
+            view.findViewById(R.id.selector).setVisibility(View.GONE);
         }
-        recyclerView.setAdapter(new MyDoctorRecyclerViewAdapter(DummyContent.ITEMS, mListener));
 
         Spinner spinner = (Spinner) view.findViewById(R.id.area);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
