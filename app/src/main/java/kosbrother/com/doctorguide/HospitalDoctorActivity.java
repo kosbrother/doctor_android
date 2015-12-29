@@ -1,15 +1,19 @@
 package kosbrother.com.doctorguide;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,10 +55,22 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
 
     @Override
     public void onListFragmentInteraction(DummyHospitalContent.DummyHospital item) {
-        Snackbar snackbar = Snackbar
-                .make(tabLayout, "Welcome to AndroidHive", Snackbar.LENGTH_LONG);
+        final CharSequence[] items = {"一般外科", "大腸直腸", "心臟外科"};
 
-        snackbar.show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.AppCompatAlertDialogStyle);
+        builder.setTitle("請選擇科別細項");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                // Do something with the selection
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        int titleDividerId = getResources().getIdentifier("titleDivider", "id", "android");
+        View titleDivider = dialog.findViewById(titleDividerId);
+        if (titleDivider != null)
+            titleDivider.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
     }
 
     @Override
