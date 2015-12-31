@@ -128,8 +128,8 @@
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
@@ -140,6 +140,7 @@
         fab:menu_colorNormal="@color/colorAccent"
         fab:menu_colorPressed="#C3520C"
         fab:menu_colorRipple="#99FFFFFF"
+        fab:menu_backgroundColor="#ccffffff"
        >
 
         <com.github.clans.fab.FloatingActionButton
