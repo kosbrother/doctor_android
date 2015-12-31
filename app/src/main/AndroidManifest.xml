@@ -24,7 +24,8 @@
         <activity android:name=".SettingActivity" />
         <activity android:name=".FeedbackActivity" />
         <activity android:name=".DivisionActivity" />
-        <activity android:name=".HospitalActivity"></activity>
+        <activity android:name=".HospitalActivity" />
+        <activity android:name=".DoctorActivity"></activity>
     </application>
 
 </manifest>

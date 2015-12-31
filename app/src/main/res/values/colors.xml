@@ -8,8 +8,11 @@
     <color name="tab_text_act">#F8E71C</color>
 
     <color name="grey_text_color">#757575</color>
+    <color name="grey_text_light_color">#9E9E9E</color>
     <color name="black_text">#4a4a4a</color>
     <color name="bluegreen_text_color">#249788</color>
 
     <color name="grey_divider_color">#aadadada</color>
+
+    <color name="orange_text_link">#FFA726</color>
 </resources>
