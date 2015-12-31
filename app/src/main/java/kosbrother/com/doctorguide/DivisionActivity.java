@@ -1,6 +1,9 @@
 package kosbrother.com.doctorguide;
 
+import com.github.clans.fab.FloatingActionMenu;
+
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -46,6 +49,21 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        final FloatingActionMenu fab = (FloatingActionMenu) findViewById(R.id.menu2);
+        fab.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
+            @Override
+            public void onMenuToggle(boolean opened) {
+                int drawableId;
+                if (opened) {
+                    drawableId = R.mipmap.ic_close;
+                } else {
+                    drawableId = R.mipmap.ic_fab;
+                }
+                Drawable drawable = getResources().getDrawable(drawableId);
+                fab.getMenuIconView().setImageDrawable(drawable);
+            }
+        });
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -58,7 +76,8 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
 
     @Override
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
-
+        Intent intent = new Intent(this, DoctorActivity.class);
+        startActivity(intent);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
