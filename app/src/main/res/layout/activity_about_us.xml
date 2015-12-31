@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="kosbrother.com.doctorguide.AboutUsActivity"
+    android:background="@color/colorPrimary"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_marginTop="24dp"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:maxHeight="500dp"
+        android:adjustViewBounds="true"
+        android:src="@mipmap/ic_aboutus_logo"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerCrop"
+        />
+    <TextView
+        android:layout_marginTop="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="關於就醫指南"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="24dp"/>
+
+    <TextView
+        android:layout_margin="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="我們致力於讓每個需要就診的民眾，能找到最優質的醫生、完善健全的醫院，讓您擁有良好的就診體驗。"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="16dp"/>
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="36dp"
+        android:text="給我們意見"
+        android:textColor="@color/textColorPrimary"
+        android:background="@drawable/feedback_button"/>
+
+    <TextView
+        android:layout_margin="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="APP版本 1.0.3"
+        android:textColor="@color/textColorPrimary"
+        />
+
+</LinearLayout>
