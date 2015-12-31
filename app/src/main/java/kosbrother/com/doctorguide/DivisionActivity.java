@@ -1,5 +1,6 @@
 package kosbrother.com.doctorguide;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,10 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
     private ActionBar actionbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private FloatingActionButton fabProblemReport;
+    private FloatingActionButton fabShare;
+    private FloatingActionButton fabComment;
+    private FloatingActionButton fabAddDoctor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +70,16 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
                 fab.getMenuIconView().setImageDrawable(drawable);
             }
         });
+
+        fabProblemReport = (FloatingActionButton) findViewById(R.id.fab_problem_report);
+        fabShare = (FloatingActionButton) findViewById(R.id.fab_share);
+        fabComment = (FloatingActionButton) findViewById(R.id.fab_comment);
+        fabAddDoctor = (FloatingActionButton) findViewById(R.id.fab_add_doctor);
+
+        fabProblemReport.setOnClickListener(clickListener);
+        fabShare.setOnClickListener(clickListener);
+        fabComment.setOnClickListener(clickListener);
+        fabAddDoctor.setOnClickListener(clickListener);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -132,4 +148,28 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
         }
         return true;
     }
+
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String text = "";
+
+            switch (v.getId()) {
+                case R.id.fab_problem_report:
+                    text = fabProblemReport.getLabelText();
+                    break;
+                case R.id.fab_share:
+                    text = fabShare.getLabelText();
+                    break;
+                case R.id.fab_comment:
+                    text = fabComment.getLabelText();
+                    break;
+                case R.id.fab_add_doctor:
+                    text = fabAddDoctor.getLabelText();
+                    break;
+            }
+
+            Toast.makeText(DivisionActivity.this, text, Toast.LENGTH_SHORT).show();
+        }
+    };
 }

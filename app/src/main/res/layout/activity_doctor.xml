@@ -169,6 +169,6 @@
             fab:fab_colorPressed="#491B9B"
             fab:fab_colorRipple="#2C0D63"
             />
-        
+
     </com.github.clans.fab.FloatingActionMenu>
 </android.support.design.widget.CoordinatorLayout>
