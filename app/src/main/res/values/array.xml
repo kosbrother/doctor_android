@@ -12,4 +12,9 @@
         <item>評論數</item>
         <item>分數</item>
     </string-array>
+    <string-array name="report_page_options">
+        <item>醫院資訊頁</item>
+        <item>科別資訊頁</item>
+        <item>醫師資訊頁</item>
+    </string-array>
 </resources>

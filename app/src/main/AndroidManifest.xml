@@ -26,7 +26,8 @@
         <activity android:name=".DivisionActivity" />
         <activity android:name=".HospitalActivity" />
         <activity android:name=".DoctorActivity" />
-        <activity android:name=".AboutUsActivity"></activity>
+        <activity android:name=".AboutUsActivity" />
+        <activity android:name=".ProblemReportActivity"></activity>
     </application>
 
 </manifest>

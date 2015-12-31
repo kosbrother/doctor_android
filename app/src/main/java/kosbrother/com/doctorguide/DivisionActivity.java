@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,7 +155,8 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
 
             switch (v.getId()) {
                 case R.id.fab_problem_report:
-                    text = fabProblemReport.getLabelText();
+                    Intent intent = new Intent(DivisionActivity.this, ProblemReportActivity.class);
+                    startActivity(intent);
                     break;
                 case R.id.fab_share:
                     text = fabShare.getLabelText();
@@ -168,8 +168,6 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
                     text = fabAddDoctor.getLabelText();
                     break;
             }
-
-            Toast.makeText(DivisionActivity.this, text, Toast.LENGTH_SHORT).show();
         }
     };
 }
