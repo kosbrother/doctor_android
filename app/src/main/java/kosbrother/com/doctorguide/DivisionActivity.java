@@ -220,7 +220,11 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
                     startActivity(intent);
                     break;
                 case R.id.fab_share:
-                    text = fabShare.getLabelText();
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                    sendIntent.setType("text/plain");
+                    startActivity(sendIntent);
                     break;
                 case R.id.fab_comment:
                     if(isSignIn){
