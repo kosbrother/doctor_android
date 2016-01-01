@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_id": "doctor-server",
+    "project_number": "403130970450",
+    "name": "doctor server"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:403130970450:android:b36c17d424c1a772",
+        "client_id": "android:kosbrother.com.doctorguide",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "kosbrother.com.doctorguide"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "403130970450-ms1s7rfm60bj49o4tkvukhair0nskkkt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kosbrother.com.doctorguide",
+            "certificate_hash": "947C044B1D5340A78B42C7844732F2611703B040"
+          }
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}
