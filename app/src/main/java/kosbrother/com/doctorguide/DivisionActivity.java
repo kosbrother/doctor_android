@@ -212,7 +212,6 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
         @Override
         public void onClick(View v) {
             fab.close(true);
-            String text = "";
             Intent intent;
             switch (v.getId()) {
                 case R.id.fab_problem_report:
@@ -254,7 +253,8 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
     };
 
     private void startCommentActivity() {
-
+        Intent intent = new Intent(DivisionActivity.this, AddCommentActivity.class);
+        startActivity(intent);
     }
 
     @Override
