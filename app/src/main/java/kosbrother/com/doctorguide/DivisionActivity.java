@@ -152,10 +152,10 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
         @Override
         public void onClick(View v) {
             String text = "";
-
+            Intent intent;
             switch (v.getId()) {
                 case R.id.fab_problem_report:
-                    Intent intent = new Intent(DivisionActivity.this, ProblemReportActivity.class);
+                    intent = new Intent(DivisionActivity.this, ProblemReportActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.fab_share:
@@ -165,7 +165,8 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
                     text = fabComment.getLabelText();
                     break;
                 case R.id.fab_add_doctor:
-                    text = fabAddDoctor.getLabelText();
+                    intent = new Intent(DivisionActivity.this, AddDoctorActivity.class);
+                    startActivity(intent);
                     break;
             }
         }

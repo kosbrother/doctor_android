@@ -27,7 +27,8 @@
         <activity android:name=".HospitalActivity" />
         <activity android:name=".DoctorActivity" />
         <activity android:name=".AboutUsActivity" />
-        <activity android:name=".ProblemReportActivity"></activity>
+        <activity android:name=".ProblemReportActivity" />
+        <activity android:name=".AddDoctorActivity"></activity>
     </application>
 
 </manifest>
