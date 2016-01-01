@@ -1,8 +1,18 @@
 package kosbrother.com.doctorguide;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -16,6 +26,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -27,7 +38,7 @@ import kosbrother.com.doctorguide.fragments.DivisionScoreFragment;
 import kosbrother.com.doctorguide.fragments.DoctorFragment;
 import kosbrother.com.doctorguide.fragments.dummy.DummyContent;
 
-public class DivisionActivity extends AppCompatActivity implements DoctorFragment.OnListFragmentInteractionListener {
+public class DivisionActivity extends AppCompatActivity implements DoctorFragment.OnListFragmentInteractionListener, GoogleApiClient.OnConnectionFailedListener {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -36,6 +47,10 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
     private FloatingActionButton fabShare;
     private FloatingActionButton fabComment;
     private FloatingActionButton fabAddDoctor;
+    private GoogleApiClient mGoogleApiClient;
+    private boolean isSignIn;
+    private static final int RC_SIGN_IN = 9002;
+    private FloatingActionMenu fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +70,7 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        final FloatingActionMenu fab = (FloatingActionMenu) findViewById(R.id.menu2);
+        fab = (FloatingActionMenu) findViewById(R.id.menu2);
         fab.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
             public void onMenuToggle(boolean opened) {
@@ -79,6 +94,46 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
         fabShare.setOnClickListener(clickListener);
         fabComment.setOnClickListener(clickListener);
         fabAddDoctor.setOnClickListener(clickListener);
+
+        googleSignIn();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+        if (opr.isDone()) {
+            GoogleSignInResult result = opr.get();
+            handleSignInResult(result);
+        } else {
+            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(GoogleSignInResult googleSignInResult) {
+                    handleSignInResult(googleSignInResult);
+                }
+            });
+        }
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        if (result.isSuccess()) {
+            isSignIn = true;
+        }else{
+            isSignIn = false;
+        }
+    }
+
+    private void googleSignIn() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -93,6 +148,11 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
         Intent intent = new Intent(this, DoctorActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -151,6 +211,7 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            fab.close(true);
             String text = "";
             Intent intent;
             switch (v.getId()) {
@@ -162,7 +223,23 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
                     text = fabShare.getLabelText();
                     break;
                 case R.id.fab_comment:
-                    text = fabComment.getLabelText();
+                    if(isSignIn){
+                        startCommentActivity();
+                    }else {
+                        final Dialog dialog = new Dialog(DivisionActivity.this);
+                        dialog.setContentView(R.layout.dialog_login);
+
+                        SignInButton signInBtn = (SignInButton) dialog.findViewById(R.id.sign_in_button);
+                        signInBtn.setSize(SignInButton.SIZE_WIDE);
+                        signInBtn.setOnClickListener(new Button.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                signIn();
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
                     break;
                 case R.id.fab_add_doctor:
                     intent = new Intent(DivisionActivity.this, AddDoctorActivity.class);
@@ -171,4 +248,21 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
             }
         }
     };
+
+    private void startCommentActivity() {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            startCommentActivity();
+        }
+    }
+
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
 }
