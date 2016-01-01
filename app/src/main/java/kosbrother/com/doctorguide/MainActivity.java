@@ -70,13 +70,13 @@ public class MainActivity extends AppCompatActivity
         signInBtn = (SignInButton)header.findViewById(R.id.sign_in_button);
 
         setRecyclerView();
+
+        googleSignIn();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        googleSignIn();
 
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
         if (opr.isDone()) {
