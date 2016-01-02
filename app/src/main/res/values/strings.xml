@@ -24,4 +24,8 @@
 
     <string name="pull_to_refresh_refreshing_label">Loading...</string>
     <string name="login_fail">登入失敗，請重新登入一次</string>
+
+    <!-- search -->
+    <string name="search_label">Doctors</string>
+    <string name="search_hint">搜尋醫師及醫院</string>
 </resources>

@@ -1,0 +1,49 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true"
+    tools:context="kosbrother.com.doctorguide.SearchableActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="醫師"
+            android:background="@color/grey_divider_color"
+            android:padding="10dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16dp"/>
+
+        <ListView
+            android:id="@+id/doctorListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+        </ListView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="醫院"
+            android:background="@color/grey_divider_color"
+            android:padding="10dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16dp"/>
+
+        <ListView
+            android:id="@+id/hospitalListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+        </ListView>
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:gravity="center_vertical"
+    android:clickable="true"
+    android:background="@drawable/click_selector"
+    android:padding="10dp"
+    >
+
+    <ImageView
+        android:id="@+id/grade_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/head"
+        android:layout_marginLeft="16dp"
+        android:layout_centerVertical="true"
+        />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/grade_image"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp">
+        <TextView
+            android:id="@+id/doctor_name"
+            android:text="吳三玲 醫師"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceListItem"
+            />
+
+        <TextView
+            android:id="@+id/hospial_name"
+            android:layout_below="@+id/doctor_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="台北市立聯合醫院"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="#9b9b9b"/>
+        <TextView
+            android:id="@+id/distance"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="高雄市"
+            android:layout_marginRight="16dp"/>
+    </RelativeLayout>
+
+</RelativeLayout>
