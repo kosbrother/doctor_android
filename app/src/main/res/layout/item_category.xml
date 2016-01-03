@@ -25,6 +25,7 @@
             android:layout_height="match_parent"
             android:text="ggggg"
             android:gravity="center_vertical"
+            android:textSize="@dimen/doctor_fragment_title_size"
             />
     </LinearLayout>
     <Button
