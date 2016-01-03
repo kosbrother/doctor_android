@@ -18,10 +18,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="台北市立聯合醫院"
-                android:textColor="@color/textColorPrimary"/>
+                android:textColor="@color/textColorPrimary"
+                android:textSize="@dimen/doctor_fragment_text_size"
+                android:layout_marginBottom="4dp"
+                />
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                >
                 <Spinner
                     android:id="@+id/div_selector"
                     android:layout_width="wrap_content"
@@ -31,26 +36,32 @@
                     android:layout_toRightOf="@+id/div_selector"
                     android:layout_width="1dp"
                     android:layout_height="16dp"
-                    android:background="@color/textColorPrimary"/>
+                    android:layout_centerVertical="true"
+                    android:background="@color/textColorPrimary"
+                    android:layout_marginRight="10dp"/>
                 <Spinner
+                    android:id="@+id/doc_selector"
                     android:layout_toRightOf="@+id/view1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
                 <TextView
                     android:id="@+id/text1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="就診日期  "
+                    android:textSize="@dimen/doctor_fragment_title_size"
                     android:textColor="@color/textColorPrimary"/>
                 <TextView
                     android:layout_toRightOf="@+id/text1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2015年12月10日"
+                    android:textSize="@dimen/doctor_fragment_title_size"
                     android:textColor="@color/textColorPrimary"/>
             </RelativeLayout>
         </LinearLayout>

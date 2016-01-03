@@ -9,6 +9,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,19 @@ public class AddCommentActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         enablePagerSlide();
+        setSpinner();
+    }
+
+    private void setSpinner() {
+        Spinner doc_spinner = (Spinner)findViewById(R.id.doc_selector);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.divisions, R.layout.spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        doc_spinner.setAdapter(adapter);
+
+        Spinner div_spinner = (Spinner)findViewById(R.id.div_selector);
+        ArrayAdapter<CharSequence> div_adapter = ArrayAdapter.createFromResource(this, R.array.divisions, R.layout.spinner_item);
+        div_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        div_spinner.setAdapter(div_adapter);
     }
 
     private void enablePagerSlide() {
