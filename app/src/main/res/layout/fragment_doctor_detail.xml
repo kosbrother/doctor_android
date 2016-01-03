@@ -29,13 +29,14 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/grey_text_light_color"
                 android:text="服務醫院"
-                android:layout_marginBottom="4dp"/>
+                android:layout_marginBottom="4dp"
+                android:textSize="@dimen/doctor_fragment_title_size"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/your_string_here"
                 android:textColor="@color/orange_text_link"
-                android:textSize="18dp"
+                android:textSize="@dimen/doctor_fragment_link_text_size"
                 android:layout_marginBottom="4dp"
                 />
             <TextView
@@ -43,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/division_underline"
                 android:textColor="@color/orange_text_link"
-                android:textSize="18dp"
+                android:textSize="@dimen/doctor_fragment_link_text_size"
                 />
         </LinearLayout>
     </RelativeLayout>
@@ -70,11 +71,13 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/grey_text_light_color"
                 android:text="專長"
-                android:layout_marginBottom="4dp"/>
+                android:layout_marginBottom="4dp"
+                android:textSize="@dimen/doctor_fragment_title_size"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="職業醫學科、神經內科、社區醫學、健康營造 "/>
+                android:text="職業醫學科、神經內科、社區醫學、健康營造"
+                android:textSize="@dimen/doctor_fragment_text_size"/>
         </LinearLayout>
     </RelativeLayout>
     <RelativeLayout
@@ -100,11 +103,13 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/grey_text_light_color"
                 android:text="經歷"
+                android:textSize="@dimen/doctor_fragment_title_size"
                 android:layout_marginBottom="4dp"/>
             <TextView
                 android:maxLines="10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/doctor_fragment_text_size"
                 android:text="台北市立忠孝醫院神經內科主治醫師\n台北市立忠孝醫院神經內科科主任\n台北市立忠孝醫院內科部主任\n台北市立忠孝醫院社區醫學科科主任\n台北市立聯合醫院職業醫學科科主任"/>
         </LinearLayout>
     </RelativeLayout>

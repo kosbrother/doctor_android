@@ -15,4 +15,8 @@
     <dimen name="text_margin">16dp</dimen>
 
     <dimen name="doctor_list_height">100dp</dimen>
+
+    <dimen name="doctor_fragment_text_size">18sp</dimen>
+    <dimen name="doctor_fragment_title_size">16sp</dimen>
+    <dimen name="doctor_fragment_link_text_size">20sp</dimen>
 </resources>

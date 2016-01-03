@@ -39,7 +39,8 @@
                         android:textSize="24dp"
                         android:layout_centerVertical="true"
                         android:clickable="true"
-                        android:onClick="onHospitalClick"/>
+                        android:onClick="onHospitalClick"
+                        android:layout_marginLeft="5dp"/>
                     <ImageView
                         android:id="@+id/heart"
                         android:layout_width="wrap_content"

@@ -27,7 +27,7 @@
                 android:orientation="vertical"
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical"
-                android:layout_marginLeft="5dp">
+                android:layout_marginLeft="12dp">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="趙錢孫 醫師"
-                        android:textSize="24dp"
+                        android:textSize="24sp"
                         android:textColor="@color/textColorPrimary"
                         android:layout_centerVertical="true"/>
                     <ImageView
