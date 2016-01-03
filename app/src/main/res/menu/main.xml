@@ -7,4 +7,10 @@
         android:icon="@mipmap/search"
         app:showAsAction="always"
         android:title="@string/search_label"/>
+    <item
+        android:id="@+id/account"
+        android:icon="@mipmap/account"
+        android:title="設定"
+        app:showAsAction="always"
+        />
 </menu>

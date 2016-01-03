@@ -24,6 +24,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity
     private String email;
     private TextView logInEmail;
     private ProgressDialog mProgressDialog;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +59,35 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+        };
+
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        toolbar.setNavigationIcon(R.mipmap.ic_toolbar_logo);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (drawer.isDrawerOpen(Gravity.RIGHT)) {
+                    drawer.closeDrawer(Gravity.RIGHT);
+                } else {
+                    drawer.openDrawer(Gravity.RIGHT);
+                }
+            }
+        });
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -216,6 +242,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.account){
+            if (drawer.isDrawerOpen(Gravity.RIGHT)) {
+                drawer.closeDrawer(Gravity.RIGHT);
+            } else {
+                drawer.openDrawer(Gravity.RIGHT);
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
 
