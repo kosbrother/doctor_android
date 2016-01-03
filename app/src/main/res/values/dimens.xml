@@ -13,4 +13,6 @@
     <dimen name="tab_label">14sp</dimen>
     <dimen name="custom_tab_layout_height">72dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
+    <dimen name="doctor_list_height">100dp</dimen>
 </resources>
