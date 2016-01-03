@@ -14,12 +14,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/ic_launcher"/>
+        android:src="@mipmap/ic_aboutus_logo"/>
     <TextView
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="10dp"
         android:id="@+id/appname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
+        android:textSize="@dimen/doctor_fragment_link_text_size"
+        android:textColor="@color/black_text"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/appicon"/>
     <TextView
@@ -31,10 +35,12 @@
         android:layout_below="@+id/appname"/>
 
     <TextView
+        android:layout_marginTop="12dp"
         android:id="@+id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="主旨"
+        android:textSize="@dimen/doctor_fragment_text_size"
         android:textColor="@color/colorPrimary"
         android:layout_below="@+id/text"/>
     <EditText
@@ -44,10 +50,12 @@
         android:hint="請輸入主旨"
         android:layout_below="@+id/text1"/>
     <TextView
+        android:layout_marginTop="12dp"
         android:id="@+id/text2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="意見"
+        android:textSize="@dimen/doctor_fragment_text_size"
         android:textColor="@color/colorPrimary"
         android:layout_below="@+id/feedback_title"/>
     <EditText
@@ -64,6 +72,7 @@
         android:background="@drawable/primary_color_button"
         android:text="送出"
         android:textColor="@color/textColorPrimary"
+        android:textSize="@dimen/doctor_fragment_text_size"
         />
 
 </RelativeLayout>
