@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import java.util.List;
 
@@ -36,9 +37,20 @@ public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospit
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-//        holder.mItem = mValues.get(position);
-//        holder.mIdView.setText(mValues.get(position).id);
-//        holder.mContentView.setText(mValues.get(position).content);
+        switch (position % 4){
+            case 0:
+                holder.mImageView.setImageResource(R.mipmap.ic_hospital_biggest);
+                break;
+            case 1:
+                holder.mImageView.setImageResource(R.mipmap.ic_hospital_medium);
+                break;
+            case 2:
+                holder.mImageView.setImageResource(R.mipmap.ic_hospital_small);
+                break;
+            case 3:
+                holder.mImageView.setImageResource(R.mipmap.ic_hospital_smallest);
+                break;
+        }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,10 +74,12 @@ public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospit
 //        public final TextView mIdView;
 //        public final TextView mContentView;
         public DummyHospital mItem;
+        public ImageView mImageView;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
+            mImageView = (ImageView)view.findViewById(R.id.grade_image);
 //            mIdView = (TextView) view.findViewById(R.id.id);
 //            mContentView = (TextView) view.findViewById(R.id.content);
         }
