@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,59 +9,82 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="kosbrother.com.doctorguide.ProblemReportActivity"
     android:orientation="vertical">
-
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
-        <ImageView
-            android:layout_marginTop="24dp"
-            android:layout_width="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxHeight="500dp"
-            android:adjustViewBounds="true"
-            android:src="@mipmap/ic_aboutus_logo"
-            android:layout_centerHorizontal="true"
-            android:scaleType="centerCrop"
-            />
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <ImageView
+                android:layout_marginTop="24dp"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:maxHeight="500dp"
+                android:adjustViewBounds="true"
+                android:src="@mipmap/ic_aboutus_logo"
+                android:layout_centerHorizontal="true"
+                android:scaleType="centerCrop"
+                />
+            <TextView
+                android:layout_marginTop="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="非常感謝您使用就醫指南，若系統錯誤造成您使用上的不便，我們深感抱歉！我們會盡快修正，感謝您的回報！！"
+                android:textColor="@color/grey_text_color"
+                android:textSize="@dimen/comment_score_size"/>
+        </LinearLayout>
+
         <TextView
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="非常感謝您使用就醫指南，若系統錯誤造成您使用上的不便，我們深感抱歉！我們會盡快修正，感謝您的回報！！"
-            android:textColor="@color/grey_text_color"
-            android:textSize="16dp"/>
+            android:text="勘誤位置"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/doctor_fragment_text_size"/>
+
+        <Spinner
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:id="@+id/page_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></Spinner>
+        <TextView
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="詳細資訊："
+            android:textSize="@dimen/doctor_fragment_title_size"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="台北市立聯合醫院 ｜家醫科"
+            android:textSize="@dimen/doctor_fragment_title_size"/>
+
+        <TextView
+            android:layout_marginTop="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="勘誤內容"
+            android:textSize="@dimen/doctor_fragment_text_size"
+            android:textColor="@color/colorPrimary"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="具體描述"
+            android:textSize="@dimen/doctor_fragment_title_size"
+            />
     </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="勘誤位置"
-        android:textColor="@color/colorPrimary"/>
-
-    <Spinner
-        android:id="@+id/page_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></Spinner>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="詳細資訊：" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="台北市立聯合醫院 ｜家醫科" />
-
-    <TextView
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="勘誤內容"
-        android:textColor="@color/colorPrimary"/>
-    <EditText
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="具體描述"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/primary_color_button"
+        android:text="送出"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="@dimen/doctor_fragment_text_size"
         />
-</LinearLayout>
+</RelativeLayout>
