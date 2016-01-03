@@ -8,10 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import kosbrother.com.doctorguide.HospitalDoctorActivity;
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.entity.Category;
 
 /**
  * Created by steven on 12/25/15.
@@ -20,10 +24,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     private final LayoutInflater mLayoutInflater;
     private static Context mContext;
-    private String[] mTitles;
+    private ArrayList<Category> mCategories;
 
-    public CategoryAdapter(Context context,String[] titles) {
-        mTitles = titles;
+    public CategoryAdapter(Context context, ArrayList<Category> categories) {
+        mCategories = categories;
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
     }
@@ -35,22 +39,27 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(CategoryAdapter.CategoryViewHolder holder, int position) {
-        holder.mTextView.setText(mTitles[position]);
+        holder.name.setText(mCategories.get(position).name);
+        holder.icon.setImageResource(mCategories.get(position).resourceId);
     }
 
     @Override
     public int getItemCount() {
-        return mTitles.length;
+        return mCategories.size();
     }
 
     public static class CategoryViewHolder extends RecyclerView.ViewHolder {
-        TextView mTextView;
+        TextView name;
         Button mButton;
+        ImageView icon;
 
         CategoryViewHolder(View view) {
             super(view);
-            mTextView = (TextView)view.findViewById(R.id.text_view);
+
+            name = (TextView)view.findViewById(R.id.text_view);
             mButton = (Button)view.findViewById(R.id.detail_button);
+            icon = (ImageView)view.findViewById(R.id.category_icon);
+
             mButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

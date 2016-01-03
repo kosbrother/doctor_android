@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import kosbrother.com.doctorguide.adapters.CategoryAdapter;
+import kosbrother.com.doctorguide.entity.Category;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener {
@@ -197,10 +198,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setRecyclerView() {
-        String[] myStringArray = {"家醫科", "家醫科", "內科", "家醫科", "家醫科", "內科", "家醫科", "家醫科", "內科", "家醫科", "家醫科", "內科"};
+//        String[] myStringArray = {"家醫科", "家醫科", "內科", "家醫科", "家醫科", "內科", "家醫科", "家醫科", "內科", "家醫科", "家醫科", "內科"};
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(new CategoryAdapter(this, myStringArray));
+        mRecyclerView.setAdapter(new CategoryAdapter(this, Category.getCategories()));
     }
 
     @Override
