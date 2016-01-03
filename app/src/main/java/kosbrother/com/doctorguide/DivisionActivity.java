@@ -186,8 +186,7 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
 
     private void setSpinner() {
         Spinner spinner = (Spinner)findViewById(R.id.division_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.areas, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.divisions, R.layout.spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }
