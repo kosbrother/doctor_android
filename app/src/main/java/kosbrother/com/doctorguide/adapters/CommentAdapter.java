@@ -1,6 +1,7 @@
 package kosbrother.com.doctorguide.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import kosbrother.com.doctorguide.CommentDetailActivity;
 import kosbrother.com.doctorguide.R;
 
 /**
@@ -60,13 +62,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 //                    builder.show();
 //                }
 //            });
-//            view.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(mContext, HospitalDoctorActivity.class);
-//                    mContext.startActivity(intent);
-//                }
-//            });
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, CommentDetailActivity.class);
+                    mContext.startActivity(intent);
+                }
+            });
         }
     }
 }

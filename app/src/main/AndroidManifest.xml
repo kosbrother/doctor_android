@@ -8,7 +8,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -16,6 +15,7 @@
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value="kosbrother.com.doctorguide.SearchableActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,15 +42,18 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".AddCommentActivity" />
-        <activity android:name="kosbrother.com.doctorguide.SearchableActivity"
+        <activity
+            android:name=".SearchableActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+        <activity android:name=".CommentDetailActivity"></activity>
     </application>
 
 </manifest>
