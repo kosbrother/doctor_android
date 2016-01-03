@@ -5,11 +5,11 @@
         android:id="@+id/account_menu">
         <item
             android:id="@+id/my_collections"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@mipmap/nav_heart"
             android:title="@string/my_collections" />
         <item
             android:id="@+id/my_comments"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@mipmap/nav_comment"
             android:title="@string/my_reviews" />
     </group>
 
@@ -17,15 +17,15 @@
         android:id="@+id/other_menu">
         <item
             android:id="@+id/setting"
-            android:icon="@drawable/ic_menu_share"
+            android:icon="@mipmap/nav_setting"
             android:title="@string/settings" />
         <item
             android:id="@+id/feedback"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@mipmap/nav_report"
             android:title="@string/feedback" />
         <item
             android:id="@+id/play_store"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@mipmap/nav_star"
             android:title="@string/evaluate" />
     </group>
 

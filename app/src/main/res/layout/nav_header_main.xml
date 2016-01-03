@@ -13,13 +13,24 @@
         android:scaleType="centerCrop"
         android:src="@mipmap/header_v1" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/head"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="26dp"/>
+
     <TextView
         android:id="@+id/log_in_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:text="chunyuko@gmail.com"
         android:layout_alignParentBottom="true"
+        android:textColor="@color/textColorPrimary"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="14dp"
+        android:textSize="18dp"
         />
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
@@ -28,6 +39,8 @@
         android:visibility="visible"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="4dp"
         />
 
 </RelativeLayout>
