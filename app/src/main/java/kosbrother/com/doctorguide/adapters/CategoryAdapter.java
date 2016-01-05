@@ -38,9 +38,20 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     @Override
-    public void onBindViewHolder(CategoryAdapter.CategoryViewHolder holder, int position) {
+    public void onBindViewHolder(CategoryAdapter.CategoryViewHolder holder, final int position) {
         holder.name.setText(mCategories.get(position).name);
         holder.icon.setImageResource(mCategories.get(position).resourceId);
+        holder.mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder =
+                        new AlertDialog.Builder(mContext, R.style.AppCompatAlertDialogStyle);
+                builder.setTitle(mCategories.get(position).name);
+                builder.setMessage(mCategories.get(position).intro);
+                builder.setPositiveButton("確定", null);
+                builder.show();
+            }
+        });
     }
 
     @Override
@@ -60,17 +71,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             mButton = (Button)view.findViewById(R.id.detail_button);
             icon = (ImageView)view.findViewById(R.id.category_icon);
 
-            mButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder builder =
-                            new AlertDialog.Builder(mContext, R.style.AppCompatAlertDialogStyle);
-                    builder.setTitle("一般內科");
-                    builder.setMessage("感染，發燒，腹痛，頭痛，胸痛，喘，水腫，頭暈，心悸，腹瀉，失眠，虛弱，體重減輕，便秘，黃疸...等");
-                    builder.setPositiveButton("確定", null);
-                    builder.show();
-                }
-            });
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
