@@ -18,6 +18,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
 }
 
 dependencies {
@@ -32,4 +36,10 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:8.3.0'
     compile 'com.google.android.gms:play-services-appindexing:8.3.0'
     compile 'org.adw.library:discrete-seekbar:1.0.0'
+    compile 'com.squareup.okhttp3:okhttp:3.0.0-RC1'
+    compile (
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.4.6'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.4.6'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.4.6']
+    )
 }
