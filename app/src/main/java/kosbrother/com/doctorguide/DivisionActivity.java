@@ -33,10 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
+import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DivisionScoreFragment;
 import kosbrother.com.doctorguide.fragments.DoctorFragment;
-import kosbrother.com.doctorguide.fragments.dummy.DummyContent;
 
 public class DivisionActivity extends AppCompatActivity implements DoctorFragment.OnListFragmentInteractionListener, GoogleApiClient.OnConnectionFailedListener {
 
@@ -138,21 +138,21 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.HEARTTYPE), "科內醫生");
+        adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.HEARTTYPE,1), "科內醫生");
         adapter.addFragment(new DivisionScoreFragment(), "本科評分");
         adapter.addFragment(new CommentFragment(), "本科評論");
         viewPager.setAdapter(adapter);
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
-        Intent intent = new Intent(this, DoctorActivity.class);
-        startActivity(intent);
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
+    public void onListFragmentInteraction(Doctor item) {
+        Intent intent = new Intent(this, DoctorActivity.class);
+        startActivity(intent);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

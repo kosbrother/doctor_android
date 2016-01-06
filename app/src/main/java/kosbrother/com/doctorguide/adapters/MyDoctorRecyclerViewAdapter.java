@@ -4,25 +4,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.fragments.DoctorFragment;
-import kosbrother.com.doctorguide.fragments.dummy.DummyContent.DummyItem;
 
 
 public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<MyDoctorRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final ArrayList<Doctor> mDoctors;
     private final DoctorFragment.OnListFragmentInteractionListener mListener;
     private int mFragmentViewType;
     public static final int DISTANCETYPE = 0;
     public static final int HEARTTYPE = 1;
 
 
-    public MyDoctorRecyclerViewAdapter(List<DummyItem> items, DoctorFragment.OnListFragmentInteractionListener listener, int fragmentViewType) {
-        mValues = items;
+    public MyDoctorRecyclerViewAdapter(ArrayList<Doctor> items, DoctorFragment.OnListFragmentInteractionListener listener, int fragmentViewType) {
+        mDoctors = items;
         mListener = listener;
         mFragmentViewType = fragmentViewType;
     }
@@ -39,18 +40,15 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<MyDoctorRe
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-//        holder.mIdView.setText(mValues.get(position).id);
-//        holder.mContentView.setText(mValues.get(position).content);
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        holder.mName.setText(mDoctors.get(position).name);
+        holder.mhospialName.setText(mDoctors.get(position).hospital);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onListFragmentInteraction(mDoctors.get(position));
                 }
             }
         });
@@ -58,25 +56,20 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<MyDoctorRe
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mDoctors.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-//        public final TextView mIdView;
-//        public final TextView mContentView;
-        public DummyItem mItem;
+        public  View mView;
+        public  TextView mName;
+        public  TextView mhospialName;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-//            mIdView = (TextView) view.findViewById(R.id.id);
-//            mContentView = (TextView) view.findViewById(R.id.content);
+            mName = (TextView) view.findViewById(R.id.doctor_name);
+            mhospialName = (TextView) view.findViewById(R.id.hospial_name);
         }
 
-//        @Override
-//        public String toString() {
-//            return super.toString() + " '" + mContentView.getText() + "'";
-//        }
     }
 }

@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
+import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.entity.Hospital;
 import kosbrother.com.doctorguide.fragments.DoctorFragment;
 import kosbrother.com.doctorguide.fragments.HospitalFragment;
-import kosbrother.com.doctorguide.fragments.dummy.DummyContent;
 
 public class HospitalDoctorActivity extends AppCompatActivity implements HospitalFragment.OnListFragmentInteractionListener,DoctorFragment.OnListFragmentInteractionListener {
 
@@ -57,7 +57,7 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(HospitalFragment.newInstance(categoryId), "醫院");
-        adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.DISTANCETYPE), "醫生");
+        adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.DISTANCETYPE,categoryId), "醫生");
         viewPager.setAdapter(adapter);
     }
 
@@ -83,7 +83,7 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(Doctor item) {
         Intent intent = new Intent(this, DoctorActivity.class);
         startActivity(intent);
     }

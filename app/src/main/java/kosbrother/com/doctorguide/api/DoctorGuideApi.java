@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.entity.Hospital;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -14,7 +15,7 @@ import okhttp3.Response;
 /**
  * Created by steven on 1/6/16.
  */
-public class DoctorApi {
+public class DoctorGuideApi {
     final static String HOST = "http://130.211.247.159";
     private final static ObjectMapper mapper = new ObjectMapper();
 
@@ -28,6 +29,29 @@ public class DoctorApi {
             e.printStackTrace();
         }
         return hospitals;
+    }
+
+    public static ArrayList<Doctor> getDoctorsByAreaAndCategory(int areaId, int categoryId){
+        ArrayList<Doctor> doctors = new ArrayList<Doctor>();
+        try {
+            String message = runHttpGet(HOST + "/api/v1/doctors/by_area_category.json?area_id="+ areaId +"&category_id=" + categoryId);
+            doctors = readDoctorJson(message);
+            return doctors;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return doctors;
+    }
+
+    public static ArrayList<Doctor> readDoctorJson(String jsonString){
+        ArrayList<Doctor> doctorsList = new ArrayList<Doctor>();
+        try {
+            doctorsList = mapper.readValue(jsonString, new TypeReference<ArrayList<Doctor>>() {});
+            return doctorsList;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return doctorsList;
     }
 
     public static ArrayList<Hospital> readHospitalJson(String jsonString){

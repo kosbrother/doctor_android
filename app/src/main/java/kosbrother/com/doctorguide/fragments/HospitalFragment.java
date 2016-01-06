@@ -1,6 +1,5 @@
 package kosbrother.com.doctorguide.fragments;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,14 +12,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyHospitalRecyclerViewAdapter;
-import kosbrother.com.doctorguide.api.DoctorApi;
+import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Area;
 import kosbrother.com.doctorguide.entity.Hospital;
 
@@ -129,7 +127,6 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
     }
 
     private class GetHospitalsTask extends AsyncTask {
-        private ProgressDialog mProgressDialog;
 
         @Override
         protected void onPreExecute() {
@@ -138,7 +135,7 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
         }
         @Override
         protected Object doInBackground(Object... params) {
-            hospitals = DoctorApi.getHospitalsByAreaAndCategory(areaId,mCategoryId);
+            hospitals = DoctorGuideApi.getHospitalsByAreaAndCategory(areaId, mCategoryId);
             return null;
         }
 
@@ -146,7 +143,6 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             Util.hideProgressDialog();
-            Toast.makeText(getContext(), "area id is:" + areaId + " and sort:" + sortSrting + " check:" + checktime, Toast.LENGTH_SHORT).show();
             MyHospitalRecyclerViewAdapter hospitalAdapter = new MyHospitalRecyclerViewAdapter(hospitals, mListener);
             recyclerView.setAdapter(hospitalAdapter);
             hospitalAdapter.notifyDataSetChanged();

@@ -1,6 +1,7 @@
 package kosbrother.com.doctorguide.fragments;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,41 +9,39 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
-import kosbrother.com.doctorguide.fragments.dummy.DummyContent;
-import kosbrother.com.doctorguide.fragments.dummy.DummyContent.DummyItem;
+import kosbrother.com.doctorguide.api.DoctorGuideApi;
+import kosbrother.com.doctorguide.entity.Area;
+import kosbrother.com.doctorguide.entity.Doctor;
 
-/**
- * A fragment representing a list of Items.
- * <p />
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
-public class DoctorFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
+public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedListener{
+
     private static final String ARG_TYPE = "ARG_TYPE";
-    // TODO: Customize parameters
+    private static final String ARG_CATEGORY_ID = "CATEGORY_ID";
     private int fragmentType;
+    private int mCategoryId = 1;
     private OnListFragmentInteractionListener mListener;
+    private ArrayList<Doctor> doctors;
+    private RecyclerView recyclerView;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+
     public DoctorFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static DoctorFragment newInstance(int fragmentType) {
+    public static DoctorFragment newInstance(int fragmentType,int categoryId) {
         DoctorFragment fragment = new DoctorFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_TYPE, fragmentType);
+        args.putInt(ARG_CATEGORY_ID, categoryId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,6 +52,7 @@ public class DoctorFragment extends Fragment {
 
         if (getArguments() != null) {
             fragmentType = getArguments().getInt(ARG_TYPE);
+            mCategoryId = getArguments().getInt(ARG_CATEGORY_ID);
         }
     }
 
@@ -61,30 +61,38 @@ public class DoctorFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_doctor_list, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        recyclerView = (RecyclerView) view.findViewById(R.id.list);
         Context context = view.getContext();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-        recyclerView.setAdapter(new MyDoctorRecyclerViewAdapter(DummyContent.ITEMS, mListener,fragmentType));
 
         if(fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE){
             view.findViewById(R.id.selector).setVisibility(View.GONE);
         }
 
-        Spinner spinner = (Spinner) view.findViewById(R.id.area);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.areas, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        setAreaSpinner(view);
+        setSortSpinner(view);
+
+        return view;
+    }
+
+    private void setSortSpinner(View view) {
 
         Spinner sort = (Spinner) view.findViewById(R.id.sort);
         ArrayAdapter<CharSequence> sort_adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.sort_options, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sort_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sort.setAdapter(sort_adapter);
+        sort.setOnItemSelectedListener(this);
+    }
 
-        return view;
+    private void setAreaSpinner(View view) {
+        Spinner spinner = (Spinner) view.findViewById(R.id.area);
+        ArrayAdapter<String> areaAdapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_item, Area.getAreaStrings().toArray(new String[Area.getAreas().size()]));
+        areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(areaAdapter);
+        spinner.setOnItemSelectedListener(this);
     }
 
 
@@ -105,6 +113,54 @@ public class DoctorFragment extends Fragment {
         mListener = null;
     }
 
+    int areaId = 0;
+    String sortSrting;
+    int checktime = 0;
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Spinner spinner = (Spinner) parent;
+        if(spinner.getId() == R.id.area){
+            areaId = Area.getAreas().get(position).id;
+        }else if(spinner.getId() == R.id.sort){
+            sortSrting = (String)parent.getItemAtPosition(position);
+        }
+
+        if(areaId != 0 && sortSrting!=null)
+            checktime += 1;
+        if(checktime >= 1) {
+            new GetDoctorsTask().execute();
+        }
+    }
+
+    private class GetDoctorsTask extends AsyncTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Util.showProgressDialog(getContext());
+        }
+        @Override
+        protected Object doInBackground(Object... params) {
+            doctors = DoctorGuideApi.getDoctorsByAreaAndCategory(areaId, mCategoryId);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            Util.hideProgressDialog();
+            MyDoctorRecyclerViewAdapter adatper = new MyDoctorRecyclerViewAdapter(doctors, mListener, fragmentType);
+            recyclerView.setAdapter(adatper);
+            adatper.notifyDataSetChanged();
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -117,6 +173,6 @@ public class DoctorFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Doctor item);
     }
 }
