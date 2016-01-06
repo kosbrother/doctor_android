@@ -52,6 +52,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 builder.show();
             }
         });
+        holder.listView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, HospitalDoctorActivity.class);
+                intent.putExtra("CATEGORY_NAME",mCategories.get(position).name);
+                intent.putExtra("CATEGORY_ID",mCategories.get(position).id);
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -63,6 +72,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         TextView name;
         Button mButton;
         ImageView icon;
+        View listView;
 
         CategoryViewHolder(View view) {
             super(view);
@@ -70,14 +80,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             name = (TextView)view.findViewById(R.id.text_view);
             mButton = (Button)view.findViewById(R.id.detail_button);
             icon = (ImageView)view.findViewById(R.id.category_icon);
-
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, HospitalDoctorActivity.class);
-                    mContext.startActivity(intent);
-                }
-            });
+            listView = view;
         }
     }
 }

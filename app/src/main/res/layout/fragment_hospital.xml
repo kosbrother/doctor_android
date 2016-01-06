@@ -28,75 +28,85 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp">
         <TextView
-            android:id="@+id/hospial_name"
-            android:text="台北市立聯合醫院"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceListItem"
-            />
-
-        <TextView
-            android:id="@+id/address"
-            android:layout_below="@+id/hospial_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="台北市大同醫鄭州路45號"
-            android:textAppearance="?attr/textAppearanceListItem"
-            android:textColor="#9b9b9b"/>
-        <RelativeLayout
-            android:layout_below="@+id/address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/thumb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/thumb"
-                android:layout_marginRight="5dp"
-                />
-            <TextView
-                android:id="@+id/recommend_num"
-                android:layout_toRightOf="@+id/thumb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="900"
-                android:layout_marginRight="5dp"/>
-            <ImageView
-                android:id="@+id/sms"
-                android:layout_toRightOf="@+id/recommend_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/sms"
-                android:layout_marginRight="5dp"
-                />
-            <TextView
-                android:id="@+id/comment_num"
-                android:layout_toRightOf="@+id/sms"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="20"
-                android:layout_marginRight="5dp"/>
-            <ImageView
-                android:id="@+id/star"
-                android:layout_toRightOf="@+id/comment_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/star"
-                android:layout_marginRight="5dp"
-                />
-            <TextView
-                android:id="@+id/score"
-                android:layout_toRightOf="@+id/star"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="4.2"/>
-        </RelativeLayout>
-        <TextView
             android:id="@+id/distance"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="距離1KM"
             android:layout_marginRight="16dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/distance"
+            android:orientation="vertical"
+            android:layout_marginRight="4dp">
+
+            <TextView
+                android:id="@+id/hospial_name"
+                android:text="台北市立聯合醫院"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceListItem"
+                />
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_below="@+id/hospial_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="台北市大同醫鄭州路45號"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="12sp"
+                android:textColor="#9b9b9b"/>
+            <RelativeLayout
+                android:layout_below="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/thumb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/thumb"
+                    android:layout_marginRight="5dp"
+                    />
+                <TextView
+                    android:id="@+id/recommend_num"
+                    android:layout_toRightOf="@+id/thumb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="900"
+                    android:layout_marginRight="5dp"/>
+                <ImageView
+                    android:id="@+id/sms"
+                    android:layout_toRightOf="@+id/recommend_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/sms"
+                    android:layout_marginRight="5dp"
+                    />
+                <TextView
+                    android:id="@+id/comment_num"
+                    android:layout_toRightOf="@+id/sms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="20"
+                    android:layout_marginRight="5dp"/>
+                <ImageView
+                    android:id="@+id/star"
+                    android:layout_toRightOf="@+id/comment_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/star"
+                    android:layout_marginRight="5dp"
+                    />
+                <TextView
+                    android:id="@+id/score"
+                    android:layout_toRightOf="@+id/star"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4.2"/>
+            </RelativeLayout>
+        </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

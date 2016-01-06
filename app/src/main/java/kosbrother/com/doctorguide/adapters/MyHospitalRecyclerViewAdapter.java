@@ -5,12 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.entity.Hospital;
 import kosbrother.com.doctorguide.fragments.HospitalFragment.OnListFragmentInteractionListener;
-import kosbrother.com.doctorguide.fragments.dummy.DummyHospitalContent;
 import kosbrother.com.doctorguide.fragments.dummy.DummyHospitalContent.DummyHospital;
 
 /**
@@ -20,11 +21,11 @@ import kosbrother.com.doctorguide.fragments.dummy.DummyHospitalContent.DummyHosp
  */
 public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospitalRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyHospital> mValues;
+    private final ArrayList<Hospital> mHospitals;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyHospitalRecyclerViewAdapter(List<DummyHospitalContent.DummyHospital> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
+    public MyHospitalRecyclerViewAdapter(ArrayList<Hospital> items, OnListFragmentInteractionListener listener) {
+        mHospitals = items;
         mListener = listener;
     }
 
@@ -36,29 +37,29 @@ public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospit
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        switch (position % 4){
-            case 0:
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        switch (mHospitals.get(position).grade){
+            case "醫學中心":
                 holder.mImageView.setImageResource(R.mipmap.ic_hospital_biggest);
                 break;
-            case 1:
+            case "區域醫院":
                 holder.mImageView.setImageResource(R.mipmap.ic_hospital_medium);
                 break;
-            case 2:
+            case "地區醫院":
                 holder.mImageView.setImageResource(R.mipmap.ic_hospital_small);
                 break;
-            case 3:
+            case "診所":
                 holder.mImageView.setImageResource(R.mipmap.ic_hospital_smallest);
                 break;
         }
+        holder.mName.setText(mHospitals.get(position).name);
+        holder.mAddress.setText(mHospitals.get(position).address);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onListFragmentInteraction(mHospitals.get(position));
                 }
             }
         });
@@ -66,27 +67,21 @@ public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospit
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mHospitals.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-//        public final TextView mIdView;
-//        public final TextView mContentView;
-        public DummyHospital mItem;
+        public View mView;
+        public TextView mName;
+        public TextView mAddress;
         public ImageView mImageView;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mImageView = (ImageView)view.findViewById(R.id.grade_image);
-//            mIdView = (TextView) view.findViewById(R.id.id);
-//            mContentView = (TextView) view.findViewById(R.id.content);
+            mName = (TextView)view.findViewById(R.id.hospial_name);
+            mAddress = (TextView)view.findViewById(R.id.address);
         }
-
-//        @Override
-//        public String toString() {
-//            return super.toString() + " '" + mContentView.getText() + "'";
-//        }
     }
 }

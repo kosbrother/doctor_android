@@ -19,16 +19,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
+import kosbrother.com.doctorguide.entity.Hospital;
 import kosbrother.com.doctorguide.fragments.DoctorFragment;
 import kosbrother.com.doctorguide.fragments.HospitalFragment;
 import kosbrother.com.doctorguide.fragments.dummy.DummyContent;
-import kosbrother.com.doctorguide.fragments.dummy.DummyHospitalContent;
 
 public class HospitalDoctorActivity extends AppCompatActivity implements HospitalFragment.OnListFragmentInteractionListener,DoctorFragment.OnListFragmentInteractionListener {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private int categoryId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +37,15 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
         setContentView(R.layout.activity_hospital_doctor);
 
         actionbar = getSupportActionBar();
-        actionbar.setTitle("家醫科");
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setElevation(0);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String title = extras.getString("CATEGORY_NAME");
+            actionbar.setTitle(title);
+            categoryId = extras.getInt("CATEGORY_ID");
+        }
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -49,13 +56,13 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new HospitalFragment(), "醫院");
+        adapter.addFragment(HospitalFragment.newInstance(categoryId), "醫院");
         adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.DISTANCETYPE), "醫生");
         viewPager.setAdapter(adapter);
     }
 
     @Override
-    public void onListFragmentInteraction(DummyHospitalContent.DummyHospital item) {
+    public void onListFragmentInteraction(Hospital item) {
         final CharSequence[] items = {"一般外科", "大腸直腸", "心臟外科"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.AppCompatAlertDialogStyle);
