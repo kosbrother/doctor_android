@@ -68,11 +68,10 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
 
         if(fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE){
             view.findViewById(R.id.selector).setVisibility(View.GONE);
+        }else {
+            setAreaSpinner(view);
+            setSortSpinner(view);
         }
-
-        setAreaSpinner(view);
-        setSortSpinner(view);
-
         return view;
     }
 

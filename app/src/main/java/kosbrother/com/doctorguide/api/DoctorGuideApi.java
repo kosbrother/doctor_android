@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.entity.Hospital;
 import okhttp3.OkHttpClient;
@@ -43,7 +44,43 @@ public class DoctorGuideApi {
         return doctors;
     }
 
-    public static ArrayList<Doctor> readDoctorJson(String jsonString){
+    public static ArrayList<Division> getDivisionByHospitalAndCategory(int hospitalId, int categoryId){
+        ArrayList<Division> divisions = new ArrayList<Division>();
+        try {
+            String message = runHttpGet(HOST + "/api/v1/divisions/by_hospital_category.json?hospital_id="+ hospitalId +"&category_id=" + categoryId);
+            divisions = readDivisionJson(message);
+            return divisions;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return divisions;
+    }
+
+    public static ArrayList<Division> getDivisionByHospital(int hospitalId){
+        ArrayList<Division> divisions = new ArrayList<Division>();
+        try {
+            String message = runHttpGet(HOST + "/api/v1/divisions/by_hospital.json?hospital_id="+ hospitalId);
+            divisions = readDivisionJson(message);
+            return divisions;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return divisions;
+    }
+
+    private static ArrayList<Division> readDivisionJson(String jsonString){
+        ArrayList<Division> divisionsList = new ArrayList<Division>();
+        try {
+            divisionsList = mapper.readValue(jsonString, new TypeReference<ArrayList<Division>>() {});
+            return divisionsList;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return divisionsList;
+    }
+
+
+    private static ArrayList<Doctor> readDoctorJson(String jsonString){
         ArrayList<Doctor> doctorsList = new ArrayList<Doctor>();
         try {
             doctorsList = mapper.readValue(jsonString, new TypeReference<ArrayList<Doctor>>() {});
@@ -54,7 +91,7 @@ public class DoctorGuideApi {
         return doctorsList;
     }
 
-    public static ArrayList<Hospital> readHospitalJson(String jsonString){
+    private static ArrayList<Hospital> readHospitalJson(String jsonString){
         ArrayList<Hospital> hospitalList = new ArrayList<Hospital>();
         try {
             hospitalList = mapper.readValue(jsonString, new TypeReference<ArrayList<Hospital>>() {});

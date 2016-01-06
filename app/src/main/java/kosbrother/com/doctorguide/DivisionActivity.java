@@ -15,6 +15,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -25,14 +26,20 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
+import kosbrother.com.doctorguide.api.DoctorGuideApi;
+import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DivisionScoreFragment;
@@ -51,6 +58,13 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
     private boolean isSignIn;
     private static final int RC_SIGN_IN = 9002;
     private FloatingActionMenu fab;
+    private int hospitalId;
+    private ArrayList<Division> hospitalDivisions;
+    private int divisionId;
+    private String divisionName;
+    private boolean startInteract = false;
+    private String hospitalGrade;
+    private String hospitalName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +76,16 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setElevation(0);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            divisionId = extras.getInt("DIVISION_ID");
+            divisionName = extras.getString("DIVISION_NAME");
+            hospitalId = extras.getInt("HOSPITAL_ID");
+            hospitalGrade = extras.getString("HOSPITAL_GRADE");
+            hospitalName = extras.getString("HOSPITAL_NAME");
+        }
+
+        setViews();
         setSpinner();
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -96,6 +120,27 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
         fabAddDoctor.setOnClickListener(clickListener);
 
         googleSignIn();
+    }
+
+    private void setViews() {
+        ImageView divImage = (ImageView)findViewById(R.id.div_image);
+        TextView hospital = (TextView)findViewById(R.id.hospial_name);
+        switch (hospitalGrade){
+            case "醫學中心":
+                divImage.setImageResource(R.mipmap.ic_hospital_biggest);
+                break;
+            case "區域醫院":
+                divImage.setImageResource(R.mipmap.ic_hospital_medium);
+                break;
+            case "地區醫院":
+                divImage.setImageResource(R.mipmap.ic_hospital_small);
+                break;
+            case "診所":
+                divImage.setImageResource(R.mipmap.ic_hospital_smallest);
+                break;
+        }
+        hospital.setText(hospitalName);
+
     }
 
     @Override
@@ -185,10 +230,58 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
     }
 
     private void setSpinner() {
-        Spinner spinner = (Spinner)findViewById(R.id.division_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.divisions, R.layout.spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        new SetDivisionTask().execute();
+    }
+
+    private class SetDivisionTask extends AsyncTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Util.showProgressDialog(DivisionActivity.this);
+        }
+        @Override
+        protected Object doInBackground(Object... params) {
+            hospitalDivisions = DoctorGuideApi.getDivisionByHospital(hospitalId);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            Util.hideProgressDialog();
+
+            Spinner spinner = (Spinner)findViewById(R.id.division_spinner);
+            List<String> strings = new ArrayList<String>();
+            for (Division div : hospitalDivisions)
+                strings.add(div.name );
+
+            ArrayAdapter<String> areaAdapter = new ArrayAdapter<String>(DivisionActivity.this,
+                    android.R.layout.simple_spinner_item, strings.toArray(new String[strings.size()]));
+            areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(areaAdapter);
+            int spinnerPosition = areaAdapter.getPosition(divisionName);
+            spinner.setSelection(spinnerPosition);
+            spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (startInteract == true) {
+                        Intent intent = new Intent(DivisionActivity.this, DivisionActivity.class);
+                        intent.putExtra("DIVISION_ID",hospitalDivisions.get(position).id);
+                        intent.putExtra("DIVISION_NAME",hospitalDivisions.get(position).name);
+                        intent.putExtra("HOSPITAL_ID",hospitalId);
+                        startActivity(intent);
+                        finish();
+                    } else
+                        startInteract = true;
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        }
     }
 
     public void onHospitalClick(View v) {

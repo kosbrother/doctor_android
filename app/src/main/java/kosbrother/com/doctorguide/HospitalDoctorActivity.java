@@ -2,6 +2,7 @@ package kosbrother.com.doctorguide;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -18,7 +19,10 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
+import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
+import kosbrother.com.doctorguide.api.DoctorGuideApi;
+import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.entity.Hospital;
 import kosbrother.com.doctorguide.fragments.DoctorFragment;
@@ -63,13 +67,52 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
 
     @Override
     public void onListFragmentInteraction(Hospital item) {
-        final CharSequence[] items = {"一般外科", "大腸直腸", "心臟外科"};
+        new GetDivisionsTask(item).execute();
+    }
 
+    private class GetDivisionsTask extends AsyncTask {
+
+        private final Hospital item;
+        private ArrayList<Division> divisions;
+
+        public GetDivisionsTask(Hospital item){
+            this.item = item;
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Util.showProgressDialog(HospitalDoctorActivity.this);
+        }
+        @Override
+        protected Object doInBackground(Object... params) {
+            divisions = DoctorGuideApi.getDivisionByHospitalAndCategory(item.id, categoryId);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            Util.hideProgressDialog();
+            showDivisionDialog(divisions,item);
+        }
+
+    }
+
+    private void showDivisionDialog(final ArrayList<Division> divisions, final Hospital item) {
+        List<String> strings = new ArrayList<String>();
+        for (Division div : divisions)
+            strings.add(div.name );
+        String[] items = strings.toArray(new String[strings.size()]);
         AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.AppCompatAlertDialogStyle);
         builder.setTitle("請選擇科別細項");
         builder.setItems(items, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
+            public void onClick(DialogInterface dialog, int position) {
                 Intent intent = new Intent(HospitalDoctorActivity.this, DivisionActivity.class);
+                intent.putExtra("DIVISION_ID",divisions.get(position).id);
+                intent.putExtra("DIVISION_NAME",divisions.get(position).name);
+                intent.putExtra("HOSPITAL_ID",item.id);
+                intent.putExtra("HOSPITAL_GRADE",item.grade);
+                intent.putExtra("HOSPITAL_NAME",item.name);
                 startActivity(intent);
             }
         });
