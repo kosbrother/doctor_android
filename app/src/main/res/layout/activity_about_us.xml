@@ -39,6 +39,7 @@
         android:textColor="@color/textColorPrimary"
         android:textSize="16dp"/>
     <Button
+        android:id="@+id/feedback"
         android:layout_width="120dp"
         android:layout_height="36dp"
         android:text="給我們意見"
