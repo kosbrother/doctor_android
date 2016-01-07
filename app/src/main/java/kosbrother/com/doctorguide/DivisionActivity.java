@@ -24,6 +24,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -139,8 +140,8 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
                 divImage.setImageResource(R.mipmap.ic_hospital_smallest);
                 break;
         }
-        hospital.setText(hospitalName);
-
+        String htmlString="<u>" + hospitalName + "</u>";
+        hospital.setText(Html.fromHtml(htmlString));
     }
 
     @Override
@@ -257,7 +258,7 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
                 strings.add(div.name );
 
             ArrayAdapter<String> areaAdapter = new ArrayAdapter<String>(DivisionActivity.this,
-                    android.R.layout.simple_spinner_item, strings.toArray(new String[strings.size()]));
+                    R.layout.spinner_item, strings.toArray(new String[strings.size()]));
             areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(areaAdapter);
             int spinnerPosition = areaAdapter.getPosition(divisionName);

@@ -26,7 +26,7 @@
                 android:orientation="vertical"
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical"
-                android:layout_marginLeft="5dp">
+                android:layout_marginLeft="18dp">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -37,36 +37,21 @@
                         android:layout_height="wrap_content"
                         android:text="@string/your_string_here"
                         android:textColor="@color/tab_text_act"
-                        android:textSize="24dp"
+                        android:textSize="@dimen/doctor_fragment_text_size"
                         android:layout_centerVertical="true"
                         android:clickable="true"
                         android:onClick="onHospitalClick"
-                        android:layout_marginLeft="5dp"/>
-                    <ImageView
-                        android:id="@+id/heart"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/heart_white"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="12dp"
                         />
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp">
-                    <Spinner
-                        android:id="@+id/division_spinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        />
                     <RelativeLayout
-                        android:layout_toRightOf="@id/division_spinner"
+                        android:id="@+id/comment_part"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true">
+                        >
                         <ImageView
                             android:id="@+id/thumb"
                             android:layout_width="wrap_content"
@@ -111,6 +96,13 @@
                             android:layout_height="wrap_content"
                             android:text="4.2"/>
                     </RelativeLayout>
+                    <Spinner
+                        android:layout_below="@+id/comment_part"
+                        android:id="@+id/division_spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/doctor_fragment_title_size"
+                        />
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
