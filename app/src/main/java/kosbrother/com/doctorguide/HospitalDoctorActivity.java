@@ -93,7 +93,17 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             Util.hideProgressDialog();
-            showDivisionDialog(divisions,item);
+            if(divisions.size() > 1)
+                showDivisionDialog(divisions,item);
+            else{
+                Intent intent = new Intent(HospitalDoctorActivity.this, DivisionActivity.class);
+                intent.putExtra("DIVISION_ID",divisions.get(0).id);
+                intent.putExtra("DIVISION_NAME",divisions.get(0).name);
+                intent.putExtra("HOSPITAL_ID",item.id);
+                intent.putExtra("HOSPITAL_GRADE",item.grade);
+                intent.putExtra("HOSPITAL_NAME",item.name);
+                startActivity(intent);
+            }
         }
 
     }

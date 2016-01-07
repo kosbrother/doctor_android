@@ -270,6 +270,8 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
                         intent.putExtra("DIVISION_ID",hospitalDivisions.get(position).id);
                         intent.putExtra("DIVISION_NAME",hospitalDivisions.get(position).name);
                         intent.putExtra("HOSPITAL_ID",hospitalId);
+                        intent.putExtra("HOSPITAL_GRADE",hospitalGrade);
+                        intent.putExtra("HOSPITAL_NAME",hospitalName);
                         startActivity(intent);
                         finish();
                     } else

@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_id": "doctor-server",
-    "project_number": "403130970450",
-    "name": "doctor server"
+    "project_id": "doctor-guide-server",
+    "project_number": "422229901752",
+    "name": "doctor guide server"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:403130970450:android:b36c17d424c1a772",
+        "mobilesdk_app_id": "1:422229901752:android:b36c17d424c1a772",
         "client_id": "android:kosbrother.com.doctorguide",
         "client_type": 1,
         "android_client_info": {
@@ -16,7 +16,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "403130970450-ms1s7rfm60bj49o4tkvukhair0nskkkt.apps.googleusercontent.com",
+          "client_id": "422229901752-f3n8nc25gr426fq2l33pguer3nnslo0m.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "kosbrother.com.doctorguide",
