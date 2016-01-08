@@ -42,11 +42,19 @@ public class DoctorActivity extends GoogleSignInActivity {
     private String doctorName;
     private boolean collected;
     private FloatingActionMenu fab;
+    private int hospitalName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            doctorlId = extras.getInt("DOCTOR_ID");
+            doctorName = extras.getString("DOCTOR_NAME");
+            hospitalName = extras.getInt("HOSPITAL_NAME");
+        }
 
         actionbar = getSupportActionBar();
         actionbar.setTitle("醫師資訊");
@@ -59,14 +67,14 @@ public class DoctorActivity extends GoogleSignInActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            doctorlId = extras.getInt("DOCTOR_ID");
-            doctorName = extras.getString("DOCTOR_NAME");
-        }
-
+        setViews();
         setHeatButton();
         setFab();
+    }
+
+    private void setViews() {
+        TextView dName = (TextView)findViewById(R.id.doctor_name);
+        dName.setText(doctorName + " 醫師");
     }
 
     private void setFab() {
@@ -204,7 +212,7 @@ public class DoctorActivity extends GoogleSignInActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new DoctorDetailFragment(), "醫師資料");
+        adapter.addFragment(DoctorDetailFragment.newInstance(doctorlId), "醫師資料");
         adapter.addFragment(new DoctorScoreFragment(), "醫師評分");
         adapter.addFragment(new CommentFragment(), "醫師評論");
         viewPager.setAdapter(adapter);

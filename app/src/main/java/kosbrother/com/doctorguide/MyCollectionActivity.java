@@ -122,6 +122,7 @@ public class MyCollectionActivity extends AppCompatActivity implements DoctorMyC
             Intent intent = new Intent(this, DoctorActivity.class);
             intent.putExtra("DOCTOR_ID",item.getId());
             intent.putExtra("DOCTOR_NAME",item.getName());
+            intent.putExtra("HOSPITAL_NAME",item.getHospital());
             startActivity(intent);
         }
     }

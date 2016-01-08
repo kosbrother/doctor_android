@@ -140,6 +140,7 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
         Intent intent = new Intent(this, DoctorActivity.class);
         intent.putExtra("DOCTOR_ID",item.id);
         intent.putExtra("DOCTOR_NAME",item.name);
+        intent.putExtra("HOSPITAL_NAME",item.hospital);
         startActivity(intent);
     }
 

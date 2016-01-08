@@ -6,4 +6,7 @@ package kosbrother.com.doctorguide.entity;
 public class Division {
     public int id;
     public String name;
+    public int hospital_id;
+    public String hospital_name;
+    public String hospital_grade;
 }

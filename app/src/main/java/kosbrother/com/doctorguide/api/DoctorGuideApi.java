@@ -20,6 +20,18 @@ public class DoctorGuideApi {
     final static String HOST = "http://130.211.247.159";
     private final static ObjectMapper mapper = new ObjectMapper();
 
+    public static Doctor getDoctorInfo(int doctorId){
+        Doctor doctor = null;
+        try {
+            String message = runHttpGet(HOST + "/api/v1/doctors/" + doctorId + ".json");
+            doctor = mapper.readValue(message, new TypeReference<Doctor>() {});
+            return doctor;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return doctor;
+    }
+
     public static ArrayList<Hospital> getHospitalsByAreaAndCategory(int areaId, int categoryId){
         ArrayList<Hospital> hospitals = new ArrayList<Hospital>();
         try {
