@@ -137,7 +137,7 @@
         >
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab12"
+            android:id="@+id/fab_problem_report"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_fab_problem"
@@ -148,7 +148,7 @@
             fab:fab_colorRipple="#0A6E7C" />
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab22"
+            android:id="@+id/fab_share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_fab_share"
@@ -159,7 +159,7 @@
             fab:fab_colorRipple="#3D6016"/>
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab32"
+            android:id="@+id/fab_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_fab_comment"
