@@ -10,10 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.adapters.MyDoctorMyCollectionRecyclerViewAdapter;
-import kosbrother.com.doctorguide.fragments.dummy.DummyContent;
-import kosbrother.com.doctorguide.fragments.dummy.DummyContent.DummyItem;
+import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
 
 /**
  * A fragment representing a list of Items.
@@ -26,6 +28,7 @@ public class DoctorMyCollectionFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private RealmResults<RealmDoctor> results;
 
 
     /**
@@ -55,7 +58,15 @@ public class DoctorMyCollectionFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyDoctorMyCollectionRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            Realm realm = Realm.getInstance(getContext());
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmQuery<RealmDoctor> query = realm.where(RealmDoctor.class);
+                    results = query.findAll();
+                }
+            });
+            recyclerView.setAdapter(new MyDoctorMyCollectionRecyclerViewAdapter(results, mListener));
         }
         return view;
     }
@@ -90,6 +101,6 @@ public class DoctorMyCollectionFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(View v, RealmDoctor item);
     }
 }

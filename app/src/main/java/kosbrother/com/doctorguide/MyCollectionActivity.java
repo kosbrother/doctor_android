@@ -2,6 +2,7 @@ package kosbrother.com.doctorguide;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,10 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
 import kosbrother.com.doctorguide.entity.realm.RealmHospital;
 import kosbrother.com.doctorguide.fragments.DoctorMyCollectionFragment;
 import kosbrother.com.doctorguide.fragments.HospitalMyCollecionFragment;
-import kosbrother.com.doctorguide.fragments.dummy.DummyContent;
 
 public class MyCollectionActivity extends AppCompatActivity implements DoctorMyCollectionFragment.OnListFragmentInteractionListener, HospitalMyCollecionFragment.OnListFragmentInteractionListener {
 
@@ -81,14 +82,48 @@ public class MyCollectionActivity extends AppCompatActivity implements DoctorMyC
                         }
                     }).show();
         }else{
-
+            Intent intent = new Intent(this, HospitalActivity.class);
+            intent.putExtra("HOSPITAL_ID",item.getId());
+            intent.putExtra("HOSPITAL_GRADE",item.getGrade());
+            intent.putExtra("HOSPITAL_NAME",item.getName());
+            startActivity(intent);
         }
 
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(View view, final RealmDoctor item) {
+        if(view.getId() == R.id.heart){
+            String message = "確定要取消收藏「" + item.getName() + " 醫師" +"」嗎？";
 
+            new AlertDialog.Builder(MyCollectionActivity.this,R.style.AppCompatAlertDialogStyle)
+                    .setTitle("取消收藏")
+                    .setMessage(message)
+                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Realm realm = Realm.getInstance(getBaseContext());
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    RealmDoctor doc = realm.where(RealmDoctor.class).equalTo("id", item.getId()).findFirst();
+                                    doc.removeFromRealm();
+                                }
+                            });
+                            adapter.notifyDataSetChanged();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    }).show();
+        }else{
+            Intent intent = new Intent(this, DoctorActivity.class);
+            intent.putExtra("DOCTOR_ID",item.getId());
+            intent.putExtra("DOCTOR_NAME",item.getName());
+            startActivity(intent);
+        }
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
