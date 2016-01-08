@@ -102,6 +102,11 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
+        setFab();
+        googleSignIn();
+    }
+
+    private void setFab() {
         fab = (FloatingActionMenu) findViewById(R.id.menu2);
         fab.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
@@ -126,8 +131,6 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
         fabShare.setOnClickListener(clickListener);
         fabComment.setOnClickListener(clickListener);
         fabAddDoctor.setOnClickListener(clickListener);
-
-        googleSignIn();
     }
 
     private void setViews() {

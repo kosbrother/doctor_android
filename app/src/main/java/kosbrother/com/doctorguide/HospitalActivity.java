@@ -1,6 +1,11 @@
 package kosbrother.com.doctorguide;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -35,6 +40,7 @@ public class HospitalActivity extends AppCompatActivity {
     private int hospitalId;
     private String hospitalGrade;
     private String hospitalName;
+    private FloatingActionMenu fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +66,56 @@ public class HospitalActivity extends AppCompatActivity {
         }
         setViews();
         setHeatButton();
+        setFab();
     }
+
+    private void setFab() {
+        fab = (FloatingActionMenu) findViewById(R.id.menu2);
+        fab.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
+            @Override
+            public void onMenuToggle(boolean opened) {
+                int drawableId;
+                if (opened) {
+                    drawableId = R.mipmap.ic_close;
+                } else {
+                    drawableId = R.mipmap.ic_fab;
+                }
+                Drawable drawable = getResources().getDrawable(drawableId);
+                fab.getMenuIconView().setImageDrawable(drawable);
+            }
+        });
+        FloatingActionButton fabProblemReport = (FloatingActionButton) findViewById(R.id.fab_problem_report);
+        FloatingActionButton fabShare = (FloatingActionButton) findViewById(R.id.fab_share);
+        FloatingActionButton fabAddDoctor = (FloatingActionButton) findViewById(R.id.fab_add_doctor);
+        fabProblemReport.setOnClickListener(clickListener);
+        fabShare.setOnClickListener(clickListener);
+        fabAddDoctor.setOnClickListener(clickListener);
+    }
+
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            fab.close(true);
+            Intent intent;
+            switch (v.getId()) {
+                case R.id.fab_problem_report:
+                    intent = new Intent(HospitalActivity.this, ProblemReportActivity.class);
+                    startActivity(intent);
+                    break;
+                case R.id.fab_share:
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                    sendIntent.setType("text/plain");
+                    startActivity(sendIntent);
+                    break;
+                case R.id.fab_add_doctor:
+                    intent = new Intent(HospitalActivity.this, AddDoctorActivity.class);
+                    startActivity(intent);
+                    break;
+            }
+        }
+    };
 
     private void setViews() {
         ImageView divImage = (ImageView)findViewById(R.id.div_image);
