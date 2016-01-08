@@ -289,6 +289,9 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
 
     public void onHospitalClick(View v) {
         Intent intent = new Intent(this, HospitalActivity.class);
+        intent.putExtra("HOSPITAL_ID",hospitalId);
+        intent.putExtra("HOSPITAL_GRADE",hospitalGrade);
+        intent.putExtra("HOSPITAL_NAME",hospitalName);
         startActivity(intent);
     }
 

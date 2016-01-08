@@ -1,7 +1,8 @@
 package kosbrother.com.doctorguide;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,10 +11,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import kosbrother.com.doctorguide.entity.realm.RealmHospital;
 import kosbrother.com.doctorguide.fragments.DoctorMyCollectionFragment;
 import kosbrother.com.doctorguide.fragments.HospitalMyCollecionFragment;
 import kosbrother.com.doctorguide.fragments.dummy.DummyContent;
@@ -23,6 +27,7 @@ public class MyCollectionActivity extends AppCompatActivity implements DoctorMyC
     private ActionBar actionbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private ViewPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,18 +47,48 @@ public class MyCollectionActivity extends AppCompatActivity implements DoctorMyC
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new HospitalMyCollecionFragment(), "收藏醫院");
         adapter.addFragment(new DoctorMyCollectionFragment(), "收藏醫生");
         viewPager.setAdapter(adapter);
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
-        Snackbar snackbar = Snackbar
-                .make(tabLayout, "Welcome to AndroidHive", Snackbar.LENGTH_LONG);
+    public void onListFragmentInteraction(View view, final RealmHospital item) {
+        if(view.getId() == R.id.heart){
+            String message = "確定要取消收藏「" + item.getName() + "」嗎？";
 
-        snackbar.show();
+            new AlertDialog.Builder(MyCollectionActivity.this,R.style.AppCompatAlertDialogStyle)
+                    .setTitle("取消收藏")
+                    .setMessage(message)
+                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Realm realm = Realm.getInstance(getBaseContext());
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    RealmHospital hosp = realm.where(RealmHospital.class).equalTo("id", item.getId()).findFirst();
+                                    hosp.removeFromRealm();
+                                }
+                            });
+                            adapter.notifyDataSetChanged();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    }).show();
+        }else{
+
+        }
+
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -82,6 +117,11 @@ public class MyCollectionActivity extends AppCompatActivity implements DoctorMyC
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
+        }
+
+        @Override
+        public int getItemPosition(Object object){
+            return POSITION_NONE;
         }
     }
 

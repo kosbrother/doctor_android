@@ -4,11 +4,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import java.util.List;
-
+import io.realm.RealmResults;
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.entity.realm.RealmHospital;
 import kosbrother.com.doctorguide.fragments.HospitalMyCollecionFragment.OnListFragmentInteractionListener;
 import kosbrother.com.doctorguide.fragments.dummy.DummyContent.DummyItem;
 
@@ -19,10 +21,10 @@ import kosbrother.com.doctorguide.fragments.dummy.DummyContent.DummyItem;
  */
 public class MyHospitalMyCollecionRecyclerViewAdapter extends RecyclerView.Adapter<MyHospitalMyCollecionRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final RealmResults<RealmHospital> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyHospitalMyCollecionRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyHospitalMyCollecionRecyclerViewAdapter(RealmResults<RealmHospital> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -35,33 +37,39 @@ public class MyHospitalMyCollecionRecyclerViewAdapter extends RecyclerView.Adapt
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-//        holder.mIdView.setText(mValues.get(position).id);
-//        holder.mContentView.setText(mValues.get(position).content);
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        holder.mName.setText(mValues.get(position).getName());
+        holder.mAddress.setText(mValues.get(position).getAddress());
 
-        switch (position % 4){
-            case 0:
+        switch (mValues.get(position).getGrade()){
+            case "醫學中心":
                 holder.mImageView.setImageResource(R.mipmap.ic_hospital_biggest);
                 break;
-            case 1:
+            case "區域醫院":
                 holder.mImageView.setImageResource(R.mipmap.ic_hospital_medium);
                 break;
-            case 2:
+            case "地區醫院":
                 holder.mImageView.setImageResource(R.mipmap.ic_hospital_small);
                 break;
-            case 3:
+            case "診所":
                 holder.mImageView.setImageResource(R.mipmap.ic_hospital_smallest);
                 break;
         }
+
+        holder.heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    mListener.onListFragmentInteraction(v,mValues.get(position));
+                }
+            }
+        });
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onListFragmentInteraction(v,mValues.get(position));
                 }
             }
         });
@@ -73,23 +81,20 @@ public class MyHospitalMyCollecionRecyclerViewAdapter extends RecyclerView.Adapt
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-//        public final TextView mIdView;
-//        public final TextView mContentView;
-        public DummyItem mItem;
+        public View mView;
+        public TextView mName;
+        public TextView mAddress;
         public ImageView mImageView;
+        public Button heart;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mImageView = (ImageView)view.findViewById(R.id.grade_image);
-//            mIdView = (TextView) view.findViewById(R.id.id);
-//            mContentView = (TextView) view.findViewById(R.id.content);
+            mName = (TextView)view.findViewById(R.id.hospial_name);
+            mAddress = (TextView)view.findViewById(R.id.address);
+            heart = (Button)view.findViewById(R.id.heart);
         }
 
-//        @Override
-//        public String toString() {
-//            return super.toString() + " '" + mContentView.getText() + "'";
-//        }
     }
 }

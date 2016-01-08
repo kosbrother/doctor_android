@@ -10,10 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.adapters.MyHospitalMyCollecionRecyclerViewAdapter;
-import kosbrother.com.doctorguide.fragments.dummy.DummyContent;
-import kosbrother.com.doctorguide.fragments.dummy.DummyContent.DummyItem;
+import kosbrother.com.doctorguide.entity.realm.RealmHospital;
 
 /**
  * A fragment representing a list of Items.
@@ -27,6 +29,7 @@ public class HospitalMyCollecionFragment extends Fragment {
     private int mColumnCount = 1;
 
     private OnListFragmentInteractionListener mListener;
+    private RealmResults<RealmHospital> results;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -55,7 +58,16 @@ public class HospitalMyCollecionFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyHospitalMyCollecionRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            Realm realm = Realm.getInstance(getContext());
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmQuery<RealmHospital> query = realm.where(RealmHospital.class);
+                    results = query.findAll();
+                }
+            });
+
+            recyclerView.setAdapter(new MyHospitalMyCollecionRecyclerViewAdapter(results, mListener));
         }
         return view;
     }
@@ -90,6 +102,6 @@ public class HospitalMyCollecionFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(View view,RealmHospital item);
     }
 }
