@@ -44,6 +44,18 @@ public class DoctorGuideApi {
         return doctors;
     }
 
+    public static ArrayList<Doctor> getDoctorsByHospitalAndDivision(int hospitalID, int divisionId){
+        ArrayList<Doctor> doctors = new ArrayList<Doctor>();
+        try {
+            String message = runHttpGet(HOST + "/api/v1/doctors/by_hospital_division.json?hospital_id="+ hospitalID +"&division_id=" + divisionId);
+            doctors = readDoctorJson(message);
+            return doctors;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return doctors;
+    }
+
     public static ArrayList<Division> getDivisionByHospitalAndCategory(int hospitalId, int categoryId){
         ArrayList<Division> divisions = new ArrayList<Division>();
         try {

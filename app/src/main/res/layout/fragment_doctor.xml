@@ -107,11 +107,11 @@
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
-    <ImageView
+    <Button
+        android:background="@drawable/heart_red_line_to_red_button"
         android:id="@+id/heart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/heart_red"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="12dp"

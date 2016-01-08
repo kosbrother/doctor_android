@@ -136,7 +136,7 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
     }
 
     @Override
-    public void onListFragmentInteraction(Doctor item) {
+    public void onListFragmentInteraction(View v, Doctor item) {
         Intent intent = new Intent(this, DoctorActivity.class);
         intent.putExtra("DOCTOR_ID",item.id);
         intent.putExtra("DOCTOR_NAME",item.name);

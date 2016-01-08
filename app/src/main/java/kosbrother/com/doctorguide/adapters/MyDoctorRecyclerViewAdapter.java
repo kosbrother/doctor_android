@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -32,10 +33,12 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<MyDoctorRe
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_doctor, parent, false);
-        if(mFragmentViewType == DISTANCETYPE)
+        if(mFragmentViewType == DISTANCETYPE) {
             view.findViewById(R.id.heart).setVisibility(View.GONE);
-        else
+        }else{
+            view.findViewById(R.id.hospial_name).setVisibility(View.GONE);
             view.findViewById(R.id.distance).setVisibility(View.GONE);
+        }
         return new ViewHolder(view);
     }
 
@@ -44,11 +47,26 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<MyDoctorRe
         holder.mName.setText(mDoctors.get(position).name);
         holder.mhospialName.setText(mDoctors.get(position).hospital);
 
+        if(mDoctors.get(position).isCollected) {
+            holder.heart.setBackgroundResource(R.drawable.heart_read_to_white_button);
+        }else{
+            holder.heart.setBackgroundResource(R.drawable.heart_red_line_to_red_button);
+        }
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    mListener.onListFragmentInteraction(mDoctors.get(position));
+                    mListener.onListFragmentInteraction(v, mDoctors.get(position));
+                }
+            }
+        });
+
+        holder.heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    mListener.onListFragmentInteraction(v,mDoctors.get(position));
                 }
             }
         });
@@ -63,12 +81,14 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<MyDoctorRe
         public  View mView;
         public  TextView mName;
         public  TextView mhospialName;
+        public Button heart;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mName = (TextView) view.findViewById(R.id.doctor_name);
             mhospialName = (TextView) view.findViewById(R.id.hospial_name);
+            heart = (Button)view.findViewById(R.id.heart);
         }
 
     }

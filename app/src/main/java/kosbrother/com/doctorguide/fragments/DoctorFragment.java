@@ -15,23 +15,31 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Area;
 import kosbrother.com.doctorguide.entity.Doctor;
+import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
 
 
 public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedListener{
 
     private static final String ARG_TYPE = "ARG_TYPE";
     private static final String ARG_CATEGORY_ID = "CATEGORY_ID";
+    private static final String ARG_HOSPITAL_ID = "HOSPITAL_ID";
+    private static final String ARG_DIVISION_ID = "DIVISION_ID";
     private int fragmentType;
     private int mCategoryId = 1;
     private OnListFragmentInteractionListener mListener;
     private ArrayList<Doctor> doctors;
     private RecyclerView recyclerView;
+    private int mHospitalId;
+    private int mDivisionId;
 
 
     public DoctorFragment() {
@@ -46,6 +54,16 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
         return fragment;
     }
 
+    public static DoctorFragment newInstance(int fragmentType,int hospitalId,int divisionId) {
+        DoctorFragment fragment = new DoctorFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_TYPE, fragmentType);
+        args.putInt(ARG_HOSPITAL_ID, hospitalId);
+        args.putInt(ARG_DIVISION_ID, divisionId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +71,8 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
         if (getArguments() != null) {
             fragmentType = getArguments().getInt(ARG_TYPE);
             mCategoryId = getArguments().getInt(ARG_CATEGORY_ID);
+            mHospitalId = getArguments().getInt(ARG_HOSPITAL_ID);
+            mDivisionId = getArguments().getInt(ARG_DIVISION_ID);
         }
     }
 
@@ -68,11 +88,16 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
 
         if(fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE){
             view.findViewById(R.id.selector).setVisibility(View.GONE);
+            setHeartTypeRecyclerAdapter();
         }else {
             setAreaSpinner(view);
             setSortSpinner(view);
         }
         return view;
+    }
+
+    private void setHeartTypeRecyclerAdapter() {
+        new GetDoctorsTask().execute();
     }
 
     private void setSortSpinner(View view) {
@@ -140,7 +165,26 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
         }
         @Override
         protected Object doInBackground(Object... params) {
-            doctors = DoctorGuideApi.getDoctorsByAreaAndCategory(areaId, mCategoryId);
+            if(fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE ) {
+                doctors = DoctorGuideApi.getDoctorsByHospitalAndDivision(mHospitalId, mDivisionId);
+                Realm realm = Realm.getInstance(getContext());
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmQuery<RealmDoctor> query = realm.where(RealmDoctor.class);
+                        RealmResults<RealmDoctor> results = query.findAll();
+                        for(Doctor doc:doctors){
+                            for(RealmDoctor realmDoctor: results){
+                                if(doc.id == realmDoctor.getId()){
+                                    doc.isCollected = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                });
+            }else
+                doctors = DoctorGuideApi.getDoctorsByAreaAndCategory(areaId, mCategoryId);
             return null;
         }
 
@@ -172,6 +216,6 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(Doctor item);
+        void onListFragmentInteraction(View v, Doctor item);
     }
 }

@@ -1,12 +1,15 @@
 package kosbrother.com.doctorguide.entity.realm;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by steven on 1/6/16.
  */
 public class RealmHospital extends RealmObject {
+    @PrimaryKey
     private int id;
+
     private String name;
     private String address;
     private String grade;

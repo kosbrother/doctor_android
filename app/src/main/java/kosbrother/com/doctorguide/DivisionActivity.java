@@ -12,15 +12,19 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -37,11 +41,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.entity.Doctor;
+import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
 import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DivisionScoreFragment;
 import kosbrother.com.doctorguide.fragments.DoctorFragment;
@@ -66,6 +72,7 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
     private boolean startInteract = false;
     private String hospitalGrade;
     private String hospitalName;
+    private ViewPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,8 +190,8 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.HEARTTYPE,1), "科內醫生");
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.HEARTTYPE,hospitalId,divisionId), "科內醫生");
         adapter.addFragment(new DivisionScoreFragment(), "本科評分");
         adapter.addFragment(new CommentFragment(), "本科評論");
         viewPager.setAdapter(adapter);
@@ -196,9 +203,57 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
     }
 
     @Override
-    public void onListFragmentInteraction(Doctor item) {
-        Intent intent = new Intent(this, DoctorActivity.class);
-        startActivity(intent);
+    public void onListFragmentInteraction(View view, final Doctor item) {
+        if(view.getId() == R.id.heart){
+            if(item.isCollected) {
+                String message = "確定要取消收藏「" + item.name + " 醫師" + "」嗎？";
+                new AlertDialog.Builder(DivisionActivity.this, R.style.AppCompatAlertDialogStyle)
+                        .setTitle("取消收藏")
+                        .setMessage(message)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Realm realm = Realm.getInstance(getBaseContext());
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        RealmDoctor doc = realm.where(RealmDoctor.class).equalTo("id", item.id).findFirst();
+                                        doc.removeFromRealm();
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }).show();
+            }else{
+                Realm realm = Realm.getInstance(getBaseContext());
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmDoctor doctor = new RealmDoctor();
+                        doctor.setId(item.id);
+                        doctor.setName(item.name);
+                        doctor.setAddress(item.address);
+                        doctor.setHospital(hospitalName);
+                        realm.copyToRealmOrUpdate(doctor);
+                    }
+                });
+                Snackbar snackbar = Snackbar.make(tabLayout, "成功收藏", Snackbar.LENGTH_SHORT);
+                View snackbrView = snackbar.getView();
+                TextView tv = (TextView) snackbrView.findViewById(android.support.design.R.id.snackbar_text);
+                tv.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary));
+                snackbar.show();
+            }
+            adapter.notifyDataSetChanged();
+        }else{
+            Intent intent = new Intent(this, DoctorActivity.class);
+            intent.putExtra("DOCTOR_ID",item.id);
+            intent.putExtra("DOCTOR_NAME",item.name);
+            startActivity(intent);
+        }
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -227,6 +282,10 @@ public class DivisionActivity extends AppCompatActivity implements DoctorFragmen
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
+        }
+        @Override
+        public int getItemPosition(Object object){
+            return POSITION_NONE;
         }
     }
 
