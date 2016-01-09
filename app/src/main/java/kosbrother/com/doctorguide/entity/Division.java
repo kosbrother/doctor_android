@@ -9,4 +9,5 @@ public class Division {
     public int hospital_id;
     public String hospital_name;
     public String hospital_grade;
+    public int category_id;
 }

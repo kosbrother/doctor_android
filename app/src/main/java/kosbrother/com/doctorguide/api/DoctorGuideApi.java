@@ -32,6 +32,18 @@ public class DoctorGuideApi {
         return doctor;
     }
 
+    public static Hospital getHospitalInfo(int hospitalId){
+        Hospital hospital = null;
+        try {
+            String message = runHttpGet(HOST + "/api/v1/hospitals/" + hospitalId + ".json");
+            hospital = mapper.readValue(message, new TypeReference<Hospital>() {});
+            return hospital;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return hospital;
+    }
+
     public static ArrayList<Hospital> getHospitalsByAreaAndCategory(int areaId, int categoryId){
         ArrayList<Hospital> hospitals = new ArrayList<Hospital>();
         try {

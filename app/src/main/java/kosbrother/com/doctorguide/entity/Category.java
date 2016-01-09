@@ -67,6 +67,15 @@ public class Category {
         return (String) hash.get(id);
     }
 
+    public static Category getCategoryById(int id){
+        ArrayList<Category> categories  = getCategories();
+        for(Category c:categories){
+            if(c.id == id)
+                return c;
+        }
+        return null;
+    }
+
     public static ArrayList<Category> getCategories() {
         ArrayList<Category> cateogries = new ArrayList<Category>();
         JSONArray categoryArray;

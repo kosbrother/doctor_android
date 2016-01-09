@@ -6,6 +6,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -15,6 +16,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,12 +28,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import kosbrother.com.doctorguide.Util.Util;
+import kosbrother.com.doctorguide.api.DoctorGuideApi;
+import kosbrother.com.doctorguide.entity.Category;
+import kosbrother.com.doctorguide.entity.Division;
+import kosbrother.com.doctorguide.entity.Hospital;
 import kosbrother.com.doctorguide.entity.realm.RealmHospital;
 import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DivisionListFragment;
 import kosbrother.com.doctorguide.fragments.HospitalDetailFragment;
 
-public class HospitalActivity extends AppCompatActivity {
+public class HospitalActivity extends AppCompatActivity implements DivisionListFragment.OnListFragmentInteractionListener{
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -41,22 +48,12 @@ public class HospitalActivity extends AppCompatActivity {
     private String hospitalGrade;
     private String hospitalName;
     private FloatingActionMenu fab;
+    private Hospital hospital;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hospital);
-
-        actionbar = getSupportActionBar();
-        actionbar.setTitle("醫院資訊");
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setElevation(0);
-
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -64,9 +61,63 @@ public class HospitalActivity extends AppCompatActivity {
             hospitalGrade = extras.getString("HOSPITAL_GRADE");
             hospitalName = extras.getString("HOSPITAL_NAME");
         }
+
+        actionbar = getSupportActionBar();
+        actionbar.setTitle("醫院資訊");
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setElevation(0);
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+
         setViews();
         setHeatButton();
         setFab();
+
+        new SetFragmentTask().execute();
+    }
+
+    @Override
+    public void onListFragmentInteraction(View view,Division division) {
+        if(view.getId() == R.id.detail_button){
+            AlertDialog.Builder builder =
+                    new AlertDialog.Builder(HospitalActivity.this, R.style.AppCompatAlertDialogStyle);
+            builder.setTitle(Category.getCategoryById(division.category_id).name);
+            builder.setMessage(Category.getCategoryById(division.category_id).intro);
+            builder.setPositiveButton("確定", null);
+            builder.show();
+        }else{
+            Intent intent = new Intent(HospitalActivity.this, DivisionActivity.class);
+            intent.putExtra("DIVISION_ID",division.id);
+            intent.putExtra("DIVISION_NAME",division.name);
+            intent.putExtra("HOSPITAL_ID",division.hospital_id);
+            intent.putExtra("HOSPITAL_GRADE",division.hospital_grade);
+            intent.putExtra("HOSPITAL_NAME",division.hospital_name);
+            startActivity(intent);
+        }
+    }
+
+    private class SetFragmentTask extends AsyncTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Util.showProgressDialog(HospitalActivity.this);
+        }
+        @Override
+        protected Object doInBackground(Object... params) {
+            hospital = DoctorGuideApi.getHospitalInfo(hospitalId);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            Util.hideProgressDialog();
+            setupViewPager(viewPager);
+            tabLayout.setupWithViewPager(viewPager);
+        }
+
     }
 
     private void setFab() {
@@ -196,8 +247,8 @@ public class HospitalActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new HospitalDetailFragment(), "關於本院");
-        adapter.addFragment(new DivisionListFragment(), "院內科別");
+        adapter.addFragment(HospitalDetailFragment.newInstance(hospitalId,hospital), "關於本院");
+        adapter.addFragment(DivisionListFragment.newInstance(hospitalId,hospital.divisions), "院內科別");
         adapter.addFragment(new CommentFragment(), "本院評論");
         viewPager.setAdapter(adapter);
     }

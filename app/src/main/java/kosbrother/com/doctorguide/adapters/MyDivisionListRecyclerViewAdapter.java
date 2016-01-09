@@ -4,10 +4,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.List;
 
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.entity.Category;
+import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.fragments.DivisionListFragment.OnListFragmentInteractionListener;
 import kosbrother.com.doctorguide.fragments.dummy.DummyContent.DummyItem;
 
@@ -18,10 +23,10 @@ import kosbrother.com.doctorguide.fragments.dummy.DummyContent.DummyItem;
  */
 public class MyDivisionListRecyclerViewAdapter extends RecyclerView.Adapter<MyDivisionListRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Division> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyDivisionListRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyDivisionListRecyclerViewAdapter(List<Division> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -34,18 +39,23 @@ public class MyDivisionListRecyclerViewAdapter extends RecyclerView.Adapter<MyDi
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-//        holder.mIdView.setText(mValues.get(position).id);
-//        holder.mContentView.setText(mValues.get(position).content);
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        holder.mDivision.setText(mValues.get(position).name);
+        holder.mCategoryImage.setImageResource(Category.getCategoryById(mValues.get(position).category_id).resourceId);
+        holder.mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    mListener.onListFragmentInteraction(v,mValues.get(position));
+                }
+            }
+        });
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onListFragmentInteraction(v,mValues.get(position));
                 }
             }
         });
@@ -57,21 +67,18 @@ public class MyDivisionListRecyclerViewAdapter extends RecyclerView.Adapter<MyDi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-//        public final TextView mIdView;
-//        public final TextView mContentView;
-        public DummyItem mItem;
+        public View mView;
+        public ImageView mCategoryImage;
+        public TextView mDivision;
+        public Button mButton;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-//            mIdView = (TextView) view.findViewById(R.id.id);
-//            mContentView = (TextView) view.findViewById(R.id.content);
+            mCategoryImage = (ImageView)view.findViewById(R.id.category_icon);
+            mDivision = (TextView)view.findViewById(R.id.division);
+            mButton = (Button)view.findViewById(R.id.detail_button);
         }
 
-//        @Override
-//        public String toString() {
-//            return super.toString() + " '" + mContentView.getText() + "'";
-//        }
     }
 }
