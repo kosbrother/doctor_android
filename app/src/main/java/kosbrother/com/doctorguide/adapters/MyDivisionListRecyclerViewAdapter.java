@@ -14,13 +14,7 @@ import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.entity.Category;
 import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.fragments.DivisionListFragment.OnListFragmentInteractionListener;
-import kosbrother.com.doctorguide.fragments.dummy.DummyContent.DummyItem;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class MyDivisionListRecyclerViewAdapter extends RecyclerView.Adapter<MyDivisionListRecyclerViewAdapter.ViewHolder> {
 
     private final List<Division> mValues;
@@ -41,7 +35,8 @@ public class MyDivisionListRecyclerViewAdapter extends RecyclerView.Adapter<MyDi
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mDivision.setText(mValues.get(position).name);
-        holder.mCategoryImage.setImageResource(Category.getCategoryById(mValues.get(position).category_id).resourceId);
+        if(Category.getCategoryById(mValues.get(position).category_id) != null)
+            holder.mCategoryImage.setImageResource(Category.getCategoryById(mValues.get(position).category_id).resourceId);
         holder.mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

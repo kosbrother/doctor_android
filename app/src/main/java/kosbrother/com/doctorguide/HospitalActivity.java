@@ -230,6 +230,7 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
                             hosp.setId(hospitalId);
                             hosp.setGrade(hospitalGrade);
                             hosp.setName(hospitalName);
+                            hosp.setAddress(hospital.address);
                         }
                     });
 

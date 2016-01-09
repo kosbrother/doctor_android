@@ -6,7 +6,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -35,17 +34,9 @@ public class MainActivity extends GoogleSignInActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener {
 
     RecyclerView mRecyclerView;
-    private GoogleApiClient mGoogleApiClient;
     private SignInButton signInBtn;
-    private static final int RC_SIGN_IN = 9002;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient mClient;
     private String email;
     private TextView logInEmail;
-    private ProgressDialog mProgressDialog;
     private DrawerLayout drawer;
 
     @Override

@@ -10,4 +10,5 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context="kosbrother.com.doctorguide.fragments.DivisionListFragment"
-    tools:listitem="@layout/fragment_division_list_item" />
+    tools:listitem="@layout/fragment_division_list_item"
+    android:paddingBottom="@dimen/listview_padding_bottom_to_show_fab"/>

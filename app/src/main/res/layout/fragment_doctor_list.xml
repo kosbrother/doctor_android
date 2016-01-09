@@ -39,6 +39,6 @@
         android:layout_centerHorizontal="true"
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/fragment_hospital"
-        android:paddingBottom="50dp"
+        android:paddingBottom="@dimen/listview_padding_bottom_to_show_fab"
         android:clipToPadding="false"/>
 </RelativeLayout>

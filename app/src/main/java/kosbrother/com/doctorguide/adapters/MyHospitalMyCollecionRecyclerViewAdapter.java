@@ -12,13 +12,8 @@ import io.realm.RealmResults;
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.entity.realm.RealmHospital;
 import kosbrother.com.doctorguide.fragments.HospitalMyCollecionFragment.OnListFragmentInteractionListener;
-import kosbrother.com.doctorguide.fragments.dummy.DummyContent.DummyItem;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
+
 public class MyHospitalMyCollecionRecyclerViewAdapter extends RecyclerView.Adapter<MyHospitalMyCollecionRecyclerViewAdapter.ViewHolder> {
 
     private final RealmResults<RealmHospital> mValues;

@@ -12,13 +12,7 @@ import java.util.ArrayList;
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.entity.Hospital;
 import kosbrother.com.doctorguide.fragments.HospitalFragment.OnListFragmentInteractionListener;
-import kosbrother.com.doctorguide.fragments.dummy.DummyHospitalContent.DummyHospital;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyHospital} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospitalRecyclerViewAdapter.ViewHolder> {
 
     private final ArrayList<Hospital> mHospitals;
