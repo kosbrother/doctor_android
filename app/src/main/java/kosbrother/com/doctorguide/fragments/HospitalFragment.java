@@ -5,12 +5,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -19,22 +19,21 @@ import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyHospitalRecyclerViewAdapter;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
+import kosbrother.com.doctorguide.custom.LoadMoreRecyclerView;
 import kosbrother.com.doctorguide.entity.Area;
 import kosbrother.com.doctorguide.entity.Hospital;
 
-/**
- * A fragment representing a list of Items.
- * <p />
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
 public class HospitalFragment extends Fragment implements Spinner.OnItemSelectedListener{
 
     private static final String ARG_CATEGORY_ID = "CATEGORY_ID";
     private int mCategoryId = 1;
     private OnListFragmentInteractionListener mListener;
-    private ArrayList<Hospital> hospitals;
-    private RecyclerView recyclerView;
+    private ArrayList<Hospital> hospitals = new ArrayList<>();
+    private LoadMoreRecyclerView recyclerView;
+    private MyHospitalRecyclerViewAdapter hospitalAdapter;
+    private int page = 1;
+    private LinearLayout loadmoreLayout;
+    private boolean isLoadCompleted = false;
 
     public HospitalFragment() {
     }
@@ -60,10 +59,20 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_hospital_list, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        recyclerView = (LoadMoreRecyclerView) view.findViewById(R.id.list);
+        loadmoreLayout = (LinearLayout) view.findViewById(R.id.load_more);
         Context context = view.getContext();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setOnLoadMoreListener(new LoadMoreRecyclerView.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                if(!isLoadCompleted){
+                    loadmoreLayout.setVisibility(View.VISIBLE);
+                    new GetHospitalsTask().execute();
+                }
+            }
+        });
         setAreaSpinner(view);
         setSortSpinner(view);
 
@@ -122,30 +131,50 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
         if(areaId != 0 && sortSrting!=null)
             checktime += 1;
         if(checktime >= 1) {
+            page = 1;isLoadCompleted = false;
             new GetHospitalsTask().execute();
         }
     }
 
     private class GetHospitalsTask extends AsyncTask {
 
+        private ArrayList<Hospital> getHospitals;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Util.showProgressDialog(getContext());
+            if(page == 1)
+                Util.showProgressDialog(getContext());
         }
         @Override
         protected Object doInBackground(Object... params) {
-            hospitals = DoctorGuideApi.getHospitalsByAreaAndCategory(areaId, mCategoryId);
+            getHospitals = DoctorGuideApi.getHospitalsByAreaAndCategory(areaId, mCategoryId, page);
             return null;
         }
 
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
-            Util.hideProgressDialog();
-            MyHospitalRecyclerViewAdapter hospitalAdapter = new MyHospitalRecyclerViewAdapter(hospitals, mListener);
-            recyclerView.setAdapter(hospitalAdapter);
-            hospitalAdapter.notifyDataSetChanged();
+            if(page==1)
+                Util.hideProgressDialog();
+            loadmoreLayout.setVisibility(View.GONE);
+            recyclerView.setLoaded();
+
+            if(page == 1) {
+                page += 1;
+                hospitals = getHospitals;
+                hospitalAdapter = new MyHospitalRecyclerViewAdapter(hospitals, mListener);
+                recyclerView.setAdapter(hospitalAdapter);
+                hospitalAdapter.notifyDataSetChanged();
+            }else{
+                if(getHospitals.size() > 0) {
+                    page += 1;
+                    hospitals.addAll(getHospitals);
+                    hospitalAdapter.notifyDataSetChanged();
+                }else{
+                    isLoadCompleted = true;
+                }
+            }
         }
 
     }
@@ -155,18 +184,7 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
 
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(Hospital item);
     }
 }
