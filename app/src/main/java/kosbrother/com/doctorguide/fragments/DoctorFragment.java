@@ -5,12 +5,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -22,6 +22,7 @@ import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
+import kosbrother.com.doctorguide.custom.LoadMoreRecyclerView;
 import kosbrother.com.doctorguide.entity.Area;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
@@ -36,10 +37,14 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
     private int fragmentType;
     private int mCategoryId = 1;
     private OnListFragmentInteractionListener mListener;
-    private ArrayList<Doctor> doctors;
-    private RecyclerView recyclerView;
+    private ArrayList<Doctor> doctors = new ArrayList();
+    private LoadMoreRecyclerView recyclerView;
     private int mHospitalId;
     private int mDivisionId;
+    private int page = 1;
+    private LinearLayout loadmoreLayout;
+    private boolean isLoadCompleted = false;
+    private MyDoctorRecyclerViewAdapter adatper;
 
 
     public DoctorFragment() {
@@ -81,10 +86,20 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_doctor_list, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        recyclerView = (LoadMoreRecyclerView) view.findViewById(R.id.list);
+        loadmoreLayout = (LinearLayout) view.findViewById(R.id.load_more);
         Context context = view.getContext();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setOnLoadMoreListener(new LoadMoreRecyclerView.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                if (!isLoadCompleted) {
+                    loadmoreLayout.setVisibility(View.VISIBLE);
+                    new GetDoctorsTask().execute();
+                }
+            }
+        });
 
         if(fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE){
             view.findViewById(R.id.selector).setVisibility(View.GONE);
@@ -152,11 +167,14 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
         if(areaId != 0 && sortSrting!=null)
             checktime += 1;
         if(checktime >= 1) {
+            page = 1;isLoadCompleted = false;
             new GetDoctorsTask().execute();
         }
     }
 
     private class GetDoctorsTask extends AsyncTask {
+
+        private ArrayList<Doctor> getDoctors;
 
         @Override
         protected void onPreExecute() {
@@ -173,9 +191,9 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
                     public void execute(Realm realm) {
                         RealmQuery<RealmDoctor> query = realm.where(RealmDoctor.class);
                         RealmResults<RealmDoctor> results = query.findAll();
-                        for(Doctor doc:doctors){
-                            for(RealmDoctor realmDoctor: results){
-                                if(doc.id == realmDoctor.getId()){
+                        for (Doctor doc : doctors) {
+                            for (RealmDoctor realmDoctor : results) {
+                                if (doc.id == realmDoctor.getId()) {
                                     doc.isCollected = true;
                                     break;
                                 }
@@ -184,7 +202,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
                     }
                 });
             }else
-                doctors = DoctorGuideApi.getDoctorsByAreaAndCategory(areaId, mCategoryId);
+                getDoctors = DoctorGuideApi.getDoctorsByAreaAndCategory(areaId, mCategoryId,page);
             return null;
         }
 
@@ -192,9 +210,30 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             Util.hideProgressDialog();
-            MyDoctorRecyclerViewAdapter adatper = new MyDoctorRecyclerViewAdapter(doctors, mListener, fragmentType);
-            recyclerView.setAdapter(adatper);
-            adatper.notifyDataSetChanged();
+            if(fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE ) {
+                adatper = new MyDoctorRecyclerViewAdapter(doctors, mListener, fragmentType);
+                recyclerView.setAdapter(adatper);
+                adatper.notifyDataSetChanged();
+            }else{
+                loadmoreLayout.setVisibility(View.GONE);
+                recyclerView.setLoaded();
+
+                if(page == 1) {
+                    page += 1;
+                    doctors = getDoctors;
+                    adatper = new MyDoctorRecyclerViewAdapter(doctors, mListener,fragmentType);
+                    recyclerView.setAdapter(adatper);
+                    adatper.notifyDataSetChanged();
+                }else{
+                    if(getDoctors.size() > 0) {
+                        page += 1;
+                        doctors.addAll(getDoctors);
+                        adatper.notifyDataSetChanged();
+                    }else{
+                        isLoadCompleted = true;
+                    }
+                }
+            }
         }
 
     }
@@ -204,18 +243,8 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
 
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(View v, Doctor item);
     }
 }

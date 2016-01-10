@@ -56,10 +56,10 @@ public class DoctorGuideApi {
         return hospitals;
     }
 
-    public static ArrayList<Doctor> getDoctorsByAreaAndCategory(int areaId, int categoryId){
+    public static ArrayList<Doctor> getDoctorsByAreaAndCategory(int areaId, int categoryId, int page){
         ArrayList<Doctor> doctors = new ArrayList<Doctor>();
         try {
-            String message = runHttpGet(HOST + "/api/v1/doctors/by_area_category.json?area_id="+ areaId +"&category_id=" + categoryId);
+            String message = runHttpGet(HOST + "/api/v1/doctors/by_area_category.json?area_id="+ areaId +"&category_id=" + categoryId + "&page="+page);
             doctors = readDoctorJson(message);
             return doctors;
         } catch (IOException e) {
