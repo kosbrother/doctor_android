@@ -179,7 +179,8 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Util.showProgressDialog(getContext());
+            if(page==1)
+                Util.showProgressDialog(getContext());
         }
         @Override
         protected Object doInBackground(Object... params) {
@@ -209,11 +210,13 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
-            Util.hideProgressDialog();
+            if(page==1)
+                Util.hideProgressDialog();
             if(fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE ) {
                 adatper = new MyDoctorRecyclerViewAdapter(doctors, mListener, fragmentType);
                 recyclerView.setAdapter(adatper);
                 adatper.notifyDataSetChanged();
+                isLoadCompleted = true;
             }else{
                 loadmoreLayout.setVisibility(View.GONE);
                 recyclerView.setLoaded();
