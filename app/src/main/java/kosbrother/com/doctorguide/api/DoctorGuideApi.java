@@ -36,7 +36,8 @@ public class DoctorGuideApi {
         Hospital hospital = null;
         try {
             String message = runHttpGet(HOST + "/api/v1/hospitals/" + hospitalId + ".json");
-            hospital = mapper.readValue(message, new TypeReference<Hospital>() {});
+            hospital = mapper.readValue(message, new TypeReference<Hospital>() {
+            });
             return hospital;
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,10 +45,10 @@ public class DoctorGuideApi {
         return hospital;
     }
 
-    public static ArrayList<Hospital> getHospitalsByAreaAndCategory(int areaId, int categoryId, int page){
+    public static ArrayList<Hospital> getHospitalsByAreaAndCategory(int areaId, int categoryId, int page, double latitude, double longitude){
         ArrayList<Hospital> hospitals = new ArrayList<Hospital>();
         try {
-            String message = runHttpGet(HOST + "/api/v1/hospitals/by_area_category.json?area_id="+ areaId +"&category_id=" + categoryId + "&page="+page);
+            String message = runHttpGet(HOST + "/api/v1/hospitals/by_area_category.json?area_id="+ areaId +"&category_id=" + categoryId + "&page="+page + "&latitude="+latitude+"&longitude="+longitude);
             hospitals = readHospitalJson(message);
             return hospitals;
         } catch (IOException e) {
@@ -56,10 +57,10 @@ public class DoctorGuideApi {
         return hospitals;
     }
 
-    public static ArrayList<Doctor> getDoctorsByAreaAndCategory(int areaId, int categoryId, int page){
+    public static ArrayList<Doctor> getDoctorsByAreaAndCategory(int areaId, int categoryId, int page, double latitude, double longitude){
         ArrayList<Doctor> doctors = new ArrayList<Doctor>();
         try {
-            String message = runHttpGet(HOST + "/api/v1/doctors/by_area_category.json?area_id="+ areaId +"&category_id=" + categoryId + "&page="+page);
+            String message = runHttpGet(HOST + "/api/v1/doctors/by_area_category.json?area_id="+ areaId +"&category_id=" + categoryId + "&page="+page + "&latitude="+latitude+"&longitude="+longitude);
             doctors = readDoctorJson(message);
             return doctors;
         } catch (IOException e) {

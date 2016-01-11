@@ -1,5 +1,7 @@
 package kosbrother.com.doctorguide.fragments;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
     private static final String ARG_CATEGORY_ID = "CATEGORY_ID";
     private static final String ARG_HOSPITAL_ID = "HOSPITAL_ID";
     private static final String ARG_DIVISION_ID = "DIVISION_ID";
+    private static LatLng location;
     private int fragmentType;
     private int mCategoryId = 1;
     private OnListFragmentInteractionListener mListener;
@@ -50,11 +53,12 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
     public DoctorFragment() {
     }
 
-    public static DoctorFragment newInstance(int fragmentType,int categoryId) {
+    public static DoctorFragment newInstance(int fragmentType,int categoryId,LatLng latLng) {
         DoctorFragment fragment = new DoctorFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_TYPE, fragmentType);
         args.putInt(ARG_CATEGORY_ID, categoryId);
+        location = latLng;
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,6 +83,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
             mHospitalId = getArguments().getInt(ARG_HOSPITAL_ID);
             mDivisionId = getArguments().getInt(ARG_DIVISION_ID);
         }
+        setRetainInstance(true);
     }
 
     @Override
@@ -203,7 +208,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
                     }
                 });
             }else
-                getDoctors = DoctorGuideApi.getDoctorsByAreaAndCategory(areaId, mCategoryId,page);
+                getDoctors = DoctorGuideApi.getDoctorsByAreaAndCategory(areaId, mCategoryId,page,location.latitude,location.longitude);
             return null;
         }
 
@@ -213,7 +218,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
             if(page==1)
                 Util.hideProgressDialog();
             if(fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE ) {
-                adatper = new MyDoctorRecyclerViewAdapter(doctors, mListener, fragmentType);
+                adatper = new MyDoctorRecyclerViewAdapter(doctors, mListener, fragmentType,location);
                 recyclerView.setAdapter(adatper);
                 adatper.notifyDataSetChanged();
                 isLoadCompleted = true;
@@ -224,7 +229,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
                 if(page == 1) {
                     page += 1;
                     doctors = getDoctors;
-                    adatper = new MyDoctorRecyclerViewAdapter(doctors, mListener,fragmentType);
+                    adatper = new MyDoctorRecyclerViewAdapter(doctors, mListener,fragmentType,location);
                     recyclerView.setAdapter(adatper);
                     adatper.notifyDataSetChanged();
                 }else{

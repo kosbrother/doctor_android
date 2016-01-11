@@ -7,7 +7,6 @@ import java.util.List;
  * Created by steven on 1/6/16.
  */
 public class Hospital {
-
     public int id;
     public String name;
     public String address;
@@ -17,4 +16,6 @@ public class Hospital {
     public HashMap<String,Object> cHours;
     public List<String> ss;
     public List<Division> divisions;
+    public float latitude;
+    public float longitude;
 }

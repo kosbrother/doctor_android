@@ -1,5 +1,7 @@
 package kosbrother.com.doctorguide.adapters;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,17 +12,22 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.entity.Hospital;
 import kosbrother.com.doctorguide.fragments.HospitalFragment.OnListFragmentInteractionListener;
+
+import static kosbrother.com.doctorguide.Util.SphericalUtil.computeDistanceBetween;
 
 public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospitalRecyclerViewAdapter.ViewHolder> {
 
     private final ArrayList<Hospital> mHospitals;
     private final OnListFragmentInteractionListener mListener;
+    private LatLng mLocation;
 
-    public MyHospitalRecyclerViewAdapter(ArrayList<Hospital> items, OnListFragmentInteractionListener listener) {
+    public MyHospitalRecyclerViewAdapter(ArrayList<Hospital> items, OnListFragmentInteractionListener listener, LatLng location) {
         mHospitals = items;
         mListener = listener;
+        mLocation = location;
     }
 
     @Override
@@ -48,6 +55,8 @@ public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospit
         }
         holder.mName.setText(mHospitals.get(position).name);
         holder.mAddress.setText(mHospitals.get(position).address);
+        double distance = computeDistanceBetween(mLocation, new LatLng(mHospitals.get(position).latitude, mHospitals.get(position).longitude));
+        holder.mDistance.setText(Util.formatNumber(distance));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +78,7 @@ public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospit
         public TextView mName;
         public TextView mAddress;
         public ImageView mImageView;
+        public TextView mDistance;
 
         public ViewHolder(View view) {
             super(view);
@@ -76,6 +86,7 @@ public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospit
             mImageView = (ImageView)view.findViewById(R.id.grade_image);
             mName = (TextView)view.findViewById(R.id.hospial_name);
             mAddress = (TextView)view.findViewById(R.id.address);
+            mDistance = (TextView)view.findViewById(R.id.distance);
         }
     }
 }

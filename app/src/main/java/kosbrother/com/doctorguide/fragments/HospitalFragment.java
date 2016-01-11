@@ -1,5 +1,7 @@
 package kosbrother.com.doctorguide.fragments;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import kosbrother.com.doctorguide.entity.Hospital;
 public class HospitalFragment extends Fragment implements Spinner.OnItemSelectedListener{
 
     private static final String ARG_CATEGORY_ID = "CATEGORY_ID";
+    private static LatLng location;
     private int mCategoryId = 1;
     private OnListFragmentInteractionListener mListener;
     private ArrayList<Hospital> hospitals = new ArrayList<>();
@@ -38,10 +41,11 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
     public HospitalFragment() {
     }
 
-    public static HospitalFragment newInstance(int category) {
+    public static HospitalFragment newInstance(int category, LatLng latLng) {
         HospitalFragment fragment = new HospitalFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_CATEGORY_ID, category);
+        location = latLng;
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,6 +57,7 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
         if (getArguments() != null) {
             mCategoryId = getArguments().getInt(ARG_CATEGORY_ID);
         }
+        setRetainInstance(true);
     }
 
     @Override
@@ -148,7 +153,7 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
         }
         @Override
         protected Object doInBackground(Object... params) {
-            getHospitals = DoctorGuideApi.getHospitalsByAreaAndCategory(areaId, mCategoryId, page);
+            getHospitals = DoctorGuideApi.getHospitalsByAreaAndCategory(areaId, mCategoryId, page,location.latitude,location.longitude);
             return null;
         }
 
@@ -163,7 +168,7 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
             if(page == 1) {
                 page += 1;
                 hospitals = getHospitals;
-                hospitalAdapter = new MyHospitalRecyclerViewAdapter(hospitals, mListener);
+                hospitalAdapter = new MyHospitalRecyclerViewAdapter(hospitals, mListener,location);
                 recyclerView.setAdapter(hospitalAdapter);
                 hospitalAdapter.notifyDataSetChanged();
             }else{

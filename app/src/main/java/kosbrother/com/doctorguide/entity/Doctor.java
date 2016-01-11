@@ -14,4 +14,6 @@ public class Doctor {
     public String exp;
     public String spe;
     public List<Division> divisions;
+    public float latitude;
+    public float longitude;
 }

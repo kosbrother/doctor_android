@@ -27,4 +27,17 @@ public class Util {
             mProgressDialog.hide();
         }
     }
+
+    public static String formatNumber(double distance) {
+        String unit = "m";
+        if (distance < 1) {
+            distance *= 1000;
+            unit = "mm";
+        } else if (distance > 1000) {
+            distance /= 1000;
+            unit = "km";
+        }
+
+        return String.format("%.1f%s", distance, unit);
+    }
 }
