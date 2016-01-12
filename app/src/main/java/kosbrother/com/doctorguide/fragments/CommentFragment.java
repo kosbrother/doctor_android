@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Random;
+
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.adapters.CommentAdapter;
 
@@ -69,6 +71,11 @@ public class CommentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Random rand = new Random();
+        int n = rand.nextInt(2);
+        if(n == 1)
+            return inflater.inflate(R.layout.fragment_no_comment_in_division, container, false);
+
         String[] myStringArray = {"家醫科","家醫科","內科","家醫科","家醫科","內科","家醫科","家醫科","內科","家醫科","家醫科","內科"};
         View view = inflater.inflate(R.layout.fragment_comment, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);

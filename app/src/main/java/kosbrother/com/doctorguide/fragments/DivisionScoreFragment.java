@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Random;
+
 import kosbrother.com.doctorguide.R;
 
 /**
@@ -24,7 +26,13 @@ public class DivisionScoreFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_division_score, container, false);
+        Random rand = new Random();
+        int n = rand.nextInt(2);
+
+        if(n == 1)
+            return inflater.inflate(R.layout.fragment_division_score, container, false);
+        else
+            return inflater.inflate(R.layout.fragment_no_score_in_division, container, false);
     }
 
 }

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
     private LinearLayout loadmoreLayout;
     private boolean isLoadCompleted = false;
     private MyDoctorRecyclerViewAdapter adatper;
+    private View view;
 
 
     public DoctorFragment() {
@@ -90,7 +92,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_doctor_list, container, false);
+        view = inflater.inflate(R.layout.fragment_doctor_list, container, false);
         recyclerView = (LoadMoreRecyclerView) view.findViewById(R.id.list);
         loadmoreLayout = (LinearLayout) view.findViewById(R.id.load_more);
         Context context = view.getContext();
@@ -222,6 +224,14 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
                 recyclerView.setAdapter(adatper);
                 adatper.notifyDataSetChanged();
                 isLoadCompleted = true;
+                if(doctors.size()==0){
+                    LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                    View noDoctorView = inflater.inflate(R.layout.fragment_no_doctors_in_division, null);
+                    noDoctorView.setLayoutParams(lparams);
+                    ((RelativeLayout) view.findViewById(R.id.baseLayout)).addView(noDoctorView);
+                }
+
             }else{
                 loadmoreLayout.setVisibility(View.GONE);
                 recyclerView.setLoaded();
