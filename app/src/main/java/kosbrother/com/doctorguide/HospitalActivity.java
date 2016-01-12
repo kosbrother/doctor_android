@@ -164,6 +164,7 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
                     break;
                 case R.id.fab_add_doctor:
                     intent = new Intent(HospitalActivity.this, AddDoctorActivity.class);
+                    intent.putExtra("HOSPITAL_NAME",hospitalName);
                     startActivity(intent);
                     break;
             }

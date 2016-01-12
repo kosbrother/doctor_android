@@ -35,6 +35,8 @@
     <string name="division_page">科別資訊頁</string>
     <string name="doctor_page">醫師資訊頁</string>
 
+    <string name="add_doctor_title">就醫指南APP:新增醫師</string>
+
     <string name="confirm">確定</string>
     <string name="cancel">取消</string>
 </resources>

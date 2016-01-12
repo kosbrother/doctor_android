@@ -356,6 +356,8 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
                     break;
                 case R.id.fab_add_doctor:
                     intent = new Intent(DivisionActivity.this, AddDoctorActivity.class);
+                    intent.putExtra("HOSPITAL_NAME",hospitalName);
+                    intent.putExtra("DIVISION_NAME",divisionName);
                     startActivity(intent);
                     break;
             }
