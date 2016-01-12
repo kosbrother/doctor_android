@@ -67,7 +67,11 @@ public class HospitalMyCollecionFragment extends Fragment {
                 }
             });
 
-            recyclerView.setAdapter(new MyHospitalMyCollecionRecyclerViewAdapter(results, mListener));
+            if(results.size() == 0){
+                view = inflater.inflate(R.layout.fragment_no_hospital_collection, container, false);
+            }else{
+                recyclerView.setAdapter(new MyHospitalMyCollecionRecyclerViewAdapter(results, mListener));
+            }
         }
         return view;
     }

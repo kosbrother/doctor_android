@@ -66,7 +66,11 @@ public class DoctorMyCollectionFragment extends Fragment {
                     results = query.findAll();
                 }
             });
-            recyclerView.setAdapter(new MyDoctorMyCollectionRecyclerViewAdapter(results, mListener));
+            if(results.size() == 0){
+                view = inflater.inflate(R.layout.fragment_no_doctor_collection, container, false);
+            }else {
+                recyclerView.setAdapter(new MyDoctorMyCollectionRecyclerViewAdapter(results, mListener));
+            }
         }
         return view;
     }
