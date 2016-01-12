@@ -323,6 +323,9 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
             switch (v.getId()) {
                 case R.id.fab_problem_report:
                     intent = new Intent(DivisionActivity.this, ProblemReportActivity.class);
+                    intent.putExtra("REPORT_TYPE",getString(R.string.division_page));
+                    intent.putExtra("HOSPITAL_NAME",hospitalName);
+                    intent.putExtra("DIVISION_NAME",divisionName);
                     startActivity(intent);
                     break;
                 case R.id.fab_share:

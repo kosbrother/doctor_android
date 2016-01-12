@@ -151,6 +151,8 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
             switch (v.getId()) {
                 case R.id.fab_problem_report:
                     intent = new Intent(HospitalActivity.this, ProblemReportActivity.class);
+                    intent.putExtra("REPORT_TYPE",getString(R.string.hospital_page));
+                    intent.putExtra("HOSPITAL_NAME",hospitalName);
                     startActivity(intent);
                     break;
                 case R.id.fab_share:

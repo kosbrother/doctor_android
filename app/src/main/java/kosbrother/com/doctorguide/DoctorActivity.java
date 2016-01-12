@@ -42,7 +42,7 @@ public class DoctorActivity extends GoogleSignInActivity {
     private String doctorName;
     private boolean collected;
     private FloatingActionMenu fab;
-    private int hospitalName;
+    private String hospitalName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class DoctorActivity extends GoogleSignInActivity {
         if (extras != null) {
             doctorlId = extras.getInt("DOCTOR_ID");
             doctorName = extras.getString("DOCTOR_NAME");
-            hospitalName = extras.getInt("HOSPITAL_NAME");
+            hospitalName = extras.getString("HOSPITAL_NAME");
         }
 
         actionbar = getSupportActionBar();
@@ -109,6 +109,9 @@ public class DoctorActivity extends GoogleSignInActivity {
             switch (v.getId()) {
                 case R.id.fab_problem_report:
                     intent = new Intent(DoctorActivity.this, ProblemReportActivity.class);
+                    intent.putExtra("REPORT_TYPE",getString(R.string.doctor_page));
+                    intent.putExtra("HOSPITAL_NAME",hospitalName);
+                    intent.putExtra("DOCTOR_NAME",doctorName);
                     startActivity(intent);
                     break;
                 case R.id.fab_share:
