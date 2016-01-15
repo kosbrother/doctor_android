@@ -32,7 +32,7 @@ public class DivisionScoreFragment extends Fragment {
         if(n == 1)
             return inflater.inflate(R.layout.fragment_division_score, container, false);
         else
-            return inflater.inflate(R.layout.fragment_no_score_in_division, container, false);
+            return inflater.inflate(R.layout.fragment_no_score, container, false);
     }
 
 }

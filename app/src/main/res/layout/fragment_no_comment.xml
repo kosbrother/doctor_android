@@ -26,6 +26,7 @@
             android:textSize="24sp"
             android:textStyle="bold"/>
         <TextView
+            android:id="@+id/content"
             android:layout_marginLeft="28dp"
             android:layout_marginRight="28dp"
             android:paddingTop="12dp"
@@ -51,7 +52,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="進入選單， "
+                android:text="進入選單，"
                 android:textSize="@dimen/doctor_fragment_link_text_size"
                 />
         </LinearLayout>
@@ -74,7 +75,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="新增評論"
+                android:text="新增評論!"
                 android:textSize="@dimen/doctor_fragment_link_text_size"
                 />
         </LinearLayout>

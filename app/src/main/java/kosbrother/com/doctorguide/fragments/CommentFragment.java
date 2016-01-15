@@ -74,7 +74,7 @@ public class CommentFragment extends Fragment {
         Random rand = new Random();
         int n = rand.nextInt(2);
         if(n == 1)
-            return inflater.inflate(R.layout.fragment_no_comment_in_division, container, false);
+            return inflater.inflate(R.layout.fragment_no_comment, container, false);
 
         String[] myStringArray = {"家醫科","家醫科","內科","家醫科","家醫科","內科","家醫科","家醫科","內科","家醫科","家醫科","內科"};
         View view = inflater.inflate(R.layout.fragment_comment, container, false);

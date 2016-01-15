@@ -51,7 +51,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="進入選單， "
+                android:text="進入選單，"
                 android:textSize="@dimen/doctor_fragment_link_text_size"
                 />
         </LinearLayout>
@@ -74,7 +74,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="新增醫師！ "
+                android:text="新增醫師!"
                 android:textSize="@dimen/doctor_fragment_link_text_size"
                 />
         </LinearLayout>
