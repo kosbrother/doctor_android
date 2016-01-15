@@ -64,15 +64,10 @@ public class MainActivity extends GoogleSignInActivity
         toggle.syncState();
 
         toolbar.setNavigationIcon(R.mipmap.ic_toolbar_logo);
+        // need overwrite unless it will try open left drawler then crash
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                if (drawer.isDrawerOpen(Gravity.RIGHT)) {
-                    drawer.closeDrawer(Gravity.RIGHT);
-                } else {
-                    drawer.openDrawer(Gravity.RIGHT);
-                }
             }
         });
 
