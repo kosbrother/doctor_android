@@ -9,6 +9,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -17,12 +18,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +78,10 @@ public class MainActivity extends GoogleSignInActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         View header = LayoutInflater.from(this).inflate(R.layout.nav_header_main, null);
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 180, r.getDisplayMetrics());
+        LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int)px);
+        header.setLayoutParams(lparams);
         navigationView.addHeaderView(header);
 
         logInEmail = (TextView)header.findViewById(R.id.log_in_email);

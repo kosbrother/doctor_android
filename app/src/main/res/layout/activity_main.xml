@@ -22,6 +22,8 @@
         android:foregroundGravity="right"
         android:fitsSystemWindows="true"
         app:menu="@menu/activity_main_drawer"
+        android:background="#ffffff"
+        app:itemBackground="@drawable/click_selector"
         >
         <RelativeLayout
             android:layout_width="match_parent"
