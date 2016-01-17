@@ -9,7 +9,7 @@
 
     <!-- For tab -->
     <dimen name="tab_max_width">264dp</dimen>
-    <dimen name="tab_padding_bottom">16dp</dimen>
+    <dimen name="tab_padding_bottom">14dp</dimen>
     <dimen name="tab_label">16sp</dimen>
     <dimen name="custom_tab_layout_height">72dp</dimen>
     <dimen name="text_margin">16dp</dimen>

@@ -88,7 +88,7 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
 
         Spinner sort = (Spinner) view.findViewById(R.id.sort);
         ArrayAdapter<CharSequence> sort_adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.sort_options, android.R.layout.simple_spinner_item);
+                R.array.sort_options, R.layout.spinner_area_item);
         sort_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sort.setAdapter(sort_adapter);
         sort.setOnItemSelectedListener(this);
@@ -97,7 +97,7 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
     private void setAreaSpinner(View view) {
         Spinner spinner = (Spinner) view.findViewById(R.id.area);
         ArrayAdapter<String> areaAdapter = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_spinner_item, Area.getAreaStrings().toArray(new String[Area.getAreas().size()]));
+                R.layout.spinner_area_item, Area.getAreaStrings().toArray(new String[Area.getAreas().size()]));
         areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(areaAdapter);
         spinner.setOnItemSelectedListener(this);
