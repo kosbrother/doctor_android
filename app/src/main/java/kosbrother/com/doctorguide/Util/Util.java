@@ -2,6 +2,10 @@ package kosbrother.com.doctorguide.Util;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.support.design.widget.Snackbar;
+import android.view.View;
+import android.widget.TextView;
 
 import kosbrother.com.doctorguide.R;
 
@@ -39,5 +43,13 @@ public class Util {
         }
 
         return String.format("%.1f%s", distance, unit);
+    }
+
+    public static void showSnackBar(View v, String str){
+        Snackbar snackbar = Snackbar.make(v, str, Snackbar.LENGTH_SHORT);
+        View view = snackbar.getView();
+        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+        tv.setTextColor(Color.RED);
+        snackbar.show();
     }
 }

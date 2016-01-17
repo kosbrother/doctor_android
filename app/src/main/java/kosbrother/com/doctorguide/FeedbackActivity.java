@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import kosbrother.com.doctorguide.Util.Util;
+
 public class FeedbackActivity extends AppCompatActivity {
 
     private ActionBar actionbar;
@@ -43,16 +45,22 @@ public class FeedbackActivity extends AppCompatActivity {
         submit.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent emailIntent2 = new Intent(Intent.ACTION_SEND);
-                emailIntent2.setType("plain/text");
-                emailIntent2.putExtra(Intent.EXTRA_EMAIL, new String[]{FeedbackActivity.this.getString(R.string.respond_mail_address)});
-                emailIntent2.putExtra(Intent.EXTRA_SUBJECT, FeedbackActivity.this.getString(R.string.feedback_title));
-                emailIntent2.putExtra(Intent.EXTRA_TEXT,
-                        "主旨: " + feedbackTitle.getText().toString() + "\n"
-                                + "回饋意見: " + feedbackContent.getText().toString() + "\n\n"
-                        + "程式碼版本: " + version
-                );
-                startActivity(Intent.createChooser(emailIntent2, "Send mail..."));
+                if(feedbackTitle.getText().toString().equals("")){
+                    Util.showSnackBar(v, "請填寫主旨");
+                }else if(feedbackContent.getText().toString().equals("")){
+                    Util.showSnackBar(v, "請填寫改進建議");
+                }else{
+                    final Intent emailIntent2 = new Intent(Intent.ACTION_SEND);
+                    emailIntent2.setType("plain/text");
+                    emailIntent2.putExtra(Intent.EXTRA_EMAIL, new String[]{FeedbackActivity.this.getString(R.string.respond_mail_address)});
+                    emailIntent2.putExtra(Intent.EXTRA_SUBJECT, FeedbackActivity.this.getString(R.string.feedback_title));
+                    emailIntent2.putExtra(Intent.EXTRA_TEXT,
+                            "主旨: " + feedbackTitle.getText().toString() + "\n"
+                                    + "回饋意見: " + feedbackContent.getText().toString() + "\n\n"
+                                    + "程式碼版本: " + version
+                    );
+                    startActivity(Intent.createChooser(emailIntent2, "Send mail..."));
+                }
             }
         });
     }

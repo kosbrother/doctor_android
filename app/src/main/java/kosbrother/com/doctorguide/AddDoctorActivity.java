@@ -3,15 +3,14 @@ package kosbrother.com.doctorguide;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
+
+import static kosbrother.com.doctorguide.Util.Util.showSnackBar;
 
 public class AddDoctorActivity extends AppCompatActivity {
 
@@ -88,13 +87,6 @@ public class AddDoctorActivity extends AppCompatActivity {
         }
     }
 
-    public void showSnackBar(View v, String str){
-        Snackbar snackbar = Snackbar.make(v, str, Snackbar.LENGTH_SHORT);
-        View view = snackbar.getView();
-        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-        tv.setTextColor(Color.RED);
-        snackbar.show();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
