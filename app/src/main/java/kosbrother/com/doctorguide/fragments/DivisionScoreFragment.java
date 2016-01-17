@@ -3,9 +3,12 @@ package kosbrother.com.doctorguide.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 
 import java.util.Random;
 
@@ -29,9 +32,12 @@ public class DivisionScoreFragment extends Fragment {
         Random rand = new Random();
         int n = rand.nextInt(2);
 
-        if(n == 1)
-            return inflater.inflate(R.layout.fragment_division_score, container, false);
-        else
+        if(n == 1) {
+            View view = inflater.inflate(R.layout.fragment_division_score, container, false);
+            RatingBar r = (RatingBar) view.findViewById(R.id.i_rating);
+            DrawableCompat.setTint(r.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.tab_text_act));
+            return view;
+        } else
             return inflater.inflate(R.layout.fragment_no_score, container, false);
     }
 

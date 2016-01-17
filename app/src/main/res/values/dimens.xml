@@ -25,4 +25,7 @@
     <dimen name="add_comment_sub_text_size">8sp</dimen>
 
     <dimen name="listview_padding_bottom_to_show_fab">45dp</dimen>
+
+    <dimen name="division_score">11sp</dimen>
+    <dimen name="division_score_image">11dp</dimen>
 </resources>
