@@ -9,7 +9,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/grey_divider_color"
+            android:background="@color/grey_light_background"
             >
             <Button
                 android:id="@+id/submit"
@@ -20,7 +20,6 @@
                 android:text="送出審核"
                 android:textColor="@color/textColorPrimary"
                 android:textSize="@dimen/doctor_fragment_text_size"
-                android:layout_margin="8dp"
                 android:onClick="onSubmit"
                 />
             <ScrollView
@@ -56,6 +55,7 @@
                         android:layout_marginTop="24dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:lineSpacingMultiplier="1.2"
                         android:text="就醫指南盡力搜集全台醫院及醫生資料，希望能幫助到有需要的人。我們非常歡迎您為醫院'新增醫師'，一起完善醫療的資料庫，讓台灣的就醫環境能更加友善方便！！"
                         android:textColor="@color/grey_text_color"
                         android:textSize="@dimen/comment_score_size"/>
@@ -76,6 +76,7 @@
                             android:text="醫師姓名"
                             android:textSize="@dimen/doctor_fragment_title_size"/>
                         <EditText
+                            android:layout_marginLeft="16dp"
                             android:id="@+id/doctor_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -92,6 +93,7 @@
                             android:text="服務醫院"
                             android:textSize="@dimen/doctor_fragment_title_size"/>
                         <EditText
+                            android:layout_marginLeft="16dp"
                             android:id="@+id/hospial_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -109,6 +111,7 @@
                             android:text="服務科別"
                             android:textSize="@dimen/doctor_fragment_title_size"/>
                         <EditText
+                            android:layout_marginLeft="16dp"
                             android:id="@+id/division_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -126,6 +129,7 @@
                             android:text="醫師專長"
                             android:textSize="@dimen/doctor_fragment_title_size"/>
                         <EditText
+                            android:layout_marginLeft="16dp"
                             android:id="@+id/doctor_spe"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -144,6 +148,7 @@
                             android:text="醫師經歷"
                             android:textSize="@dimen/doctor_fragment_title_size"/>
                         <EditText
+                            android:layout_marginLeft="16dp"
                             android:id="@+id/doctor_exp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
