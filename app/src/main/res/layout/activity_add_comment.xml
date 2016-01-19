@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
     >
 
     <android.support.design.widget.AppBarLayout
@@ -19,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:text="台北市立聯合醫院"
                 android:textColor="@color/textColorPrimary"
-                android:textSize="@dimen/doctor_fragment_text_size"
+                android:textSize="@dimen/doctor_fragment_title_size"
                 android:layout_marginBottom="4dp"
                 />
             <RelativeLayout
@@ -54,14 +55,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="就診日期  "
-                    android:textSize="@dimen/doctor_fragment_title_size"
+                    android:textSize="@dimen/comment_score_size"
                     android:textColor="@color/textColorPrimary"/>
                 <TextView
                     android:layout_toRightOf="@+id/text1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2015年12月10日"
-                    android:textSize="@dimen/doctor_fragment_title_size"
+                    android:textSize="@dimen/comment_score_size"
                     android:textColor="@color/textColorPrimary"/>
             </RelativeLayout>
         </LinearLayout>

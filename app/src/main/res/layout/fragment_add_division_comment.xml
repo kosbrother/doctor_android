@@ -56,8 +56,11 @@
                 android:layout_toRightOf="@+id/text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3"
-                android:textSize="@dimen/doctor_fragment_title_size"
+                android:text="0"
+                android:textSize="@dimen/doctor_fragment_text_size"
+                android:textColor="@color/colorAccent"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_centerVertical="true"/>
             <ImageView
                 android:id="@+id/check_image"
@@ -80,7 +83,8 @@
                     android:layout_height="wrap_content"
                     app:dsb_min="0"
                     app:dsb_max="5"
-                    app:dsb_value="3"
+                    app:dsb_value="0"
+                    app:dsb_progressColor="@color/grey_text_light_color"
                     android:id="@+id/seekbar"
                     />
                 <TextView
@@ -119,7 +123,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2"
-                android:textSize="@dimen/doctor_fragment_title_size"
+                android:textSize="@dimen/doctor_fragment_text_size"
+                android:textColor="@color/colorAccent"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_centerVertical="true"/>
             <ImageView
                 android:id="@+id/check_image"
@@ -143,6 +150,7 @@
                     app:dsb_min="0"
                     app:dsb_max="5"
                     app:dsb_value="2"
+                    app:dsb_progressColor="@color/orange_text_link"
                     android:id="@+id/seekbar"
                     />
                 <TextView
@@ -181,7 +189,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="4"
-                android:textSize="@dimen/doctor_fragment_title_size"
+                android:textSize="@dimen/doctor_fragment_text_size"
+                android:textColor="@color/colorAccent"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_centerVertical="true"/>
             <ImageView
                 android:id="@+id/check_image"
@@ -206,6 +217,7 @@
                     app:dsb_min="0"
                     app:dsb_max="5"
                     app:dsb_value="4"
+                    app:dsb_progressColor="@color/orange_text_link"
                     android:id="@+id/seekbar"
                     />
                 <TextView
@@ -245,8 +257,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2"
-                android:textSize="@dimen/doctor_fragment_title_size"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:textSize="@dimen/doctor_fragment_text_size"
+                android:textColor="@color/colorAccent"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"/>
             <ImageView
                 android:id="@+id/check_image"
                 android:layout_alignParentRight="true"
@@ -270,6 +285,7 @@
                     app:dsb_min="0"
                     app:dsb_max="5"
                     app:dsb_value="2"
+                    app:dsb_progressColor="@color/orange_text_link"
                     android:id="@+id/seekbar"
                     />
                 <TextView

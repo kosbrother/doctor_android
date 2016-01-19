@@ -109,8 +109,10 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
             mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }else{
-            setupViewPager(viewPager);
-            tabLayout.setupWithViewPager(viewPager);
+            if(viewPager.getAdapter() == null) {
+                setupViewPager(viewPager);
+                tabLayout.setupWithViewPager(viewPager);
+            }
         }
     }
 
@@ -131,8 +133,10 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
-        setupViewPager(viewPager);
-        tabLayout.setupWithViewPager(viewPager);
+        if(viewPager.getAdapter() == null) {
+            setupViewPager(viewPager);
+            tabLayout.setupWithViewPager(viewPager);
+        }
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 mGoogleApiClient, this);
     }
