@@ -15,9 +15,11 @@
         android:textColor="@color/textColorPrimary"
         android:textSize="@dimen/doctor_fragment_text_size"
         />
-
-    <LinearLayout
+    <ScrollView
         android:layout_above="@+id/next_step"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -86,6 +88,7 @@
                     app:dsb_value="0"
                     app:dsb_progressColor="@color/grey_text_light_color"
                     android:id="@+id/seekbar"
+                    android:layout_marginTop="10dp"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -152,6 +155,7 @@
                     app:dsb_value="2"
                     app:dsb_progressColor="@color/orange_text_link"
                     android:id="@+id/seekbar"
+                    android:layout_marginTop="10dp"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -219,6 +223,7 @@
                     app:dsb_value="4"
                     app:dsb_progressColor="@color/orange_text_link"
                     android:id="@+id/seekbar"
+                    android:layout_marginTop="10dp"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -287,6 +292,7 @@
                     app:dsb_value="2"
                     app:dsb_progressColor="@color/orange_text_link"
                     android:id="@+id/seekbar"
+                    android:layout_marginTop="10dp"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -322,14 +328,19 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <EditText
                 android:layout_marginLeft="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="請輸入您寶貴的意見"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp"></View>
         </LinearLayout>
 
     </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>
