@@ -10,6 +10,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -38,9 +39,11 @@ public class MainActivity extends GoogleSignInActivity
 
     RecyclerView mRecyclerView;
     private SignInButton signInBtn;
-    private String email;
+    private String userEmail;
     private TextView logInEmail;
     private DrawerLayout drawer;
+    private String userName;
+    private Uri userPic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +106,9 @@ public class MainActivity extends GoogleSignInActivity
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            email = acct.getEmail();
+            userEmail = acct.getEmail();
+            userName = acct.getDisplayName();
+            userPic = acct.getPhotoUrl();
             drawNavigationSignInPart(true);
         }else{
             drawNavigationSignInPart(false);
@@ -112,7 +117,7 @@ public class MainActivity extends GoogleSignInActivity
 
     private void drawNavigationSignInPart(boolean signedIn) {
         if(signedIn){
-            logInEmail.setText(email);
+            logInEmail.setText(userEmail);
             logInEmail.setVisibility(View.VISIBLE);
             signInBtn.setVisibility(View.GONE);
         } else {
