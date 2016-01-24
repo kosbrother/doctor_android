@@ -138,6 +138,8 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
                 android.R.layout.simple_spinner_item, Area.getAreaStrings().toArray(new String[Area.getAreas().size()]));
         areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(areaAdapter);
+        int closest = Util.getClosestAreaPosition(location);
+        spinner.setSelection(closest);
         spinner.setOnItemSelectedListener(this);
     }
 
