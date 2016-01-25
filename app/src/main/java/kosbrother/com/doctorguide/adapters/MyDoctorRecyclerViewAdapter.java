@@ -55,6 +55,9 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<MyDoctorRe
         holder.mhospialName.setText(mDoctors.get(position).hospital);
         double distance = computeDistanceBetween(mLocation, new LatLng(mDoctors.get(position).latitude, mDoctors.get(position).longitude));
         holder.mDistance.setText(Util.formatNumber(distance));
+        holder.mCommentNum.setText(mDoctors.get(position).comment_num + "");
+        holder.mRecommendNum.setText(mDoctors.get(position).recommend_num + "");
+        holder.mScore.setText(String.format("%.1f", mDoctors.get(position).avg));
 
         if(mDoctors.get(position).isCollected) {
             holder.heart.setBackgroundResource(R.drawable.heart_read_to_white_button);
@@ -92,6 +95,9 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<MyDoctorRe
         public  TextView mhospialName;
         public Button heart;
         public TextView mDistance;
+        public TextView mCommentNum;
+        public TextView mRecommendNum;
+        public TextView mScore;
 
         public ViewHolder(View view) {
             super(view);
@@ -100,6 +106,9 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<MyDoctorRe
             mhospialName = (TextView) view.findViewById(R.id.hospial_name);
             heart = (Button)view.findViewById(R.id.heart);
             mDistance = (TextView)view.findViewById(R.id.distance);
+            mCommentNum = (TextView)view.findViewById(R.id.comment_num);
+            mRecommendNum  = (TextView)view.findViewById(R.id.recommend_num);
+            mScore = (TextView)view.findViewById(R.id.score);
         }
 
     }

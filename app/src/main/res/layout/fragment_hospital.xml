@@ -62,13 +62,15 @@
             <RelativeLayout
                 android:layout_below="@+id/address"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                >
                 <ImageView
                     android:id="@+id/thumb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/thumb"
                     android:layout_marginRight="5dp"
+                    android:layout_centerVertical="true"
                     />
                 <TextView
                     android:id="@+id/recommend_num"
@@ -84,6 +86,7 @@
                     android:layout_height="wrap_content"
                     android:src="@mipmap/sms"
                     android:layout_marginRight="5dp"
+                    android:layout_centerVertical="true"
                     />
                 <TextView
                     android:id="@+id/comment_num"
@@ -99,6 +102,7 @@
                     android:layout_height="wrap_content"
                     android:src="@mipmap/star"
                     android:layout_marginRight="5dp"
+                    android:layout_centerVertical="true"
                     />
                 <TextView
                     android:id="@+id/score"

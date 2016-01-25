@@ -16,4 +16,7 @@ public class Doctor {
     public List<Division> divisions;
     public float latitude;
     public float longitude;
+    public int comment_num;
+    public int recommend_num;
+    public float avg;
 }

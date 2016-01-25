@@ -57,6 +57,9 @@ public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospit
         holder.mAddress.setText(mHospitals.get(position).address);
         double distance = computeDistanceBetween(mLocation, new LatLng(mHospitals.get(position).latitude, mHospitals.get(position).longitude));
         holder.mDistance.setText(Util.formatNumber(distance));
+        holder.mCommentNum.setText(mHospitals.get(position).comment_num + "");
+        holder.mRecommendNum.setText(mHospitals.get(position).recommend_num + "");
+        holder.mScore.setText(String.format("%.1f", mHospitals.get(position).avg));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +82,9 @@ public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospit
         public TextView mAddress;
         public ImageView mImageView;
         public TextView mDistance;
+        public TextView mCommentNum;
+        public TextView mRecommendNum;
+        public TextView mScore;
 
         public ViewHolder(View view) {
             super(view);
@@ -87,6 +93,9 @@ public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospit
             mName = (TextView)view.findViewById(R.id.hospial_name);
             mAddress = (TextView)view.findViewById(R.id.address);
             mDistance = (TextView)view.findViewById(R.id.distance);
+            mCommentNum = (TextView)view.findViewById(R.id.comment_num);
+            mRecommendNum  = (TextView)view.findViewById(R.id.recommend_num);
+            mScore = (TextView)view.findViewById(R.id.score);
         }
     }
 }
