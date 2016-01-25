@@ -50,6 +50,8 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
     private boolean isLoadCompleted = false;
     private MyDoctorRecyclerViewAdapter adatper;
     private View view;
+    private String[] values;
+    private String orderString;
 
 
     public DoctorFragment() {
@@ -130,6 +132,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
         sort_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sort.setAdapter(sort_adapter);
         sort.setOnItemSelectedListener(this);
+        values = getResources().getStringArray(R.array.sort_values);
     }
 
     private void setAreaSpinner(View view) {
@@ -171,6 +174,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
             areaId = Area.getAreas().get(position).id;
         }else if(spinner.getId() == R.id.sort){
             sortSrting = (String)parent.getItemAtPosition(position);
+            orderString = values[position];
         }
 
         if(areaId != 0 && sortSrting!=null)
@@ -212,7 +216,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
                     }
                 });
             }else
-                getDoctors = DoctorGuideApi.getDoctorsByAreaAndCategory(areaId, mCategoryId,page,location.latitude,location.longitude);
+                getDoctors = DoctorGuideApi.getDoctorsByAreaAndCategory(areaId, mCategoryId,page,location.latitude,location.longitude,orderString);
             return null;
         }
 

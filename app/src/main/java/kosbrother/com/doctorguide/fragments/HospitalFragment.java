@@ -37,6 +37,8 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
     private int page = 1;
     private LinearLayout loadmoreLayout;
     private boolean isLoadCompleted = false;
+    private String[] values;
+    private String orderString;
 
     public HospitalFragment() {
     }
@@ -92,6 +94,7 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
         sort_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sort.setAdapter(sort_adapter);
         sort.setOnItemSelectedListener(this);
+        values = getResources().getStringArray(R.array.sort_values);
     }
 
     private void setAreaSpinner(View view) {
@@ -133,6 +136,7 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
             areaId = Area.getAreas().get(position).id;
         }else if(spinner.getId() == R.id.sort){
             sortSrting = (String)parent.getItemAtPosition(position);
+            orderString = values[position];
         }
 
         if(areaId != 0 && sortSrting!=null)
@@ -155,7 +159,7 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
         }
         @Override
         protected Object doInBackground(Object... params) {
-            getHospitals = DoctorGuideApi.getHospitalsByAreaAndCategory(areaId, mCategoryId, page,location.latitude,location.longitude);
+            getHospitals = DoctorGuideApi.getHospitalsByAreaAndCategory(areaId, mCategoryId, page,location.latitude,location.longitude,orderString);
             return null;
         }
 

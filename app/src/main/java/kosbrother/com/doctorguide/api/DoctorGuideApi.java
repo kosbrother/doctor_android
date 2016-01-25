@@ -45,10 +45,10 @@ public class DoctorGuideApi {
         return hospital;
     }
 
-    public static ArrayList<Hospital> getHospitalsByAreaAndCategory(int areaId, int categoryId, int page, double latitude, double longitude){
+    public static ArrayList<Hospital> getHospitalsByAreaAndCategory(int areaId, int categoryId, int page, double latitude, double longitude, String order){
         ArrayList<Hospital> hospitals = new ArrayList<Hospital>();
         try {
-            String message = runHttpGet(HOST + "/api/v1/hospitals/by_area_category.json?area_id="+ areaId +"&category_id=" + categoryId + "&page="+page + "&latitude="+latitude+"&longitude="+longitude);
+            String message = runHttpGet(HOST + "/api/v1/hospitals/by_area_category.json?area_id="+ areaId +"&category_id=" + categoryId + "&page="+page + "&latitude="+latitude+"&longitude="+longitude+"&order="+order);
             hospitals = readHospitalJson(message);
             return hospitals;
         } catch (IOException e) {
@@ -57,10 +57,10 @@ public class DoctorGuideApi {
         return hospitals;
     }
 
-    public static ArrayList<Doctor> getDoctorsByAreaAndCategory(int areaId, int categoryId, int page, double latitude, double longitude){
+    public static ArrayList<Doctor> getDoctorsByAreaAndCategory(int areaId, int categoryId, int page, double latitude, double longitude, String order){
         ArrayList<Doctor> doctors = new ArrayList<Doctor>();
         try {
-            String message = runHttpGet(HOST + "/api/v1/doctors/by_area_category.json?area_id="+ areaId +"&category_id=" + categoryId + "&page="+page + "&latitude="+latitude+"&longitude="+longitude);
+            String message = runHttpGet(HOST + "/api/v1/doctors/by_area_category.json?area_id="+ areaId +"&category_id=" + categoryId + "&page="+page + "&latitude="+latitude+"&longitude="+longitude+"&order="+order);
             doctors = readDoctorJson(message);
             return doctors;
         } catch (IOException e) {
