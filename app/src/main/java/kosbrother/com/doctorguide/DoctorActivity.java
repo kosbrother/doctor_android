@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -28,6 +29,9 @@ import java.util.List;
 
 import io.realm.Realm;
 import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
+import kosbrother.com.doctorguide.Util.Util;
+import kosbrother.com.doctorguide.api.DoctorGuideApi;
+import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
 import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DoctorDetailFragment;
@@ -38,11 +42,15 @@ public class DoctorActivity extends GoogleSignInActivity {
     private ActionBar actionbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private int doctorlId;
+    private int doctorId;
     private String doctorName;
     private boolean collected;
     private FloatingActionMenu fab;
     private String hospitalName;
+    private Doctor doctor;
+//    private int commentNum;
+//    private int recommendNum;
+//    private float avg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +59,7 @@ public class DoctorActivity extends GoogleSignInActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            doctorlId = extras.getInt("DOCTOR_ID");
+            doctorId = extras.getInt("DOCTOR_ID");
             doctorName = extras.getString("DOCTOR_NAME");
             hospitalName = extras.getString("HOSPITAL_NAME");
         }
@@ -70,6 +78,35 @@ public class DoctorActivity extends GoogleSignInActivity {
         setViews();
         setHeatButton();
         setFab();
+        new GetDoctorScoreTask().execute();
+    }
+
+    private class GetDoctorScoreTask extends AsyncTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Util.showProgressDialog(DoctorActivity.this);
+        }
+        @Override
+        protected Object doInBackground(Object... params) {
+            doctor = DoctorGuideApi.getDoctorScore(doctorId);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            Util.hideProgressDialog();
+            TextView mCommentNum = (TextView) findViewById(R.id.comment_num);
+            TextView mRecommendNum = (TextView) findViewById(R.id.recommend_num);
+            TextView mScore = (TextView) findViewById(R.id.score);
+
+            mCommentNum.setText(doctor.comment_num + "");
+            mRecommendNum.setText(doctor.recommend_num + "");
+            mScore.setText(String.format("%.1f", doctor.avg));
+        }
+
     }
 
     private void setViews() {
@@ -160,7 +197,7 @@ public class DoctorActivity extends GoogleSignInActivity {
     private void setHeatButton() {
         final Button heart = (Button)findViewById(R.id.heart);
         final Realm realm = Realm.getInstance(getBaseContext());
-        RealmDoctor doctor = realm.where(RealmDoctor.class).equalTo("id", doctorlId).findFirst();
+        RealmDoctor doctor = realm.where(RealmDoctor.class).equalTo("id", doctorId).findFirst();
         if(doctor == null) {
             collected = false;
             heart.setBackgroundResource(R.drawable.heart_white_to_red_button);
@@ -177,7 +214,7 @@ public class DoctorActivity extends GoogleSignInActivity {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmDoctor doc = realm.where(RealmDoctor.class).equalTo("id", doctorlId).findFirst();
+                            RealmDoctor doc = realm.where(RealmDoctor.class).equalTo("id", doctorId).findFirst();
                             doc.removeFromRealm();
                         }
                     });
@@ -195,7 +232,7 @@ public class DoctorActivity extends GoogleSignInActivity {
                         @Override
                         public void execute(Realm realm) {
                             RealmDoctor doctor = realm.createObject(RealmDoctor.class);
-                            doctor.setId(doctorlId);
+                            doctor.setId(doctorId);
                             doctor.setName(doctorName);
                         }
                     });
@@ -215,7 +252,7 @@ public class DoctorActivity extends GoogleSignInActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(DoctorDetailFragment.newInstance(doctorlId), "醫師資料");
+        adapter.addFragment(DoctorDetailFragment.newInstance(doctorId), "醫師資料");
         adapter.addFragment(new DoctorScoreFragment(), "醫師評分");
         adapter.addFragment(new CommentFragment(), "醫師評論");
         viewPager.setAdapter(adapter);

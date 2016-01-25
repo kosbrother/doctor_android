@@ -64,6 +64,7 @@
                             android:layout_height="wrap_content"
                             android:src="@mipmap/thumb_whte"
                             android:layout_marginRight="5dp"
+                            android:layout_centerVertical="true"
                             />
                         <TextView
                             android:id="@+id/recommend_num"
@@ -71,6 +72,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="900"
+                            android:textColor="@color/textColorPrimary"
                             android:layout_marginRight="5dp"/>
                         <ImageView
                             android:id="@+id/sms"
@@ -79,6 +81,7 @@
                             android:layout_height="wrap_content"
                             android:src="@mipmap/sms_white"
                             android:layout_marginRight="5dp"
+                            android:layout_centerVertical="true"
                             />
                         <TextView
                             android:id="@+id/comment_num"
@@ -86,6 +89,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="20"
+                            android:textColor="@color/textColorPrimary"
                             android:layout_marginRight="5dp"/>
                         <ImageView
                             android:id="@+id/star"
@@ -94,12 +98,14 @@
                             android:layout_height="wrap_content"
                             android:src="@mipmap/star_white"
                             android:layout_marginRight="5dp"
+                            android:layout_centerVertical="true"
                             />
                         <TextView
                             android:id="@+id/score"
                             android:layout_toRightOf="@+id/star"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/textColorPrimary"
                             android:text="4.2"/>
                     </RelativeLayout>
                 </RelativeLayout>

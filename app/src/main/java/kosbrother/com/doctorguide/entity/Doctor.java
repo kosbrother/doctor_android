@@ -19,4 +19,7 @@ public class Doctor {
     public int comment_num;
     public int recommend_num;
     public float avg;
+
+    public float avg_friendly;
+    public float avg_speciality;
 }
