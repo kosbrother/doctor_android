@@ -3,6 +3,8 @@ package kosbrother.com.doctorguide.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +52,9 @@ public class DoctorScoreFragment extends Fragment {
             avgRating.setRating(mDoctor.avg);
             friendRatingBar.setRating(mDoctor.avg_friendly);
             speRatingBar.setRating(mDoctor.avg_speciality);
+            DrawableCompat.setTint(avgRating.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.tab_text_act));
+            DrawableCompat.setTint(friendRatingBar.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.tab_text_act));
+            DrawableCompat.setTint(speRatingBar.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.tab_text_act));
 
             return view;
         }else{
