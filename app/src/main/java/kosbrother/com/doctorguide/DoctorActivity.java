@@ -70,12 +70,9 @@ public class DoctorActivity extends GoogleSignInActivity {
         actionbar.setElevation(0);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
 
-        setViews();
         setHeatButton();
         setFab();
         new GetDoctorScoreTask().execute();
@@ -101,17 +98,17 @@ public class DoctorActivity extends GoogleSignInActivity {
             TextView mCommentNum = (TextView) findViewById(R.id.comment_num);
             TextView mRecommendNum = (TextView) findViewById(R.id.recommend_num);
             TextView mScore = (TextView) findViewById(R.id.score);
+            TextView dName = (TextView)findViewById(R.id.doctor_name);
 
             mCommentNum.setText(doctor.comment_num + "");
             mRecommendNum.setText(doctor.recommend_num + "");
             mScore.setText(String.format("%.1f", doctor.avg));
+            dName.setText(doctorName + " 醫師");
+
+            setupViewPager(viewPager);
+            tabLayout.setupWithViewPager(viewPager);
         }
 
-    }
-
-    private void setViews() {
-        TextView dName = (TextView)findViewById(R.id.doctor_name);
-        dName.setText(doctorName + " 醫師");
     }
 
     private void setFab() {
@@ -253,7 +250,7 @@ public class DoctorActivity extends GoogleSignInActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(DoctorDetailFragment.newInstance(doctorId), "醫師資料");
-        adapter.addFragment(new DoctorScoreFragment(), "醫師評分");
+        adapter.addFragment(DoctorScoreFragment.newInstance(doctor), "醫師評分");
         adapter.addFragment(new CommentFragment(), "醫師評論");
         viewPager.setAdapter(adapter);
     }
