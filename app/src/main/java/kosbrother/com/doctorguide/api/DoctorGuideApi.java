@@ -32,6 +32,18 @@ public class DoctorGuideApi {
         return doctor;
     }
 
+    public static Division getDivisionScore(int divisionId, int hospitalId) {
+        Division division = null;
+        try {
+            String message = runHttpGet(HOST + "/api/v1/divisions/" + divisionId + "/score.json?hospital_id=" + hospitalId);
+            division = mapper.readValue(message, new TypeReference<Division>() {});
+            return division;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return division;
+    }
+
     public static Doctor getDoctorInfo(int doctorId){
         Doctor doctor = null;
         try {

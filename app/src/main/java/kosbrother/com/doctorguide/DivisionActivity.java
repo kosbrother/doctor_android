@@ -63,6 +63,7 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
     private String hospitalGrade;
     private String hospitalName;
     private ViewPagerAdapter adapter;
+    private Division division;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +88,41 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
         setSpinner();
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-
         tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
 
         setFab();
+        new GetDivisionScoreTask().execute();
+    }
+
+    private class GetDivisionScoreTask extends AsyncTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Util.showProgressDialog(DivisionActivity.this);
+        }
+        @Override
+        protected Object doInBackground(Object... params) {
+            division = DoctorGuideApi.getDivisionScore(divisionId,hospitalId);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            Util.hideProgressDialog();
+            TextView mCommentNum = (TextView) findViewById(R.id.comment_num);
+            TextView mRecommendNum = (TextView) findViewById(R.id.recommend_num);
+            TextView mScore = (TextView) findViewById(R.id.score);
+
+            mCommentNum.setText(division.comment_num + "");
+            mRecommendNum.setText(division.recommend_num + "");
+            mScore.setText(String.format("%.1f", division.avg));
+
+            setupViewPager(viewPager);
+            tabLayout.setupWithViewPager(viewPager);
+        }
+
     }
 
     private void setFab() {
@@ -146,7 +176,7 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
     private void setupViewPager(ViewPager viewPager) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.HEARTTYPE,hospitalId,divisionId), "科內醫生");
-        adapter.addFragment(new DivisionScoreFragment(), "本科評分");
+        adapter.addFragment(DivisionScoreFragment.newInstance(division), "本科評分");
         adapter.addFragment(new CommentFragment(), "本科評論");
         viewPager.setAdapter(adapter);
     }

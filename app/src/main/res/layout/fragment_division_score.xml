@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/award2"/>
         <TextView
-            android:id="@+id/text"
+            android:id="@+id/avg_text"
             android:layout_marginLeft="4dp"
             android:layout_toRightOf="@+id/image1"
             android:layout_width="wrap_content"
@@ -28,8 +28,8 @@
             android:layout_centerVertical="true"/>
         <RatingBar
             android:layout_marginLeft="4dp"
-            android:id="@+id/i_rating"
-            android:layout_toRightOf="@+id/text"
+            android:id="@+id/avg_rating"
+            android:layout_toRightOf="@+id/avg_text"
             android:rating="3.5"
             android:stepSize="0.5"
             android:numStars="5"
@@ -68,22 +68,23 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="4dp">
         <TextView
-            android:id="@+id/text2"
+            android:id="@+id/text_e"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="環境衛生"
             android:textColor="@color/grey_text_color"/>
         <TextView
-            android:id="@+id/score1"
+            android:id="@+id/env_score"
             android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/text2"
+            android:layout_toRightOf="@+id/text_e"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="3.0"
             />
         <RatingBar
+            android:id="@+id/env_rating_bar"
             android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/score1"
+            android:layout_toRightOf="@+id/env_score"
             android:rating="3.5"
             android:stepSize="0.5"
             android:numStars="5"
@@ -99,22 +100,23 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="4dp">
         <TextView
-            android:id="@+id/text2"
+            android:id="@+id/text_equipment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="醫療設備"
             android:textColor="@color/grey_text_color"/>
         <TextView
-            android:id="@+id/score1"
+            android:id="@+id/equipment_score"
             android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/text2"
+            android:layout_toRightOf="@+id/text_equipment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="3.0"
             />
         <RatingBar
+            android:id="@+id/equipment_rating_bar"
             android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/score1"
+            android:layout_toRightOf="@+id/equipment_score"
             android:rating="3.5"
             android:stepSize="0.5"
             android:numStars="5"
@@ -130,22 +132,23 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="4dp">
         <TextView
-            android:id="@+id/text2"
+            android:id="@+id/text_s"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="醫護專業"
             android:textColor="@color/grey_text_color"/>
         <TextView
-            android:id="@+id/score1"
+            android:id="@+id/spe_score_div"
             android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/text2"
+            android:layout_toRightOf="@+id/text_s"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="3.0"
             />
         <RatingBar
+            android:id="@+id/spe_div_rating_bar"
             android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/score1"
+            android:layout_toRightOf="@+id/spe_score_div"
             android:rating="3.5"
             android:stepSize="0.5"
             android:numStars="5"
@@ -161,22 +164,23 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="4dp">
         <TextView
-            android:id="@+id/text2"
+            android:id="@+id/text_ss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="服務態度"
             android:textColor="@color/grey_text_color"/>
         <TextView
-            android:id="@+id/score1"
+            android:id="@+id/friend_score_div"
             android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/text2"
+            android:layout_toRightOf="@+id/text_ss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="3.0"
             />
         <RatingBar
+            android:id="@+id/friend_div_rating_bar"
             android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/score1"
+            android:layout_toRightOf="@+id/friend_score_div"
             android:rating="3.5"
             android:stepSize="0.5"
             android:numStars="5"
@@ -195,21 +199,21 @@
         android:layout_marginBottom="8dp"
         >
         <ImageView
-            android:id="@+id/image1"
+            android:id="@+id/image2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/award2"/>
         <TextView
-            android:id="@+id/text"
+            android:id="@+id/dr_avg_text"
             android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/image1"
+            android:layout_toRightOf="@+id/image2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="綜合滿意度 4.2"
             android:layout_centerVertical="true"/>
         <RatingBar
             android:layout_marginLeft="4dp"
-            android:id="@+id/div_score_rating"
+            android:id="@+id/dr_score_rating"
             android:layout_toRightOf="@+id/text"
             android:rating="3.5"
             android:stepSize="0.5"
@@ -234,22 +238,24 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="4dp">
         <TextView
-            android:id="@+id/text2"
+            android:id="@+id/text3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="醫師態度"
-            android:textColor="@color/grey_text_color"/>
+            android:textColor="@color/grey_text_color"
+            android:textSize="@dimen/doctor_fragment_title_size"/>
         <TextView
-            android:id="@+id/score1"
+            android:id="@+id/friend_score"
             android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/text2"
+            android:layout_toRightOf="@+id/text3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="3.0"
             />
         <RatingBar
+            android:id="@+id/friend_rating_bar"
             android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/score1"
+            android:layout_toRightOf="@+id/friend_score"
             android:rating="3.5"
             android:stepSize="0.5"
             android:numStars="5"
@@ -258,7 +264,6 @@
             style="?android:attr/ratingBarStyleSmall"
             android:layout_centerVertical="true"/>
     </RelativeLayout>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -270,9 +275,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="醫師專業"
-            android:textColor="@color/grey_text_color"/>
+            android:textColor="@color/grey_text_color"
+            android:textSize="@dimen/doctor_fragment_title_size"/>
         <TextView
-            android:id="@+id/score1"
+            android:id="@+id/spe_score"
             android:layout_marginLeft="4dp"
             android:layout_toRightOf="@+id/text2"
             android:layout_width="wrap_content"
@@ -280,8 +286,9 @@
             android:text="3.0"
             />
         <RatingBar
+            android:id="@+id/spe_rating_bar"
             android:layout_marginLeft="4dp"
-            android:layout_toRightOf="@+id/score1"
+            android:layout_toRightOf="@+id/spe_score"
             android:rating="3.5"
             android:stepSize="0.5"
             android:numStars="5"
