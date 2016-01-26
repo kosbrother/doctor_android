@@ -231,6 +231,7 @@ public class DoctorActivity extends GoogleSignInActivity {
                             RealmDoctor doctor = realm.createObject(RealmDoctor.class);
                             doctor.setId(doctorId);
                             doctor.setName(doctorName);
+                            doctor.setHospital(hospitalName);
                         }
                     });
 
