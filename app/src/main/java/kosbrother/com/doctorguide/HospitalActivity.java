@@ -113,6 +113,16 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
+
+            TextView mCommentNum = (TextView) findViewById(R.id.comment_num);
+            TextView mRecommendNum = (TextView) findViewById(R.id.recommend_num);
+            TextView mScore = (TextView) findViewById(R.id.score);
+
+            mCommentNum.setText(hospital.comment_num + "");
+            mRecommendNum.setText(hospital.recommend_num + "");
+            mScore.setText(String.format("%.1f", hospital.avg));
+
+
             Util.hideProgressDialog();
             setupViewPager(viewPager);
             tabLayout.setupWithViewPager(viewPager);

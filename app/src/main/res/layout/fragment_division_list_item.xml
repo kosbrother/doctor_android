@@ -45,6 +45,7 @@
                 android:text="3.0"
                 />
             <RatingBar
+                android:id="@+id/score_rating_bar"
                 android:layout_marginLeft="4dp"
                 android:layout_toRightOf="@+id/score1"
                 android:rating="3.5"

@@ -1,11 +1,14 @@
 package kosbrother.com.doctorguide.adapters;
 
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.List;
@@ -36,6 +39,8 @@ public class MyDivisionListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         if(viewType == ITEM_TYPE.ITEM.ordinal()) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.fragment_division_list_item, parent, false);
+            RatingBar rating = (RatingBar) view.findViewById(R.id.score_rating_bar);
+            DrawableCompat.setTint(rating.getProgressDrawable(), ContextCompat.getColor(parent.getContext(), R.color.tab_text_act));
             return new ViewHolder(view);
         }else{
             View view = LayoutInflater.from(parent.getContext())
@@ -68,6 +73,8 @@ public class MyDivisionListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     }
                 }
             });
+            holder.mScore.setText(String.format("%.1f", mValues.get(position).avg));
+            holder.mRatingBar.setRating(mValues.get(position).avg);
         }
     }
 
@@ -87,10 +94,15 @@ public class MyDivisionListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         public ImageView mCategoryImage;
         public TextView mDivision;
         public Button mButton;
+        public TextView mScore;
+        public RatingBar mRatingBar;
+
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
+            mRatingBar = (RatingBar)view.findViewById(R.id.score_rating_bar);
+            mScore = (TextView)view.findViewById(R.id.score1);
             mCategoryImage = (ImageView)view.findViewById(R.id.category_icon);
             mDivision = (TextView)view.findViewById(R.id.division);
             mButton = (Button)view.findViewById(R.id.detail_button);
