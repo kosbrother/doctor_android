@@ -23,9 +23,11 @@ import kosbrother.com.doctorguide.entity.Comment;
 
 public class CommentFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_HOSPITAL = "param1";
+    private static final String ARG_DIVISION = "param2";
 
-    private int mHospitalId;
+    private Integer mHospitalId;
+    private Integer mDivisionId;
 
     private ArrayList<Comment> comments;
     private View view;
@@ -35,10 +37,13 @@ public class CommentFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static CommentFragment newInstance(int hospital_id) {
+    public static CommentFragment newInstance(Integer hospital_id,Integer division_id) {
         CommentFragment fragment = new CommentFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, hospital_id);
+        if(hospital_id != null)
+            args.putInt(ARG_HOSPITAL, hospital_id);
+        if(division_id != null)
+            args.putInt(ARG_DIVISION, division_id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,7 +52,8 @@ public class CommentFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mHospitalId = getArguments().getInt(ARG_PARAM1);
+            mHospitalId = getArguments().getInt(ARG_HOSPITAL);
+            mDivisionId = getArguments().getInt(ARG_DIVISION);
         }
     }
 
@@ -69,7 +75,10 @@ public class CommentFragment extends Fragment {
         }
         @Override
         protected Object doInBackground(Object... params) {
-            comments = DoctorGuideApi.getHospitalComments(mHospitalId);
+            if(mDivisionId != 0 && mHospitalId != 0)
+                comments = DoctorGuideApi.getDivisionComments(mDivisionId,mHospitalId);
+            else if(mHospitalId != 0)
+                comments = DoctorGuideApi.getHospitalComments(mHospitalId);
             return null;
         }
 

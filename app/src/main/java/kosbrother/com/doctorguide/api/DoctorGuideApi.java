@@ -33,6 +33,18 @@ public class DoctorGuideApi {
         return comments;
     }
 
+    public static ArrayList<Comment> getDivisionComments(int division_id,int hospital_id){
+        ArrayList<Comment> comments = new ArrayList<Comment>();
+        try {
+            String message = runHttpGet(HOST + "/api/v1/divisions/"+ division_id +"/comments.json?hospital_id="+hospital_id);
+            comments = mapper.readValue(message, new TypeReference<ArrayList<Comment>>() {});
+            return comments;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return comments;
+    }
+
     public static Doctor getDoctorScore(int doctorId) {
         Doctor doctor = null;
         try {
