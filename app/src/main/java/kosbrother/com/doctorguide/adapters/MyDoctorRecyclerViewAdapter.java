@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.Util.BlankViewHolder;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.fragments.DoctorFragment;
@@ -19,7 +20,7 @@ import kosbrother.com.doctorguide.fragments.DoctorFragment;
 import static kosbrother.com.doctorguide.Util.SphericalUtil.computeDistanceBetween;
 
 
-public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<MyDoctorRecyclerViewAdapter.ViewHolder> {
+public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final ArrayList<Doctor> mDoctors;
     private final DoctorFragment.OnListFragmentInteractionListener mListener;
@@ -28,6 +29,10 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<MyDoctorRe
     public static final int HEARTTYPE = 1;
     private LatLng mLocation;
 
+    public static enum ITEM_TYPE {
+        ITEM,
+        ITEM_BLANK
+    }
 
     public MyDoctorRecyclerViewAdapter(ArrayList<Doctor> items, DoctorFragment.OnListFragmentInteractionListener listener, int fragmentViewType, LatLng location) {
         mDoctors = items;
@@ -37,56 +42,71 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<MyDoctorRe
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_doctor, parent, false);
-        if(mFragmentViewType == DISTANCETYPE) {
-            view.findViewById(R.id.heart).setVisibility(View.GONE);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(viewType == ITEM_TYPE.ITEM.ordinal()) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.fragment_doctor, parent, false);
+            if(mFragmentViewType == DISTANCETYPE) {
+                view.findViewById(R.id.heart).setVisibility(View.GONE);
+            }else{
+                view.findViewById(R.id.hospial_name).setVisibility(View.GONE);
+                view.findViewById(R.id.distance).setVisibility(View.GONE);
+            }
+            return new ViewHolder(view);
         }else{
-            view.findViewById(R.id.hospial_name).setVisibility(View.GONE);
-            view.findViewById(R.id.distance).setVisibility(View.GONE);
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_blank, parent, false);
+            return new BlankViewHolder(view);
         }
-        return new ViewHolder(view);
+
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.mName.setText(mDoctors.get(position).name);
-        holder.mhospialName.setText(mDoctors.get(position).hospital);
-        double distance = computeDistanceBetween(mLocation, new LatLng(mDoctors.get(position).latitude, mDoctors.get(position).longitude));
-        holder.mDistance.setText(Util.formatNumber(distance));
-        holder.mCommentNum.setText(mDoctors.get(position).comment_num + "");
-        holder.mRecommendNum.setText(mDoctors.get(position).recommend_num + "");
-        holder.mScore.setText(String.format("%.1f", mDoctors.get(position).avg));
+    public void onBindViewHolder(final RecyclerView.ViewHolder oHolder, final int position) {
+        if (oHolder instanceof ViewHolder) {
+            ViewHolder holder = (ViewHolder) oHolder;
+            holder.mName.setText(mDoctors.get(position).name);
+            holder.mhospialName.setText(mDoctors.get(position).hospital);
+            double distance = computeDistanceBetween(mLocation, new LatLng(mDoctors.get(position).latitude, mDoctors.get(position).longitude));
+            holder.mDistance.setText(Util.formatNumber(distance));
+            holder.mCommentNum.setText(mDoctors.get(position).comment_num + "");
+            holder.mRecommendNum.setText(mDoctors.get(position).recommend_num + "");
+            holder.mScore.setText(String.format("%.1f", mDoctors.get(position).avg));
 
-        if(mDoctors.get(position).isCollected) {
-            holder.heart.setBackgroundResource(R.drawable.heart_read_to_white_button);
-        }else{
-            holder.heart.setBackgroundResource(R.drawable.heart_red_line_to_red_button);
+            if (mDoctors.get(position).isCollected) {
+                holder.heart.setBackgroundResource(R.drawable.heart_read_to_white_button);
+            } else {
+                holder.heart.setBackgroundResource(R.drawable.heart_red_line_to_red_button);
+            }
+
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != mListener) {
+                        mListener.onListFragmentInteraction(v, mDoctors.get(position));
+                    }
+                }
+            });
+
+            holder.heart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != mListener) {
+                        mListener.onListFragmentInteraction(v, mDoctors.get(position));
+                    }
+                }
+            });
         }
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    mListener.onListFragmentInteraction(v, mDoctors.get(position));
-                }
-            }
-        });
-
-        holder.heart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    mListener.onListFragmentInteraction(v,mDoctors.get(position));
-                }
-            }
-        });
     }
 
     @Override
     public int getItemCount() {
-        return mDoctors.size();
+        return mDoctors.size() + 1;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position == mDoctors.size() ? ITEM_TYPE.ITEM_BLANK.ordinal() : ITEM_TYPE.ITEM.ordinal();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
