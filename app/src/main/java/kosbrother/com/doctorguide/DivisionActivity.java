@@ -177,7 +177,7 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.HEARTTYPE,hospitalId,divisionId), "科內醫生");
         adapter.addFragment(DivisionScoreFragment.newInstance(division), "本科評分");
-        adapter.addFragment(CommentFragment.newInstance(hospitalId,divisionId), "本科評論");
+        adapter.addFragment(CommentFragment.newInstance(hospitalId,divisionId,null), "本科評論");
         viewPager.setAdapter(adapter);
     }
 

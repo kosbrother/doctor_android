@@ -25,9 +25,11 @@ public class CommentFragment extends Fragment {
 
     private static final String ARG_HOSPITAL = "param1";
     private static final String ARG_DIVISION = "param2";
+    private static final String ARG_DOCTOR = "param2";
 
     private Integer mHospitalId;
     private Integer mDivisionId;
+    private Integer mDoctorId;
 
     private ArrayList<Comment> comments;
     private View view;
@@ -37,13 +39,15 @@ public class CommentFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static CommentFragment newInstance(Integer hospital_id,Integer division_id) {
+    public static CommentFragment newInstance(Integer hospital_id,Integer division_id, Integer doctor_id) {
         CommentFragment fragment = new CommentFragment();
         Bundle args = new Bundle();
         if(hospital_id != null)
             args.putInt(ARG_HOSPITAL, hospital_id);
         if(division_id != null)
             args.putInt(ARG_DIVISION, division_id);
+        if(doctor_id != null)
+            args.putInt(ARG_DOCTOR, doctor_id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,6 +58,7 @@ public class CommentFragment extends Fragment {
         if (getArguments() != null) {
             mHospitalId = getArguments().getInt(ARG_HOSPITAL);
             mDivisionId = getArguments().getInt(ARG_DIVISION);
+            mDoctorId = getArguments().getInt(ARG_DOCTOR);
         }
     }
 
@@ -79,6 +84,8 @@ public class CommentFragment extends Fragment {
                 comments = DoctorGuideApi.getDivisionComments(mDivisionId,mHospitalId);
             else if(mHospitalId != 0)
                 comments = DoctorGuideApi.getHospitalComments(mHospitalId);
+            else if(mDoctorId != 0)
+                comments = DoctorGuideApi.getDoctorComments(mDoctorId);
             return null;
         }
 

@@ -252,7 +252,7 @@ public class DoctorActivity extends GoogleSignInActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(DoctorDetailFragment.newInstance(doctorId), "醫師資料");
         adapter.addFragment(DoctorScoreFragment.newInstance(doctor), "醫師評分");
-        adapter.addFragment(new CommentFragment(), "醫師評論");
+        adapter.addFragment(CommentFragment.newInstance(null,null,doctorId), "醫師評論");
         viewPager.setAdapter(adapter);
     }
 

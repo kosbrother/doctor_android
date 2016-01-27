@@ -263,7 +263,7 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(HospitalDetailFragment.newInstance(hospitalId,hospital), "關於本院");
         adapter.addFragment(DivisionListFragment.newInstance(hospitalId,hospital.divisions), "院內科別");
-        adapter.addFragment(CommentFragment.newInstance(hospitalId,null), "本院評論");
+        adapter.addFragment(CommentFragment.newInstance(hospitalId,null,null), "本院評論");
         viewPager.setAdapter(adapter);
     }
 
