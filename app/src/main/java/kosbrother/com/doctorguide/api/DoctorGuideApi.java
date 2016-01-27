@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import kosbrother.com.doctorguide.entity.Comment;
 import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.entity.Hospital;
@@ -19,6 +20,18 @@ import okhttp3.Response;
 public class DoctorGuideApi {
     final static String HOST = "http://130.211.247.159";
     private final static ObjectMapper mapper = new ObjectMapper();
+
+    public static ArrayList<Comment> getHospitalComments(int hospital_id){
+        ArrayList<Comment> comments = new ArrayList<Comment>();
+        try {
+            String message = runHttpGet(HOST + "/api/v1/hospitals/"+ hospital_id +"/comments.json");
+            comments = mapper.readValue(message, new TypeReference<ArrayList<Comment>>() {});
+            return comments;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return comments;
+    }
 
     public static Doctor getDoctorScore(int doctorId) {
         Doctor doctor = null;

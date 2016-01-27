@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:id="@+id/cv_item"
-    card_view:cardCornerRadius="4dp">
+    card_view:cardCornerRadius="4dp"
+    android:background="@android:color/white">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/mText1"
+                android:id="@+id/mHostital"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="台北市立聯合醫院"
@@ -101,17 +102,24 @@
                 android:numStars="5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/ratingBarStyleSmall"/>
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            >
             <TextView
                 android:id="@+id/mText4"
-                android:layout_toRightOf="@+id/div_score_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="醫師滿意度 : "
                 android:textColor="@color/grey_text_color"
                 android:textSize="@dimen/comment_score_size"/>
             <TextView
-                android:id="@+id/doc_score"
+                android:id="@+id/dr_score"
                 android:layout_toRightOf="@+id/mText4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -119,14 +127,16 @@
                 android:textColor="@color/grey_text_color"
                 android:textSize="@dimen/comment_score_size"/>
             <RatingBar
-                android:id="@+id/doc_score_rating"
-                android:layout_toRightOf="@+id/doc_score"
+                android:id="@+id/dr_score_rating"
+                android:layout_toRightOf="@+id/dr_score"
                 android:rating="3.0"
                 android:stepSize="0.5"
                 android:numStars="5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/ratingBarStyleSmall"/>
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_centerVertical="true"
+                />
         </RelativeLayout>
         <View
             android:layout_marginTop="4dp"
@@ -165,6 +175,7 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/div_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="醫院的服務很用心，非常感謝！但是護士小姐的動作太粗魯，家裡長輩打針的時候，找不到血管，要找……"
@@ -178,6 +189,7 @@
             android:textColor="@color/grey_text_color"
             android:layout_marginBottom="4dp"/>
         <TextView
+            android:id="@+id/dr_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="趙醫師的問診讓我感覺很窩心，不會像例行公事三兩下就結束，細心又關心病人！！我們家的小孩都是⋯⋯"
