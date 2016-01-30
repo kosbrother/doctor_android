@@ -1,5 +1,7 @@
 package kosbrother.com.doctorguide.entity;
 
+import java.util.List;
+
 /**
  * Created by steven on 1/6/16.
  */
@@ -23,4 +25,6 @@ public class Division {
     public float dr_avg_score;
     public float dr_avg_friendly;
     public float dr_avg_speciality;
+
+    public List<Doctor> doctors;
 }

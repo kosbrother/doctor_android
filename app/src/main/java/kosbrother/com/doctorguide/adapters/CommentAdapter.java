@@ -45,6 +45,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, CommentDetailActivity.class);
+                intent.putExtra("COMMENT_ID",comment.id);
                 mContext.startActivity(intent);
             }
         });

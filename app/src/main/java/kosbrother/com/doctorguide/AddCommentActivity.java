@@ -2,6 +2,7 @@ package kosbrother.com.doctorguide;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -20,7 +21,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import kosbrother.com.doctorguide.Util.Util;
+import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.custom.CustomViewPager;
+import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.fragments.AddDivisionCommentFragment;
 import kosbrother.com.doctorguide.fragments.AddDoctorCommentFragment;
 
@@ -32,6 +36,7 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
     private int year;
     private int month;
     private int day;
+    private ArrayList<Division> divisions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,30 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
         enablePagerSlide();
         setSpinner();
         setTime();
+
+        new GetDivisionScoreTask().execute();
+    }
+
+    private class GetDivisionScoreTask extends AsyncTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Util.showProgressDialog(AddCommentActivity.this);
+        }
+        @Override
+        protected Object doInBackground(Object... params) {
+            divisions = DoctorGuideApi.getDivisionsWithDoctorsByHospital(1);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            Util.hideProgressDialog();
+
+        }
+
     }
 
     private void setTime() {

@@ -21,6 +21,18 @@ public class DoctorGuideApi {
     final static String HOST = "http://130.211.247.159";
     private final static ObjectMapper mapper = new ObjectMapper();
 
+    public static Comment getComment(int comment_id){
+        Comment comment = new Comment();
+        try {
+            String message = runHttpGet(HOST + "/api/v1/comments/"+ comment_id +".json");
+            comment = mapper.readValue(message, new TypeReference<Comment>() {});
+            return comment;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return comment;
+    }
+
     public static ArrayList<Comment> getHospitalComments(int hospital_id){
         ArrayList<Comment> comments = new ArrayList<Comment>();
         try {
@@ -146,6 +158,18 @@ public class DoctorGuideApi {
         ArrayList<Division> divisions = new ArrayList<Division>();
         try {
             String message = runHttpGet(HOST + "/api/v1/divisions/by_hospital_category.json?hospital_id="+ hospitalId +"&category_id=" + categoryId);
+            divisions = readDivisionJson(message);
+            return divisions;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return divisions;
+    }
+
+    public static  ArrayList<Division> getDivisionsWithDoctorsByHospital(int hospitalId){
+        ArrayList<Division> divisions = new ArrayList<Division>();
+        try {
+            String message = runHttpGet(HOST + "/api/v1/hospitals/"+ hospitalId+"/divisions_with_doctors.json");
             divisions = readDivisionJson(message);
             return divisions;
         } catch (IOException e) {
