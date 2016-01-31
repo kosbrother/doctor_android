@@ -10,6 +10,7 @@ public class Doctor {
     public String name;
     public String address;
     public String hospital;
+    public int hospital_id;
     public boolean isCollected;
     public String exp;
     public String spe;

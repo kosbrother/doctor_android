@@ -13,6 +13,7 @@ public class RealmDoctor extends RealmObject {
     private String name;
     private String address;
     private String hospital;
+    private int hospitalId;
 
     public int getId() {
         return id;
@@ -30,6 +31,10 @@ public class RealmDoctor extends RealmObject {
         return hospital;
     }
 
+    public int getHospitalId() {
+        return hospitalId;
+    }
+
     public void setId(int id){
         this.id = id;
     }
@@ -44,5 +49,9 @@ public class RealmDoctor extends RealmObject {
 
     public void setHospital(String hospital){
         this.hospital = hospital;
+    }
+
+    public void setHospitalId(int hospitalId){
+        this.hospitalId = hospitalId;
     }
 }

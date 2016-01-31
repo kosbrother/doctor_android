@@ -48,6 +48,7 @@ public class DoctorActivity extends GoogleSignInActivity {
     private FloatingActionMenu fab;
     private String hospitalName;
     private Doctor doctor;
+    private int hospitalId;
 //    private int commentNum;
 //    private int recommendNum;
 //    private float avg;
@@ -62,6 +63,7 @@ public class DoctorActivity extends GoogleSignInActivity {
             doctorId = extras.getInt("DOCTOR_ID");
             doctorName = extras.getString("DOCTOR_NAME");
             hospitalName = extras.getString("HOSPITAL_NAME");
+            hospitalId = extras.getInt("HOSPITAL_ID");
         }
 
         actionbar = getSupportActionBar();
@@ -188,6 +190,9 @@ public class DoctorActivity extends GoogleSignInActivity {
 
     private void startCommentActivity() {
         Intent intent = new Intent(DoctorActivity.this, AddCommentActivity.class);
+        intent.putExtra("DOCTOR_ID",doctorId);
+        intent.putExtra("HOSPITAL_NAME",hospitalName);
+        intent.putExtra("HOSPITAL_ID",hospitalId);
         startActivity(intent);
     }
 

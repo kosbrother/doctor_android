@@ -217,6 +217,7 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
                         doctor.setName(item.name);
                         doctor.setAddress(item.address);
                         doctor.setHospital(hospitalName);
+                        doctor.setHospitalId(hospitalId);
                         realm.copyToRealmOrUpdate(doctor);
                     }
                 });
@@ -229,6 +230,7 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
             adapter.notifyDataSetChanged();
         }else{
             Intent intent = new Intent(this, DoctorActivity.class);
+            intent.putExtra("HOSPITAL_ID",hospitalId);
             intent.putExtra("DOCTOR_ID",item.id);
             intent.putExtra("DOCTOR_NAME",item.name);
             intent.putExtra("HOSPITAL_NAME",hospitalName);
@@ -406,6 +408,7 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
         Intent intent = new Intent(DivisionActivity.this, AddCommentActivity.class);
         intent.putExtra("HOSPITAL_ID",hospitalId);
         intent.putExtra("DIVISION_ID",divisionId);
+        intent.putExtra("HOSPITAL_NAME",hospitalName);
         startActivity(intent);
     }
 

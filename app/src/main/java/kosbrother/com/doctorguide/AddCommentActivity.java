@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.custom.CustomViewPager;
 import kosbrother.com.doctorguide.entity.Division;
+import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.fragments.AddDivisionCommentFragment;
 import kosbrother.com.doctorguide.fragments.AddDoctorCommentFragment;
 
@@ -37,6 +39,10 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
     private int month;
     private int day;
     private ArrayList<Division> divisions;
+    private int hospitalId;
+    private int divisionId;
+    private String hospitalName;
+    private int doctorId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +53,17 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setElevation(0);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            hospitalId = extras.getInt("HOSPITAL_ID");
+            divisionId = extras.getInt("DIVISION_ID");
+            hospitalName = extras.getString("HOSPITAL_NAME");
+            doctorId = extras.getInt("DOCTOR_ID");
+        }
+
+        TextView hospital = (TextView)findViewById(R.id.hospial_name);
+        hospital.setText(hospitalName);
+
         viewPager = (CustomViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
@@ -54,7 +71,6 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
         tabLayout.setupWithViewPager(viewPager);
 
         enablePagerSlide();
-        setSpinner();
         setTime();
 
         new GetDivisionScoreTask().execute();
@@ -69,7 +85,7 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
         }
         @Override
         protected Object doInBackground(Object... params) {
-            divisions = DoctorGuideApi.getDivisionsWithDoctorsByHospital(1);
+            divisions = DoctorGuideApi.getDivisionsWithDoctorsByHospital(hospitalId);
             return null;
         }
 
@@ -77,7 +93,7 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             Util.hideProgressDialog();
-
+            setSpinner();
         }
 
     }
@@ -92,15 +108,85 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
     }
 
     private void setSpinner() {
-        Spinner doc_spinner = (Spinner)findViewById(R.id.doc_selector);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.divisions, R.layout.spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        doc_spinner.setAdapter(adapter);
+        setDivisionSpinner();
+        setDoctorSpinner();
+    }
 
+    private void setDivisionSpinner() {
+        ArrayList<String> divs = new ArrayList<>();
+        final ArrayList<Integer> divsValue = new ArrayList<>();
+        for(Division d : divisions){
+            divs.add(d.name);
+            divsValue.add(d.id);
+        }
         Spinner div_spinner = (Spinner)findViewById(R.id.div_selector);
-        ArrayAdapter<CharSequence> div_adapter = ArrayAdapter.createFromResource(this, R.array.divisions, R.layout.spinner_item);
-        div_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        div_spinner.setAdapter(div_adapter);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.spinner_item, divs.toArray(new String[divs.size()]));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        div_spinner.setAdapter(adapter);
+        div_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                divisionId = divsValue.get(position);
+                setDoctorSpinner();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        if(divisionId == 0)
+            divisionId = getDivisionIdFromDoctors(divisions);
+
+        div_spinner.setSelection(divsValue.indexOf(divisionId));
+    }
+
+    private int getDivisionIdFromDoctors(ArrayList<Division> divisions) {
+        for(Division d : divisions){
+            for(Doctor dr: d.doctors){
+                if(dr.id == doctorId)
+                    return d.id;
+            }
+        }
+        return 0;
+    }
+
+    private void setDoctorSpinner(){
+        Division division = getDivision(divisionId);
+        ArrayList<String> drs = new ArrayList<>();
+        ArrayList<Integer> drsValue = new ArrayList<>();
+        drs.add("未指定醫師");
+        drsValue.add(0);
+        if(division.doctors != null)
+            for(Doctor dr : division.doctors){
+                drs.add(dr.name);
+                drsValue.add(dr.id);
+            }
+
+        Spinner dr_spinner = (Spinner)findViewById(R.id.dr_selector);
+        ArrayAdapter<String> dr_adapter = new ArrayAdapter<String>(this,
+                R.layout.spinner_item, drs.toArray(new String[drs.size()]));
+        dr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dr_spinner.setAdapter(dr_adapter);
+
+        if(doctorId != 0)
+            dr_spinner.setSelection(drsValue.indexOf(doctorId));
+    }
+
+    public Division getDivision(int id)
+    {
+        for (int i = 0; i < divisions.size(); i++)
+        {
+            Division d = divisions.get(i);
+            if ( id == d.id)
+            {
+                return d;
+            }
+        }
+
+        return null;
     }
 
     private void enablePagerSlide() {

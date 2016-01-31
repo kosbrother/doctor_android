@@ -7,12 +7,17 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -36,7 +41,7 @@ import kosbrother.com.doctorguide.entity.Hospital;
 import kosbrother.com.doctorguide.fragments.DoctorFragment;
 import kosbrother.com.doctorguide.fragments.HospitalFragment;
 
-public class HospitalDoctorActivity extends AppCompatActivity implements HospitalFragment.OnListFragmentInteractionListener,DoctorFragment.OnListFragmentInteractionListener,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener , LocationListener {
+public class HospitalDoctorActivity extends AppCompatActivity implements HospitalFragment.OnListFragmentInteractionListener,DoctorFragment.OnListFragmentInteractionListener,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener , LocationListener,ActivityCompat.OnRequestPermissionsResultCallback {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -44,6 +49,8 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
     private int categoryId;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
+
+    private static final int PERMISSION_REQUEST_LOCATION = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +71,58 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        setGoogleClient();
+
+        if (Build.VERSION.SDK_INT >= 23) {
+           checkLocationPermission();
+        } else {
+            requestLocationPermission();
+        }
+
+    }
+
+    private void checkLocationPermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+            setGoogleClient();
+        else
+            requestLocationPermission();
+    }
+
+    private void requestLocationPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    ActivityCompat.requestPermissions(HospitalDoctorActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
+                            PERMISSION_REQUEST_LOCATION);
+        } else {
+            Snackbar.make(tabLayout,
+                    "就醫指南需要位置的權限，才能幫你找到附近的醫院，醫生",
+                    Snackbar.LENGTH_SHORT).show();
+            // Request the permission. The result will be received in onRequestPermissionResult().
+            ActivityCompat.requestPermissions(HospitalDoctorActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PERMISSION_REQUEST_LOCATION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+
+        if (requestCode == PERMISSION_REQUEST_LOCATION) {
+            // Request for camera permission.
+            if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                setGoogleClient();
+            } else {
+                // Permission request was denied.
+                Snackbar.make(tabLayout, "位置存取權限被拒絕！無法讀取資料", Snackbar.LENGTH_INDEFINITE).setAction("確定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ActivityCompat.requestPermissions(HospitalDoctorActivity.this,
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                                PERMISSION_REQUEST_LOCATION);
+                    }
+                }).show();
+            }
+        }
     }
 
     private void setGoogleClient() {
@@ -74,16 +132,17 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
                     .build();
+            mGoogleApiClient.connect();
         }
     }
 
     protected void onStart() {
-        mGoogleApiClient.connect();
         super.onStart();
     }
 
     protected void onStop() {
-        mGoogleApiClient.disconnect();
+        if(mGoogleApiClient != null)
+            mGoogleApiClient.disconnect();
         super.onStop();
     }
 
@@ -106,7 +165,7 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
             LocationRequest mLocationRequest = new LocationRequest();
             mLocationRequest.setInterval(10000);
             mLocationRequest.setFastestInterval(5000);
-            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }else{
             if(viewPager.getAdapter() == null) {
@@ -210,6 +269,7 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
     public void onListFragmentInteraction(View v, Doctor item) {
         Intent intent = new Intent(this, DoctorActivity.class);
         intent.putExtra("DOCTOR_ID",item.id);
+        intent.putExtra("HOSPITAL_ID",item.hospital_id);
         intent.putExtra("DOCTOR_NAME",item.name);
         intent.putExtra("HOSPITAL_NAME",item.hospital);
         startActivity(intent);
