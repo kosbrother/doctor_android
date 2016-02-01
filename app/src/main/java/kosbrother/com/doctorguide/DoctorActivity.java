@@ -1,5 +1,8 @@
 package kosbrother.com.doctorguide;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -29,16 +32,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import kosbrother.com.doctorguide.Util.CreateUserTask;
 import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Doctor;
+import kosbrother.com.doctorguide.entity.User;
 import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
 import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DoctorDetailFragment;
 import kosbrother.com.doctorguide.fragments.DoctorScoreFragment;
 
-public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreFragment.GetDoctor {
+public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreFragment.GetDoctor,CreateUserTask.AfterCreateUser {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -192,8 +197,19 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN && isSignIn) {
-            startCommentActivity();
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            GoogleSignInAccount acct = result.getSignInAccount();
+            User user = new User();
+            user.email = acct.getEmail();
+            user.name = acct.getDisplayName();
+            user.pic_url = acct.getPhotoUrl().toString();
+            new CreateUserTask(this,user).execute();
         }
+    }
+
+    @Override
+    public void afterCreateUser() {
+        startCommentActivity();
     }
 
     private void startCommentActivity() {

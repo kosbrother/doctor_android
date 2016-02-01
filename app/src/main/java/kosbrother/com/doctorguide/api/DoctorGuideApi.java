@@ -10,8 +10,11 @@ import kosbrother.com.doctorguide.entity.Comment;
 import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.entity.Hospital;
+import kosbrother.com.doctorguide.entity.User;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -20,6 +23,29 @@ import okhttp3.Response;
 public class DoctorGuideApi {
     final static String HOST = "http://130.211.247.159";
     private final static ObjectMapper mapper = new ObjectMapper();
+
+    public static int creatUser(User user){
+        OkHttpClient client = new OkHttpClient();
+        RequestBody formBody = new FormBody.Builder()
+                .add("name", user.name)
+                .add("email",user.email)
+                .add("pic_url",user.pic_url)
+                .build();
+        Request request = new Request.Builder()
+                .url(HOST + "/api/v1/users.json")
+                .post(formBody)
+                .build();
+
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return response.code();
+        }
+        return 200;
+    }
 
     public static Comment getComment(int comment_id){
         Comment comment = new Comment();

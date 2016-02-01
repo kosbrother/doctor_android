@@ -10,7 +10,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -30,20 +29,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import kosbrother.com.doctorguide.Util.CreateUserTask;
 import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
 import kosbrother.com.doctorguide.adapters.CategoryAdapter;
 import kosbrother.com.doctorguide.entity.Category;
+import kosbrother.com.doctorguide.entity.User;
 
 public class MainActivity extends GoogleSignInActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener,CreateUserTask.AfterCreateUser {
 
     RecyclerView mRecyclerView;
     private SignInButton signInBtn;
-    private String userEmail;
     private TextView logInEmail;
     private DrawerLayout drawer;
-    private String userName;
-    private Uri userPic;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,10 +105,11 @@ public class MainActivity extends GoogleSignInActivity
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            userEmail = acct.getEmail();
-            userName = acct.getDisplayName();
-            userPic = acct.getPhotoUrl();
-            drawNavigationSignInPart(true);
+            user = new User();
+            user.email = acct.getEmail();
+            user.name = acct.getDisplayName();
+            user.pic_url = acct.getPhotoUrl().toString();
+            new CreateUserTask(this,user).execute();
         }else{
             drawNavigationSignInPart(false);
         }
@@ -117,7 +117,7 @@ public class MainActivity extends GoogleSignInActivity
 
     private void drawNavigationSignInPart(boolean signedIn) {
         if(signedIn){
-            logInEmail.setText(userName);
+            logInEmail.setText(user.name);
             logInEmail.setVisibility(View.VISIBLE);
             signInBtn.setVisibility(View.GONE);
         } else {
@@ -215,4 +215,8 @@ public class MainActivity extends GoogleSignInActivity
         Toast.makeText(MainActivity.this, getString(R.string.login_fail), Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void afterCreateUser() {
+        drawNavigationSignInPart(true);
+    }
 }
