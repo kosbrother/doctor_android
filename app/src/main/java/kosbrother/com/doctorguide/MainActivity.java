@@ -195,6 +195,8 @@ public class MainActivity extends GoogleSignInActivity
             startActivity(intent);
         } else if (id == R.id.my_comments) {
             Intent intent = new Intent(this, MyCommnetActivity.class);
+            if(user != null)
+                intent.putExtra("USER_EMAIL",user.email);
             startActivity(intent);
         } else if (id == R.id.setting) {
             Intent intent = new Intent(this, SettingActivity.class);

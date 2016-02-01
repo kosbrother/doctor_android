@@ -24,6 +24,18 @@ public class DoctorGuideApi {
     final static String HOST = "http://130.211.247.159";
     private final static ObjectMapper mapper = new ObjectMapper();
 
+    public static ArrayList<Comment> getUserComments(String email){
+        ArrayList<Comment> comments = new ArrayList<Comment>();
+        try {
+            String message = runHttpGet(HOST + "/api/v1/comments/user_comments.json?user=" + email);
+            comments = mapper.readValue(message, new TypeReference<ArrayList<Comment>>() {});
+            return comments;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return comments;
+    }
+
     public static int creatUser(User user){
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new FormBody.Builder()

@@ -1,15 +1,38 @@
 package kosbrother.com.doctorguide;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
-public class MyCommnetActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+import kosbrother.com.doctorguide.Util.CreateUserTask;
+import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
+import kosbrother.com.doctorguide.Util.Util;
+import kosbrother.com.doctorguide.adapters.CommentAdapter;
+import kosbrother.com.doctorguide.api.DoctorGuideApi;
+import kosbrother.com.doctorguide.entity.Comment;
+import kosbrother.com.doctorguide.entity.User;
+
+public class MyCommnetActivity extends GoogleSignInActivity implements CreateUserTask.AfterCreateUser{
 
     private ActionBar actionbar;
     RecyclerView mRecyclerView;
+    private String userEmail;
+    private ArrayList<Comment> mComments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,14 +43,73 @@ public class MyCommnetActivity extends AppCompatActivity {
         actionbar.setTitle("我的評論");
         actionbar.setDisplayHomeAsUpEnabled(true);
 
-        setRecyclerView();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            userEmail = extras.getString("USER_EMAIL");
+        }
+
+        if(userEmail == null) {
+            final Dialog dialog = new Dialog(MyCommnetActivity.this);
+            dialog.setContentView(R.layout.dialog_login_enter_mycomment);
+
+            SignInButton signInBtn = (SignInButton) dialog.findViewById(R.id.sign_in_button);
+            signInBtn.setSize(SignInButton.SIZE_WIDE);
+            signInBtn.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    signIn();
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }else{
+            new GetMyCommentsTask().execute();
+        }
+    }
+
+    private class GetMyCommentsTask extends AsyncTask {
+
+        private ProgressDialog mProgressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressDialog = Util.showProgressDialog(MyCommnetActivity.this);
+        }
+        @Override
+        protected Object doInBackground(Object... params) {
+            mComments = DoctorGuideApi.getUserComments(userEmail);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            mProgressDialog.dismiss();
+            setRecyclerView();
+        }
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN && isSignIn) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            GoogleSignInAccount acct = result.getSignInAccount();
+            User user = new User();
+            user.email = acct.getEmail();
+            userEmail = acct.getEmail();
+            user.name = acct.getDisplayName();
+            user.pic_url = acct.getPhotoUrl().toString();
+            new CreateUserTask(this,user).execute();
+        }
     }
 
     private void setRecyclerView() {
-//        String[] myStringArray = {"家醫科","家醫科","內科","家醫科","家醫科","內科","家醫科","家醫科","內科","家醫科","家醫科","內科"};
-//        mRecyclerView = (RecyclerView)findViewById(R.id.recycler_view);
-//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        mRecyclerView.setAdapter(new CommentAdapter(this,myStringArray));
+        mRecyclerView = (RecyclerView)findViewById(R.id.recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(new CommentAdapter(mComments,this));
     }
 
     @Override
@@ -39,5 +121,10 @@ public class MyCommnetActivity extends AppCompatActivity {
                 finish();
         }
         return true;
+    }
+
+    @Override
+    public void afterCreateUser() {
+        new GetMyCommentsTask().execute();
     }
 }
