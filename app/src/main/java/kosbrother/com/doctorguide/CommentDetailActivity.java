@@ -1,5 +1,6 @@
 package kosbrother.com.doctorguide;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -43,10 +44,12 @@ public class CommentDetailActivity extends AppCompatActivity {
 
     private class GetCommentTask extends AsyncTask {
 
+        private ProgressDialog mProgressDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Util.showProgressDialog(CommentDetailActivity.this);
+            mProgressDialog = Util.showProgressDialog(CommentDetailActivity.this);
         }
         @Override
         protected Object doInBackground(Object... params) {
@@ -57,7 +60,7 @@ public class CommentDetailActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
-            Util.hideProgressDialog();
+            mProgressDialog.dismiss();
             setViews();
         }
 

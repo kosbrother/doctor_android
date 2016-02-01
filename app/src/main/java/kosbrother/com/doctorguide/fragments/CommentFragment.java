@@ -1,5 +1,6 @@
 package kosbrother.com.doctorguide.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -73,10 +74,12 @@ public class CommentFragment extends Fragment {
 
     private class GetCommentTask extends AsyncTask {
 
+        private ProgressDialog mProgressDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Util.showProgressDialog(getContext());
+            mProgressDialog = Util.showProgressDialog(getContext());
         }
         @Override
         protected Object doInBackground(Object... params) {
@@ -92,7 +95,7 @@ public class CommentFragment extends Fragment {
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
-            Util.hideProgressDialog();
+            mProgressDialog.dismiss();
             if(comments.size() == 0){
                 LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);

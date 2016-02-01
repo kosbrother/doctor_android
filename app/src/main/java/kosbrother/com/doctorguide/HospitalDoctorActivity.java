@@ -8,6 +8,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -205,6 +206,7 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
 
         private final Hospital item;
         private ArrayList<Division> divisions;
+        private ProgressDialog mProgressDialog;
 
         public GetDivisionsTask(Hospital item){
             this.item = item;
@@ -212,7 +214,7 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Util.showProgressDialog(HospitalDoctorActivity.this);
+            mProgressDialog = Util.showProgressDialog(HospitalDoctorActivity.this);
         }
         @Override
         protected Object doInBackground(Object... params) {
@@ -223,7 +225,7 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
-            Util.hideProgressDialog();
+            mProgressDialog.dismiss();
             if(divisions.size() > 1)
                 showDivisionDialog(divisions,item);
             else{

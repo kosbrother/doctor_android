@@ -2,6 +2,7 @@ package kosbrother.com.doctorguide.fragments;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -153,12 +154,13 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
     private class GetHospitalsTask extends AsyncTask {
 
         private ArrayList<Hospital> getHospitals;
+        private ProgressDialog mProgressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             if(page == 1)
-                Util.showProgressDialog(getContext());
+                mProgressDialog = Util.showProgressDialog(getContext());
         }
         @Override
         protected Object doInBackground(Object... params) {
@@ -170,7 +172,7 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             if(page==1)
-                Util.hideProgressDialog();
+                mProgressDialog.dismiss();
             loadmoreLayout.setVisibility(View.GONE);
             recyclerView.setLoaded();
 

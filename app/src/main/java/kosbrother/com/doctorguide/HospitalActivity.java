@@ -3,6 +3,7 @@ package kosbrother.com.doctorguide;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -104,10 +105,12 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
 
     private class SetFragmentTask extends AsyncTask {
 
+        private ProgressDialog mProgressDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Util.showProgressDialog(HospitalActivity.this);
+            mProgressDialog = Util.showProgressDialog(HospitalActivity.this);
         }
         @Override
         protected Object doInBackground(Object... params) {
@@ -128,7 +131,7 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
             mScore.setText(String.format("%.1f", hospital.avg));
 
 
-            Util.hideProgressDialog();
+            mProgressDialog.dismiss();
             setupViewPager(viewPager);
             tabLayout.setupWithViewPager(viewPager);
         }

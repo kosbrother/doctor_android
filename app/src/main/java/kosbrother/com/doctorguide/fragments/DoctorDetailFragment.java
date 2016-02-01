@@ -1,6 +1,7 @@
 package kosbrother.com.doctorguide.fragments;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -74,10 +75,12 @@ public class DoctorDetailFragment extends Fragment {
 
     private class SetDoctorTask extends AsyncTask {
 
+        private ProgressDialog mProgressDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Util.showProgressDialog(getContext());
+            mProgressDialog = Util.showProgressDialog(getContext());
         }
         @Override
         protected Object doInBackground(Object... params) {
@@ -90,7 +93,7 @@ public class DoctorDetailFragment extends Fragment {
             super.onPostExecute(result);
             ArrayList<Integer> hospitalIds = new ArrayList<Integer>();
 
-            Util.hideProgressDialog();
+            mProgressDialog.dismiss();
             exp.setText(doctor.exp);
             spe.setText(doctor.spe);
             for(final Division div: doctor.divisions){

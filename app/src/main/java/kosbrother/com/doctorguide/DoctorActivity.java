@@ -6,6 +6,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -87,10 +88,12 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
 
     private class GetDoctorScoreTask extends AsyncTask {
 
+        private ProgressDialog mProgressDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Util.showProgressDialog(DoctorActivity.this);
+            mProgressDialog = Util.showProgressDialog(DoctorActivity.this);
         }
         @Override
         protected Object doInBackground(Object... params) {
@@ -101,7 +104,7 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
-            Util.hideProgressDialog();
+            mProgressDialog.dismiss();
             TextView mCommentNum = (TextView) findViewById(R.id.comment_num);
             TextView mRecommendNum = (TextView) findViewById(R.id.recommend_num);
             TextView mScore = (TextView) findViewById(R.id.score);

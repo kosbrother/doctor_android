@@ -2,6 +2,7 @@ package kosbrother.com.doctorguide.fragments;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -191,12 +192,13 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
     private class GetDoctorsTask extends AsyncTask {
 
         private ArrayList<Doctor> getDoctors;
+        private ProgressDialog mProgressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             if(page==1)
-                Util.showProgressDialog(getContext());
+                mProgressDialog = Util.showProgressDialog(getContext());
         }
         @Override
         protected Object doInBackground(Object... params) {
@@ -227,7 +229,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             if(page==1)
-                Util.hideProgressDialog();
+                mProgressDialog.dismiss();
             if(fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE ) {
                 adatper = new MyDoctorRecyclerViewAdapter(doctors, mListener, fragmentType,location);
                 recyclerView.setAdapter(adatper);

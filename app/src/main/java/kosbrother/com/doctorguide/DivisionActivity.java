@@ -7,6 +7,7 @@ import com.github.clans.fab.FloatingActionMenu;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -101,10 +102,12 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
 
     private class GetDivisionScoreTask extends AsyncTask {
 
+        private ProgressDialog mProgressDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Util.showProgressDialog(DivisionActivity.this);
+            mProgressDialog = Util.showProgressDialog(DivisionActivity.this);
         }
         @Override
         protected Object doInBackground(Object... params) {
@@ -115,7 +118,7 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
-            Util.hideProgressDialog();
+            mProgressDialog.dismiss();
             TextView mCommentNum = (TextView) findViewById(R.id.comment_num);
             TextView mRecommendNum = (TextView) findViewById(R.id.recommend_num);
             TextView mScore = (TextView) findViewById(R.id.score);
@@ -282,10 +285,12 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
 
     private class SetDivisionTask extends AsyncTask {
 
+        private ProgressDialog mProgressDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Util.showProgressDialog(DivisionActivity.this);
+            mProgressDialog = Util.showProgressDialog(DivisionActivity.this);
         }
         @Override
         protected Object doInBackground(Object... params) {
@@ -296,7 +301,7 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
-            Util.hideProgressDialog();
+            mProgressDialog.dismiss();
 
             Spinner spinner = (Spinner)findViewById(R.id.division_spinner);
             List<String> strings = new ArrayList<String>();

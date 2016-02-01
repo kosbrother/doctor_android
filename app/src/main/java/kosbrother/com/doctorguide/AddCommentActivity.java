@@ -2,6 +2,7 @@ package kosbrother.com.doctorguide;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -78,10 +79,12 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
 
     private class GetDivisionScoreTask extends AsyncTask {
 
+        private ProgressDialog mProgressDialog;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Util.showProgressDialog(AddCommentActivity.this);
+            mProgressDialog = Util.showProgressDialog(AddCommentActivity.this);
         }
         @Override
         protected Object doInBackground(Object... params) {
@@ -92,7 +95,7 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
-            Util.hideProgressDialog();
+            mProgressDialog.dismiss();
             setSpinner();
         }
 
