@@ -1,6 +1,7 @@
 package kosbrother.com.doctorguide.fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,7 +19,6 @@ public class HospitalDetailFragment extends Fragment {
 
     private static final String ARG_HOSPITAL_ID = "ARG_HOSPITAL_ID";
     private static Hospital mHospital;
-    private int mHospitalId;
     private TextView addressView;
     private TextView phoneView;
     private TextView openTimeView;
@@ -29,11 +29,9 @@ public class HospitalDetailFragment extends Fragment {
     public HospitalDetailFragment() {
     }
 
-    public static HospitalDetailFragment newInstance(int hospitalId, Hospital hospital) {
+    public static HospitalDetailFragment newInstance() {
         HospitalDetailFragment fragment = new HospitalDetailFragment();
         Bundle args = new Bundle();
-        mHospital = hospital;
-        args.putInt(ARG_HOSPITAL_ID, hospitalId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,10 +41,6 @@ public class HospitalDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mHospitalId = getArguments().getInt(ARG_HOSPITAL_ID);
-        }
     }
 
 
@@ -93,5 +87,21 @@ public class HospitalDetailFragment extends Fragment {
         if(hour.equals(""))
             hour = "目前無門診時間資料";
         return hour;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof GetHospital) {
+            mHospital = ((GetHospital) context).getHospital();
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement GetDoctor");
+        }
+    }
+
+    public interface GetHospital{
+        Hospital getHospital();
     }
 }

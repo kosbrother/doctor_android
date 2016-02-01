@@ -45,7 +45,7 @@ import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DivisionScoreFragment;
 import kosbrother.com.doctorguide.fragments.DoctorFragment;
 
-public class DivisionActivity extends GoogleSignInActivity implements DoctorFragment.OnListFragmentInteractionListener {
+public class DivisionActivity extends GoogleSignInActivity implements DoctorFragment.OnListFragmentInteractionListener,DivisionScoreFragment.GetDivision {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -92,6 +92,11 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
 
         setFab();
         new GetDivisionScoreTask().execute();
+    }
+
+    @Override
+    public Division getDivision() {
+        return division;
     }
 
     private class GetDivisionScoreTask extends AsyncTask {
@@ -176,7 +181,7 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
     private void setupViewPager(ViewPager viewPager) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.HEARTTYPE,hospitalId,divisionId), "科內醫生");
-        adapter.addFragment(DivisionScoreFragment.newInstance(division), "本科評分");
+        adapter.addFragment(DivisionScoreFragment.newInstance(), "本科評分");
         adapter.addFragment(CommentFragment.newInstance(hospitalId,divisionId,null), "本科評論");
         viewPager.setAdapter(adapter);
     }

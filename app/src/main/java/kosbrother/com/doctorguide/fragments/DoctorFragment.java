@@ -22,6 +22,7 @@ import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.Util.GetLocation;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
@@ -57,12 +58,11 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
     public DoctorFragment() {
     }
 
-    public static DoctorFragment newInstance(int fragmentType,int categoryId,LatLng latLng) {
+    public static DoctorFragment newInstance(int fragmentType,int categoryId) {
         DoctorFragment fragment = new DoctorFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_TYPE, fragmentType);
         args.putInt(ARG_CATEGORY_ID, categoryId);
-        location = latLng;
         fragment.setArguments(args);
         return fragment;
     }
@@ -155,6 +155,9 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
+        }
+        if(context instanceof GetLocation){
+            location = ((GetLocation) context).getLocation();
         }
     }
 

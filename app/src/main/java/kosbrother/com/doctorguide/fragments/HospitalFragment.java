@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.Util.GetLocation;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyHospitalRecyclerViewAdapter;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
@@ -43,11 +44,10 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
     public HospitalFragment() {
     }
 
-    public static HospitalFragment newInstance(int category, LatLng latLng) {
+    public static HospitalFragment newInstance(int category) {
         HospitalFragment fragment = new HospitalFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_CATEGORY_ID, category);
-        location = latLng;
         fragment.setArguments(args);
         return fragment;
     }
@@ -117,6 +117,9 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
+        }
+        if(context instanceof GetLocation){
+            location = ((GetLocation) context).getLocation();
         }
     }
 

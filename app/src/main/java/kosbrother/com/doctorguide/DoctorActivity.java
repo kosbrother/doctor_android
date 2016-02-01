@@ -37,7 +37,7 @@ import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DoctorDetailFragment;
 import kosbrother.com.doctorguide.fragments.DoctorScoreFragment;
 
-public class DoctorActivity extends GoogleSignInActivity {
+public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreFragment.GetDoctor {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -78,6 +78,11 @@ public class DoctorActivity extends GoogleSignInActivity {
         setHeatButton();
         setFab();
         new GetDoctorScoreTask().execute();
+    }
+
+    @Override
+    public Doctor getDodctor() {
+        return doctor;
     }
 
     private class GetDoctorScoreTask extends AsyncTask {
@@ -256,7 +261,7 @@ public class DoctorActivity extends GoogleSignInActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(DoctorDetailFragment.newInstance(doctorId), "醫師資料");
-        adapter.addFragment(DoctorScoreFragment.newInstance(doctor), "醫師評分");
+        adapter.addFragment(DoctorScoreFragment.newInstance(), "醫師評分");
         adapter.addFragment(CommentFragment.newInstance(null,null,doctorId), "醫師評論");
         viewPager.setAdapter(adapter);
     }

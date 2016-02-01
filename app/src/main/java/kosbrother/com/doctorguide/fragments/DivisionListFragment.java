@@ -37,11 +37,10 @@ public class DivisionListFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static DivisionListFragment newInstance(int hospitalId, List<Division> divisions) {
+    public static DivisionListFragment newInstance(int hospitalId) {
         DivisionListFragment fragment = new DivisionListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_HOSPITAL_ID, hospitalId);
-        mDivisions = divisions;
         fragment.setArguments(args);
         return fragment;
     }
@@ -80,6 +79,13 @@ public class DivisionListFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
+
+        if (context instanceof GetDivisions) {
+            mDivisions = ((GetDivisions) context).getDivisions();
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement GetDivisions");
+        }
     }
 
     @Override
@@ -91,5 +97,9 @@ public class DivisionListFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(View view, Division division);
+    }
+
+    public interface GetDivisions{
+        List<Division> getDivisions();
     }
 }

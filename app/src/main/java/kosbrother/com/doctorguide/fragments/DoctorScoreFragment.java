@@ -1,6 +1,7 @@
 package kosbrother.com.doctorguide.fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -26,10 +27,9 @@ public class DoctorScoreFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static DoctorScoreFragment newInstance(Doctor doctor) {
+    public static DoctorScoreFragment newInstance() {
         DoctorScoreFragment fragment = new DoctorScoreFragment();
         Bundle args = new Bundle();
-        mDoctor = doctor;
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,6 +63,22 @@ public class DoctorScoreFragment extends Fragment {
             return view;
         }
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof GetDoctor) {
+            mDoctor = ((GetDoctor) context).getDodctor();
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement GetDoctor");
+        }
+    }
+
+    public interface GetDoctor{
+        Doctor getDodctor();
     }
 
 }

@@ -1,6 +1,7 @@
 package kosbrother.com.doctorguide.fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -26,10 +27,9 @@ public class DivisionScoreFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static DivisionScoreFragment newInstance(Division division) {
+    public static DivisionScoreFragment newInstance() {
         DivisionScoreFragment fragment = new DivisionScoreFragment();
         Bundle args = new Bundle();
-        mDivision = division;
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,6 +81,22 @@ public class DivisionScoreFragment extends Fragment {
             return view;
         } else
             return inflater.inflate(R.layout.fragment_no_score, container, false);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof GetDivision) {
+            mDivision = ((GetDivision) context).getDivision();
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement GetDivision");
+        }
+    }
+
+    public interface GetDivision{
+        Division getDivision();
     }
 
 }

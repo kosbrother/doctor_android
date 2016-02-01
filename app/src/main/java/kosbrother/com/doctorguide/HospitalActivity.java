@@ -38,7 +38,7 @@ import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DivisionListFragment;
 import kosbrother.com.doctorguide.fragments.HospitalDetailFragment;
 
-public class HospitalActivity extends AppCompatActivity implements DivisionListFragment.OnListFragmentInteractionListener{
+public class HospitalActivity extends AppCompatActivity implements DivisionListFragment.OnListFragmentInteractionListener,DivisionListFragment.GetDivisions,HospitalDetailFragment.GetHospital {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -95,6 +95,11 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
             intent.putExtra("HOSPITAL_NAME",division.hospital_name);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public Hospital getHospital() {
+        return hospital;
     }
 
     private class SetFragmentTask extends AsyncTask {
@@ -261,10 +266,15 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(HospitalDetailFragment.newInstance(hospitalId,hospital), "關於本院");
-        adapter.addFragment(DivisionListFragment.newInstance(hospitalId,hospital.divisions), "院內科別");
+        adapter.addFragment(HospitalDetailFragment.newInstance(), "關於本院");
+        adapter.addFragment(DivisionListFragment.newInstance(hospitalId), "院內科別");
         adapter.addFragment(CommentFragment.newInstance(hospitalId,null,null), "本院評論");
         viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public List<Division> getDivisions() {
+        return hospital.divisions;
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

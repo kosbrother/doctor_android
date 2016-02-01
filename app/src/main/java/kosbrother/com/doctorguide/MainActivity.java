@@ -117,7 +117,7 @@ public class MainActivity extends GoogleSignInActivity
 
     private void drawNavigationSignInPart(boolean signedIn) {
         if(signedIn){
-            logInEmail.setText(userEmail);
+            logInEmail.setText(userName);
             logInEmail.setVisibility(View.VISIBLE);
             signInBtn.setVisibility(View.GONE);
         } else {
