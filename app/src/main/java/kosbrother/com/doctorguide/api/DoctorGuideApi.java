@@ -39,6 +39,7 @@ public class DoctorGuideApi {
         Response response = null;
         try {
             response = client.newCall(request).execute();
+            response.body().string();
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
         } catch (IOException e) {
             e.printStackTrace();
