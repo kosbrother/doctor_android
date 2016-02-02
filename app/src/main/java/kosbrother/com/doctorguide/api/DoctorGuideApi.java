@@ -14,7 +14,6 @@ import kosbrother.com.doctorguide.entity.User;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -38,14 +37,15 @@ public class DoctorGuideApi {
 
     public static int creatUser(User user){
         OkHttpClient client = new OkHttpClient();
-        RequestBody formBody = new FormBody.Builder()
+        FormBody.Builder formBody = new FormBody.Builder()
                 .add("name", user.name)
-                .add("email",user.email)
-                .add("pic_url",user.pic_url)
-                .build();
+                .add("email", user.email);
+        if(user.pic_url != null)
+            formBody.add("pic_url", user.pic_url);
+
         Request request = new Request.Builder()
                 .url(HOST + "/api/v1/users.json")
-                .post(formBody)
+                .post(formBody.build())
                 .build();
 
         Response response = null;

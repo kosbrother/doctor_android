@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -27,17 +28,18 @@ import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Comment;
 import kosbrother.com.doctorguide.entity.User;
 
-public class MyCommnetActivity extends GoogleSignInActivity implements CreateUserTask.AfterCreateUser{
+public class MyCommentActivity extends GoogleSignInActivity implements CreateUserTask.AfterCreateUser{
 
     private ActionBar actionbar;
     RecyclerView mRecyclerView;
     private String userEmail;
     private ArrayList<Comment> mComments;
+    private LinearLayout noCommentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_commnet);
+        setContentView(R.layout.activity_my_comment);
 
         actionbar = getSupportActionBar();
         actionbar.setTitle("我的評論");
@@ -49,7 +51,7 @@ public class MyCommnetActivity extends GoogleSignInActivity implements CreateUse
         }
 
         if(userEmail == null) {
-            final Dialog dialog = new Dialog(MyCommnetActivity.this);
+            final Dialog dialog = new Dialog(MyCommentActivity.this);
             dialog.setContentView(R.layout.dialog_login_enter_mycomment);
 
             SignInButton signInBtn = (SignInButton) dialog.findViewById(R.id.sign_in_button);
@@ -65,6 +67,8 @@ public class MyCommnetActivity extends GoogleSignInActivity implements CreateUse
         }else{
             new GetMyCommentsTask().execute();
         }
+
+        noCommentLayout = (LinearLayout)findViewById(R.id.no_comment_layout);
     }
 
     private class GetMyCommentsTask extends AsyncTask {
@@ -74,7 +78,7 @@ public class MyCommnetActivity extends GoogleSignInActivity implements CreateUse
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mProgressDialog = Util.showProgressDialog(MyCommnetActivity.this);
+            mProgressDialog = Util.showProgressDialog(MyCommentActivity.this);
         }
         @Override
         protected Object doInBackground(Object... params) {
@@ -86,6 +90,8 @@ public class MyCommnetActivity extends GoogleSignInActivity implements CreateUse
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             mProgressDialog.dismiss();
+            if(mComments.size() == 0)
+                noCommentLayout.setVisibility(View.VISIBLE);
             setRecyclerView();
         }
 
@@ -101,7 +107,8 @@ public class MyCommnetActivity extends GoogleSignInActivity implements CreateUse
             user.email = acct.getEmail();
             userEmail = acct.getEmail();
             user.name = acct.getDisplayName();
-            user.pic_url = acct.getPhotoUrl().toString();
+            if(acct.getPhotoUrl() != null)
+                user.pic_url = acct.getPhotoUrl().toString();
             new CreateUserTask(this,user).execute();
         }
     }

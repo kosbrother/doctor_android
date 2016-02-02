@@ -202,7 +202,8 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
             User user = new User();
             user.email = acct.getEmail();
             user.name = acct.getDisplayName();
-            user.pic_url = acct.getPhotoUrl().toString();
+            if(acct.getPhotoUrl() != null)
+                user.pic_url = acct.getPhotoUrl().toString();
             new CreateUserTask(this,user).execute();
         }
     }

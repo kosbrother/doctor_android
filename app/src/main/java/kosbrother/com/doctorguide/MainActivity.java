@@ -108,7 +108,8 @@ public class MainActivity extends GoogleSignInActivity
             user = new User();
             user.email = acct.getEmail();
             user.name = acct.getDisplayName();
-            user.pic_url = acct.getPhotoUrl().toString();
+            if(acct.getPhotoUrl() != null)
+                user.pic_url = acct.getPhotoUrl().toString();
             new CreateUserTask(this,user).execute();
         }else{
             drawNavigationSignInPart(false);
@@ -194,7 +195,7 @@ public class MainActivity extends GoogleSignInActivity
             Intent intent = new Intent(this, MyCollectionActivity.class);
             startActivity(intent);
         } else if (id == R.id.my_comments) {
-            Intent intent = new Intent(this, MyCommnetActivity.class);
+            Intent intent = new Intent(this, MyCommentActivity.class);
             if(user != null)
                 intent.putExtra("USER_EMAIL",user.email);
             startActivity(intent);

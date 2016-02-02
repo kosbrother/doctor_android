@@ -420,7 +420,8 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
             User user = new User();
             user.email = acct.getEmail();
             user.name = acct.getDisplayName();
-            user.pic_url = acct.getPhotoUrl().toString();
+            if(acct.getPhotoUrl() != null)
+                user.pic_url = acct.getPhotoUrl().toString();
             new CreateUserTask(this,user).execute();
         }
     }

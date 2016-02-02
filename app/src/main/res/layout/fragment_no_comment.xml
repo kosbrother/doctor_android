@@ -33,7 +33,7 @@
             android:paddingTop="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="歡迎您為該科別新增評論，您寶貴的意見能讓台灣的醫療品質變得更好!!"
+            android:text="歡迎您為該科別或醫師新增評論，您寶貴的意見能讓台灣的醫療品質變得更好!!"
             android:textSize="@dimen/doctor_fragment_link_text_size"/>
         <LinearLayout
             android:gravity="center_vertical"
