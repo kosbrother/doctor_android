@@ -5,6 +5,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="search">搜尋</string>
+    <string name="edit">編輯</string>
 
     <string name="my_collections">我的收藏</string>
     <string name="my_reviews">我的評論</string>

@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -40,6 +41,30 @@ public class CommentDetailActivity extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
 
         new GetCommentTask().execute();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.comment_detail, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+//            case R.id.edit:
+//                Intent intent = new Intent(this, AddCommentActivity.class);
+//                intent.putExtra("DOCTOR_ID",comment.doctor_id);
+//                intent.putExtra("HOSPITAL_NAME",comment.hospital_name);
+//                intent.putExtra("HOSPITAL_ID",comment.hospital_id);
+//                startActivity(intent);
+//                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private class GetCommentTask extends AsyncTask {
@@ -123,16 +148,5 @@ public class CommentDetailActivity extends AppCompatActivity {
         mDivComment.setText(comment.div_comment);
         mDrComment.setText(comment.dr_comment);
         mCommentTime.setText(new SimpleDateFormat("yyyy/MM/dd").format(comment.updated_at));
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case android.R.id.home:
-                finish();
-        }
-        return true;
     }
 }

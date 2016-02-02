@@ -8,17 +8,6 @@
     android:id="@+id/cv_item"
     card_view:cardCornerRadius="4dp"
     android:background="@android:color/white">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp">
-    <ImageView
-        android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/card_overflow"
-        android:onClick="showPopup"/>
-    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
