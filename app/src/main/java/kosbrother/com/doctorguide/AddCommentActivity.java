@@ -3,6 +3,7 @@ package kosbrother.com.doctorguide;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -31,7 +32,7 @@ import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.fragments.AddDivisionCommentFragment;
 import kosbrother.com.doctorguide.fragments.AddDoctorCommentFragment;
 
-public class AddCommentActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class AddCommentActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,AddDivisionCommentFragment.EnablePagerSlide {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -71,7 +72,6 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        enablePagerSlide();
         setTime();
 
         new GetDivisionScoreTask().execute();
@@ -173,6 +173,22 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
                 R.layout.spinner_item, drs.toArray(new String[drs.size()]));
         dr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dr_spinner.setAdapter(dr_adapter);
+        dr_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Intent data = new Intent("fragmentupdater");
+                if(position == 0)
+                    data.putExtra("directSubmit", true);
+                else
+                    data.putExtra("directSubmit", false);
+                AddCommentActivity.this.sendBroadcast(data);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         if(doctorId != 0)
             dr_spinner.setSelection(drsValue.indexOf(doctorId));
@@ -192,8 +208,9 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
         return null;
     }
 
-    private void enablePagerSlide() {
+    public void enablePagerSlide() {
         viewPager.setPagingEnabled(true);
+        viewPager.setCurrentItem(1);
     }
 
     private void setupViewPager(ViewPager viewPager) {
