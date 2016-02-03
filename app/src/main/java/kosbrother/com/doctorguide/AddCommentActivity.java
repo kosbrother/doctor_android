@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,8 +23,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
+import kosbrother.com.doctorguide.Util.PassParamsToActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.custom.CustomViewPager;
@@ -32,7 +35,7 @@ import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.fragments.AddDivisionCommentFragment;
 import kosbrother.com.doctorguide.fragments.AddDoctorCommentFragment;
 
-public class AddCommentActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,AddDivisionCommentFragment.EnablePagerSlide {
+public class AddCommentActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,AddDivisionCommentFragment.EnablePagerSlide, PassParamsToActivity {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -45,6 +48,8 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
     private int divisionId;
     private String hospitalName;
     private int doctorId;
+    private HashMap<String,String> submitParams = new HashMap<String,String>();
+    private String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +66,7 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
             divisionId = extras.getInt("DIVISION_ID");
             hospitalName = extras.getString("HOSPITAL_NAME");
             doctorId = extras.getInt("DOCTOR_ID");
+            user = extras.getString("USER");
         }
 
         TextView hospital = (TextView)findViewById(R.id.hospial_name);
@@ -75,6 +81,54 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
         setTime();
 
         new GetDivisionScoreTask().execute();
+    }
+
+    @Override
+    public void passParams(HashMap<String,String> map) {
+        if(doctorId != 0)
+            submitParams.put("doctor_id",doctorId+"");
+        if(hospitalId != 0)
+            submitParams.put("hospital_id",hospitalId+"");
+        if(divisionId != 0)
+            submitParams.put("division_id",divisionId+"");
+        submitParams.put("user",user);
+        for(String key : map.keySet()){
+            submitParams.put(key,map.get(key));
+        }
+    }
+
+    @Override
+    public void submitPost() {
+        new PostCommentTask().execute();
+    }
+
+    private class PostCommentTask extends AsyncTask {
+
+        private ProgressDialog mProgressDialog;
+        private Boolean isSuccess;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressDialog = Util.showProgressDialog(AddCommentActivity.this);
+        }
+        @Override
+        protected Object doInBackground(Object... params) {
+            isSuccess = DoctorGuideApi.postComment(submitParams);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            mProgressDialog.dismiss();
+            if(isSuccess){
+                Snackbar snackbar = Snackbar.make(tabLayout, "評論發表成功！", Snackbar.LENGTH_SHORT);
+                snackbar.show();
+            }
+
+        }
+
     }
 
     private class GetDivisionScoreTask extends AsyncTask {

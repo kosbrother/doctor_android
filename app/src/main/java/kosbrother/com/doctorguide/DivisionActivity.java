@@ -70,6 +70,7 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
     private String hospitalName;
     private ViewPagerAdapter adapter;
     private Division division;
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -412,6 +413,15 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
     };
 
     @Override
+    protected void handleSignInResult(GoogleSignInResult result) {
+        super.handleSignInResult(result);
+        if (result.isSuccess()) {
+            GoogleSignInAccount acct = result.getSignInAccount();
+            email = acct.getEmail();
+        }
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN && isSignIn) {
@@ -436,6 +446,7 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
         intent.putExtra("HOSPITAL_ID",hospitalId);
         intent.putExtra("DIVISION_ID",divisionId);
         intent.putExtra("HOSPITAL_NAME",hospitalName);
+        intent.putExtra("USER",email);
         startActivity(intent);
     }
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import kosbrother.com.doctorguide.entity.Comment;
 import kosbrother.com.doctorguide.entity.Division;
@@ -232,7 +233,8 @@ public class DoctorGuideApi {
     private static ArrayList<Division> readDivisionJson(String jsonString){
         ArrayList<Division> divisionsList = new ArrayList<Division>();
         try {
-            divisionsList = mapper.readValue(jsonString, new TypeReference<ArrayList<Division>>() {});
+            divisionsList = mapper.readValue(jsonString, new TypeReference<ArrayList<Division>>() {
+            });
             return divisionsList;
         } catch (IOException e) {
             e.printStackTrace();
@@ -274,4 +276,27 @@ public class DoctorGuideApi {
         }
     }
 
+    public static Boolean postComment(HashMap<String, String> submitParams) {
+        OkHttpClient client = new OkHttpClient();
+        FormBody.Builder formBody = new FormBody.Builder();
+        for(String key : submitParams.keySet()){
+            formBody.add(key,submitParams.get(key));
+        }
+
+        Request request = new Request.Builder()
+                .url(HOST + "/api/v1/comments.json")
+                .post(formBody.build())
+                .build();
+
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+            response.body().string();
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }

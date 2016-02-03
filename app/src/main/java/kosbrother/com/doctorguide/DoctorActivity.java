@@ -55,9 +55,7 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
     private String hospitalName;
     private Doctor doctor;
     private int hospitalId;
-//    private int commentNum;
-//    private int recommendNum;
-//    private float avg;
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,6 +192,15 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
     };
 
     @Override
+    protected void handleSignInResult(GoogleSignInResult result) {
+        super.handleSignInResult(result);
+        if (result.isSuccess()) {
+            GoogleSignInAccount acct = result.getSignInAccount();
+            email = acct.getEmail();
+        }
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN && isSignIn) {
@@ -218,6 +225,7 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
         intent.putExtra("DOCTOR_ID",doctorId);
         intent.putExtra("HOSPITAL_NAME",hospitalName);
         intent.putExtra("HOSPITAL_ID",hospitalId);
+        intent.putExtra("USER",email);
         startActivity(intent);
     }
 

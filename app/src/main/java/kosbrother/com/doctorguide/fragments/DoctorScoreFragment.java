@@ -40,7 +40,7 @@ public class DoctorScoreFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-        if(mDoctor.comment_num > 0) {
+        if(mDoctor != null && mDoctor.comment_num > 0) {
             View view = inflater.inflate(R.layout.fragment_doctor_score, container, false);
             ((TextView)view.findViewById(R.id.review_count)).setText(mDoctor.comment_num + "");
             ((TextView)view.findViewById(R.id.avg_text)).setText("綜合滿意度 " + String.format("%.1f", mDoctor.avg));

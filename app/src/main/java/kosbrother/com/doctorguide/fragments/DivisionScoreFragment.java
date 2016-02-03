@@ -38,7 +38,7 @@ public class DivisionScoreFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if(mDivision.comment_num > 0) {
+        if(mDivision != null && mDivision.comment_num > 0) {
             View view = inflater.inflate(R.layout.fragment_division_score, container, false);
 
             ((TextView)view.findViewById(R.id.dr_avg_text)).setText("綜合滿意度 " + String.format("%.1f", mDivision.dr_avg_score));
