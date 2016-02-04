@@ -1,16 +1,24 @@
 package kosbrother.com.doctorguide;
 
-import android.content.Intent;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.HashMap;
+
+import kosbrother.com.doctorguide.Util.Util;
+import kosbrother.com.doctorguide.api.DoctorGuideApi;
 
 public class ProblemReportActivity extends AppCompatActivity {
 
@@ -23,6 +31,11 @@ public class ProblemReportActivity extends AppCompatActivity {
     private String reportString;
     private String doctorName;
     private TextView reportTypeText;
+    private int doctorId;
+    private int hospitalId;
+    private int divisionId;
+    private HashMap<String,String> submitParams = new HashMap<String,String>();
+    private EditText reportContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +48,9 @@ public class ProblemReportActivity extends AppCompatActivity {
             hospitalName = extras.getString("HOSPITAL_NAME");
             doctorName = extras.getString("DOCTOR_NAME");
             reportType = extras.getString("REPORT_TYPE");
+            doctorId = extras.getInt("DOCTOR_ID");
+            hospitalId = extras.getInt("HOSPITAL_ID");
+            divisionId = extras.getInt("DIVISION_ID");
         }
 
         actionbar = getSupportActionBar();
@@ -55,25 +71,62 @@ public class ProblemReportActivity extends AppCompatActivity {
 
     private void setSubmit() {
         Button submit = (Button)findViewById(R.id.submit);
-        final EditText reportContent = (EditText)findViewById(R.id.report_content);
+        reportContent = (EditText)findViewById(R.id.report_content);
 
         submit.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent emailIntent2 = new Intent(Intent.ACTION_SEND);
-
-
-                emailIntent2.setType("plain/text");
-                emailIntent2.putExtra(Intent.EXTRA_EMAIL, new String[]{ProblemReportActivity.this.getString(R.string.respond_mail_address)});
-                emailIntent2.putExtra(Intent.EXTRA_SUBJECT, ProblemReportActivity.this.getString(R.string.report_title));
-                emailIntent2.putExtra(Intent.EXTRA_TEXT,
-                        "勘誤位置: " + reportString + "\n\n"
-                                + "勘誤內容: " + reportContent.getText().toString() + "\n\n"
-                                + "程式碼版本: " + version
-                );
-                startActivity(Intent.createChooser(emailIntent2, "Send mail..."));
+                setSubmitParams();
+                new PostProblemTask().execute();
             }
         });
+    }
+
+    private void setSubmitParams() {
+        if(doctorId != 0)
+            submitParams.put("doctor_id",doctorId+"");
+        if(hospitalId != 0)
+            submitParams.put("hospital_id",hospitalId+"");
+        if(divisionId != 0)
+            submitParams.put("division_id",divisionId+"");
+        submitParams.put("content",reportContent.getText().toString());
+    }
+
+    private class PostProblemTask extends AsyncTask {
+
+        private ProgressDialog mProgressDialog;
+        private Boolean isSuccess;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressDialog = Util.showProgressDialog(ProblemReportActivity.this);
+        }
+        @Override
+        protected Object doInBackground(Object... params) {
+            isSuccess = DoctorGuideApi.postProblem(submitParams);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            mProgressDialog.dismiss();
+            if(isSuccess){
+                new AlertDialog.Builder(ProblemReportActivity.this)
+                        .setTitle("成功提交")
+                        .setMessage("我們會儘速改進，謝謝你的提報！")
+                        .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                        .show();
+            }
+
+        }
+
     }
 
     private void setViews() {

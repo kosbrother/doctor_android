@@ -374,6 +374,8 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
                     intent.putExtra("REPORT_TYPE",getString(R.string.division_page));
                     intent.putExtra("HOSPITAL_NAME",hospitalName);
                     intent.putExtra("DIVISION_NAME",divisionName);
+                    intent.putExtra("DIVISION_ID",divisionId);
+                    intent.putExtra("HOSPITAL_ID",hospitalId);
                     startActivity(intent);
                     break;
                 case R.id.fab_share:

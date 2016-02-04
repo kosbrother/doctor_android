@@ -159,6 +159,8 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
                     intent.putExtra("REPORT_TYPE",getString(R.string.doctor_page));
                     intent.putExtra("HOSPITAL_NAME",hospitalName);
                     intent.putExtra("DOCTOR_NAME",doctorName);
+                    intent.putExtra("DOCTOR_ID",doctorId);
+                    intent.putExtra("HOSPITAL_ID",hospitalId);
                     startActivity(intent);
                     break;
                 case R.id.fab_share:

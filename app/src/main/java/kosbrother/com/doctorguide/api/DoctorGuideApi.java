@@ -321,4 +321,28 @@ public class DoctorGuideApi {
         }
         return true;
     }
+
+    public static Boolean postProblem(HashMap<String,String> submitParams){
+        OkHttpClient client = new OkHttpClient();
+        FormBody.Builder formBody = new FormBody.Builder();
+        for(String key : submitParams.keySet()){
+            formBody.add(key,submitParams.get(key));
+        }
+
+        Request request = new Request.Builder()
+                .url(HOST + "/api/v1/problems.json")
+                .post(formBody.build())
+                .build();
+
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+            response.body().string();
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }

@@ -171,6 +171,7 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
                     intent = new Intent(HospitalActivity.this, ProblemReportActivity.class);
                     intent.putExtra("REPORT_TYPE",getString(R.string.hospital_page));
                     intent.putExtra("HOSPITAL_NAME",hospitalName);
+                    intent.putExtra("HOSPITAL_ID",hospitalId);
                     startActivity(intent);
                     break;
                 case R.id.fab_share:
