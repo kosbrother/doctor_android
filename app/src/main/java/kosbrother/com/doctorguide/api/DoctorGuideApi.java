@@ -299,4 +299,26 @@ public class DoctorGuideApi {
         }
         return true;
     }
+
+    public static Boolean postFeedback(String subject, String content){
+        OkHttpClient client = new OkHttpClient();
+        FormBody.Builder formBody = new FormBody.Builder()
+                .add("subject", subject)
+                .add("content", content);
+        Request request = new Request.Builder()
+                .url(HOST + "/api/v1/feedbacks.json")
+                .post(formBody.build())
+                .build();
+
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+            response.body().string();
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }
