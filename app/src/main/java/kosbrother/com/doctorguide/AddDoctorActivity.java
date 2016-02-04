@@ -1,14 +1,22 @@
 package kosbrother.com.doctorguide;
 
-import android.content.Intent;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+
+import java.util.HashMap;
+
+import kosbrother.com.doctorguide.Util.Util;
+import kosbrother.com.doctorguide.api.DoctorGuideApi;
 
 import static kosbrother.com.doctorguide.Util.Util.showSnackBar;
 
@@ -23,6 +31,9 @@ public class AddDoctorActivity extends AppCompatActivity {
     private EditText speEdit;
     private EditText expEdit;
     private String version;
+    private int hospitalId;
+    private int divisionId;
+    private HashMap<String,String> submitParams = new HashMap<String,String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +44,8 @@ public class AddDoctorActivity extends AppCompatActivity {
         if (extras != null) {
             divisionName = extras.getString("DIVISION_NAME");
             hospitalName = extras.getString("HOSPITAL_NAME");
+            hospitalId = extras.getInt("HOSPITAL_ID");
+            divisionId = extras.getInt("DIVISION_ID");
         }
 
         actionbar = getSupportActionBar();
@@ -69,22 +82,58 @@ public class AddDoctorActivity extends AppCompatActivity {
         }else if(hospitalEdit.getText().toString().equals("")){
             showSnackBar(v,"請填寫醫院名");
         }else{
-            final Intent emailIntent2 = new Intent(Intent.ACTION_SEND);
-
-
-            emailIntent2.setType("plain/text");
-            emailIntent2.putExtra(Intent.EXTRA_EMAIL, new String[]{AddDoctorActivity.this.getString(R.string.respond_mail_address)});
-            emailIntent2.putExtra(Intent.EXTRA_SUBJECT, AddDoctorActivity.this.getString(R.string.add_doctor_title));
-            emailIntent2.putExtra(Intent.EXTRA_TEXT,
-                    "醫師姓名: " + doctorEdit.getText().toString() + "\n\n"
-                            + "服務醫院: " + hospitalEdit.getText().toString() + "\n\n"
-                            + "服務科別: " + divisionEdit.getText().toString() + "\n\n"
-                            + "醫師專長: " + speEdit.getText().toString() + "\n\n"
-                            + "醫師經歷: " + expEdit.getText().toString() + "\n\n"
-                            + "程式碼版本: " + version
-            );
-            startActivity(Intent.createChooser(emailIntent2, "Send mail..."));
+            setSubmitParams();
+            new PostAddDoctorTask().execute();
         }
+    }
+
+    private void setSubmitParams() {
+        if(hospitalId != 0)
+            submitParams.put("hospital_id",hospitalId+"");
+        if(divisionId != 0)
+            submitParams.put("division_id",divisionId+"");
+        submitParams.put("name",doctorEdit.getText().toString());
+        submitParams.put("hospital_name",hospitalEdit.getText().toString());
+        submitParams.put("division_name",divisionEdit.getText().toString());
+        submitParams.put("spe",speEdit.getText().toString());
+        submitParams.put("exp",expEdit.getText().toString());
+    }
+
+    private class PostAddDoctorTask extends AsyncTask {
+
+        private ProgressDialog mProgressDialog;
+        private Boolean isSuccess;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressDialog = Util.showProgressDialog(AddDoctorActivity.this);
+        }
+        @Override
+        protected Object doInBackground(Object... params) {
+            isSuccess = DoctorGuideApi.postAddDoctor(submitParams);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            mProgressDialog.dismiss();
+            if(isSuccess){
+                new AlertDialog.Builder(AddDoctorActivity.this)
+                        .setTitle("成功提交")
+                        .setMessage("我們審核醫師資料後，就會加入該醫師，謝謝！")
+                        .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                        .show();
+            }
+
+        }
+
     }
 
 

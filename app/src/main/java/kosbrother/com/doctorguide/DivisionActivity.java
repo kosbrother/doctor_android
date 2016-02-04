@@ -408,6 +408,8 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
                     intent = new Intent(DivisionActivity.this, AddDoctorActivity.class);
                     intent.putExtra("HOSPITAL_NAME",hospitalName);
                     intent.putExtra("DIVISION_NAME",divisionName);
+                    intent.putExtra("HOSPITAL_ID",hospitalId);
+                    intent.putExtra("DIVISION_ID",divisionId);
                     startActivity(intent);
                     break;
             }
