@@ -25,6 +25,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.app.default_searchable"
@@ -36,17 +37,39 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HospitalDoctorActivity" />
-        <activity android:name=".MyCollectionActivity" />
-        <activity android:name=".MyCommentActivity" />
-        <activity android:name=".SettingActivity" />
-        <activity android:name=".FeedbackActivity" />
-        <activity android:name=".DivisionActivity" />
-        <activity android:name=".HospitalActivity" />
-        <activity android:name=".DoctorActivity" />
-        <activity android:name=".AboutUsActivity" />
-        <activity android:name=".ProblemReportActivity" />
-        <activity android:name=".AddDoctorActivity" />
+        <activity
+            android:name=".HospitalDoctorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MyCollectionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MyCommentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FeedbackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DivisionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HospitalActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DoctorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AboutUsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ProblemReportActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddDoctorActivity"
+            android:screenOrientation="portrait" />
         <!--
              ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -55,10 +78,13 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".AddCommentActivity" />
+        <activity
+            android:name=".AddCommentActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SearchableActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -67,7 +93,9 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".CommentDetailActivity"/>
+        <activity
+            android:name=".CommentDetailActivity"
+            android:screenOrientation="portrait" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
