@@ -1,179 +1,211 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="kosbrother.com.doctorguide.fragments.HospitalDetailFragment">
 
-    <LinearLayout
+    <fragment
+        android:id="@+id/map"
+        class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:src="@mipmap/map"/>
-        <RelativeLayout
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp">
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_place_black_24px"
-                android:layout_centerVertical="true"/>
-            <LinearLayout
-                android:layout_toRightOf="@+id/image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:orientation="vertical"
-                android:layout_marginLeft="20dp">
-                <TextView
-                    android:textSize="@dimen/comment_score_size"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/grey_text_color"
-                    android:text="院址"
-                    />
-                <TextView
-                    android:textColor="@color/black_text"
-                    android:textSize="@dimen/comment_score_size"
-                    android:id="@+id/address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="台北市大同區鄭州路45號"/>
-            </LinearLayout>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_marginBottom="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp">
-            <ImageView
-                android:id="@+id/image1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_local_phone_black_24px"
-                android:layout_centerVertical="true"/>
-            <LinearLayout
-                android:layout_toRightOf="@+id/image1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:orientation="vertical"
-                android:layout_marginLeft="20dp">
-                <TextView
-                    android:textSize="@dimen/comment_score_size"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/grey_text_color"
-                    android:text="電話"
-                    android:layout_marginBottom="4dp"/>
-                <TextView
-                    android:textColor="@color/black_text"
-                    android:textSize="@dimen/comment_score_size"
-                    android:id="@+id/phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="(02)2443-2345"/>
-            </LinearLayout>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_marginBottom="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp">
-            <ImageView
-                android:id="@+id/image2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/time"
-                android:layout_centerVertical="true"/>
-            <LinearLayout
-                android:layout_toRightOf="@+id/image2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:orientation="vertical"
-                android:layout_marginLeft="20dp">
-                <TextView
-                    android:textSize="@dimen/comment_score_size"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/grey_text_color"
-                    android:text="營業時間"
-                    android:layout_marginBottom="4dp"/>
-                <TextView
-                    android:textColor="@color/black_text"
-                    android:textSize="@dimen/comment_score_size"
-                    android:id="@+id/open_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="09:00-21:00"/>
-            </LinearLayout>
-        </RelativeLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey_divider_color"></View>
+        android:layout_height="200dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
         <LinearLayout
-            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="16dp">
-            <TextView
-                android:layout_width="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="醫院分級："
-                android:textColor="@color/grey_text_color"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/grade"
-                android:layout_width="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp">
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/ic_place_black_24px" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/image"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="院址"
+                        android:textColor="@color/grey_text_color"
+                        android:textSize="@dimen/comment_score_size" />
+
+                    <TextView
+                        android:id="@+id/address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="台北市大同區鄭州路45號"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/comment_score_size" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="中度級" />
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp">
+
+                <ImageView
+                    android:id="@+id/image1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/ic_local_phone_black_24px" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/image1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:text="電話"
+                        android:textColor="@color/grey_text_color"
+                        android:textSize="@dimen/comment_score_size" />
+
+                    <TextView
+                        android:id="@+id/phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="(02)2443-2345"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/comment_score_size" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp">
+
+                <ImageView
+                    android:id="@+id/image2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/time" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/image2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:text="營業時間"
+                        android:textColor="@color/grey_text_color"
+                        android:textSize="@dimen/comment_score_size" />
+
+                    <TextView
+                        android:id="@+id/open_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="09:00-21:00"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/comment_score_size" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_divider_color"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="醫院分級："
+                    android:textColor="@color/grey_text_color"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/grade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="中度級" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="評鑑效期："
+                    android:textColor="@color/grey_text_color"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/assess"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2017年12月" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="醫院服務："
+                    android:textColor="@color/grey_text_color"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/services"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="復健－物理治療業務" />
+            </LinearLayout>
         </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="16dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="評鑑效期："
-                android:textColor="@color/grey_text_color"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/assess"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2017年12月" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="16dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="醫院服務："
-                android:textStyle="bold"
-                android:textColor="@color/grey_text_color"/>
-            <TextView
-                android:id="@+id/services"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="復健－物理治療業務" />
-        </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+
+    </ScrollView>
+
+</LinearLayout>
