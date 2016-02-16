@@ -16,10 +16,10 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="醫師"
-            android:background="@color/grey_divider_color"
-            android:padding="10dp"
+            android:background="@color/grey_pretty_light"
+            android:padding="8dp"
             android:textColor="@color/colorPrimary"
-            android:textSize="16dp"/>
+            android:textSize="18sp"/>
 
         <ListView
             android:id="@+id/doctorListView"
@@ -33,10 +33,10 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="醫院"
-            android:background="@color/grey_divider_color"
-            android:padding="10dp"
+            android:background="@color/grey_pretty_light"
+            android:padding="8dp"
             android:textColor="@color/colorPrimary"
-            android:textSize="16dp"/>
+            android:textSize="18sp"/>
 
         <ListView
             android:id="@+id/hospitalListView"
