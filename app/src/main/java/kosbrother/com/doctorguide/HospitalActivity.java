@@ -1,8 +1,5 @@
 package kosbrother.com.doctorguide;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -25,6 +22,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +39,7 @@ import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DivisionListFragment;
 import kosbrother.com.doctorguide.fragments.HospitalDetailFragment;
 
-public class HospitalActivity extends AppCompatActivity implements DivisionListFragment.OnListFragmentInteractionListener,DivisionListFragment.GetDivisions,HospitalDetailFragment.GetHospital {
+public class HospitalActivity extends AppCompatActivity implements DivisionListFragment.OnListFragmentInteractionListener, DivisionListFragment.GetDivisions, HospitalDetailFragment.GetHospital {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -79,21 +79,21 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
     }
 
     @Override
-    public void onListFragmentInteraction(View view,Division division) {
-        if(view.getId() == R.id.detail_button){
+    public void onListFragmentInteraction(View view, Division division) {
+        if (view.getId() == R.id.detail_button) {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(HospitalActivity.this, R.style.AppCompatAlertDialogStyle);
             builder.setTitle(Category.getCategoryById(division.category_id).name);
             builder.setMessage(Category.getCategoryById(division.category_id).intro);
             builder.setPositiveButton("確定", null);
             builder.show();
-        }else{
+        } else {
             Intent intent = new Intent(HospitalActivity.this, DivisionActivity.class);
-            intent.putExtra("DIVISION_ID",division.id);
-            intent.putExtra("DIVISION_NAME",division.name);
-            intent.putExtra("HOSPITAL_ID",division.hospital_id);
-            intent.putExtra("HOSPITAL_GRADE",division.hospital_grade);
-            intent.putExtra("HOSPITAL_NAME",division.hospital_name);
+            intent.putExtra("DIVISION_ID", division.id);
+            intent.putExtra("DIVISION_NAME", division.name);
+            intent.putExtra("HOSPITAL_ID", division.hospital_id);
+            intent.putExtra("HOSPITAL_GRADE", division.hospital_grade);
+            intent.putExtra("HOSPITAL_NAME", division.hospital_name);
             startActivity(intent);
         }
     }
@@ -112,6 +112,7 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
             super.onPreExecute();
             mProgressDialog = Util.showProgressDialog(HospitalActivity.this);
         }
+
         @Override
         protected Object doInBackground(Object... params) {
             hospital = DoctorGuideApi.getHospitalInfo(hospitalId);
@@ -169,9 +170,9 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
             switch (v.getId()) {
                 case R.id.fab_problem_report:
                     intent = new Intent(HospitalActivity.this, ProblemReportActivity.class);
-                    intent.putExtra("REPORT_TYPE",getString(R.string.hospital_page));
-                    intent.putExtra("HOSPITAL_NAME",hospitalName);
-                    intent.putExtra("HOSPITAL_ID",hospitalId);
+                    intent.putExtra("REPORT_TYPE", getString(R.string.hospital_page));
+                    intent.putExtra("HOSPITAL_NAME", hospitalName);
+                    intent.putExtra("HOSPITAL_ID", hospitalId);
                     startActivity(intent);
                     break;
                 case R.id.fab_share:
@@ -183,8 +184,8 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
                     break;
                 case R.id.fab_add_doctor:
                     intent = new Intent(HospitalActivity.this, AddDoctorActivity.class);
-                    intent.putExtra("HOSPITAL_NAME",hospitalName);
-                    intent.putExtra("HOSPITAL_ID",hospitalId);
+                    intent.putExtra("HOSPITAL_NAME", hospitalName);
+                    intent.putExtra("HOSPITAL_ID", hospitalId);
                     startActivity(intent);
                     break;
             }
@@ -192,9 +193,9 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
     };
 
     private void setViews() {
-        ImageView divImage = (ImageView)findViewById(R.id.div_image);
-        TextView hospital = (TextView)findViewById(R.id.hospial_name);
-        switch (hospitalGrade){
+        ImageView divImage = (ImageView) findViewById(R.id.div_image);
+        TextView hospital = (TextView) findViewById(R.id.hospial_name);
+        switch (hospitalGrade) {
             case "醫學中心":
                 divImage.setImageResource(R.mipmap.ic_hospital_biggest);
                 break;
@@ -212,14 +213,14 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
     }
 
     private void setHeatButton() {
-        final Button heart = (Button)findViewById(R.id.heart);
+        final Button heart = (Button) findViewById(R.id.heart);
 
         final Realm realm = Realm.getInstance(getBaseContext());
         RealmHospital hosp = realm.where(RealmHospital.class).equalTo("id", hospitalId).findFirst();
-        if(hosp == null) {
+        if (hosp == null) {
             collected = false;
             heart.setBackgroundResource(R.drawable.heart_white_to_red_button);
-        }else{
+        } else {
             collected = true;
             heart.setBackgroundResource(R.drawable.heart_read_to_white_button);
         }
@@ -273,8 +274,9 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(HospitalDetailFragment.newInstance(), "關於本院");
         adapter.addFragment(DivisionListFragment.newInstance(hospitalId), "院內科別");
-        adapter.addFragment(CommentFragment.newInstance(hospitalId,null,null), "本院評論");
+        adapter.addFragment(CommentFragment.newInstance(hospitalId, null, null), "本院評論");
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(2);
     }
 
     @Override
