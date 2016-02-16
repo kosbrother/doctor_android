@@ -75,9 +75,9 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
 
 
         if (Build.VERSION.SDK_INT >= 23) {
-           checkLocationPermission();
+            checkLocationPermission();
         } else {
-            requestLocationPermission();
+            setGoogleClient();
         }
 
     }
