@@ -72,7 +72,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="環境衛生"
-            android:textColor="@color/grey_text_color"/>
+            android:textColor="@color/grey_text_color"
+            android:textSize="@dimen/doctor_fragment_title_size"/>
         <TextView
             android:id="@+id/env_score"
             android:layout_marginLeft="4dp"
@@ -80,6 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="3.0"
+            android:layout_centerVertical="true"
             />
         <RatingBar
             android:id="@+id/env_rating_bar"
@@ -104,7 +106,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="醫療設備"
-            android:textColor="@color/grey_text_color"/>
+            android:textColor="@color/grey_text_color"
+            android:textSize="@dimen/doctor_fragment_title_size"/>
         <TextView
             android:id="@+id/equipment_score"
             android:layout_marginLeft="4dp"
@@ -112,6 +115,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="3.0"
+            android:layout_centerVertical="true"
             />
         <RatingBar
             android:id="@+id/equipment_rating_bar"
@@ -136,7 +140,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="醫護專業"
-            android:textColor="@color/grey_text_color"/>
+            android:textColor="@color/grey_text_color"
+            android:textSize="@dimen/doctor_fragment_title_size"/>
         <TextView
             android:id="@+id/spe_score_div"
             android:layout_marginLeft="4dp"
@@ -144,6 +149,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="3.0"
+            android:layout_centerVertical="true"
             />
         <RatingBar
             android:id="@+id/spe_div_rating_bar"
@@ -168,7 +174,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="服務態度"
-            android:textColor="@color/grey_text_color"/>
+            android:textColor="@color/grey_text_color"
+            android:textSize="@dimen/doctor_fragment_title_size"/>
         <TextView
             android:id="@+id/friend_score_div"
             android:layout_marginLeft="4dp"
@@ -176,6 +183,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="3.0"
+            android:layout_centerVertical="true"
             />
         <RatingBar
             android:id="@+id/friend_div_rating_bar"

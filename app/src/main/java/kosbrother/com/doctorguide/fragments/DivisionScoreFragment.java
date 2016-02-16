@@ -59,6 +59,10 @@ public class DivisionScoreFragment extends Fragment {
             ((TextView)view.findViewById(R.id.review_count)).setText(mDivision.comment_num + "");
             ((TextView)view.findViewById(R.id.avg_text)).setText("綜合滿意度 " + String.format("%.1f", mDivision.avg));
             ((TextView)view.findViewById(R.id.env_score)).setText(String.format("%.1f", mDivision.avg_environment));
+            RatingBar divAvgRating = (RatingBar) view.findViewById(R.id.avg_rating);
+            divAvgRating.setRating(mDivision.avg);
+            DrawableCompat.setTint(divAvgRating.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.rating_bar_color));
+
             RatingBar envRating = (RatingBar) view.findViewById(R.id.env_rating_bar);
             envRating.setRating(mDivision.avg_environment);
             DrawableCompat.setTint(envRating.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.rating_bar_color));
