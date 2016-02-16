@@ -76,8 +76,12 @@ public class ProblemReportActivity extends AppCompatActivity {
         submit.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setSubmitParams();
-                new PostProblemTask().execute();
+                if(reportContent.getText().toString().equals("")){
+                    Util.showSnackBar(v, "請填寫問題內容");
+                }else {
+                    setSubmitParams();
+                    new PostProblemTask().execute();
+                }
             }
         });
     }
