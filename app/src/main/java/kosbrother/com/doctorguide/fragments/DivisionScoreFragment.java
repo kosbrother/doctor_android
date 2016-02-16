@@ -52,31 +52,31 @@ public class DivisionScoreFragment extends Fragment {
             friendRatingBar.setRating(mDivision.dr_avg_friendly);
             speRatingBar.setRating(mDivision.dr_avg_speciality);
 
-            DrawableCompat.setTint(avgRating.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.tab_text_act));
-            DrawableCompat.setTint(friendRatingBar.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.tab_text_act));
-            DrawableCompat.setTint(speRatingBar.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.tab_text_act));
+            DrawableCompat.setTint(avgRating.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.rating_bar_color));
+            DrawableCompat.setTint(friendRatingBar.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.rating_bar_color));
+            DrawableCompat.setTint(speRatingBar.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.rating_bar_color));
 
             ((TextView)view.findViewById(R.id.review_count)).setText(mDivision.comment_num + "");
             ((TextView)view.findViewById(R.id.avg_text)).setText("綜合滿意度 " + String.format("%.1f", mDivision.avg));
             ((TextView)view.findViewById(R.id.env_score)).setText(String.format("%.1f", mDivision.avg_environment));
             RatingBar envRating = (RatingBar) view.findViewById(R.id.env_rating_bar);
             envRating.setRating(mDivision.avg_environment);
-            DrawableCompat.setTint(envRating.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.tab_text_act));
+            DrawableCompat.setTint(envRating.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.rating_bar_color));
 
             ((TextView)view.findViewById(R.id.equipment_score)).setText(String.format("%.1f", mDivision.avg_equipment));
             RatingBar equitmentRating = (RatingBar) view.findViewById(R.id.equipment_rating_bar);
             equitmentRating.setRating(mDivision.avg_equipment);
-            DrawableCompat.setTint(equitmentRating.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.tab_text_act));
+            DrawableCompat.setTint(equitmentRating.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.rating_bar_color));
 
             ((TextView)view.findViewById(R.id.spe_score_div)).setText(String.format("%.1f", mDivision.avg_speciality));
             RatingBar divSpeRating = (RatingBar) view.findViewById(R.id.spe_div_rating_bar);
             divSpeRating.setRating(mDivision.avg_speciality);
-            DrawableCompat.setTint(divSpeRating.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.tab_text_act));
+            DrawableCompat.setTint(divSpeRating.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.rating_bar_color));
 
             ((TextView)view.findViewById(R.id.friend_score_div)).setText(String.format("%.1f", mDivision.avg_friendly));
             RatingBar divFriendlyRating = (RatingBar) view.findViewById(R.id.friend_div_rating_bar);
             equitmentRating.setRating(mDivision.avg_friendly);
-            DrawableCompat.setTint(divFriendlyRating.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.tab_text_act));
+            DrawableCompat.setTint(divFriendlyRating.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.rating_bar_color));
 
             return view;
         } else

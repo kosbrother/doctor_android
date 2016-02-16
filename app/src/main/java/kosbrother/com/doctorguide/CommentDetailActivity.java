@@ -111,29 +111,29 @@ public class CommentDetailActivity extends AppCompatActivity {
         friendRatingBar.setRating(comment.dr_friendly);
         speRatingBar.setRating(comment.dr_speciality);
 
-        DrawableCompat.setTint(friendRatingBar.getProgressDrawable(), ContextCompat.getColor(this, R.color.tab_text_act));
-        DrawableCompat.setTint(speRatingBar.getProgressDrawable(), ContextCompat.getColor(this, R.color.tab_text_act));
+        DrawableCompat.setTint(friendRatingBar.getProgressDrawable(), ContextCompat.getColor(this, R.color.rating_bar_color));
+        DrawableCompat.setTint(speRatingBar.getProgressDrawable(), ContextCompat.getColor(this, R.color.rating_bar_color));
 
 
         ((TextView)findViewById(R.id.env_score)).setText(String.format("%d", comment.div_environment));
         RatingBar envRating = (RatingBar)findViewById(R.id.env_rating_bar);
         envRating.setRating(comment.div_environment);
-        DrawableCompat.setTint(envRating.getProgressDrawable(), ContextCompat.getColor(this, R.color.tab_text_act));
+        DrawableCompat.setTint(envRating.getProgressDrawable(), ContextCompat.getColor(this, R.color.rating_bar_color));
 
         ((TextView)findViewById(R.id.equipment_score)).setText(String.format("%d", comment.div_equipment));
         RatingBar equitmentRating = (RatingBar)findViewById(R.id.equipment_rating_bar);
         equitmentRating.setRating(comment.div_equipment);
-        DrawableCompat.setTint(equitmentRating.getProgressDrawable(), ContextCompat.getColor(this, R.color.tab_text_act));
+        DrawableCompat.setTint(equitmentRating.getProgressDrawable(), ContextCompat.getColor(this, R.color.rating_bar_color));
 
         ((TextView)findViewById(R.id.spe_score_div)).setText(String.format("%d", comment.div_speciality));
         RatingBar divSpeRating = (RatingBar)findViewById(R.id.spe_div_rating_bar);
         divSpeRating.setRating(comment.div_speciality);
-        DrawableCompat.setTint(divSpeRating.getProgressDrawable(), ContextCompat.getColor(this, R.color.tab_text_act));
+        DrawableCompat.setTint(divSpeRating.getProgressDrawable(), ContextCompat.getColor(this, R.color.rating_bar_color));
 
         ((TextView)findViewById(R.id.friend_score_div)).setText(String.format("%d", comment.div_friendly));
         RatingBar divFriendlyRating = (RatingBar)findViewById(R.id.friend_div_rating_bar);
         equitmentRating.setRating(comment.div_friendly);
-        DrawableCompat.setTint(divFriendlyRating.getProgressDrawable(), ContextCompat.getColor(this, R.color.tab_text_act));
+        DrawableCompat.setTint(divFriendlyRating.getProgressDrawable(), ContextCompat.getColor(this, R.color.rating_bar_color));
 
 
         mDivisionName.setText(comment.division_name);
