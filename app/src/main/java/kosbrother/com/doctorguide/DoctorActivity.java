@@ -139,6 +139,8 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
                 fab.getMenuIconView().setImageDrawable(drawable);
             }
         });
+        fab.setClosedOnTouchOutside(true);
+
         FloatingActionButton fabProblemReport = (FloatingActionButton) findViewById(R.id.fab_problem_report);
         FloatingActionButton fabShare = (FloatingActionButton) findViewById(R.id.fab_share);
         FloatingActionButton fabComment = (FloatingActionButton) findViewById(R.id.fab_comment);
