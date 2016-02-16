@@ -37,6 +37,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/your_string_here"
+                        android:layout_marginRight="16dp"
                         android:textColor="@color/tab_text_act"
                         android:textSize="@dimen/doctor_fragment_text_size"
                         android:layout_centerVertical="true"
