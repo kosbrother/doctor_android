@@ -80,7 +80,8 @@ public class HospitalDetailFragment extends Fragment {
             public void onMapReady(GoogleMap googleMap) {
                 LatLng addressLatLng = getLatLngFromAddress(getContext(), mHospital.address);
                 if (addressLatLng != null) {
-                    googleMap.addMarker(new MarkerOptions().position(addressLatLng).title(mHospital.name));
+                    googleMap.addMarker(new MarkerOptions().position(addressLatLng).title(mHospital.name))
+                            .showInfoWindow();
                     googleMap.moveCamera(CameraUpdateFactory.newLatLng(addressLatLng));
                     googleMap.moveCamera(CameraUpdateFactory.zoomTo(17));
                 }
