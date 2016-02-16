@@ -189,6 +189,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:orientation="horizontal">
@@ -206,6 +207,9 @@
                     android:layout_height="wrap_content"
                     android:text="復健－物理治療業務" />
             </LinearLayout>
+
+            <include layout="@layout/item_blank" />
+
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>
