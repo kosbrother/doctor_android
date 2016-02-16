@@ -8,24 +8,24 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
         android:src="@mipmap/head"
         android:layout_marginLeft="24dp"
-        android:layout_marginTop="28dp"/>
+        android:layout_marginTop="32dp"/>
 
     <TextView
         android:id="@+id/log_in_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:text="chunyuko@gmail.com"
         android:layout_alignParentBottom="true"
         android:textColor="@color/textColorPrimary"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="24dp"
         android:layout_marginBottom="14dp"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:visibility="gone"
+        android:textStyle="bold"
         />
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
