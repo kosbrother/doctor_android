@@ -21,7 +21,8 @@
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="地區:"/>
+            android:text="地區:"
+            android:layout_centerVertical="true"/>
         <Spinner
             android:id="@+id/area"
             android:layout_toRightOf="@+id/text"

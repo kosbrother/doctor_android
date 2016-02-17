@@ -3,16 +3,17 @@ package kosbrother.com.doctorguide;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -123,8 +124,16 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
             super.onPostExecute(result);
             mProgressDialog.dismiss();
             if(isSuccess){
-                Snackbar snackbar = Snackbar.make(tabLayout, "評論發表成功！", Snackbar.LENGTH_SHORT);
-                snackbar.show();
+                new AlertDialog.Builder(AddCommentActivity.this)
+                        .setTitle("評論發表成功")
+                        .setMessage("謝謝你發表評論，讓資料更完善！")
+                        .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                        .show();
             }
 
         }
@@ -326,8 +335,17 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
     public void dateClick(View v) {
         DatePickerDialog dpd = DatePickerDialog.newInstance(
                 AddCommentActivity.this,
-                year,month -1 ,day
+                year, month - 1, day
         );
         dpd.show(getFragmentManager(), "Datepickerdialog");
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(viewPager.getCurrentItem() == 1){
+            viewPager.setCurrentItem(0);
+        }else{
+            super.onBackPressed();
+        }
     }
 }

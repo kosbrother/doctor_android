@@ -33,6 +33,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     >
+                    <TextView
+                        android:id="@+id/hospial_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="台北市立聯合醫院"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="@dimen/doctor_fragment_text_size"
+                        android:layout_centerVertical="true"/>
                     <Button
                         android:background="@drawable/heart_white_to_red_button"
                         android:id="@+id/heart"
@@ -42,82 +50,68 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="12dp"
                         />
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_toLeftOf="@+id/heart"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:id="@+id/hospial_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="台北市立聯合醫院"
-                            android:textColor="@color/textColorPrimary"
-                            android:textSize="@dimen/doctor_fragment_text_size"
-                            android:layout_centerVertical="true"/>
-                        <RelativeLayout
-                            android:id="@+id/comment_part"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            >
-                            <ImageView
-                                android:id="@+id/thumb"
-                                android:layout_width="@dimen/division_score_image"
-                                android:layout_height="@dimen/division_score_image"
-                                android:src="@mipmap/thumb_whte"
-                                android:layout_marginRight="5dp"
-                                android:layout_centerVertical="true"
-                                />
-                            <TextView
-                                android:id="@+id/recommend_num"
-                                android:textColor="@color/textColorPrimary"
-                                android:layout_toRightOf="@+id/thumb"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="900"
-                                android:textSize="@dimen/division_score"
-                                android:layout_centerVertical="true"
-                                android:layout_marginRight="5dp"/>
-                            <ImageView
-                                android:id="@+id/sms"
-                                android:layout_toRightOf="@+id/recommend_num"
-                                android:layout_width="@dimen/division_score_image"
-                                android:layout_height="@dimen/division_score_image"
-                                android:src="@mipmap/sms_white"
-                                android:layout_marginRight="5dp"
-                                android:layout_centerVertical="true"
-                                />
-                            <TextView
-                                android:id="@+id/comment_num"
-                                android:textColor="@color/textColorPrimary"
-                                android:layout_toRightOf="@+id/sms"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="20"
-                                android:layout_marginRight="5dp"
-                                android:layout_centerVertical="true"
-                                android:textSize="@dimen/division_score"/>
-                            <ImageView
-                                android:id="@+id/star"
-                                android:layout_toRightOf="@+id/comment_num"
-                                android:layout_width="@dimen/division_score_image"
-                                android:layout_height="@dimen/division_score_image"
-                                android:src="@mipmap/star_white"
-                                android:layout_marginRight="5dp"
-                                android:layout_centerVertical="true"
-                                />
-                            <TextView
-                                android:id="@+id/score"
-                                android:textColor="@color/textColorPrimary"
-                                android:layout_toRightOf="@+id/star"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:textSize="@dimen/division_score"
-                                android:text="4.2"/>
-                        </RelativeLayout>
-                    </LinearLayout>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/comment_part"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    >
+                    <ImageView
+                        android:id="@+id/thumb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/thumb_whte"
+                        android:layout_marginRight="5dp"
+                        android:layout_centerVertical="true"
+                        />
+                    <TextView
+                        android:id="@+id/recommend_num"
+                        android:textColor="@color/textColorPrimary"
+                        android:layout_toRightOf="@+id/thumb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="900"
+                        android:textSize="@dimen/division_score"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="5dp"/>
+                    <ImageView
+                        android:id="@+id/sms"
+                        android:layout_toRightOf="@+id/recommend_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/sms_white"
+                        android:layout_marginRight="5dp"
+                        android:layout_centerVertical="true"
+                        />
+                    <TextView
+                        android:id="@+id/comment_num"
+                        android:textColor="@color/textColorPrimary"
+                        android:layout_toRightOf="@+id/sms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="20"
+                        android:layout_marginRight="5dp"
+                        android:layout_centerVertical="true"
+                        android:textSize="@dimen/division_score"/>
+                    <ImageView
+                        android:id="@+id/star"
+                        android:layout_toRightOf="@+id/comment_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/star_white"
+                        android:layout_marginRight="5dp"
+                        android:layout_centerVertical="true"
+                        />
+                    <TextView
+                        android:id="@+id/score"
+                        android:textColor="@color/textColorPrimary"
+                        android:layout_toRightOf="@+id/star"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textSize="@dimen/division_score"
+                        android:text="4.2"/>
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
@@ -140,8 +134,8 @@
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
@@ -152,6 +146,7 @@
         fab:menu_colorNormal="@color/colorAccent"
         fab:menu_colorPressed="#C3520C"
         fab:menu_colorRipple="#99FFFFFF"
+        fab:menu_backgroundColor="#ccffffff"
         >
 
         <com.github.clans.fab.FloatingActionButton

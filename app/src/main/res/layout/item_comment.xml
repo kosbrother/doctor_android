@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="4dp"
     android:id="@+id/cv_item"
     card_view:cardCornerRadius="4dp"
     android:background="@android:color/white">
@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="台北市立聯合醫院"
-                android:textSize="24dp"
+                android:textSize="20sp"
                 android:textColor="@color/bluegreen_text_color"/>
         </RelativeLayout>
         <RelativeLayout
@@ -82,7 +82,9 @@
                 android:layout_height="wrap_content"
                 android:text="3.0"
                 android:textColor="@color/grey_text_color"
-                android:textSize="@dimen/comment_score_size"/>
+                android:textSize="@dimen/comment_score_size"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"/>
             <RatingBar
                 android:id="@+id/div_score_rating"
                 android:layout_toRightOf="@+id/div_score"
@@ -114,7 +116,9 @@
                 android:layout_height="wrap_content"
                 android:text="3.0"
                 android:textColor="@color/grey_text_color"
-                android:textSize="@dimen/comment_score_size"/>
+                android:textSize="@dimen/comment_score_size"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"/>
             <RatingBar
                 android:id="@+id/dr_score_rating"
                 android:layout_toRightOf="@+id/dr_score"
@@ -133,7 +137,7 @@
             android:id="@+id/divider1"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/grey_text_color"
+            android:background="@color/grey_divider_color"
             android:layout_centerVertical="true"/>
         <RelativeLayout
             android:layout_width="wrap_content"

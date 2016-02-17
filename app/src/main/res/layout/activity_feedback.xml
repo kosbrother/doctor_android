@@ -13,9 +13,10 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
         <ImageView
+            android:layout_marginTop="32dp"
             android:id="@+id/appicon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_centerHorizontal="true"
             android:src="@mipmap/ic_aboutus_logo"/>
         <TextView

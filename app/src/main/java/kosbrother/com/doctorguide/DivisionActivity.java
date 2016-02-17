@@ -154,6 +154,7 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
                 fab.getMenuIconView().setImageDrawable(drawable);
             }
         });
+        fab.setClosedOnTouchOutside(true);
 
         fabProblemReport = (FloatingActionButton) findViewById(R.id.fab_problem_report);
         fabShare = (FloatingActionButton) findViewById(R.id.fab_share);

@@ -1,5 +1,8 @@
 package kosbrother.com.doctorguide;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,9 +24,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,6 +154,8 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
                 fab.getMenuIconView().setImageDrawable(drawable);
             }
         });
+        fab.setClosedOnTouchOutside(true);
+
         FloatingActionButton fabProblemReport = (FloatingActionButton) findViewById(R.id.fab_problem_report);
         FloatingActionButton fabShare = (FloatingActionButton) findViewById(R.id.fab_share);
         FloatingActionButton fabAddDoctor = (FloatingActionButton) findViewById(R.id.fab_add_doctor);

@@ -40,7 +40,7 @@ public class MyDivisionListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.fragment_division_list_item, parent, false);
             RatingBar rating = (RatingBar) view.findViewById(R.id.score_rating_bar);
-            DrawableCompat.setTint(rating.getProgressDrawable(), ContextCompat.getColor(parent.getContext(), R.color.tab_text_act));
+            DrawableCompat.setTint(rating.getProgressDrawable(), ContextCompat.getColor(parent.getContext(), R.color.rating_bar_color));
             return new ViewHolder(view);
         }else{
             View view = LayoutInflater.from(parent.getContext())

@@ -52,9 +52,9 @@ public class DoctorScoreFragment extends Fragment {
             avgRating.setRating(mDoctor.avg);
             friendRatingBar.setRating(mDoctor.avg_friendly);
             speRatingBar.setRating(mDoctor.avg_speciality);
-            DrawableCompat.setTint(avgRating.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.tab_text_act));
-            DrawableCompat.setTint(friendRatingBar.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.tab_text_act));
-            DrawableCompat.setTint(speRatingBar.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.tab_text_act));
+            DrawableCompat.setTint(avgRating.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.rating_bar_color));
+            DrawableCompat.setTint(friendRatingBar.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.rating_bar_color));
+            DrawableCompat.setTint(speRatingBar.getProgressDrawable(), ContextCompat.getColor(getContext(), R.color.rating_bar_color));
 
             return view;
         }else{

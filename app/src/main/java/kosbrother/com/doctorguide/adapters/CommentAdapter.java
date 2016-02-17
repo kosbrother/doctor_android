@@ -2,6 +2,8 @@ package kosbrother.com.doctorguide.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,14 +62,23 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         float divScore = (comment.div_environment + comment.div_equipment + comment.div_friendly + comment.div_speciality) / 4.0f;
         holder.mDivScore.setText(String.format("%.1f", divScore));
         holder.mDivRaitng.setRating(divScore);
+        DrawableCompat.setTint(holder.mDivRaitng.getProgressDrawable(), ContextCompat.getColor(mContext, R.color.rating_bar_color));
 
         float drScore = (comment.dr_friendly + comment.dr_speciality) / 2.0f;
         holder.mDrScore.setText(String.format("%.1f", drScore));
         holder.mDrRaitng.setRating(drScore);
+        DrawableCompat.setTint(holder.mDrRaitng.getProgressDrawable(), ContextCompat.getColor(mContext, R.color.rating_bar_color));
 
         holder.mCommentTime.setText(new SimpleDateFormat("yyyy/MM/dd").format(comment.updated_at));
-        holder.mDivComment.setText(comment.div_comment);
-        holder.mDrComment.setText(comment.dr_comment);
+        if(comment.div_comment == null || comment.div_comment.equals(""))
+            holder.mDivComment.setText("暫無評論");
+        else
+            holder.mDivComment.setText(comment.div_comment);
+
+        if(comment.dr_comment == null || comment.dr_comment.equals(""))
+            holder.mDrComment.setText("暫無評論");
+        else
+            holder.mDrComment.setText(comment.dr_comment);
     }
 
     @Override

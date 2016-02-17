@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="96dp"
     android:clickable="true"
     android:background="@drawable/click_selector"
     >
@@ -44,7 +44,7 @@
             <TextView
                 android:id="@+id/hospial_name"
                 android:text="台北市立聯合醫院"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceListItem"
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:text="台北市大同醫鄭州路45號"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:textColor="#9b9b9b"/>
             <RelativeLayout
                 android:layout_below="@+id/address"
