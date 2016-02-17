@@ -31,8 +31,10 @@ proguard/
 # Android Studio captures folder
 captures/
 
-.idea/workspace.xml
-.idea/libraries/
-app/app.iml
+# Android Studio and Gradle specific entries
+.gradle
+.idea
+*.iml
+build
 
 .DS_Store
