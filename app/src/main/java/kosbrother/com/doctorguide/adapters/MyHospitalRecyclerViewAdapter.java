@@ -1,7 +1,5 @@
 package kosbrother.com.doctorguide.adapters;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +7,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.entity.Hospital;
 import kosbrother.com.doctorguide.fragments.HospitalFragment.OnListFragmentInteractionListener;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.event.hospitaldoctor.HospitalDoctorClickHospitalListEvent;
 
 import static kosbrother.com.doctorguide.Util.SphericalUtil.computeDistanceBetween;
 
@@ -39,7 +41,7 @@ public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospit
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        switch (mHospitals.get(position).grade){
+        switch (mHospitals.get(position).grade) {
             case "醫學中心":
                 holder.mImageView.setImageResource(R.mipmap.ic_hospital_biggest);
                 break;
@@ -65,7 +67,10 @@ public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospit
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    mListener.onListFragmentInteraction(mHospitals.get(position));
+                    Hospital hospital = mHospitals.get(position);
+                    mListener.onListFragmentInteraction(hospital);
+
+                    GAManager.sendEvent(new HospitalDoctorClickHospitalListEvent(hospital.name));
                 }
             }
         });
@@ -89,13 +94,13 @@ public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospit
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mImageView = (ImageView)view.findViewById(R.id.grade_image);
-            mName = (TextView)view.findViewById(R.id.hospial_name);
-            mAddress = (TextView)view.findViewById(R.id.address);
-            mDistance = (TextView)view.findViewById(R.id.distance);
-            mCommentNum = (TextView)view.findViewById(R.id.comment_num);
-            mRecommendNum  = (TextView)view.findViewById(R.id.recommend_num);
-            mScore = (TextView)view.findViewById(R.id.score);
+            mImageView = (ImageView) view.findViewById(R.id.grade_image);
+            mName = (TextView) view.findViewById(R.id.hospial_name);
+            mAddress = (TextView) view.findViewById(R.id.address);
+            mDistance = (TextView) view.findViewById(R.id.distance);
+            mCommentNum = (TextView) view.findViewById(R.id.comment_num);
+            mRecommendNum = (TextView) view.findViewById(R.id.recommend_num);
+            mScore = (TextView) view.findViewById(R.id.score);
         }
     }
 }

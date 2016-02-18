@@ -1,8 +1,5 @@
 package kosbrother.com.doctorguide;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -25,6 +22,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +38,11 @@ import kosbrother.com.doctorguide.entity.realm.RealmHospital;
 import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DivisionListFragment;
 import kosbrother.com.doctorguide.fragments.HospitalDetailFragment;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.category.GACategory;
+import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickCollectEvent;
+import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickFABEvent;
+import kosbrother.com.doctorguide.google_analytics.label.GALabel;
 
 public class HospitalActivity extends AppCompatActivity implements DivisionListFragment.OnListFragmentInteractionListener, DivisionListFragment.GetDivisions, HospitalDetailFragment.GetHospital {
 
@@ -144,13 +149,15 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
         fab.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
             public void onMenuToggle(boolean opened) {
+                GAManager.sendEvent(new HospitalClickFABEvent(GALabel.FAB_MENU));
+
                 int drawableId;
                 if (opened) {
                     drawableId = R.mipmap.ic_close;
                 } else {
                     drawableId = R.mipmap.ic_fab;
                 }
-                Drawable drawable = getResources().getDrawable(drawableId);
+                Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), drawableId);
                 fab.getMenuIconView().setImageDrawable(drawable);
             }
         });
@@ -171,6 +178,8 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
             Intent intent;
             switch (v.getId()) {
                 case R.id.fab_problem_report:
+                    GAManager.sendEvent(new HospitalClickFABEvent(GALabel.PROBLEM_REPORT));
+
                     intent = new Intent(HospitalActivity.this, ProblemReportActivity.class);
                     intent.putExtra("REPORT_TYPE", getString(R.string.hospital_page));
                     intent.putExtra("HOSPITAL_NAME", hospitalName);
@@ -178,6 +187,8 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
                     startActivity(intent);
                     break;
                 case R.id.fab_share:
+                    GAManager.sendEvent(new HospitalClickFABEvent(GALabel.SHARE));
+
                     Intent sendIntent = new Intent();
                     sendIntent.setAction(Intent.ACTION_SEND);
                     sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
@@ -185,6 +196,8 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
                     startActivity(sendIntent);
                     break;
                 case R.id.fab_add_doctor:
+                    GAManager.sendEvent(new HospitalClickFABEvent(GALabel.ADD_DOCTOR));
+
                     intent = new Intent(HospitalActivity.this, AddDoctorActivity.class);
                     intent.putExtra("HOSPITAL_NAME", hospitalName);
                     intent.putExtra("HOSPITAL_ID", hospitalId);
@@ -230,7 +243,9 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
         heart.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (collected == true) {
+                GAManager.sendEvent(new HospitalClickCollectEvent(hospitalName));
+
+                if (collected) {
 
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
@@ -276,7 +291,7 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(HospitalDetailFragment.newInstance(), "關於本院");
         adapter.addFragment(DivisionListFragment.newInstance(hospitalId), "院內科別");
-        adapter.addFragment(CommentFragment.newInstance(hospitalId, null, null), "本院評論");
+        adapter.addFragment(CommentFragment.newInstance(hospitalId, null, null, GACategory.HOSPITAL), "本院評論");
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(2);
     }

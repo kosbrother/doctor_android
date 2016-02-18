@@ -16,11 +16,14 @@ import java.util.ArrayList;
 import kosbrother.com.doctorguide.HospitalDoctorActivity;
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.entity.Category;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.event.main.MainClickCategoryListEvent;
+import kosbrother.com.doctorguide.google_analytics.event.main.MainClickDivisionInfoEvent;
 
 /**
  * Created by steven on 12/25/15.
  */
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>{
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
     private final LayoutInflater mLayoutInflater;
     private static Context mContext;
@@ -44,6 +47,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GAManager.sendEvent(new MainClickDivisionInfoEvent(mCategories.get(position).name));
+
                 AlertDialog.Builder builder =
                         new AlertDialog.Builder(mContext, R.style.AppCompatAlertDialogStyle);
                 builder.setTitle(mCategories.get(position).name);
@@ -55,9 +60,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.listView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GAManager.sendEvent(new MainClickCategoryListEvent(mCategories.get(position).name));
+
                 Intent intent = new Intent(mContext, HospitalDoctorActivity.class);
-                intent.putExtra("CATEGORY_NAME",mCategories.get(position).name);
-                intent.putExtra("CATEGORY_ID",mCategories.get(position).id);
+                intent.putExtra("CATEGORY_NAME", mCategories.get(position).name);
+                intent.putExtra("CATEGORY_ID", mCategories.get(position).id);
                 mContext.startActivity(intent);
             }
         });
@@ -77,9 +84,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         CategoryViewHolder(View view) {
             super(view);
 
-            name = (TextView)view.findViewById(R.id.text_view);
-            mButton = (Button)view.findViewById(R.id.detail_button);
-            icon = (ImageView)view.findViewById(R.id.category_icon);
+            name = (TextView) view.findViewById(R.id.text_view);
+            mButton = (Button) view.findViewById(R.id.detail_button);
+            icon = (ImageView) view.findViewById(R.id.category_icon);
             listView = view;
         }
     }

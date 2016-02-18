@@ -1,7 +1,5 @@
 package kosbrother.com.doctorguide.fragments;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -17,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 import io.realm.Realm;
@@ -31,9 +31,12 @@ import kosbrother.com.doctorguide.custom.LoadMoreRecyclerView;
 import kosbrother.com.doctorguide.entity.Area;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.event.hospitaldoctor.HospitalDoctorClickAreaSpinnerEvent;
+import kosbrother.com.doctorguide.google_analytics.event.hospitaldoctor.HospitalDoctorClickSortSpinnerEvent;
 
 
-public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedListener{
+public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedListener {
 
     private static final String ARG_TYPE = "ARG_TYPE";
     private static final String ARG_CATEGORY_ID = "CATEGORY_ID";
@@ -43,7 +46,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
     private int fragmentType;
     private int mCategoryId = 1;
     private OnListFragmentInteractionListener mListener;
-    private ArrayList<Doctor> doctors = new ArrayList();
+    private ArrayList<Doctor> doctors = new ArrayList<>();
     private LoadMoreRecyclerView recyclerView;
     private int mHospitalId;
     private int mDivisionId;
@@ -59,7 +62,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
     public DoctorFragment() {
     }
 
-    public static DoctorFragment newInstance(int fragmentType,int categoryId) {
+    public static DoctorFragment newInstance(int fragmentType, int categoryId) {
         DoctorFragment fragment = new DoctorFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_TYPE, fragmentType);
@@ -68,7 +71,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
         return fragment;
     }
 
-    public static DoctorFragment newInstance(int fragmentType,int hospitalId,int divisionId) {
+    public static DoctorFragment newInstance(int fragmentType, int hospitalId, int divisionId) {
         DoctorFragment fragment = new DoctorFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_TYPE, fragmentType);
@@ -111,10 +114,10 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
             }
         });
 
-        if(fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE){
+        if (fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE) {
             view.findViewById(R.id.selector).setVisibility(View.GONE);
             setHeartTypeRecyclerAdapter();
-        }else {
+        } else {
             setAreaSpinner(view);
             setSortSpinner(view);
         }
@@ -138,7 +141,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
 
     private void setAreaSpinner(View view) {
         Spinner spinner = (Spinner) view.findViewById(R.id.area);
-        ArrayAdapter<String> areaAdapter = new ArrayAdapter<String>(getContext(),
+        ArrayAdapter<String> areaAdapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_item, Area.getAreaStrings().toArray(new String[Area.getAreas().size()]));
         areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(areaAdapter);
@@ -157,7 +160,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
-        if(context instanceof GetLocation){
+        if (context instanceof GetLocation) {
             location = ((GetLocation) context).getLocation();
         }
     }
@@ -171,20 +174,26 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
     int areaId = 0;
     String sortSrting;
     int checktime = 0;
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner spinner = (Spinner) parent;
-        if(spinner.getId() == R.id.area){
+        if (spinner.getId() == R.id.area) {
             areaId = Area.getAreas().get(position).id;
-        }else if(spinner.getId() == R.id.sort){
-            sortSrting = (String)parent.getItemAtPosition(position);
+
+            GAManager.sendEvent(new HospitalDoctorClickAreaSpinnerEvent(Area.getAreaStrings().get(position)));
+        } else if (spinner.getId() == R.id.sort) {
+            sortSrting = (String) parent.getItemAtPosition(position);
             orderString = values[position];
+
+            GAManager.sendEvent(new HospitalDoctorClickSortSpinnerEvent(sortSrting));
         }
 
-        if(areaId != 0 && sortSrting!=null)
+        if (areaId != 0 && sortSrting != null)
             checktime += 1;
-        if(checktime >= 1) {
-            page = 1;isLoadCompleted = false;
+        if (checktime >= 1) {
+            page = 1;
+            isLoadCompleted = false;
             new GetDoctorsTask().execute();
         }
     }
@@ -197,12 +206,13 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if(page==1)
+            if (page == 1)
                 mProgressDialog = Util.showProgressDialog(getContext());
         }
+
         @Override
         protected Object doInBackground(Object... params) {
-            if(fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE ) {
+            if (fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE) {
                 doctors = DoctorGuideApi.getDoctorsByHospitalAndDivision(mHospitalId, mDivisionId);
                 Realm realm = Realm.getInstance(getContext());
                 realm.executeTransaction(new Realm.Transaction() {
@@ -220,22 +230,22 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
                         }
                     }
                 });
-            }else
-                getDoctors = DoctorGuideApi.getDoctorsByAreaAndCategory(areaId, mCategoryId,page,location.latitude,location.longitude,orderString);
+            } else
+                getDoctors = DoctorGuideApi.getDoctorsByAreaAndCategory(areaId, mCategoryId, page, location.latitude, location.longitude, orderString);
             return null;
         }
 
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
-            if(page==1)
+            if (page == 1)
                 mProgressDialog.dismiss();
-            if(fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE ) {
-                adatper = new MyDoctorRecyclerViewAdapter(doctors, mListener, fragmentType,location);
+            if (fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE) {
+                adatper = new MyDoctorRecyclerViewAdapter(doctors, mListener, fragmentType, location);
                 recyclerView.setAdapter(adatper);
                 adatper.notifyDataSetChanged();
                 isLoadCompleted = true;
-                if(doctors.size()==0){
+                if (doctors.size() == 0) {
                     LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                     View noDoctorView = inflater.inflate(R.layout.fragment_no_doctors_in_division, null);
@@ -243,22 +253,22 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
                     ((RelativeLayout) view.findViewById(R.id.baseLayout)).addView(noDoctorView);
                 }
 
-            }else{
+            } else {
                 loadmoreLayout.setVisibility(View.GONE);
                 recyclerView.setLoaded();
 
-                if(page == 1) {
+                if (page == 1) {
                     page += 1;
                     doctors = getDoctors;
-                    adatper = new MyDoctorRecyclerViewAdapter(doctors, mListener,fragmentType,location);
+                    adatper = new MyDoctorRecyclerViewAdapter(doctors, mListener, fragmentType, location);
                     recyclerView.setAdapter(adatper);
                     adatper.notifyDataSetChanged();
-                }else{
-                    if(getDoctors.size() > 0) {
+                } else {
+                    if (getDoctors.size() > 0) {
                         page += 1;
                         doctors.addAll(getDoctors);
                         adatper.notifyDataSetChanged();
-                    }else{
+                    } else {
                         isLoadCompleted = true;
                     }
                 }

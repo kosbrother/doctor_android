@@ -24,13 +24,15 @@ import kosbrother.com.doctorguide.entity.Comment;
 
 public class CommentFragment extends Fragment {
 
-    private static final String ARG_HOSPITAL = "param1";
-    private static final String ARG_DIVISION = "param2";
-    private static final String ARG_DOCTOR = "param2";
+    private static final String ARG_HOSPITAL = "ARG_HOSPITAL";
+    private static final String ARG_DIVISION = "ARG_DIVISION";
+    private static final String ARG_DOCTOR = "ARG_DOCTOR";
+    private static final String ARG_GA_CATEGORY = "ARG_GA_CATEGORY";
 
     private Integer mHospitalId;
     private Integer mDivisionId;
     private Integer mDoctorId;
+    private String mGACategory;
 
     private ArrayList<Comment> comments;
     private View view;
@@ -40,15 +42,16 @@ public class CommentFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static CommentFragment newInstance(Integer hospital_id,Integer division_id, Integer doctor_id) {
+    public static CommentFragment newInstance(Integer hospital_id, Integer division_id, Integer doctor_id, String gACategory) {
         CommentFragment fragment = new CommentFragment();
         Bundle args = new Bundle();
-        if(hospital_id != null)
+        if (hospital_id != null)
             args.putInt(ARG_HOSPITAL, hospital_id);
-        if(division_id != null)
+        if (division_id != null)
             args.putInt(ARG_DIVISION, division_id);
-        if(doctor_id != null)
+        if (doctor_id != null)
             args.putInt(ARG_DOCTOR, doctor_id);
+        args.putString(ARG_GA_CATEGORY, gACategory);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,6 +63,7 @@ public class CommentFragment extends Fragment {
             mHospitalId = getArguments().getInt(ARG_HOSPITAL);
             mDivisionId = getArguments().getInt(ARG_DIVISION);
             mDoctorId = getArguments().getInt(ARG_DOCTOR);
+            mGACategory = getArguments().getString(ARG_GA_CATEGORY);
         }
     }
 
@@ -81,13 +85,14 @@ public class CommentFragment extends Fragment {
             super.onPreExecute();
             mProgressDialog = Util.showProgressDialog(getContext());
         }
+
         @Override
         protected Object doInBackground(Object... params) {
-            if(mDivisionId != 0 && mHospitalId != 0)
-                comments = DoctorGuideApi.getDivisionComments(mDivisionId,mHospitalId);
-            else if(mHospitalId != 0)
+            if (mDivisionId != 0 && mHospitalId != 0)
+                comments = DoctorGuideApi.getDivisionComments(mDivisionId, mHospitalId);
+            else if (mHospitalId != 0)
                 comments = DoctorGuideApi.getHospitalComments(mHospitalId);
-            else if(mDoctorId != 0)
+            else if (mDoctorId != 0)
                 comments = DoctorGuideApi.getDoctorComments(mDoctorId);
             return null;
         }
@@ -96,17 +101,17 @@ public class CommentFragment extends Fragment {
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             mProgressDialog.dismiss();
-            if(comments.size() == 0){
+            if (comments.size() == 0) {
                 LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 View noDoctorView = inflater.inflate(R.layout.fragment_no_comment, null);
                 noDoctorView.setLayoutParams(lparams);
                 ((RelativeLayout) view.findViewById(R.id.baseLayout)).addView(noDoctorView);
-            }else{
+            } else {
                 RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
                 Context context = view.getContext();
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                recyclerView.setAdapter(new CommentAdapter(comments, getContext()));
+                recyclerView.setAdapter(new CommentAdapter(comments, getContext(),mGACategory));
             }
         }
 

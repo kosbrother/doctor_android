@@ -1,11 +1,5 @@
 package kosbrother.com.doctorguide;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -29,14 +23,25 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import kosbrother.com.doctorguide.Util.CreateUserTask;
 import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
 import kosbrother.com.doctorguide.adapters.CategoryAdapter;
 import kosbrother.com.doctorguide.entity.Category;
 import kosbrother.com.doctorguide.entity.User;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.event.main.MainClickAccountEvent;
+import kosbrother.com.doctorguide.google_analytics.event.main.MainClickSearchIconEvent;
+import kosbrother.com.doctorguide.google_analytics.event.main.MainSubmitSearchTextEvent;
+import kosbrother.com.doctorguide.google_analytics.label.GALabel;
 
 public class MainActivity extends GoogleSignInActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener,CreateUserTask.AfterCreateUser {
+        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener, CreateUserTask.AfterCreateUser {
 
     RecyclerView mRecyclerView;
     private SignInButton signInBtn;
@@ -53,12 +58,13 @@ public class MainActivity extends GoogleSignInActivity
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
             }
+
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
@@ -82,12 +88,12 @@ public class MainActivity extends GoogleSignInActivity
         View header = LayoutInflater.from(this).inflate(R.layout.nav_header_main, null);
         Resources r = getResources();
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 180, r.getDisplayMetrics());
-        LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int)px);
+        LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) px);
         header.setLayoutParams(lparams);
         navigationView.addHeaderView(header);
 
-        logInEmail = (TextView)header.findViewById(R.id.log_in_email);
-        signInBtn = (SignInButton)header.findViewById(R.id.sign_in_button);
+        logInEmail = (TextView) header.findViewById(R.id.log_in_email);
+        signInBtn = (SignInButton) header.findViewById(R.id.sign_in_button);
 
         setRecyclerView();
 
@@ -95,6 +101,8 @@ public class MainActivity extends GoogleSignInActivity
         signInBtn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GAManager.sendEvent(new MainClickAccountEvent(GALabel.SIGN_IN));
+
                 signIn();
             }
         });
@@ -108,16 +116,16 @@ public class MainActivity extends GoogleSignInActivity
             user = new User();
             user.email = acct.getEmail();
             user.name = acct.getDisplayName();
-            if(acct.getPhotoUrl() != null)
+            if (acct.getPhotoUrl() != null)
                 user.pic_url = acct.getPhotoUrl().toString();
-            new CreateUserTask(this,user).execute();
-        }else{
+            new CreateUserTask(this, user).execute();
+        } else {
             drawNavigationSignInPart(false);
         }
     }
 
     private void drawNavigationSignInPart(boolean signedIn) {
-        if(signedIn){
+        if (signedIn) {
             logInEmail.setText(user.name);
             logInEmail.setVisibility(View.VISIBLE);
             signInBtn.setVisibility(View.GONE);
@@ -154,9 +162,17 @@ public class MainActivity extends GoogleSignInActivity
                 (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GAManager.sendEvent(new MainClickSearchIconEvent());
+            }
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                GAManager.sendEvent(new MainSubmitSearchTextEvent(query));
+
                 searchView.onActionViewCollapsed();
                 searchView.setQuery("", false);
                 searchView.clearFocus();
@@ -175,7 +191,9 @@ public class MainActivity extends GoogleSignInActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.account){
+        if (id == R.id.account) {
+            GAManager.sendEvent(new MainClickAccountEvent(GALabel.MENU_ITEM));
+
             if (drawer.isDrawerOpen(Gravity.RIGHT)) {
                 drawer.closeDrawer(Gravity.RIGHT);
             } else {
@@ -192,20 +210,29 @@ public class MainActivity extends GoogleSignInActivity
         int id = item.getItemId();
 
         if (id == R.id.my_collections) {
+            GAManager.sendEvent(new MainClickAccountEvent(GALabel.MY_COLLECTION));
+
             Intent intent = new Intent(this, MyCollectionActivity.class);
             startActivity(intent);
         } else if (id == R.id.my_comments) {
+            GAManager.sendEvent(new MainClickAccountEvent(GALabel.MY_COMMENT));
+
             Intent intent = new Intent(this, MyCommentActivity.class);
-            if(user != null)
-                intent.putExtra("USER_EMAIL",user.email);
+            if (user != null)
+                intent.putExtra("USER_EMAIL", user.email);
             startActivity(intent);
         } else if (id == R.id.setting) {
+            GAManager.sendEvent(new MainClickAccountEvent(GALabel.SETTING));
+
             Intent intent = new Intent(this, SettingActivity.class);
             startActivity(intent);
         } else if (id == R.id.feedback) {
+            GAManager.sendEvent(new MainClickAccountEvent(GALabel.FEEDBACK));
+
             Intent intent = new Intent(this, FeedbackActivity.class);
             startActivity(intent);
         } else if (id == R.id.play_store) {
+            GAManager.sendEvent(new MainClickAccountEvent(GALabel.PLAY_STORE));
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

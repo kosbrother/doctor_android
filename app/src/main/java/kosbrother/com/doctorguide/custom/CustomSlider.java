@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.event.addcomment.AddCommentSlideEvent;
 
 /**
  * Created by steven on 2/2/16.
@@ -26,6 +28,7 @@ public class CustomSlider extends LinearLayout {
     private Context mContext;
     private boolean isScroed;
     private int score;
+    private String sliderLabel;
 
     public CustomSlider(Context context) {
         super(context);
@@ -66,6 +69,8 @@ public class CustomSlider extends LinearLayout {
         seekbar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
             @Override
             public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
+                GAManager.sendEvent(new AddCommentSlideEvent(sliderLabel, value));
+
                 isScroed = true;
                 score = value;
                 scoreText.setText(value + "");
@@ -94,5 +99,9 @@ public class CustomSlider extends LinearLayout {
 
     public int getScore(){
         return score;
+    }
+
+    public void setSliderLabel(String sliderLabel) {
+        this.sliderLabel = sliderLabel;
     }
 }

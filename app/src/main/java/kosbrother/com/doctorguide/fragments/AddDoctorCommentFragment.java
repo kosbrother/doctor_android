@@ -21,6 +21,9 @@ import java.util.List;
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.Util.PassParamsToActivity;
 import kosbrother.com.doctorguide.custom.CustomSlider;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.event.addcomment.AddCommentSubmitCommentEvent;
+import kosbrother.com.doctorguide.google_analytics.label.GALabel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,8 +31,8 @@ import kosbrother.com.doctorguide.custom.CustomSlider;
 public class AddDoctorCommentFragment extends Fragment {
 
 
-    private CustomSlider speSlide;
-    private CustomSlider friendSlide;
+    private CustomSlider doctorSpeSlide;
+    private CustomSlider doctorFriendSlide;
     private Button next;
     private PassParamsToActivity passMethod;
     private EditText drComment;
@@ -46,21 +49,27 @@ public class AddDoctorCommentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_doctor_comment, container, false);
-        speSlide = (CustomSlider)view.findViewById(R.id.spe_slide);
-        friendSlide = (CustomSlider)view.findViewById(R.id.friendly_slide);
-        drComment = (EditText)view.findViewById(R.id.dr_comment);
-        radioGroup = (RadioGroup)view.findViewById(R.id.rgroup);
-        radioRecommendYes = (RadioButton)view.findViewById(R.id.radio_recommend_yes);
-        radioRecommendNo = (RadioButton)view.findViewById(R.id.radio_recommend_no);
+        doctorFriendSlide = (CustomSlider) view.findViewById(R.id.doctor_friendly_slide);
+        doctorFriendSlide.setSliderLabel("doctorFriendSlide");
+        doctorSpeSlide = (CustomSlider) view.findViewById(R.id.doctor_spe_slide);
+        doctorSpeSlide.setSliderLabel("doctorSpeSlide");
+        drComment = (EditText) view.findViewById(R.id.dr_comment);
+        radioGroup = (RadioGroup) view.findViewById(R.id.rgroup);
+        radioRecommendYes = (RadioButton) view.findViewById(R.id.radio_recommend_yes);
+        radioRecommendNo = (RadioButton) view.findViewById(R.id.radio_recommend_no);
 
-        next = (Button)view.findViewById(R.id.next_step);
+        next = (Button) view.findViewById(R.id.next_step);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isFilled()) {
+                    GAManager.sendEvent(new AddCommentSubmitCommentEvent(GALabel.FINISH));
+
                     passMethod.passParams(getSubmitParams());
                     passMethod.submitPost();
-                }else{
+                } else {
+                    GAManager.sendEvent(new AddCommentSubmitCommentEvent(GALabel.DATA_NOT_FILLED));
+
                     Snackbar snackbar = Snackbar.make(next, getNoticeString(), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
@@ -71,27 +80,27 @@ public class AddDoctorCommentFragment extends Fragment {
     }
 
     private HashMap<String, String> getSubmitParams() {
-        HashMap<String, String> hashMap = new HashMap<String, String>();
-        hashMap.put("dr_speciality",speSlide.getScore()+"");
-        hashMap.put("dr_friendly",friendSlide.getScore()+"");
-        hashMap.put("dr_comment",drComment.getText().toString());
-        if(radioGroup.getCheckedRadioButtonId() == radioRecommendYes.getId())
-            hashMap.put("is_recommend","true");
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("dr_speciality", doctorSpeSlide.getScore() + "");
+        hashMap.put("dr_friendly", doctorFriendSlide.getScore() + "");
+        hashMap.put("dr_comment", drComment.getText().toString());
+        if (radioGroup.getCheckedRadioButtonId() == radioRecommendYes.getId())
+            hashMap.put("is_recommend", "true");
         else
-            hashMap.put("is_recommend","false");
+            hashMap.put("is_recommend", "false");
         return hashMap;
     }
 
     private String getNoticeString() {
         String noticeString = "";
-        List<String> list = new ArrayList<String>();
-        if(speSlide.isScroed() == false)
+        List<String> list = new ArrayList<>();
+        if (!doctorSpeSlide.isScroed())
             list.add("醫師專業");
-        if(friendSlide.isScroed() == false)
+        if (!doctorFriendSlide.isScroed())
             list.add("醫師態度");
-        if(list.size() > 0)
+        if (list.size() > 0)
             noticeString = TextUtils.join(", ", list) + " 尚未打分數！";
-        if(radioGroup.getCheckedRadioButtonId() == -1)
+        if (radioGroup.getCheckedRadioButtonId() == -1)
             noticeString = noticeString + "是否推薦醫師未選擇！";
         return noticeString;
     }
@@ -108,11 +117,11 @@ public class AddDoctorCommentFragment extends Fragment {
     }
 
     public boolean isFilled() {
-        if(speSlide.isScroed() == false)
+        if (!doctorSpeSlide.isScroed())
             return false;
-        if(friendSlide.isScroed() == false)
+        if (!doctorFriendSlide.isScroed())
             return false;
-        if(radioGroup.getCheckedRadioButtonId() == -1)
+        if (radioGroup.getCheckedRadioButtonId() == -1)
             return false;
         return true;
     }

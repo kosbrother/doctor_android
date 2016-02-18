@@ -17,6 +17,9 @@ import java.util.HashMap;
 
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.event.adddoctor.AddDoctorSubmitEvent;
+import kosbrother.com.doctorguide.google_analytics.label.GALabel;
 
 import static kosbrother.com.doctorguide.Util.Util.showSnackBar;
 
@@ -33,7 +36,7 @@ public class AddDoctorActivity extends AppCompatActivity {
     private String version;
     private int hospitalId;
     private int divisionId;
-    private HashMap<String,String> submitParams = new HashMap<String,String>();
+    private HashMap<String, String> submitParams = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,39 +67,45 @@ public class AddDoctorActivity extends AppCompatActivity {
     }
 
     private void findAndSetViews() {
-        doctorEdit = (EditText)findViewById(R.id.doctor_name);
-        hospitalEdit = (EditText)findViewById(R.id.hospial_name);
-        divisionEdit = (EditText)findViewById(R.id.division_name);
-        speEdit = (EditText)findViewById(R.id.doctor_spe);
-        expEdit = (EditText)findViewById(R.id.doctor_exp);
+        doctorEdit = (EditText) findViewById(R.id.doctor_name);
+        hospitalEdit = (EditText) findViewById(R.id.hospial_name);
+        divisionEdit = (EditText) findViewById(R.id.division_name);
+        speEdit = (EditText) findViewById(R.id.doctor_spe);
+        expEdit = (EditText) findViewById(R.id.doctor_exp);
 
-        if(divisionName != null)
+        if (divisionName != null)
             divisionEdit.setText(divisionName);
-        if(hospitalName != null)
+        if (hospitalName != null)
             hospitalEdit.setText(hospitalName);
     }
 
     public void onSubmit(View v) {
-        if(doctorEdit.getText().toString().equals("")){
-            showSnackBar(v,"請填寫醫師名");
-        }else if(hospitalEdit.getText().toString().equals("")){
-            showSnackBar(v,"請填寫醫院名");
-        }else{
+        if (doctorEdit.getText().toString().equals("")) {
+            GAManager.sendEvent(new AddDoctorSubmitEvent(GALabel.NO_DOCTOR_NAME));
+
+            showSnackBar(v, "請填寫醫師名");
+        } else if (hospitalEdit.getText().toString().equals("")) {
+            GAManager.sendEvent(new AddDoctorSubmitEvent(GALabel.NO_HOSPITAL_NAME));
+
+            showSnackBar(v, "請填寫醫院名");
+        } else {
+            GAManager.sendEvent(new AddDoctorSubmitEvent(GALabel.DATA_FILLED));
+
             setSubmitParams();
             new PostAddDoctorTask().execute();
         }
     }
 
     private void setSubmitParams() {
-        if(hospitalId != 0)
-            submitParams.put("hospital_id",hospitalId+"");
-        if(divisionId != 0)
-            submitParams.put("division_id",divisionId+"");
-        submitParams.put("name",doctorEdit.getText().toString());
-        submitParams.put("hospital_name",hospitalEdit.getText().toString());
-        submitParams.put("division_name",divisionEdit.getText().toString());
-        submitParams.put("spe",speEdit.getText().toString());
-        submitParams.put("exp",expEdit.getText().toString());
+        if (hospitalId != 0)
+            submitParams.put("hospital_id", hospitalId + "");
+        if (divisionId != 0)
+            submitParams.put("division_id", divisionId + "");
+        submitParams.put("name", doctorEdit.getText().toString());
+        submitParams.put("hospital_name", hospitalEdit.getText().toString());
+        submitParams.put("division_name", divisionEdit.getText().toString());
+        submitParams.put("spe", speEdit.getText().toString());
+        submitParams.put("exp", expEdit.getText().toString());
     }
 
     private class PostAddDoctorTask extends AsyncTask {
@@ -109,6 +118,7 @@ public class AddDoctorActivity extends AppCompatActivity {
             super.onPreExecute();
             mProgressDialog = Util.showProgressDialog(AddDoctorActivity.this);
         }
+
         @Override
         protected Object doInBackground(Object... params) {
             isSuccess = DoctorGuideApi.postAddDoctor(submitParams);
@@ -119,7 +129,7 @@ public class AddDoctorActivity extends AppCompatActivity {
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             mProgressDialog.dismiss();
-            if(isSuccess){
+            if (isSuccess) {
                 new AlertDialog.Builder(AddDoctorActivity.this)
                         .setTitle("成功提交")
                         .setMessage("我們審核醫師資料後，就會加入該醫師，謝謝！")

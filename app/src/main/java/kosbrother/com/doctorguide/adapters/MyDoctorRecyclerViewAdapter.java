@@ -1,13 +1,13 @@
 package kosbrother.com.doctorguide.adapters;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
@@ -16,6 +16,10 @@ import kosbrother.com.doctorguide.Util.BlankViewHolder;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.fragments.DoctorFragment;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickDoctorListEvent;
+import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickCollectEvent;
+import kosbrother.com.doctorguide.google_analytics.event.hospitaldoctor.HospitalDoctorClickDoctorListEvent;
 
 import static kosbrother.com.doctorguide.Util.SphericalUtil.computeDistanceBetween;
 
@@ -29,7 +33,7 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     public static final int HEARTTYPE = 1;
     private LatLng mLocation;
 
-    public static enum ITEM_TYPE {
+    public enum ITEM_TYPE {
         ITEM,
         ITEM_BLANK
     }
@@ -43,17 +47,17 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == ITEM_TYPE.ITEM.ordinal()) {
+        if (viewType == ITEM_TYPE.ITEM.ordinal()) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.fragment_doctor, parent, false);
-            if(mFragmentViewType == DISTANCETYPE) {
+            if (mFragmentViewType == DISTANCETYPE) {
                 view.findViewById(R.id.heart).setVisibility(View.GONE);
-            }else{
+            } else {
                 view.findViewById(R.id.hospial_name).setVisibility(View.GONE);
                 view.findViewById(R.id.distance).setVisibility(View.GONE);
             }
             return new ViewHolder(view);
-        }else{
+        } else {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_blank, parent, false);
             return new BlankViewHolder(view);
@@ -83,7 +87,14 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     if (null != mListener) {
-                        mListener.onListFragmentInteraction(v, mDoctors.get(position));
+                        Doctor doctor = mDoctors.get(position);
+
+                        if (mFragmentViewType == HEARTTYPE) {
+                            GAManager.sendEvent(new DivisionClickDoctorListEvent(doctor.name));
+                        } else {
+                            GAManager.sendEvent(new HospitalDoctorClickDoctorListEvent(doctor.name));
+                        }
+                        mListener.onListFragmentInteraction(v, doctor);
                     }
                 }
             });
@@ -92,7 +103,10 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     if (null != mListener) {
-                        mListener.onListFragmentInteraction(v, mDoctors.get(position));
+                        Doctor doctor = mDoctors.get(position);
+                        GAManager.sendEvent(new DoctorClickCollectEvent(doctor.name));
+
+                        mListener.onListFragmentInteraction(v, doctor);
                     }
                 }
             });
@@ -110,9 +124,9 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public  View mView;
-        public  TextView mName;
-        public  TextView mhospialName;
+        public View mView;
+        public TextView mName;
+        public TextView mhospialName;
         public Button heart;
         public TextView mDistance;
         public TextView mCommentNum;
@@ -124,11 +138,11 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             mView = view;
             mName = (TextView) view.findViewById(R.id.doctor_name);
             mhospialName = (TextView) view.findViewById(R.id.hospial_name);
-            heart = (Button)view.findViewById(R.id.heart);
-            mDistance = (TextView)view.findViewById(R.id.distance);
-            mCommentNum = (TextView)view.findViewById(R.id.comment_num);
-            mRecommendNum  = (TextView)view.findViewById(R.id.recommend_num);
-            mScore = (TextView)view.findViewById(R.id.score);
+            heart = (Button) view.findViewById(R.id.heart);
+            mDistance = (TextView) view.findViewById(R.id.distance);
+            mCommentNum = (TextView) view.findViewById(R.id.comment_num);
+            mRecommendNum = (TextView) view.findViewById(R.id.recommend_num);
+            mScore = (TextView) view.findViewById(R.id.score);
         }
 
     }
