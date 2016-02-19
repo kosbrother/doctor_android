@@ -18,10 +18,13 @@ import kosbrother.com.doctorguide.Util.BlankViewHolder;
 import kosbrother.com.doctorguide.entity.Category;
 import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.fragments.DivisionListFragment.OnListFragmentInteractionListener;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickDivisionListEvent;
+import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickDivisionInfoEvent;
 
 public class MyDivisionListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static enum ITEM_TYPE {
+    public enum ITEM_TYPE {
         ITEM,
         ITEM_BLANK
     }
@@ -36,13 +39,13 @@ public class MyDivisionListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == ITEM_TYPE.ITEM.ordinal()) {
+        if (viewType == ITEM_TYPE.ITEM.ordinal()) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.fragment_division_list_item, parent, false);
             RatingBar rating = (RatingBar) view.findViewById(R.id.score_rating_bar);
             DrawableCompat.setTint(rating.getProgressDrawable(), ContextCompat.getColor(parent.getContext(), R.color.rating_bar_color));
             return new ViewHolder(view);
-        }else{
+        } else {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_blank, parent, false);
             return new BlankViewHolder(view);
@@ -60,7 +63,10 @@ public class MyDivisionListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 @Override
                 public void onClick(View v) {
                     if (null != mListener) {
-                        mListener.onListFragmentInteraction(v, mValues.get(position));
+                        Division division = mValues.get(position);
+
+                        GAManager.sendEvent(new HospitalClickDivisionInfoEvent(division.name));
+                        mListener.onListFragmentInteraction(v, division);
                     }
                 }
             });
@@ -69,7 +75,10 @@ public class MyDivisionListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 @Override
                 public void onClick(View v) {
                     if (null != mListener) {
-                        mListener.onListFragmentInteraction(v, mValues.get(position));
+                        Division division = mValues.get(position);
+
+                        GAManager.sendEvent(new HospitalClickDivisionListEvent(division.name));
+                        mListener.onListFragmentInteraction(v, division);
                     }
                 }
             });
@@ -101,11 +110,11 @@ public class MyDivisionListRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mRatingBar = (RatingBar)view.findViewById(R.id.score_rating_bar);
-            mScore = (TextView)view.findViewById(R.id.score1);
-            mCategoryImage = (ImageView)view.findViewById(R.id.category_icon);
-            mDivision = (TextView)view.findViewById(R.id.division);
-            mButton = (Button)view.findViewById(R.id.detail_button);
+            mRatingBar = (RatingBar) view.findViewById(R.id.score_rating_bar);
+            mScore = (TextView) view.findViewById(R.id.score1);
+            mCategoryImage = (ImageView) view.findViewById(R.id.category_icon);
+            mDivision = (TextView) view.findViewById(R.id.division);
+            mButton = (Button) view.findViewById(R.id.detail_button);
         }
 
     }

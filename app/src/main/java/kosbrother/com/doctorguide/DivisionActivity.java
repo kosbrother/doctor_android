@@ -1,13 +1,5 @@
 package kosbrother.com.doctorguide;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.SignInButton;
-
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -34,6 +26,13 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +49,14 @@ import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
 import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DivisionScoreFragment;
 import kosbrother.com.doctorguide.fragments.DoctorFragment;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.category.GACategory;
+import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickDivisionSpinnerEvent;
+import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickFABEvent;
+import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickHospitalTextEvent;
+import kosbrother.com.doctorguide.google_analytics.label.GALabel;
 
-public class DivisionActivity extends GoogleSignInActivity implements DoctorFragment.OnListFragmentInteractionListener,DivisionScoreFragment.GetDivision,CreateUserTask.AfterCreateUser {
+public class DivisionActivity extends GoogleSignInActivity implements DoctorFragment.OnListFragmentInteractionListener, DivisionScoreFragment.GetDivision, CreateUserTask.AfterCreateUser {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -115,9 +120,10 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
             super.onPreExecute();
             mProgressDialog = Util.showProgressDialog(DivisionActivity.this);
         }
+
         @Override
         protected Object doInBackground(Object... params) {
-            division = DoctorGuideApi.getDivisionScore(divisionId,hospitalId);
+            division = DoctorGuideApi.getDivisionScore(divisionId, hospitalId);
             return null;
         }
 
@@ -144,13 +150,15 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
         fab.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
             public void onMenuToggle(boolean opened) {
+                GAManager.sendEvent(new DivisionClickFABEvent(GALabel.FAB_MENU));
+
                 int drawableId;
                 if (opened) {
                     drawableId = R.mipmap.ic_close;
                 } else {
                     drawableId = R.mipmap.ic_fab;
                 }
-                Drawable drawable = getResources().getDrawable(drawableId);
+                Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), drawableId);
                 fab.getMenuIconView().setImageDrawable(drawable);
             }
         });
@@ -168,9 +176,9 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
     }
 
     private void setViews() {
-        ImageView divImage = (ImageView)findViewById(R.id.div_image);
-        TextView hospital = (TextView)findViewById(R.id.hospial_name);
-        switch (hospitalGrade){
+        ImageView divImage = (ImageView) findViewById(R.id.div_image);
+        TextView hospital = (TextView) findViewById(R.id.hospial_name);
+        switch (hospitalGrade) {
             case "醫學中心":
                 divImage.setImageResource(R.mipmap.ic_hospital_biggest);
                 break;
@@ -184,22 +192,22 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
                 divImage.setImageResource(R.mipmap.ic_hospital_smallest);
                 break;
         }
-        String htmlString="<u>" + hospitalName + "</u>";
+        String htmlString = "<u>" + hospitalName + "</u>";
         hospital.setText(Html.fromHtml(htmlString));
     }
 
     private void setupViewPager(ViewPager viewPager) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.HEARTTYPE,hospitalId,divisionId), "科內醫生");
+        adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.HEARTTYPE, hospitalId, divisionId), "科內醫生");
         adapter.addFragment(DivisionScoreFragment.newInstance(), "本科評分");
-        adapter.addFragment(CommentFragment.newInstance(hospitalId,divisionId,null), "本科評論");
+        adapter.addFragment(CommentFragment.newInstance(hospitalId, divisionId, null, GACategory.DIVISION), "本科評論");
         viewPager.setAdapter(adapter);
     }
 
     @Override
     public void onListFragmentInteraction(View view, final Doctor item) {
-        if(view.getId() == R.id.heart){
-            if(item.isCollected) {
+        if (view.getId() == R.id.heart) {
+            if (item.isCollected) {
                 String message = "確定要取消收藏「" + item.name + " 醫師" + "」嗎？";
                 new AlertDialog.Builder(DivisionActivity.this, R.style.AppCompatAlertDialogStyle)
                         .setTitle("取消收藏")
@@ -222,7 +230,7 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
                             public void onClick(DialogInterface dialog, int which) {
                             }
                         }).show();
-            }else{
+            } else {
                 Realm realm = Realm.getInstance(getBaseContext());
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
@@ -243,12 +251,12 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
                 snackbar.show();
             }
             adapter.notifyDataSetChanged();
-        }else{
+        } else {
             Intent intent = new Intent(this, DoctorActivity.class);
-            intent.putExtra("HOSPITAL_ID",hospitalId);
-            intent.putExtra("DOCTOR_ID",item.id);
-            intent.putExtra("DOCTOR_NAME",item.name);
-            intent.putExtra("HOSPITAL_NAME",hospitalName);
+            intent.putExtra("HOSPITAL_ID", hospitalId);
+            intent.putExtra("DOCTOR_ID", item.id);
+            intent.putExtra("DOCTOR_NAME", item.name);
+            intent.putExtra("HOSPITAL_NAME", hospitalName);
             startActivity(intent);
         }
     }
@@ -280,8 +288,9 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+
         @Override
-        public int getItemPosition(Object object){
+        public int getItemPosition(Object object) {
             return POSITION_NONE;
         }
     }
@@ -299,6 +308,7 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
             super.onPreExecute();
             mProgressDialog = Util.showProgressDialog(DivisionActivity.this);
         }
+
         @Override
         protected Object doInBackground(Object... params) {
             hospitalDivisions = DoctorGuideApi.getDivisionByHospital(hospitalId);
@@ -310,12 +320,12 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
             super.onPostExecute(result);
             mProgressDialog.dismiss();
 
-            Spinner spinner = (Spinner)findViewById(R.id.division_spinner);
-            List<String> strings = new ArrayList<String>();
+            Spinner spinner = (Spinner) findViewById(R.id.division_spinner);
+            List<String> strings = new ArrayList<>();
             for (Division div : hospitalDivisions)
-                strings.add(div.name );
+                strings.add(div.name);
 
-            ArrayAdapter<String> areaAdapter = new ArrayAdapter<String>(DivisionActivity.this,
+            ArrayAdapter<String> areaAdapter = new ArrayAdapter<>(DivisionActivity.this,
                     R.layout.spinner_item, strings.toArray(new String[strings.size()]));
             areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(areaAdapter);
@@ -324,13 +334,15 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
             spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (startInteract == true) {
+                    GAManager.sendEvent(new DivisionClickDivisionSpinnerEvent(hospitalDivisions.get(position).name));
+
+                    if (startInteract) {
                         Intent intent = new Intent(DivisionActivity.this, DivisionActivity.class);
-                        intent.putExtra("DIVISION_ID",hospitalDivisions.get(position).id);
-                        intent.putExtra("DIVISION_NAME",hospitalDivisions.get(position).name);
-                        intent.putExtra("HOSPITAL_ID",hospitalId);
-                        intent.putExtra("HOSPITAL_GRADE",hospitalGrade);
-                        intent.putExtra("HOSPITAL_NAME",hospitalName);
+                        intent.putExtra("DIVISION_ID", hospitalDivisions.get(position).id);
+                        intent.putExtra("DIVISION_NAME", hospitalDivisions.get(position).name);
+                        intent.putExtra("HOSPITAL_ID", hospitalId);
+                        intent.putExtra("HOSPITAL_GRADE", hospitalGrade);
+                        intent.putExtra("HOSPITAL_NAME", hospitalName);
                         startActivity(intent);
                         finish();
                     } else
@@ -346,10 +358,12 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
     }
 
     public void onHospitalClick(View v) {
+        GAManager.sendEvent(new DivisionClickHospitalTextEvent(hospitalName));
+
         Intent intent = new Intent(this, HospitalActivity.class);
-        intent.putExtra("HOSPITAL_ID",hospitalId);
-        intent.putExtra("HOSPITAL_GRADE",hospitalGrade);
-        intent.putExtra("HOSPITAL_NAME",hospitalName);
+        intent.putExtra("HOSPITAL_ID", hospitalId);
+        intent.putExtra("HOSPITAL_GRADE", hospitalGrade);
+        intent.putExtra("HOSPITAL_NAME", hospitalName);
         startActivity(intent);
     }
 
@@ -371,15 +385,19 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
             Intent intent;
             switch (v.getId()) {
                 case R.id.fab_problem_report:
+                    GAManager.sendEvent(new DivisionClickFABEvent(GALabel.PROBLEM_REPORT));
+
                     intent = new Intent(DivisionActivity.this, ProblemReportActivity.class);
-                    intent.putExtra("REPORT_TYPE",getString(R.string.division_page));
-                    intent.putExtra("HOSPITAL_NAME",hospitalName);
-                    intent.putExtra("DIVISION_NAME",divisionName);
-                    intent.putExtra("DIVISION_ID",divisionId);
-                    intent.putExtra("HOSPITAL_ID",hospitalId);
+                    intent.putExtra("REPORT_TYPE", getString(R.string.division_page));
+                    intent.putExtra("HOSPITAL_NAME", hospitalName);
+                    intent.putExtra("DIVISION_NAME", divisionName);
+                    intent.putExtra("DIVISION_ID", divisionId);
+                    intent.putExtra("HOSPITAL_ID", hospitalId);
                     startActivity(intent);
                     break;
                 case R.id.fab_share:
+                    GAManager.sendEvent(new DivisionClickFABEvent(GALabel.SHARE));
+
                     Intent sendIntent = new Intent();
                     sendIntent.setAction(Intent.ACTION_SEND);
                     sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
@@ -387,9 +405,11 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
                     startActivity(sendIntent);
                     break;
                 case R.id.fab_comment:
-                    if(isSignIn){
+                    GAManager.sendEvent(new DivisionClickFABEvent(GALabel.COMMENT));
+
+                    if (isSignIn) {
                         startCommentActivity();
-                    }else {
+                    } else {
                         final Dialog dialog = new Dialog(DivisionActivity.this);
                         dialog.setContentView(R.layout.dialog_login);
 
@@ -406,11 +426,13 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
                     }
                     break;
                 case R.id.fab_add_doctor:
+                    GAManager.sendEvent(new DivisionClickFABEvent(GALabel.ADD_DOCTOR));
+
                     intent = new Intent(DivisionActivity.this, AddDoctorActivity.class);
-                    intent.putExtra("HOSPITAL_NAME",hospitalName);
-                    intent.putExtra("DIVISION_NAME",divisionName);
-                    intent.putExtra("HOSPITAL_ID",hospitalId);
-                    intent.putExtra("DIVISION_ID",divisionId);
+                    intent.putExtra("HOSPITAL_NAME", hospitalName);
+                    intent.putExtra("DIVISION_NAME", divisionName);
+                    intent.putExtra("HOSPITAL_ID", hospitalId);
+                    intent.putExtra("DIVISION_ID", divisionId);
                     startActivity(intent);
                     break;
             }
@@ -435,9 +457,9 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
             User user = new User();
             user.email = acct.getEmail();
             user.name = acct.getDisplayName();
-            if(acct.getPhotoUrl() != null)
+            if (acct.getPhotoUrl() != null)
                 user.pic_url = acct.getPhotoUrl().toString();
-            new CreateUserTask(this,user).execute();
+            new CreateUserTask(this, user).execute();
         }
     }
 
@@ -448,10 +470,10 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
 
     private void startCommentActivity() {
         Intent intent = new Intent(DivisionActivity.this, AddCommentActivity.class);
-        intent.putExtra("HOSPITAL_ID",hospitalId);
-        intent.putExtra("DIVISION_ID",divisionId);
-        intent.putExtra("HOSPITAL_NAME",hospitalName);
-        intent.putExtra("USER",email);
+        intent.putExtra("HOSPITAL_ID", hospitalId);
+        intent.putExtra("DIVISION_ID", divisionId);
+        intent.putExtra("HOSPITAL_NAME", hospitalName);
+        intent.putExtra("USER", email);
         startActivity(intent);
     }
 

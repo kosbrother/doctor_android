@@ -22,22 +22,26 @@ import java.util.List;
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.Util.PassParamsToActivity;
 import kosbrother.com.doctorguide.custom.CustomSlider;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.event.addcomment.AddCommentSubmitCommentEvent;
+import kosbrother.com.doctorguide.google_analytics.label.GALabel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class AddDivisionCommentFragment extends Fragment {
 
-
     private EnablePagerSlide mListener;
     private Boolean directSubmit;
     private Button next;
-    private CustomSlider envSlide;
-    private CustomSlider equSlide;
-    private CustomSlider speSlide;
-    private CustomSlider friendSlide;
+    private CustomSlider divisionEnvSlide;
+    private CustomSlider divisionEquSlide;
+    private CustomSlider divisionSpeSlide;
+    private CustomSlider divisionFriendSlide;
     private PassParamsToActivity passMethod;
     private EditText divComment;
+
+    FragmentReceiver receiver = new FragmentReceiver();
 
     public AddDivisionCommentFragment() {
         // Required empty public constructor
@@ -46,31 +50,42 @@ public class AddDivisionCommentFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter("fragmentupdater"));
+        getActivity().registerReceiver(receiver, new IntentFilter("fragmentupdater"));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_division_comment, container, false);
-        envSlide = (CustomSlider)view.findViewById(R.id.env_slide);
-        equSlide = (CustomSlider)view.findViewById(R.id.equipment_slide);
-        speSlide = (CustomSlider)view.findViewById(R.id.spe_slide);
-        friendSlide = (CustomSlider)view.findViewById(R.id.friendly_slide);
-        divComment = (EditText)view.findViewById(R.id.div_comment);
+        divisionEnvSlide = (CustomSlider) view.findViewById(R.id.division_env_slide);
+        divisionEnvSlide.setSliderLabel("divisionEnvSlide");
+        divisionEquSlide = (CustomSlider) view.findViewById(R.id.division_equipment_slide);
+        divisionEquSlide.setSliderLabel("divisionEquSlide");
+        divisionSpeSlide = (CustomSlider) view.findViewById(R.id.division_spe_slide);
+        divisionSpeSlide.setSliderLabel("divisionSpeSlide");
+        divisionFriendSlide = (CustomSlider) view.findViewById(R.id.division_friendly_slide);
+        divisionFriendSlide.setSliderLabel("divisionFriendSlide");
+        divComment = (EditText) view.findViewById(R.id.div_comment);
 
 
-        next = (Button)view.findViewById(R.id.next_step);
+        next = (Button) view.findViewById(R.id.next_step);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (isFilled() && directSubmit) {
+                    GAManager.sendEvent(new AddCommentSubmitCommentEvent(GALabel.FINISH));
+
                     passMethod.passParams(getSubmitParams());
                     passMethod.submitPost();
                 } else if (isFilled()) {
+                    GAManager.sendEvent(new AddCommentSubmitCommentEvent(GALabel.NEXT_STEP));
+
                     passMethod.passParams(getSubmitParams());
                     mListener.enablePagerSlide();
                 } else {
+                    GAManager.sendEvent(new AddCommentSubmitCommentEvent(GALabel.DATA_NOT_FILLED));
+
                     Snackbar snackbar = Snackbar.make(next, getNoticeString(), Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
@@ -81,37 +96,37 @@ public class AddDivisionCommentFragment extends Fragment {
     }
 
     private HashMap<String, String> getSubmitParams() {
-        HashMap<String, String> hashMap = new HashMap<String, String>();
-        hashMap.put("div_equipment",equSlide.getScore()+"");
-        hashMap.put("div_environment",envSlide.getScore()+"");
-        hashMap.put("div_speciality",speSlide.getScore()+"");
-        hashMap.put("div_friendly",friendSlide.getScore()+"");
-        hashMap.put("div_comment",divComment.getText().toString());
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("div_equipment", divisionEquSlide.getScore() + "");
+        hashMap.put("div_environment", divisionEnvSlide.getScore() + "");
+        hashMap.put("div_speciality", divisionSpeSlide.getScore() + "");
+        hashMap.put("div_friendly", divisionFriendSlide.getScore() + "");
+        hashMap.put("div_comment", divComment.getText().toString());
         return hashMap;
     }
 
     private String getNoticeString() {
-        List<String> list = new ArrayList<String>();
-        if(envSlide.isScroed() == false)
+        List<String> list = new ArrayList<>();
+        if (!divisionEnvSlide.isScroed())
             list.add("環境衛生");
-        if(equSlide.isScroed() == false)
+        if (!divisionEquSlide.isScroed())
             list.add("醫療設備");
-        if(speSlide.isScroed() == false)
+        if (!divisionSpeSlide.isScroed())
             list.add("醫護專業");
-        if(friendSlide.isScroed() == false)
+        if (!divisionFriendSlide.isScroed())
             list.add("服務態度");
         String joined = TextUtils.join(", ", list);
         return joined + " 尚未打分數！";
     }
 
     private boolean isFilled() {
-        if(envSlide.isScroed() == false)
+        if (!divisionEnvSlide.isScroed())
             return false;
-        if(equSlide.isScroed() == false)
+        if (!divisionEquSlide.isScroed())
             return false;
-        if(speSlide.isScroed() == false)
+        if (!divisionSpeSlide.isScroed())
             return false;
-        if(friendSlide.isScroed() == false)
+        if (!divisionFriendSlide.isScroed())
             return false;
 
         return true;
@@ -135,6 +150,12 @@ public class AddDivisionCommentFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        getActivity().unregisterReceiver(receiver);
+        super.onDestroy();
+    }
+
     public interface EnablePagerSlide {
         void enablePagerSlide();
     }
@@ -145,7 +166,7 @@ public class AddDivisionCommentFragment extends Fragment {
             Bundle extras = intent.getExtras();
             if (extras != null) {
                 directSubmit = extras.getBoolean("directSubmit");
-                if(directSubmit)
+                if (directSubmit)
                     next.setText("完成");
                 else
                     next.setText("下一步");

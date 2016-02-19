@@ -18,19 +18,27 @@ import java.util.ArrayList;
 import kosbrother.com.doctorguide.CommentDetailActivity;
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.entity.Comment;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.category.GACategory;
+import kosbrother.com.doctorguide.google_analytics.event.mycomment.MyCommentClickCommentListEvent;
+import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickCommentListEvent;
+import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickCommentListEvent;
+import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickCommentListEvent;
 
 /**
  * Created by steven on 12/26/15.
  */
-public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder>{
+public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
 
 
     private final ArrayList<Comment> mComments;
     private final Context mContext;
+    private final String mGACategory;
 
-    public CommentAdapter(ArrayList<Comment> comments,Context context) {
+    public CommentAdapter(ArrayList<Comment> comments, Context context, String gACategory) {
         mComments = comments;
         mContext = context;
+        mGACategory = gACategory;
     }
 
     @Override
@@ -46,17 +54,32 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                switch (mGACategory) {
+                    case GACategory.DOCTOR:
+                        GAManager.sendEvent(new DoctorClickCommentListEvent(comment));
+                        break;
+                    case GACategory.DIVISION:
+                        GAManager.sendEvent(new DivisionClickCommentListEvent(comment));
+                        break;
+                    case GACategory.HOSPITAL:
+                        GAManager.sendEvent(new HospitalClickCommentListEvent(comment));
+                        break;
+                    case GACategory.MY_COMMENT:
+                        GAManager.sendEvent(new MyCommentClickCommentListEvent(comment));
+                        break;
+                }
+
                 Intent intent = new Intent(mContext, CommentDetailActivity.class);
-                intent.putExtra("COMMENT_ID",comment.id);
+                intent.putExtra("COMMENT_ID", comment.id);
                 mContext.startActivity(intent);
             }
         });
         holder.mDivisionName.setText(comment.division_name);
         holder.mhospialName.setText(comment.hospital_name);
         holder.mDoctor.setText(comment.doctor_name);
-        if(comment.is_recommend){
+        if (comment.is_recommend) {
             holder.mRecommend.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             holder.mRecommend.setVisibility(View.INVISIBLE);
         }
         float divScore = (comment.div_environment + comment.div_equipment + comment.div_friendly + comment.div_speciality) / 4.0f;
@@ -70,12 +93,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         DrawableCompat.setTint(holder.mDrRaitng.getProgressDrawable(), ContextCompat.getColor(mContext, R.color.rating_bar_color));
 
         holder.mCommentTime.setText(new SimpleDateFormat("yyyy/MM/dd").format(comment.updated_at));
-        if(comment.div_comment == null || comment.div_comment.equals(""))
+        if (comment.div_comment == null || comment.div_comment.equals(""))
             holder.mDivComment.setText("暫無評論");
         else
             holder.mDivComment.setText(comment.div_comment);
 
-        if(comment.dr_comment == null || comment.dr_comment.equals(""))
+        if (comment.dr_comment == null || comment.dr_comment.equals(""))
             holder.mDrComment.setText("暫無評論");
         else
             holder.mDrComment.setText(comment.dr_comment);
@@ -104,17 +127,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         CommentViewHolder(View view) {
             super(view);
             mView = view;
-            mhospialName = (TextView)view.findViewById(R.id.mHostital);
-            mDivisionName = (TextView)view.findViewById(R.id.division);
-            mDoctor = (TextView)view.findViewById(R.id.doctor);
-            mRecommend = (ImageView)view.findViewById(R.id.awrad);
-            mDivScore = (TextView)view.findViewById(R.id.div_score);
-            mDivRaitng = (RatingBar)view.findViewById(R.id.div_score_rating);
-            mDrScore = (TextView)view.findViewById(R.id.dr_score);
-            mDrRaitng = (RatingBar)view.findViewById(R.id.dr_score_rating);
-            mCommentTime = (TextView)view.findViewById(R.id.comment_time);
-            mDivComment = (TextView)view.findViewById(R.id.div_comment);
-            mDrComment = (TextView)view.findViewById(R.id.dr_comment);
+            mhospialName = (TextView) view.findViewById(R.id.mHostital);
+            mDivisionName = (TextView) view.findViewById(R.id.division);
+            mDoctor = (TextView) view.findViewById(R.id.doctor);
+            mRecommend = (ImageView) view.findViewById(R.id.awrad);
+            mDivScore = (TextView) view.findViewById(R.id.div_score);
+            mDivRaitng = (RatingBar) view.findViewById(R.id.div_score_rating);
+            mDrScore = (TextView) view.findViewById(R.id.dr_score);
+            mDrRaitng = (RatingBar) view.findViewById(R.id.dr_score_rating);
+            mCommentTime = (TextView) view.findViewById(R.id.comment_time);
+            mDivComment = (TextView) view.findViewById(R.id.div_comment);
+            mDrComment = (TextView) view.findViewById(R.id.dr_comment);
         }
     }
 }

@@ -23,6 +23,9 @@ import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.entity.Doctor;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickDivisionTextEvent;
+import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickHospitalTextEvent;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,8 +70,8 @@ public class DoctorDetailFragment extends Fragment {
     }
 
     private void setViews(View view) {
-        exp = (TextView)view.findViewById(R.id.exp);
-        spe = (TextView)view.findViewById(R.id.spe);
+        exp = (TextView) view.findViewById(R.id.exp);
+        spe = (TextView) view.findViewById(R.id.spe);
         hospitalsLayout = (LinearLayout) view.findViewById(R.id.hospitals);
         new SetDoctorTask().execute();
     }
@@ -82,6 +85,7 @@ public class DoctorDetailFragment extends Fragment {
             super.onPreExecute();
             mProgressDialog = Util.showProgressDialog(getContext());
         }
+
         @Override
         protected Object doInBackground(Object... params) {
             doctor = DoctorGuideApi.getDoctorInfo(mDoctorId);
@@ -91,17 +95,17 @@ public class DoctorDetailFragment extends Fragment {
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
-            ArrayList<Integer> hospitalIds = new ArrayList<Integer>();
+            ArrayList<Integer> hospitalIds = new ArrayList<>();
 
             mProgressDialog.dismiss();
             exp.setText(doctor.exp);
             spe.setText(doctor.spe);
-            for(final Division div: doctor.divisions){
+            for (final Division div : doctor.divisions) {
                 LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 lparams.setMargins(0, 0, 0, 4);
 
-                if(!hospitalIds.contains(div.hospital_id)) {
+                if (!hospitalIds.contains(div.hospital_id)) {
                     hospitalIds.add(div.hospital_id);
                     TextView tv = new TextView(getContext());
                     tv.setTextSize(20);
@@ -113,6 +117,8 @@ public class DoctorDetailFragment extends Fragment {
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            GAManager.sendEvent(new DoctorClickHospitalTextEvent(div.hospital_name));
+
                             Intent intent = new Intent(getContext(), HospitalActivity.class);
                             intent.putExtra("HOSPITAL_ID", div.hospital_id);
                             intent.putExtra("HOSPITAL_GRADE", div.hospital_grade);
@@ -123,22 +129,24 @@ public class DoctorDetailFragment extends Fragment {
                     hospitalsLayout.addView(tv);
                 }
 
-                TextView tv2=new TextView(getContext());
+                TextView tv2 = new TextView(getContext());
                 tv2.setTextSize(20);
                 tv2.setTextColor(ContextCompat.getColor(getContext(), R.color.orange_text_link));
                 tv2.setClickable(true);
                 tv2.setLayoutParams(lparams);
-                String htmlString2="<u>" + div.name + "</u>";
+                String htmlString2 = "<u>" + div.name + "</u>";
                 tv2.setText(Html.fromHtml(htmlString2));
                 tv2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        GAManager.sendEvent(new DoctorClickDivisionTextEvent(div.name));
+
                         Intent intent = new Intent(getContext(), DivisionActivity.class);
-                        intent.putExtra("DIVISION_ID",div.id);
-                        intent.putExtra("DIVISION_NAME",div.name);
-                        intent.putExtra("HOSPITAL_ID",div.hospital_id);
-                        intent.putExtra("HOSPITAL_GRADE",div.hospital_grade);
-                        intent.putExtra("HOSPITAL_NAME",div.hospital_name);
+                        intent.putExtra("DIVISION_ID", div.id);
+                        intent.putExtra("DIVISION_NAME", div.name);
+                        intent.putExtra("HOSPITAL_ID", div.hospital_id);
+                        intent.putExtra("HOSPITAL_GRADE", div.hospital_grade);
+                        intent.putExtra("HOSPITAL_NAME", div.hospital_name);
                         startActivity(intent);
                     }
                 });

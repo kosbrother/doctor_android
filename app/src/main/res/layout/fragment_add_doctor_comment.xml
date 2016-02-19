@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="kosbrother.com.doctorguide.fragments.AddDivisionCommentFragment">
 
     <Button
@@ -54,7 +53,7 @@
                 android:textSize="@dimen/doctor_fragment_title_size"
                 android:layout_centerVertical="true"/>
             <kosbrother.com.doctorguide.custom.CustomSlider
-                android:id="@+id/friendly_slide"
+                android:id="@+id/doctor_friendly_slide"
                 android:layout_toRightOf="@+id/text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -75,7 +74,7 @@
                 android:textSize="@dimen/doctor_fragment_title_size"
                 android:layout_centerVertical="true"/>
             <kosbrother.com.doctorguide.custom.CustomSlider
-                android:id="@+id/spe_slide"
+                android:id="@+id/doctor_spe_slide"
                 android:layout_toRightOf="@+id/text2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -142,7 +141,7 @@
                 android:hint="請輸入您寶貴的意見"/>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="50dp"></View>
+                android:layout_height="50dp"/>
         </LinearLayout>
 
     </LinearLayout>

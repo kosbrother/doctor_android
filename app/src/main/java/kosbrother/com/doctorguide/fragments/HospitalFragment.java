@@ -1,7 +1,5 @@
 package kosbrother.com.doctorguide.fragments;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -16,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 import kosbrother.com.doctorguide.R;
@@ -26,8 +26,11 @@ import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.custom.LoadMoreRecyclerView;
 import kosbrother.com.doctorguide.entity.Area;
 import kosbrother.com.doctorguide.entity.Hospital;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.event.hospitaldoctor.HospitalDoctorClickAreaSpinnerEvent;
+import kosbrother.com.doctorguide.google_analytics.event.hospitaldoctor.HospitalDoctorClickSortSpinnerEvent;
 
-public class HospitalFragment extends Fragment implements Spinner.OnItemSelectedListener{
+public class HospitalFragment extends Fragment implements Spinner.OnItemSelectedListener {
 
     private static final String ARG_CATEGORY_ID = "CATEGORY_ID";
     private static LatLng location;
@@ -75,7 +78,7 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
         recyclerView.setOnLoadMoreListener(new LoadMoreRecyclerView.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                if(!isLoadCompleted){
+                if (!isLoadCompleted) {
                     loadmoreLayout.setVisibility(View.VISIBLE);
                     new GetHospitalsTask().execute();
                 }
@@ -88,7 +91,6 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
     }
 
     private void setSortSpinner(View view) {
-
         Spinner sort = (Spinner) view.findViewById(R.id.sort);
         ArrayAdapter<CharSequence> sort_adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.sort_options, R.layout.spinner_area_item);
@@ -100,7 +102,7 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
 
     private void setAreaSpinner(View view) {
         Spinner spinner = (Spinner) view.findViewById(R.id.area);
-        ArrayAdapter<String> areaAdapter = new ArrayAdapter<String>(getContext(),
+        ArrayAdapter<String> areaAdapter = new ArrayAdapter<>(getContext(),
                 R.layout.spinner_area_item, Area.getAreaStrings().toArray(new String[Area.getAreas().size()]));
         areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(areaAdapter);
@@ -119,7 +121,7 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
-        if(context instanceof GetLocation){
+        if (context instanceof GetLocation) {
             location = ((GetLocation) context).getLocation();
         }
     }
@@ -133,20 +135,26 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
     int areaId = 0;
     String sortSrting;
     int checktime = 0;
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner spinner = (Spinner) parent;
-        if(spinner.getId() == R.id.area){
+        if (spinner.getId() == R.id.area) {
             areaId = Area.getAreas().get(position).id;
-        }else if(spinner.getId() == R.id.sort){
-            sortSrting = (String)parent.getItemAtPosition(position);
+
+            GAManager.sendEvent(new HospitalDoctorClickAreaSpinnerEvent(Area.getAreaStrings().get(position)));
+        } else if (spinner.getId() == R.id.sort) {
+            sortSrting = (String) parent.getItemAtPosition(position);
             orderString = values[position];
+
+            GAManager.sendEvent(new HospitalDoctorClickSortSpinnerEvent(sortSrting));
         }
 
-        if(areaId != 0 && sortSrting!=null)
+        if (areaId != 0 && sortSrting != null)
             checktime += 1;
-        if(checktime >= 1) {
-            page = 1;isLoadCompleted = false;
+        if (checktime >= 1) {
+            page = 1;
+            isLoadCompleted = false;
             new GetHospitalsTask().execute();
         }
     }
@@ -159,35 +167,36 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if(page == 1)
+            if (page == 1)
                 mProgressDialog = Util.showProgressDialog(getContext());
         }
+
         @Override
         protected Object doInBackground(Object... params) {
-            getHospitals = DoctorGuideApi.getHospitalsByAreaAndCategory(areaId, mCategoryId, page,location.latitude,location.longitude,orderString);
+            getHospitals = DoctorGuideApi.getHospitalsByAreaAndCategory(areaId, mCategoryId, page, location.latitude, location.longitude, orderString);
             return null;
         }
 
         @Override
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
-            if(page==1)
+            if (page == 1)
                 mProgressDialog.dismiss();
             loadmoreLayout.setVisibility(View.GONE);
             recyclerView.setLoaded();
 
-            if(page == 1) {
+            if (page == 1) {
                 page += 1;
                 hospitals = getHospitals;
-                hospitalAdapter = new MyHospitalRecyclerViewAdapter(hospitals, mListener,location);
+                hospitalAdapter = new MyHospitalRecyclerViewAdapter(hospitals, mListener, location);
                 recyclerView.setAdapter(hospitalAdapter);
                 hospitalAdapter.notifyDataSetChanged();
-            }else{
-                if(getHospitals.size() > 0) {
+            } else {
+                if (getHospitals.size() > 0) {
                     page += 1;
                     hospitals.addAll(getHospitals);
                     hospitalAdapter.notifyDataSetChanged();
-                }else{
+                } else {
                     isLoadCompleted = true;
                 }
             }

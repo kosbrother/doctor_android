@@ -1,13 +1,5 @@
 package kosbrother.com.doctorguide;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.SignInButton;
-
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
-
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -28,6 +20,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +41,13 @@ import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
 import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DoctorDetailFragment;
 import kosbrother.com.doctorguide.fragments.DoctorScoreFragment;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.category.GACategory;
+import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickCollectEvent;
+import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickFABEvent;
+import kosbrother.com.doctorguide.google_analytics.label.GALabel;
 
-public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreFragment.GetDoctor,CreateUserTask.AfterCreateUser {
+public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreFragment.GetDoctor, CreateUserTask.AfterCreateUser {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -98,6 +102,7 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
             super.onPreExecute();
             mProgressDialog = Util.showProgressDialog(DoctorActivity.this);
         }
+
         @Override
         protected Object doInBackground(Object... params) {
             doctor = DoctorGuideApi.getDoctorScore(doctorId);
@@ -111,7 +116,7 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
             TextView mCommentNum = (TextView) findViewById(R.id.comment_num);
             TextView mRecommendNum = (TextView) findViewById(R.id.recommend_num);
             TextView mScore = (TextView) findViewById(R.id.score);
-            TextView dName = (TextView)findViewById(R.id.doctor_name);
+            TextView dName = (TextView) findViewById(R.id.doctor_name);
 
             mCommentNum.setText(doctor.comment_num + "");
             mRecommendNum.setText(doctor.recommend_num + "");
@@ -129,13 +134,15 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
         fab.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
             public void onMenuToggle(boolean opened) {
+                GAManager.sendEvent(new DoctorClickFABEvent(GALabel.FAB_MENU));
+
                 int drawableId;
                 if (opened) {
                     drawableId = R.mipmap.ic_close;
                 } else {
                     drawableId = R.mipmap.ic_fab;
                 }
-                Drawable drawable = getResources().getDrawable(drawableId);
+                Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), drawableId);
                 fab.getMenuIconView().setImageDrawable(drawable);
             }
         });
@@ -157,15 +164,19 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
             Intent intent;
             switch (v.getId()) {
                 case R.id.fab_problem_report:
+                    GAManager.sendEvent(new DoctorClickFABEvent(GALabel.PROBLEM_REPORT));
+
                     intent = new Intent(DoctorActivity.this, ProblemReportActivity.class);
-                    intent.putExtra("REPORT_TYPE",getString(R.string.doctor_page));
-                    intent.putExtra("HOSPITAL_NAME",hospitalName);
-                    intent.putExtra("DOCTOR_NAME",doctorName);
-                    intent.putExtra("DOCTOR_ID",doctorId);
-                    intent.putExtra("HOSPITAL_ID",hospitalId);
+                    intent.putExtra("REPORT_TYPE", getString(R.string.doctor_page));
+                    intent.putExtra("HOSPITAL_NAME", hospitalName);
+                    intent.putExtra("DOCTOR_NAME", doctorName);
+                    intent.putExtra("DOCTOR_ID", doctorId);
+                    intent.putExtra("HOSPITAL_ID", hospitalId);
                     startActivity(intent);
                     break;
                 case R.id.fab_share:
+                    GAManager.sendEvent(new DoctorClickFABEvent(GALabel.SHARE));
+
                     Intent sendIntent = new Intent();
                     sendIntent.setAction(Intent.ACTION_SEND);
                     sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
@@ -173,9 +184,11 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
                     startActivity(sendIntent);
                     break;
                 case R.id.fab_comment:
-                    if(isSignIn){
+                    GAManager.sendEvent(new DoctorClickFABEvent(GALabel.COMMENT));
+
+                    if (isSignIn) {
                         startCommentActivity();
-                    }else {
+                    } else {
                         final Dialog dialog = new Dialog(DoctorActivity.this);
                         dialog.setContentView(R.layout.dialog_login);
 
@@ -213,9 +226,9 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
             User user = new User();
             user.email = acct.getEmail();
             user.name = acct.getDisplayName();
-            if(acct.getPhotoUrl() != null)
+            if (acct.getPhotoUrl() != null)
                 user.pic_url = acct.getPhotoUrl().toString();
-            new CreateUserTask(this,user).execute();
+            new CreateUserTask(this, user).execute();
         }
     }
 
@@ -226,21 +239,21 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
 
     private void startCommentActivity() {
         Intent intent = new Intent(DoctorActivity.this, AddCommentActivity.class);
-        intent.putExtra("DOCTOR_ID",doctorId);
-        intent.putExtra("HOSPITAL_NAME",hospitalName);
-        intent.putExtra("HOSPITAL_ID",hospitalId);
-        intent.putExtra("USER",email);
+        intent.putExtra("DOCTOR_ID", doctorId);
+        intent.putExtra("HOSPITAL_NAME", hospitalName);
+        intent.putExtra("HOSPITAL_ID", hospitalId);
+        intent.putExtra("USER", email);
         startActivity(intent);
     }
 
     private void setHeatButton() {
-        final Button heart = (Button)findViewById(R.id.heart);
+        final Button heart = (Button) findViewById(R.id.heart);
         final Realm realm = Realm.getInstance(getBaseContext());
         RealmDoctor doctor = realm.where(RealmDoctor.class).equalTo("id", doctorId).findFirst();
-        if(doctor == null) {
+        if (doctor == null) {
             collected = false;
             heart.setBackgroundResource(R.drawable.heart_white_to_red_button);
-        }else{
+        } else {
             collected = true;
             heart.setBackgroundResource(R.drawable.heart_read_to_white_button);
         }
@@ -248,7 +261,9 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
         heart.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (collected == true) {
+                GAManager.sendEvent(new DoctorClickCollectEvent(doctorName));
+
+                if (collected) {
 
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
@@ -294,7 +309,7 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(DoctorDetailFragment.newInstance(doctorId), "醫師資料");
         adapter.addFragment(DoctorScoreFragment.newInstance(), "醫師評分");
-        adapter.addFragment(CommentFragment.newInstance(null,null,doctorId), "醫師評論");
+        adapter.addFragment(CommentFragment.newInstance(null, null, doctorId, GACategory.DOCTOR), "醫師評論");
         viewPager.setAdapter(adapter);
     }
 

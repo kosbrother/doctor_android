@@ -1,10 +1,5 @@
 package kosbrother.com.doctorguide;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.SignInButton;
-
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -18,6 +13,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+
 import java.util.ArrayList;
 
 import kosbrother.com.doctorguide.Util.CreateUserTask;
@@ -27,8 +27,9 @@ import kosbrother.com.doctorguide.adapters.CommentAdapter;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Comment;
 import kosbrother.com.doctorguide.entity.User;
+import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 
-public class MyCommentActivity extends GoogleSignInActivity implements CreateUserTask.AfterCreateUser{
+public class MyCommentActivity extends GoogleSignInActivity implements CreateUserTask.AfterCreateUser {
 
     private ActionBar actionbar;
     RecyclerView mRecyclerView;
@@ -50,7 +51,7 @@ public class MyCommentActivity extends GoogleSignInActivity implements CreateUse
             userEmail = extras.getString("USER_EMAIL");
         }
 
-        if(userEmail == null) {
+        if (userEmail == null) {
             final Dialog dialog = new Dialog(MyCommentActivity.this);
             dialog.setContentView(R.layout.dialog_login_enter_mycomment);
 
@@ -64,11 +65,11 @@ public class MyCommentActivity extends GoogleSignInActivity implements CreateUse
                 }
             });
             dialog.show();
-        }else{
+        } else {
             new GetMyCommentsTask().execute();
         }
 
-        noCommentLayout = (LinearLayout)findViewById(R.id.no_comment_layout);
+        noCommentLayout = (LinearLayout) findViewById(R.id.no_comment_layout);
     }
 
     private class GetMyCommentsTask extends AsyncTask {
@@ -80,6 +81,7 @@ public class MyCommentActivity extends GoogleSignInActivity implements CreateUse
             super.onPreExecute();
             mProgressDialog = Util.showProgressDialog(MyCommentActivity.this);
         }
+
         @Override
         protected Object doInBackground(Object... params) {
             mComments = DoctorGuideApi.getUserComments(userEmail);
@@ -90,7 +92,7 @@ public class MyCommentActivity extends GoogleSignInActivity implements CreateUse
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             mProgressDialog.dismiss();
-            if(mComments.size() == 0)
+            if (mComments.size() == 0)
                 noCommentLayout.setVisibility(View.VISIBLE);
             setRecyclerView();
         }
@@ -107,16 +109,16 @@ public class MyCommentActivity extends GoogleSignInActivity implements CreateUse
             user.email = acct.getEmail();
             userEmail = acct.getEmail();
             user.name = acct.getDisplayName();
-            if(acct.getPhotoUrl() != null)
+            if (acct.getPhotoUrl() != null)
                 user.pic_url = acct.getPhotoUrl().toString();
-            new CreateUserTask(this,user).execute();
+            new CreateUserTask(this, user).execute();
         }
     }
 
     private void setRecyclerView() {
-        mRecyclerView = (RecyclerView)findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(new CommentAdapter(mComments,this));
+        mRecyclerView.setAdapter(new CommentAdapter(mComments, this, GACategory.MY_COMMENT));
     }
 
     @Override
