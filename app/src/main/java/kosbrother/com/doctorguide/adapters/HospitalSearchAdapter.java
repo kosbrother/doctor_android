@@ -39,11 +39,9 @@ public class HospitalSearchAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
-        vi = inflater.inflate(R.layout.item_search_hospital, null);
-        vi.setClickable(true);
-        vi.setFocusable(true);
-
-
+        if (vi == null) {
+            vi = inflater.inflate(R.layout.item_search_hospital, parent, false);
+        }
         return vi;
     }
 }
