@@ -104,16 +104,14 @@ public class CommentDetailActivity extends AppCompatActivity {
         mCommentor.setText(comment.user_name);
 
         ((TextView)findViewById(R.id.friend_score)).setText(String.format("%d", comment.dr_friendly));
-        ((TextView)findViewById(R.id.spe_score)).setText(String.format("%d", comment.dr_speciality));
         RatingBar friendRatingBar = (RatingBar)findViewById(R.id.friend_rating_bar);
-        RatingBar speRatingBar = (RatingBar)findViewById(R.id.spe_rating_bar);
-
         friendRatingBar.setRating(comment.dr_friendly);
-        speRatingBar.setRating(comment.dr_speciality);
-
         DrawableCompat.setTint(friendRatingBar.getProgressDrawable(), ContextCompat.getColor(this, R.color.rating_bar_color));
-        DrawableCompat.setTint(speRatingBar.getProgressDrawable(), ContextCompat.getColor(this, R.color.rating_bar_color));
 
+        ((TextView) findViewById(R.id.spe_score)).setText(String.format("%d", comment.dr_speciality));
+        RatingBar speRatingBar = (RatingBar)findViewById(R.id.spe_rating_bar);
+        speRatingBar.setRating(comment.dr_speciality);
+        DrawableCompat.setTint(speRatingBar.getProgressDrawable(), ContextCompat.getColor(this, R.color.rating_bar_color));
 
         ((TextView)findViewById(R.id.env_score)).setText(String.format("%d", comment.div_environment));
         RatingBar envRating = (RatingBar)findViewById(R.id.env_rating_bar);
@@ -132,7 +130,7 @@ public class CommentDetailActivity extends AppCompatActivity {
 
         ((TextView)findViewById(R.id.friend_score_div)).setText(String.format("%d", comment.div_friendly));
         RatingBar divFriendlyRating = (RatingBar)findViewById(R.id.friend_div_rating_bar);
-        equitmentRating.setRating(comment.div_friendly);
+        divFriendlyRating.setRating(comment.div_friendly);
         DrawableCompat.setTint(divFriendlyRating.getProgressDrawable(), ContextCompat.getColor(this, R.color.rating_bar_color));
 
 
@@ -145,8 +143,16 @@ public class CommentDetailActivity extends AppCompatActivity {
             mRecommend.setVisibility(View.INVISIBLE);
         }
 
-        mDivComment.setText(comment.div_comment);
-        mDrComment.setText(comment.dr_comment);
+        if (comment.dr_comment == null || comment.dr_comment.equals(""))
+            mDrComment.setText("暫無評論");
+        else
+            mDrComment.setText(comment.dr_comment);
+
+        if (comment.div_comment == null || comment.div_comment.equals(""))
+            mDivComment.setText("暫無評論");
+        else
+            mDivComment.setText(comment.div_comment);
+
         mCommentTime.setText(new SimpleDateFormat("yyyy/MM/dd").format(comment.updated_at));
     }
 }

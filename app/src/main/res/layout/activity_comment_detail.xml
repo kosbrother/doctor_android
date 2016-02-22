@@ -23,6 +23,28 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/doctor_fragment_title_size"
                 />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="12dp">
+            <TextView
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:text="評論人"
+                android:textSize="@dimen/doctor_fragment_title_size"
+                android:layout_marginRight="20dp"
+                android:textColor="@color/black_text"/>
+            <TextView
+                android:id="@+id/commentor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="李俊俋"
+                android:textSize="@dimen/doctor_fragment_title_size"
+                android:textColor="@color/black_text"/>
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,28 +70,6 @@
                     android:textColor="@color/grey_text_color"
                     android:textSize="@dimen/comment_score_size"/>
             </RelativeLayout>
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="12dp">
-            <TextView
-                android:layout_width="64dp"
-                android:layout_height="wrap_content"
-                android:text="評論人"
-                android:textSize="@dimen/doctor_fragment_title_size"
-                android:layout_marginRight="20dp"
-                android:textColor="@color/black_text"/>
-            <TextView
-                android:id="@+id/commentor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="李俊俋"
-                android:textSize="@dimen/doctor_fragment_title_size"
-                android:textColor="@color/black_text"/>
         </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -191,8 +191,7 @@
                 android:id="@+id/env_rating_bar"
                 android:layout_marginLeft="4dp"
                 android:layout_toRightOf="@+id/env_score"
-                android:rating="3.5"
-                android:stepSize="0.5"
+                android:stepSize="1"
                 android:numStars="5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -226,8 +225,7 @@
                 android:id="@+id/equipment_rating_bar"
                 android:layout_marginLeft="4dp"
                 android:layout_toRightOf="@+id/equipment_score"
-                android:rating="3.5"
-                android:stepSize="0.5"
+                android:stepSize="1"
                 android:numStars="5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -261,8 +259,7 @@
                 android:id="@+id/spe_div_rating_bar"
                 android:layout_marginLeft="4dp"
                 android:layout_toRightOf="@+id/spe_score_div"
-                android:rating="3.5"
-                android:stepSize="0.5"
+                android:stepSize="1"
                 android:numStars="5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -296,8 +293,7 @@
                 android:id="@+id/friend_div_rating_bar"
                 android:layout_marginLeft="4dp"
                 android:layout_toRightOf="@+id/friend_score_div"
-                android:rating="3.5"
-                android:stepSize="0.5"
+                android:stepSize="1"
                 android:numStars="5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -314,7 +310,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="12dp">
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -402,8 +400,7 @@
                         android:id="@+id/friend_rating_bar"
                         android:layout_marginLeft="4dp"
                         android:layout_toRightOf="@+id/friend_score"
-                        android:rating="3.5"
-                        android:stepSize="0.5"
+                        android:stepSize="1"
                         android:numStars="5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -437,8 +434,7 @@
                         android:id="@+id/spe_rating_bar"
                         android:layout_marginLeft="4dp"
                         android:layout_toRightOf="@+id/spe_score"
-                        android:rating="3.5"
-                        android:stepSize="0.5"
+                        android:stepSize="1"
                         android:numStars="5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -458,7 +454,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="12dp">
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="12dp">
 
             <TextView
                 android:layout_width="wrap_content"
