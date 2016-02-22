@@ -20,10 +20,10 @@ import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.entity.Comment;
 import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.category.GACategory;
-import kosbrother.com.doctorguide.google_analytics.event.mycomment.MyCommentClickCommentListEvent;
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickCommentListEvent;
 import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickCommentListEvent;
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickCommentListEvent;
+import kosbrother.com.doctorguide.google_analytics.event.mycomment.MyCommentClickCommentListEvent;
 
 /**
  * Created by steven on 12/26/15.
@@ -75,6 +75,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             }
         });
         holder.mDivisionName.setText(comment.division_name);
+        if (mGACategory.equals(GACategory.MY_COMMENT)) {
+            holder.mCommenterName.setVisibility(View.GONE);
+        } else {
+            holder.mCommenterName.setText(comment.user_name);
+        }
         holder.mhospialName.setText(comment.hospital_name);
         holder.mDoctor.setText(comment.doctor_name);
         if (comment.is_recommend) {
@@ -113,6 +118,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
         public View mView;
         public TextView mDivisionName;
+        public TextView mCommenterName;
         public TextView mhospialName;
         public TextView mDoctor;
         public ImageView mRecommend;
@@ -129,6 +135,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             mView = view;
             mhospialName = (TextView) view.findViewById(R.id.mHostital);
             mDivisionName = (TextView) view.findViewById(R.id.division);
+            mCommenterName = (TextView) view.findViewById(R.id.commenterNameTextView);
             mDoctor = (TextView) view.findViewById(R.id.doctor);
             mRecommend = (ImageView) view.findViewById(R.id.awrad);
             mDivScore = (TextView) view.findViewById(R.id.div_score);
