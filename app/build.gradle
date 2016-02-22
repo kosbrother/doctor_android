@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 23
@@ -23,6 +24,22 @@ android {
     }
 }
 
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        // The Fabric Gradle plugin uses an open ended version to react
+        // quickly to Android tooling updates
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 dependencies {
     compile 'io.realm:realm-android:0.87.1'
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -41,9 +58,12 @@ dependencies {
     compile 'org.adw.library:discrete-seekbar:1.0.0'
     compile 'com.wdullaer:materialdatetimepicker:2.1.1'
     compile 'com.squareup.okhttp3:okhttp:3.0.0-RC1'
-    compile (
+    compile(
             [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.4.6'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.4.6'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.4.6']
     )
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+        transitive = true;
+    }
 }
