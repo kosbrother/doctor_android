@@ -26,8 +26,10 @@ public class SearchableActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchable);
         actionbar = getSupportActionBar();
-        actionbar.setTitle("搜尋");
-        actionbar.setDisplayHomeAsUpEnabled(true);
+        if (actionbar != null) {
+            actionbar.setTitle("搜尋");
+            actionbar.setDisplayHomeAsUpEnabled(true);
+        }
 
         if (getIntent() != null) {
             handleIntent(getIntent());
@@ -43,22 +45,22 @@ public class SearchableActivity extends AppCompatActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            actionbar.setTitle("搜尋："+ query);
+            actionbar.setTitle("搜尋：" + query);
             doQuery();
         }
     }
 
     private ListView mListView1, mListView2;
 
-    private String [] data1 ={"Hiren", "Pratik", "Dhruv", "Narendra"};
-    private String [] data2 ={"Kirit", "Miral", "Bhushan"};
+    private String[] data1 = {"Hiren", "Pratik", "Dhruv", "Narendra"};
+    private String[] data2 = {"Kirit", "Miral", "Bhushan"};
 
     private void doQuery() {
-        mListView1 = (ListView)findViewById(R.id.doctorListView);
-        mListView2 = (ListView)findViewById(R.id.hospitalListView);
+        mListView1 = (ListView) findViewById(R.id.doctorListView);
+        mListView2 = (ListView) findViewById(R.id.hospitalListView);
 
-        mListView1.setAdapter(new DoctorSearchListAdapter(this,data1));
-        mListView2.setAdapter(new HospitalSearchAdapter(this,data2));
+        mListView1.setAdapter(new DoctorSearchListAdapter(this, data1));
+        mListView2.setAdapter(new HospitalSearchAdapter(this, data2));
 
         ListUtils.setDynamicHeight(mListView1);
         ListUtils.setDynamicHeight(mListView2);

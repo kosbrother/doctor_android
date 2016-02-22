@@ -39,17 +39,13 @@ public class DoctorSearchListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
-        if(position < mDoctors.length){
-            vi = inflater.inflate(R.layout.item_search_doctor, null);
-            vi.setClickable(true);
-            vi.setFocusable(true);
-        }else{
-            vi = inflater.inflate(R.layout.item_search_doctor_add, null);
-            vi.setClickable(true);
-            vi.setFocusable(true);
+        if (vi == null) {
+            if (position < mDoctors.length) {
+                vi = inflater.inflate(R.layout.item_search_doctor, parent, false);
+            } else {
+                vi = inflater.inflate(R.layout.item_search_doctor_add, parent, false);
+            }
         }
-
-
         return vi;
     }
 }
