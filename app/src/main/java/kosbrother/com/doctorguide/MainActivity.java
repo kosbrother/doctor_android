@@ -114,10 +114,12 @@ public class MainActivity extends GoogleSignInActivity
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             user = new User();
-            user.email = acct.getEmail();
-            user.name = acct.getDisplayName();
-            if (acct.getPhotoUrl() != null)
-                user.pic_url = acct.getPhotoUrl().toString();
+            if (acct != null) {
+                user.email = acct.getEmail();
+                user.name = acct.getDisplayName();
+                if (acct.getPhotoUrl() != null)
+                    user.pic_url = acct.getPhotoUrl().toString();
+            }
             new CreateUserTask(this, user).execute();
         } else {
             drawNavigationSignInPart(false);
@@ -160,6 +162,7 @@ public class MainActivity extends GoogleSignInActivity
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final SearchView searchView =
                 (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnSearchClickListener(new View.OnClickListener() {
