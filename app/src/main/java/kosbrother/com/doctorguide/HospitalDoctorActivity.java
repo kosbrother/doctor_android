@@ -1,12 +1,5 @@
 package kosbrother.com.doctorguide;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -30,6 +23,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,9 +43,8 @@ import kosbrother.com.doctorguide.entity.Hospital;
 import kosbrother.com.doctorguide.fragments.DoctorFragment;
 import kosbrother.com.doctorguide.fragments.HospitalFragment;
 
-public class HospitalDoctorActivity extends AppCompatActivity implements HospitalFragment.OnListFragmentInteractionListener,DoctorFragment.OnListFragmentInteractionListener,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener , LocationListener,ActivityCompat.OnRequestPermissionsResultCallback, GetLocation {
+public class HospitalDoctorActivity extends AppCompatActivity implements HospitalFragment.OnListFragmentInteractionListener, DoctorFragment.OnListFragmentInteractionListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ActivityCompat.OnRequestPermissionsResultCallback, GetLocation {
 
-    private ActionBar actionbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private int categoryId;
@@ -59,7 +58,8 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hospital_doctor);
 
-        actionbar = getSupportActionBar();
+        ActionBar actionbar = getSupportActionBar();
+        assert actionbar != null;
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setElevation(0);
 
@@ -73,11 +73,10 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-
         if (Build.VERSION.SDK_INT >= 23) {
-           checkLocationPermission();
+            checkLocationPermission();
         } else {
-            requestLocationPermission();
+            setGoogleClient();
         }
 
     }
@@ -91,16 +90,16 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
 
     private void requestLocationPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    ActivityCompat.requestPermissions(HospitalDoctorActivity.this,
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
-                            PERMISSION_REQUEST_LOCATION);
+            ActivityCompat.requestPermissions(HospitalDoctorActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PERMISSION_REQUEST_LOCATION);
         } else {
             Snackbar.make(tabLayout,
                     "就醫指南需要位置的權限，才能幫你找到附近的醫院，醫生",
                     Snackbar.LENGTH_SHORT).show();
             // Request the permission. The result will be received in onRequestPermissionResult().
             ActivityCompat.requestPermissions(HospitalDoctorActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                     PERMISSION_REQUEST_LOCATION);
         }
     }
@@ -143,7 +142,7 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
     }
 
     protected void onStop() {
-        if(mGoogleApiClient != null)
+        if (mGoogleApiClient != null)
             mGoogleApiClient.disconnect();
         super.onStop();
     }
@@ -151,7 +150,7 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(HospitalFragment.newInstance(categoryId), "醫院");
-        adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.DISTANCETYPE,categoryId), "醫生");
+        adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.DISTANCETYPE, categoryId), "醫生");
         viewPager.setAdapter(adapter);
     }
 
@@ -163,22 +162,22 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
     @Override
     public void onConnected(Bundle bundle) {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if(mLastLocation == null){
+        if (mLastLocation == null) {
             LocationRequest mLocationRequest = new LocationRequest();
             mLocationRequest.setInterval(10000);
             mLocationRequest.setFastestInterval(5000);
             mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }else{
-            if(viewPager.getAdapter() == null) {
+        } else {
+            if (viewPager.getAdapter() == null) {
                 setupViewPager(viewPager);
                 tabLayout.setupWithViewPager(viewPager);
             }
         }
     }
 
-    public LatLng getLocation(){
-        return new LatLng(mLastLocation.getLatitude(),mLastLocation.getLongitude());
+    public LatLng getLocation() {
+        return new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
     }
 
     @Override
@@ -194,7 +193,7 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
-        if(viewPager.getAdapter() == null) {
+        if (viewPager.getAdapter() == null) {
             setupViewPager(viewPager);
             tabLayout.setupWithViewPager(viewPager);
         }
@@ -208,14 +207,16 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
         private ArrayList<Division> divisions;
         private ProgressDialog mProgressDialog;
 
-        public GetDivisionsTask(Hospital item){
+        public GetDivisionsTask(Hospital item) {
             this.item = item;
         }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             mProgressDialog = Util.showProgressDialog(HospitalDoctorActivity.this);
         }
+
         @Override
         protected Object doInBackground(Object... params) {
             divisions = DoctorGuideApi.getDivisionByHospitalAndCategory(item.id, categoryId);
@@ -226,15 +227,15 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             mProgressDialog.dismiss();
-            if(divisions.size() > 1)
-                showDivisionDialog(divisions,item);
-            else{
+            if (divisions.size() > 1)
+                showDivisionDialog(divisions, item);
+            else {
                 Intent intent = new Intent(HospitalDoctorActivity.this, DivisionActivity.class);
-                intent.putExtra("DIVISION_ID",divisions.get(0).id);
-                intent.putExtra("DIVISION_NAME",divisions.get(0).name);
-                intent.putExtra("HOSPITAL_ID",item.id);
-                intent.putExtra("HOSPITAL_GRADE",item.grade);
-                intent.putExtra("HOSPITAL_NAME",item.name);
+                intent.putExtra("DIVISION_ID", divisions.get(0).id);
+                intent.putExtra("DIVISION_NAME", divisions.get(0).name);
+                intent.putExtra("HOSPITAL_ID", item.id);
+                intent.putExtra("HOSPITAL_GRADE", item.grade);
+                intent.putExtra("HOSPITAL_NAME", item.name);
                 startActivity(intent);
             }
         }
@@ -244,18 +245,18 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
     private void showDivisionDialog(final ArrayList<Division> divisions, final Hospital item) {
         List<String> strings = new ArrayList<String>();
         for (Division div : divisions)
-            strings.add(div.name );
+            strings.add(div.name);
         String[] items = strings.toArray(new String[strings.size()]);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.AppCompatAlertDialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
         builder.setTitle("請選擇科別細項");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int position) {
                 Intent intent = new Intent(HospitalDoctorActivity.this, DivisionActivity.class);
-                intent.putExtra("DIVISION_ID",divisions.get(position).id);
-                intent.putExtra("DIVISION_NAME",divisions.get(position).name);
-                intent.putExtra("HOSPITAL_ID",item.id);
-                intent.putExtra("HOSPITAL_GRADE",item.grade);
-                intent.putExtra("HOSPITAL_NAME",item.name);
+                intent.putExtra("DIVISION_ID", divisions.get(position).id);
+                intent.putExtra("DIVISION_NAME", divisions.get(position).name);
+                intent.putExtra("HOSPITAL_ID", item.id);
+                intent.putExtra("HOSPITAL_GRADE", item.grade);
+                intent.putExtra("HOSPITAL_NAME", item.name);
                 startActivity(intent);
             }
         });
@@ -271,10 +272,10 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
     @Override
     public void onListFragmentInteraction(View v, Doctor item) {
         Intent intent = new Intent(this, DoctorActivity.class);
-        intent.putExtra("DOCTOR_ID",item.id);
-        intent.putExtra("HOSPITAL_ID",item.hospital_id);
-        intent.putExtra("DOCTOR_NAME",item.name);
-        intent.putExtra("HOSPITAL_NAME",item.hospital);
+        intent.putExtra("DOCTOR_ID", item.id);
+        intent.putExtra("HOSPITAL_ID", item.hospital_id);
+        intent.putExtra("DOCTOR_NAME", item.name);
+        intent.putExtra("HOSPITAL_NAME", item.hospital);
         startActivity(intent);
     }
 
