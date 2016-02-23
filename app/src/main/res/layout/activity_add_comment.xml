@@ -1,103 +1,112 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    >
+    android:background="@android:color/white">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/hospial_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="台北市立聯合醫院"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
                 android:textColor="@color/textColorPrimary"
                 android:textSize="@dimen/doctor_fragment_title_size"
-                android:layout_marginBottom="4dp"
-                />
+                tools:text="高雄市立小港醫院（委託財團法人私立高雄醫學大學經營）" />
+
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                >
+                android:orientation="horizontal">
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right">
+
                     <Spinner
                         android:id="@+id/div_selector"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true" />
                 </LinearLayout>
+
                 <View
                     android:id="@+id/view1"
-                    android:layout_toRightOf="@+id/div_selector"
                     android:layout_width="1dp"
                     android:layout_height="16dp"
                     android:layout_centerVertical="true"
-                    android:background="@color/textColorPrimary"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_marginRight="10dp"
+                    android:layout_toRightOf="@+id/div_selector"
+                    android:background="@color/textColorPrimary" />
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
+
                     <Spinner
                         android:id="@+id/dr_selector"
-                        android:layout_toRightOf="@+id/view1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/view1" />
                 </LinearLayout>
             </LinearLayout>
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp">
+
                 <TextView
                     android:id="@+id/text1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="就診日期  "
-                    android:textSize="@dimen/comment_score_size"
-                    android:textColor="@color/textColorPrimary"/>
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="@dimen/comment_score_size" />
+
                 <TextView
                     android:id="@+id/date"
-                    android:layout_toRightOf="@+id/text1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2015年12月10日"
-                    android:textSize="@dimen/comment_score_size"
-                    android:textColor="@color/textColorPrimary"
+                    android:layout_toRightOf="@+id/text1"
                     android:clickable="true"
-                    android:onClick="dateClick"/>
+                    android:onClick="dateClick"
+                    android:text="2015年12月10日"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="@dimen/comment_score_size" />
             </RelativeLayout>
         </LinearLayout>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
+            style="@style/MyCustomTabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabMode="fixed"
             app:tabGravity="fill"
-            style="@style/MyCustomTabLayout"
-            />
+            app:tabMode="fixed" />
     </android.support.design.widget.AppBarLayout>
 
     <kosbrother.com.doctorguide.custom.CustomViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>

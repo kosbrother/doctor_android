@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -61,9 +62,11 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_comment);
         actionbar = getSupportActionBar();
-        actionbar.setTitle("新增評論");
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setElevation(0);
+        if (actionbar != null) {
+            actionbar.setTitle("新增評論");
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setElevation(0);
+        }
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -82,6 +85,7 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+        setPagerSwipeAndTabClickEnabled(false);
 
         setTime();
 
@@ -278,9 +282,19 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
         return null;
     }
 
-    public void enablePagerSlide() {
-        viewPager.setPagingEnabled(true);
+    public void enablePagerSlideAndTabClickThenNextPage() {
+        setPagerSwipeAndTabClickEnabled(true);
         viewPager.setCurrentItem(1);
+    }
+
+    private void setPagerSwipeAndTabClickEnabled(boolean enabled) {
+        viewPager.setPagingEnabled(enabled);
+
+        LinearLayout tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
+        tabStrip.setEnabled(enabled);
+        for (int i = 0; i < tabStrip.getChildCount(); i++) {
+            tabStrip.getChildAt(i).setClickable(enabled);
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
