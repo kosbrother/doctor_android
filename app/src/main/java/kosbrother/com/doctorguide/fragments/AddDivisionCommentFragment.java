@@ -82,7 +82,7 @@ public class AddDivisionCommentFragment extends Fragment {
                     GAManager.sendEvent(new AddCommentSubmitCommentEvent(GALabel.NEXT_STEP));
 
                     passMethod.passParams(getSubmitParams());
-                    mListener.enablePagerSlide();
+                    mListener.enablePagerSlideAndTabClickThenNextPage();
                 } else {
                     GAManager.sendEvent(new AddCommentSubmitCommentEvent(GALabel.DATA_NOT_FILLED));
 
@@ -157,7 +157,7 @@ public class AddDivisionCommentFragment extends Fragment {
     }
 
     public interface EnablePagerSlide {
-        void enablePagerSlide();
+        void enablePagerSlideAndTabClickThenNextPage();
     }
 
     public class FragmentReceiver extends BroadcastReceiver {
