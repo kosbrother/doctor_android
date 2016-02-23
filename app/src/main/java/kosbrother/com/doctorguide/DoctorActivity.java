@@ -17,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -191,6 +192,7 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
                         startCommentActivity();
                     } else {
                         final Dialog dialog = new Dialog(DoctorActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.dialog_login);
 
                         SignInButton signInBtn = (SignInButton) dialog.findViewById(R.id.sign_in_button);

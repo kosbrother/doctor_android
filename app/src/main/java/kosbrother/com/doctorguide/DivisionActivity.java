@@ -19,6 +19,7 @@ import android.support.v7.app.ActionBar;
 import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -409,6 +410,7 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
                         startCommentActivity();
                     } else {
                         final Dialog dialog = new Dialog(DivisionActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.dialog_login);
 
                         SignInButton signInBtn = (SignInButton) dialog.findViewById(R.id.sign_in_button);
