@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="none"
-        android:id="@+id/account_menu">
+    <group
+        android:id="@+id/account_menu"
+        android:checkableBehavior="none">
         <item
             android:id="@+id/my_collections"
             android:icon="@mipmap/nav_heart"
@@ -13,8 +14,9 @@
             android:title="@string/my_reviews" />
     </group>
 
-    <group android:checkableBehavior="none"
-        android:id="@+id/other_menu">
+    <group
+        android:id="@+id/other_menu"
+        android:checkableBehavior="none">
         <item
             android:id="@+id/setting"
             android:icon="@mipmap/nav_setting"
@@ -23,10 +25,12 @@
             android:id="@+id/feedback"
             android:icon="@mipmap/nav_report"
             android:title="@string/feedback" />
+        <!--TODO: set visible next version-->
         <item
             android:id="@+id/play_store"
             android:icon="@mipmap/nav_star"
-            android:title="@string/evaluate" />
+            android:title="@string/evaluate"
+            android:visible="false" />
     </group>
 
 </menu>
