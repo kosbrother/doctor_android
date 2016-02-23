@@ -58,13 +58,8 @@ import kosbrother.com.doctorguide.google_analytics.label.GALabel;
 
 public class DivisionActivity extends GoogleSignInActivity implements DoctorFragment.OnListFragmentInteractionListener, DivisionScoreFragment.GetDivision, CreateUserTask.AfterCreateUser {
 
-    private ActionBar actionbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private FloatingActionButton fabProblemReport;
-    private FloatingActionButton fabShare;
-    private FloatingActionButton fabComment;
-    private FloatingActionButton fabAddDoctor;
     private FloatingActionMenu fab;
     private int hospitalId;
     private ArrayList<Division> hospitalDivisions;
@@ -82,10 +77,12 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_division);
 
-        actionbar = getSupportActionBar();
-        actionbar.setTitle("科別資訊");
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setElevation(0);
+        ActionBar actionbar = getSupportActionBar();
+        if (actionbar != null) {
+            actionbar.setTitle("科別資訊");
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setElevation(0);
+        }
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -164,10 +161,10 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
         });
         fab.setClosedOnTouchOutside(true);
 
-        fabProblemReport = (FloatingActionButton) findViewById(R.id.fab_problem_report);
-        fabShare = (FloatingActionButton) findViewById(R.id.fab_share);
-        fabComment = (FloatingActionButton) findViewById(R.id.fab_comment);
-        fabAddDoctor = (FloatingActionButton) findViewById(R.id.fab_add_doctor);
+        FloatingActionButton fabProblemReport = (FloatingActionButton) findViewById(R.id.fab_problem_report);
+        FloatingActionButton fabShare = (FloatingActionButton) findViewById(R.id.fab_share);
+        FloatingActionButton fabComment = (FloatingActionButton) findViewById(R.id.fab_comment);
+        FloatingActionButton fabAddDoctor = (FloatingActionButton) findViewById(R.id.fab_add_doctor);
 
         fabProblemReport.setOnClickListener(clickListener);
         fabShare.setOnClickListener(clickListener);
@@ -202,6 +199,7 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
         adapter.addFragment(DivisionScoreFragment.newInstance(), "本科評分");
         adapter.addFragment(CommentFragment.newInstance(hospitalId, divisionId, null, GACategory.DIVISION), "本科評論");
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(2);
     }
 
     @Override
