@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -43,8 +44,10 @@ public class MyCommentActivity extends GoogleSignInActivity implements CreateUse
         setContentView(R.layout.activity_my_comment);
 
         actionbar = getSupportActionBar();
-        actionbar.setTitle("我的評論");
-        actionbar.setDisplayHomeAsUpEnabled(true);
+        if (actionbar != null) {
+            actionbar.setTitle("我的評論");
+            actionbar.setDisplayHomeAsUpEnabled(true);
+        }
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -53,6 +56,7 @@ public class MyCommentActivity extends GoogleSignInActivity implements CreateUse
 
         if (userEmail == null) {
             final Dialog dialog = new Dialog(MyCommentActivity.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.dialog_login_enter_mycomment);
 
             SignInButton signInBtn = (SignInButton) dialog.findViewById(R.id.sign_in_button);
@@ -106,11 +110,13 @@ public class MyCommentActivity extends GoogleSignInActivity implements CreateUse
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             GoogleSignInAccount acct = result.getSignInAccount();
             User user = new User();
-            user.email = acct.getEmail();
-            userEmail = acct.getEmail();
-            user.name = acct.getDisplayName();
-            if (acct.getPhotoUrl() != null)
-                user.pic_url = acct.getPhotoUrl().toString();
+            if (acct != null) {
+                user.email = acct.getEmail();
+                userEmail = acct.getEmail();
+                user.name = acct.getDisplayName();
+                if (acct.getPhotoUrl() != null)
+                    user.pic_url = acct.getPhotoUrl().toString();
+            }
             new CreateUserTask(this, user).execute();
         }
     }

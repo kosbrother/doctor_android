@@ -17,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -75,6 +76,7 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
         }
 
         actionbar = getSupportActionBar();
+        assert actionbar != null;
         actionbar.setTitle("醫師資訊");
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setElevation(0);
@@ -190,6 +192,7 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
                         startCommentActivity();
                     } else {
                         final Dialog dialog = new Dialog(DoctorActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.dialog_login);
 
                         SignInButton signInBtn = (SignInButton) dialog.findViewById(R.id.sign_in_button);
@@ -311,6 +314,7 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
         adapter.addFragment(DoctorScoreFragment.newInstance(), "醫師評分");
         adapter.addFragment(CommentFragment.newInstance(null, null, doctorId, GACategory.DOCTOR), "醫師評論");
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(2);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
