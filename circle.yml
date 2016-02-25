@@ -19,6 +19,7 @@ test:
     - ./gradlew assembleDebug:
         timeout: 360
   override:
+    - ./gradlew app:check
     - ./gradlew test --continue:
         timeout: 360
     - zip -r ~/build_output.zip app/build/outputs/
