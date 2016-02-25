@@ -237,7 +237,7 @@ public class AddCommentActivity extends AppCompatActivity implements DatePickerD
         ArrayList<Integer> drsValue = new ArrayList<>();
         drs.add("未指定醫師");
         drsValue.add(0);
-        if (division.doctors != null)
+        if (division != null && division.doctors != null)
             for (Doctor dr : division.doctors) {
                 drs.add(dr.name);
                 drsValue.add(dr.id);
