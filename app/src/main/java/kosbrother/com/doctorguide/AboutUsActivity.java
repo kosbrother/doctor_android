@@ -8,41 +8,57 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-public class AboutUsActivity extends AppCompatActivity {
+import kosbrother.com.doctorguide.presenter.AboutUsPresenter;
+import kosbrother.com.doctorguide.view.AboutUsView;
 
-    private ActionBar actionbar;
+public class AboutUsActivity extends AppCompatActivity implements AboutUsView {
+
+    private AboutUsPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about_us);
+        presenter = new AboutUsPresenter(this);
+        presenter.onCreate();
+    }
 
-        actionbar = getSupportActionBar();
+    @Override
+    public void setContentView() {
+        setContentView(R.layout.activity_about_us);
+    }
+
+    @Override
+    public void initContentView() {
+        initActionBar();
+        initFeedbackButton();
+    }
+
+    private void initActionBar() {
+        ActionBar actionbar = getSupportActionBar();
+        assert actionbar != null;
         actionbar.setTitle("");
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setElevation(0);
-
-        setFeedback();
     }
 
-    private void setFeedback() {
-        Button feedback = (Button)findViewById(R.id.feedback);
-        feedback.setOnClickListener(new Button.OnClickListener() {
+    private void initFeedbackButton() {
+        findViewById(R.id.feedback).setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AboutUsActivity.this, FeedbackActivity.class);
-                startActivity(intent);
+                presenter.onFeedbackButtonClick();
             }
         });
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public void startFeedbackActivity() {
+        startActivity(new Intent(this, FeedbackActivity.class));
+    }
 
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case android.R.id.home:
-                finish();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            presenter.onHomeItemSelected();
         }
         return true;
     }

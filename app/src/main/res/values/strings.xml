@@ -40,4 +40,11 @@
 
     <string name="confirm">確定</string>
     <string name="cancel">取消</string>
+
+    <!--about us-->
+    <string name="about_us_title">關於就醫指南</string>
+    <string name="about_us_content">我們致力於讓每個需要就診的民眾，能找到最優質的醫生、完善健全的醫院，讓您擁有良好的就診體驗。</string>
+    <string name="about_us_send_feedback">給我們意見</string>
+    <string name="about_us_app_version">APP版本 1.0.3</string>
+
 </resources>
