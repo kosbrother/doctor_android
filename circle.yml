@@ -23,3 +23,5 @@ test:
     - ./gradlew test --continue:
         timeout: 360
     - zip -r ~/build_output.zip app/build/outputs/
+    # copy the test results to the test results directory.
+    - cp -r app/build/reports/lint/* $CIRCLE_TEST_REPORTS
