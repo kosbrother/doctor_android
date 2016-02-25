@@ -110,6 +110,7 @@ public class MainActivity extends GoogleSignInActivity
 
     @Override
     protected void handleSignInResult(GoogleSignInResult result) {
+        super.handleSignInResult(result);
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
