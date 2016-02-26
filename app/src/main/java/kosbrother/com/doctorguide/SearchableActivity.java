@@ -1,8 +1,10 @@
 package kosbrother.com.doctorguide;
 
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +16,14 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
+import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.DoctorSearchListAdapter;
 import kosbrother.com.doctorguide.adapters.HospitalSearchAdapter;
+import kosbrother.com.doctorguide.api.DoctorGuideApi;
+import kosbrother.com.doctorguide.entity.Doctor;
+import kosbrother.com.doctorguide.entity.Hospital;
 
 public class SearchableActivity extends AppCompatActivity {
 
@@ -44,26 +52,55 @@ public class SearchableActivity extends AppCompatActivity {
 
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
+            query = intent.getStringExtra(SearchManager.QUERY);
             actionbar.setTitle("搜尋：" + query);
-            doQuery();
+            new GetSearchResultTask().execute();
         }
     }
 
-    private ListView mListView1, mListView2;
+    private ListView doctorSearchListView, hospitalSearchListView;
+    private DoctorSearchListAdapter doctorSearchAdpater;
+    private HospitalSearchAdapter hospitalSearchAdapter;
 
-    private String[] data1 = {"Hiren", "Pratik", "Dhruv", "Narendra"};
-    private String[] data2 = {"Kirit", "Miral", "Bhushan"};
+    private ArrayList<Doctor> search_result_doctors;
+    private ArrayList<Hospital> search_result_hospitals;
 
-    private void doQuery() {
-        mListView1 = (ListView) findViewById(R.id.doctorListView);
-        mListView2 = (ListView) findViewById(R.id.hospitalListView);
+    private String query;
 
-        mListView1.setAdapter(new DoctorSearchListAdapter(this, data1));
-        mListView2.setAdapter(new HospitalSearchAdapter(this, data2));
+    private class GetSearchResultTask extends AsyncTask {
 
-        ListUtils.setDynamicHeight(mListView1);
-        ListUtils.setDynamicHeight(mListView2);
+        private ProgressDialog mProgressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressDialog = Util.showProgressDialog(SearchableActivity.this);
+        }
+        @Override
+        protected Object doInBackground(Object... params) {
+            search_result_doctors = DoctorGuideApi.searchDoctors(query);
+            search_result_hospitals = DoctorGuideApi.searchHospitals(query);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            mProgressDialog.dismiss();
+            doctorSearchListView = (ListView) findViewById(R.id.doctorListView);
+            hospitalSearchListView = (ListView) findViewById(R.id.hospitalListView);
+            doctorSearchAdpater = new DoctorSearchListAdapter(SearchableActivity.this, search_result_doctors);
+            hospitalSearchAdapter = new HospitalSearchAdapter(SearchableActivity.this, search_result_hospitals);
+
+
+            doctorSearchListView.setAdapter(doctorSearchAdpater);
+
+            hospitalSearchListView.setAdapter(hospitalSearchAdapter);
+
+            ListUtils.setDynamicHeight(doctorSearchListView);
+            ListUtils.setDynamicHeight(hospitalSearchListView);
+        }
+
     }
 
     @Override

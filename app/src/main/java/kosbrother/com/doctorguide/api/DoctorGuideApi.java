@@ -369,4 +369,28 @@ public class DoctorGuideApi {
         }
         return true;
     }
+
+    public static ArrayList<Hospital> searchHospitals(String name){
+        ArrayList<Hospital> hospitals = new ArrayList<Hospital>();
+        try {
+            String message = runHttpGet(HOST + "/api/v1/search_hospitals/"+name+".json");
+            hospitals = mapper.readValue(message, new TypeReference<ArrayList<Hospital>>() {});
+            return hospitals;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return hospitals;
+    }
+
+    public static ArrayList<Doctor> searchDoctors(String name){
+        ArrayList<Doctor> doctors = new ArrayList<Doctor>();
+        try {
+            String message = runHttpGet(HOST + "/api/v1/search_doctors/"+name+".json");
+            doctors = mapper.readValue(message, new TypeReference<ArrayList<Doctor>>() {});
+            return doctors;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return doctors;
+    }
 }
