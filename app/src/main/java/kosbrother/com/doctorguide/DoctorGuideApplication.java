@@ -13,7 +13,9 @@ public class DoctorGuideApplication extends Application {
     public void onCreate() {
         super.onCreate();
         GAManager.init(this);
-        Fabric.with(this, new Crashlytics());
+        if (!BuildConfig.DEBUG) {
+            Fabric.with(this, new Crashlytics());
+        }
     }
 
 }

@@ -1,5 +1,9 @@
 package kosbrother.com.doctorguide.Util;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -8,14 +12,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-
 /**
  * Created by steven on 1/8/16.
  */
-public class GoogleSignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
+public class GoogleSignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleApiClient mGoogleApiClient;
     protected boolean isSignIn;
@@ -24,14 +24,13 @@ public class GoogleSignInActivity extends AppCompatActivity implements GoogleApi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        googleSignIn();
+        buildGoogleApiClient();
     }
 
-    private void googleSignIn() {
+    private void buildGoogleApiClient() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
@@ -47,11 +46,13 @@ public class GoogleSignInActivity extends AppCompatActivity implements GoogleApi
     @Override
     public void onStart() {
         super.onStart();
-
+        if (!Util.isNetworkConnected(this)) {
+            Util.showRequireNetworkDialog(this);
+            return;
+        }
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
         if (opr.isDone()) {
-            GoogleSignInResult result = opr.get();
-            handleSignInResult(result);
+            handleSignInResult(opr.get());
         } else {
             opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
@@ -63,14 +64,14 @@ public class GoogleSignInActivity extends AppCompatActivity implements GoogleApi
     }
 
     protected void handleSignInResult(GoogleSignInResult result) {
-        if (result.isSuccess()) {
-            isSignIn = true;
-        }else{
-            isSignIn = false;
-        }
+        isSignIn = result.isSuccess();
     }
 
     protected void signIn() {
+        if (!Util.isNetworkConnected(this)) {
+            Util.showRequireNetworkDialog(this);
+            return;
+        }
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
