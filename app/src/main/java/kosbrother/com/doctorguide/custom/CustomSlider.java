@@ -1,7 +1,5 @@
 package kosbrother.com.doctorguide.custom;
 
-import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
@@ -11,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import kosbrother.com.doctorguide.R;
@@ -22,7 +21,7 @@ import kosbrother.com.doctorguide.google_analytics.event.addcomment.AddCommentSl
  */
 public class CustomSlider extends LinearLayout {
 
-    private DiscreteSeekBar seekbar;
+    private SeekBar seekbar;
     private ImageView checkImage;
     private TextView scoreText;
     private Context mContext;
@@ -62,31 +61,29 @@ public class CustomSlider extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        seekbar = (DiscreteSeekBar)this.findViewById(R.id.seekbar);
+        seekbar = (SeekBar)this.findViewById(R.id.seekbar);
         checkImage = (ImageView)this.findViewById(R.id.check_image);
         scoreText = (TextView)this.findViewById(R.id.score);
 
-        seekbar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
+        seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int value = seekBar.getProgress();
                 GAManager.sendEvent(new AddCommentSlideEvent(sliderLabel, value));
-
                 isScroed = true;
                 score = value;
                 scoreText.setText(value + "");
                 scoreText.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent));
                 checkImage.setVisibility(View.VISIBLE);
-                seekbar.setScrubberColor(ContextCompat.getColor(mContext, R.color.colorAccent));
-                seekbar.setThumbColor(ContextCompat.getColor(mContext, R.color.colorAccent),ContextCompat.getColor(mContext, R.color.colorAccent));
             }
 
             @Override
-            public void onStartTrackingTouch(DiscreteSeekBar seekBar) {
+            public void onStartTrackingTouch(SeekBar seekBar) {
 
             }
 
             @Override
-            public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
+            public void onStopTrackingTouch(SeekBar seekBar) {
 
             }
         });
