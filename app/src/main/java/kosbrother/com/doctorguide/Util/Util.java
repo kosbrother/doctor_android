@@ -24,9 +24,6 @@ import kosbrother.com.doctorguide.entity.Area;
 
 import static kosbrother.com.doctorguide.Util.SphericalUtil.computeDistanceBetween;
 
-/**
- * Created by steven on 1/6/16.
- */
 public class Util {
 
     public static ProgressDialog showProgressDialog(Context context) {
@@ -86,7 +83,7 @@ public class Util {
         new AlertDialog.Builder(context)
                 .setTitle("訊息通知")
                 .setMessage("就醫指南需要網路才能運行，請按確認鍵至手機設定畫面，開啟網路連結，謝謝！")
-                .setNegativeButton("確認", new DialogInterface.OnClickListener() {
+                .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         context.startActivity(new Intent(Settings.ACTION_SETTINGS));
