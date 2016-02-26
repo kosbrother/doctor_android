@@ -61,7 +61,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:8.4.0'
     compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.google.android.gms:play-services-analytics:8.4.0'
-    compile 'org.adw.library:discrete-seekbar:1.0.0'
     compile 'com.wdullaer:materialdatetimepicker:2.1.1'
     compile 'com.squareup.okhttp3:okhttp:3.0.0-RC1'
     compile(
