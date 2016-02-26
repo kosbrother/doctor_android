@@ -58,10 +58,6 @@ public class SearchableActivity extends AppCompatActivity {
         }
     }
 
-    private ListView doctorSearchListView, hospitalSearchListView;
-    private DoctorSearchListAdapter doctorSearchAdpater;
-    private HospitalSearchAdapter hospitalSearchAdapter;
-
     private ArrayList<Doctor> search_result_doctors;
     private ArrayList<Hospital> search_result_hospitals;
 
@@ -76,6 +72,7 @@ public class SearchableActivity extends AppCompatActivity {
             super.onPreExecute();
             mProgressDialog = Util.showProgressDialog(SearchableActivity.this);
         }
+
         @Override
         protected Object doInBackground(Object... params) {
             search_result_doctors = DoctorGuideApi.searchDoctors(query);
@@ -87,13 +84,13 @@ public class SearchableActivity extends AppCompatActivity {
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             mProgressDialog.dismiss();
-            doctorSearchListView = (ListView) findViewById(R.id.doctorListView);
-            hospitalSearchListView = (ListView) findViewById(R.id.hospitalListView);
-            doctorSearchAdpater = new DoctorSearchListAdapter(SearchableActivity.this, search_result_doctors);
-            hospitalSearchAdapter = new HospitalSearchAdapter(SearchableActivity.this, search_result_hospitals);
+            ListView doctorSearchListView = (ListView) findViewById(R.id.doctorListView);
+            ListView hospitalSearchListView = (ListView) findViewById(R.id.hospitalListView);
+            DoctorSearchListAdapter doctorSearchAdapter = new DoctorSearchListAdapter(SearchableActivity.this, search_result_doctors);
+            HospitalSearchAdapter hospitalSearchAdapter = new HospitalSearchAdapter(SearchableActivity.this, search_result_hospitals);
 
 
-            doctorSearchListView.setAdapter(doctorSearchAdpater);
+            doctorSearchListView.setAdapter(doctorSearchAdapter);
 
             hospitalSearchListView.setAdapter(hospitalSearchAdapter);
 
@@ -136,7 +133,7 @@ public class SearchableActivity extends AppCompatActivity {
                 return;
             }
             int height = 0;
-            int desiredWidth = View.MeasureSpec.makeMeasureSpec(mListView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+            int desiredWidth = View.MeasureSpec.makeMeasureSpec(mListView.getWidth(), View.MeasureSpec.AT_MOST);
             for (int i = 0; i < mListAdapter.getCount(); i++) {
                 View listItem = mListAdapter.getView(i, null, mListView);
                 listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
