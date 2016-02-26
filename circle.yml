@@ -22,7 +22,6 @@ test:
         parallel: true
   override:
     - ./gradlew app:check
-        parallel: true
     - ./gradlew test --continue:
         timeout: 360
         parallel: true
