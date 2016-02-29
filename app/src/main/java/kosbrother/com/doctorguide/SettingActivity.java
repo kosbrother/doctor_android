@@ -1,76 +1,75 @@
 package kosbrother.com.doctorguide;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 
-public class SettingActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 
-    private ActionBar actionbar;
-    private GoogleApiClient mGoogleApiClient;
+import kosbrother.com.doctorguide.google_signin.GoogleSigninInteractorImpl;
+import kosbrother.com.doctorguide.presenter.SettingPresenter;
+import kosbrother.com.doctorguide.view.SettingView;
+
+public class SettingActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, SettingView {
+
+    private SettingPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        presenter = new SettingPresenter(this, new GoogleSigninInteractorImpl(this, this));
+        presenter.onCreate();
+    }
+
+    @Override
+    public void setContentView() {
         setContentView(R.layout.activity_setting);
+    }
 
-        actionbar = getSupportActionBar();
-        actionbar.setTitle("設定");
+    @Override
+    public void initActionBar() {
+        ActionBar actionbar = getSupportActionBar();
+        assert actionbar != null;
+        actionbar.setTitle(getString(R.string.setting_actionbar_title));
         actionbar.setDisplayHomeAsUpEnabled(true);
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
     }
 
-    public void aboutUsClick(View v) {
-        Intent intent = new Intent(this, AboutUsActivity.class);
-        startActivity(intent);
+    public void onAboutUsClick(View v) {
+        presenter.onAboutUsClick();
     }
 
-    public void logout(View v) {
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        LinearLayout l = (LinearLayout)findViewById(R.id.linear_layout);
-                        Snackbar snackbar = Snackbar.make(l, "成功登出", Snackbar.LENGTH_LONG);
-                        snackbar.show();
-                    }
-                });
+    public void onSignOutClick(View v) {
+        presenter.onSignOutClick();
+    }
+
+    @Override
+    public void startAboutUsActivity() {
+        startActivity(new Intent(this, AboutUsActivity.class));
+    }
+
+    @Override
+    public void showSignOutSuccessSnackBar() {
+        Snackbar.make(findViewById(R.id.setting_rootLayout),
+                getString(R.string.setting_sign_out_success),
+                Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case android.R.id.home:
-                finish();
+        if (item.getItemId() == android.R.id.home) {
+            presenter.onHomeItemSelected();
         }
         return true;
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 }

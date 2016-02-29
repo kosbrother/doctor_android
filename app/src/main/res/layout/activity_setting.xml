@@ -1,48 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/setting_rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="kosbrother.com.doctorguide.SettingActivity"
-    android:id="@+id/linear_layout">
+    tools:context="kosbrother.com.doctorguide.SettingActivity">
 
-    <LinearLayout
-        android:id="@+id/about_us"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:background="@drawable/click_selector"
-        android:onClick="aboutUsClick">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="關於我們"
-            android:textSize="18dp"
-            android:layout_margin="16dp"
-            />
-    </LinearLayout>
+        android:onClick="onAboutUsClick"
+        android:padding="16dp"
+        android:text="@string/setting_about_us"
+        android:textSize="18dp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/grey_divider_color"
+        android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"/>
+        android:background="@color/grey_divider_color" />
 
-    <LinearLayout
-        android:id="@+id/logout"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:background="@drawable/click_selector"
-        android:onClick="logout">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="登出"
-            android:textSize="18dp"
-            android:layout_margin="16dp"/>
-    </LinearLayout>
+        android:onClick="onSignOutClick"
+        android:padding="16dp"
+        android:text="@string/setting_sign_out"
+        android:textSize="18dp" />
 
 </LinearLayout>

@@ -47,4 +47,10 @@
     <string name="about_us_send_feedback">給我們意見</string>
     <string name="about_us_app_version">APP版本 1.0.3</string>
 
+    <!--Setting-->
+    <string name="setting_actionbar_title">設定</string>
+    <string name="setting_about_us">關於我們</string>
+    <string name="setting_sign_out">登出</string>
+    <string name="setting_sign_out_success">成功登出</string>
+
 </resources>
