@@ -24,6 +24,6 @@ public class Doctor {
     public float avg_friendly;
     public float avg_speciality;
 
-    public String search_hospital_id;
+    public int search_hospital_id;
     public String search_hospital;
 }
