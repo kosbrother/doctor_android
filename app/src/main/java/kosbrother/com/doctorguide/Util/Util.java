@@ -1,16 +1,9 @@
 package kosbrother.com.doctorguide.Util;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.provider.Settings;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.TextView;
 
@@ -74,35 +67,4 @@ public class Util {
         return areas.get(0).id - 1;
     }
 
-    public static boolean isNetworkConnected(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
-    }
-
-    public static void showRequireNetworkDialog(final Context context) {
-        new AlertDialog.Builder(context)
-                .setTitle("訊息通知")
-                .setMessage("就醫指南需要網路才能運行，請按確認鍵至手機設定畫面，開啟網路連結，謝謝！")
-                .setPositiveButton("確認", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        context.startActivity(new Intent(Settings.ACTION_SETTINGS));
-                    }
-                })
-                .show();
-    }
-
-    public static void showSubmitCommentSuccessDialog(final Activity activity) {
-        new AlertDialog.Builder(activity)
-                .setTitle("評論發表成功")
-                .setMessage("謝謝你發表評論，讓資料更完善！")
-                .setPositiveButton("確定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        activity.finish();
-                    }
-                })
-                .show();
-    }
 }

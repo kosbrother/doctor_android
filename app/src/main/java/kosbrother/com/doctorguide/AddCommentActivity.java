@@ -1,6 +1,7 @@
 package kosbrother.com.doctorguide;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -160,7 +162,16 @@ public class AddCommentActivity extends AppCompatActivity implements
 
     @Override
     public void showPostCommentResultSuccessDialog() {
-        Util.showSubmitCommentSuccessDialog(this);
+        new AlertDialog.Builder(this)
+                .setTitle("評論發表成功")
+                .setMessage("謝謝你發表評論，讓資料更完善！")
+                .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .show();
     }
 
     @Override
