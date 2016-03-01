@@ -1,5 +1,6 @@
 package kosbrother.com.doctorguide.Util;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -89,7 +90,19 @@ public class Util {
                         context.startActivity(new Intent(Settings.ACTION_SETTINGS));
                     }
                 })
-                .create()
+                .show();
+    }
+
+    public static void showSubmitCommentSuccessDialog(final Activity activity) {
+        new AlertDialog.Builder(activity)
+                .setTitle("評論發表成功")
+                .setMessage("謝謝你發表評論，讓資料更完善！")
+                .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        activity.finish();
+                    }
+                })
                 .show();
     }
 }

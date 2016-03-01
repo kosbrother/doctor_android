@@ -66,7 +66,7 @@ public class AddDoctorCommentFragment extends Fragment {
                     GAManager.sendEvent(new AddCommentSubmitCommentEvent(GALabel.FINISH));
 
                     passMethod.passParams(getSubmitParams());
-                    passMethod.submitPost();
+                    passMethod.onSubmitClick();
                 } else {
                     GAManager.sendEvent(new AddCommentSubmitCommentEvent(GALabel.DATA_NOT_FILLED));
 
