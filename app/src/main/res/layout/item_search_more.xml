@@ -8,19 +8,10 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <ImageView
-        android:id="@+id/grade_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="16dp"
-        android:src="@mipmap/ic_doctor_add" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/grade_image"
-        android:text="新增醫師" />
+        android:text="搜尋更多..." />
 
 </RelativeLayout>
