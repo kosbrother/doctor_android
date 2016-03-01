@@ -24,30 +24,43 @@ import kosbrother.com.doctorguide.google_analytics.label.GALabel;
  */
 public class DoctorSearchListAdapter extends BaseAdapter {
 
+    private final SearchableActivity.LIST_TYPE mType;
+    private final View.OnClickListener mMoreClickListener;
     private LayoutInflater inflater;
     private ArrayList<Doctor> mDoctors;
     private Context mContext;
 
-    public DoctorSearchListAdapter(Context context, ArrayList<Doctor> doctors) {
+    public DoctorSearchListAdapter(Context context, ArrayList<Doctor> doctors, SearchableActivity.LIST_TYPE type) {
         mContext = context;
         mDoctors = doctors;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mType = type;
+        mMoreClickListener = null;
+    }
+
+    public DoctorSearchListAdapter(Context context, ArrayList<Doctor> doctors, SearchableActivity.LIST_TYPE type, View.OnClickListener moreClickListener) {
+        mContext = context;
+        mDoctors = doctors;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mType = type;
+        mMoreClickListener = moreClickListener;
     }
 
     @Override
     public int getCount() {
-        return mDoctors.size() + 1;
+        if (mType == SearchableActivity.LIST_TYPE.MORE)
+            return mDoctors.size() + 2;
+        else
+            return mDoctors.size() + 1;
     }
 
     @Override
     public Object getItem(int position) {
         if (position < mDoctors.size()) {
             return mDoctors.get(position);
-        }
-        else {
+        } else {
             return null;
         }
-
     }
 
     @Override
@@ -81,19 +94,37 @@ public class DoctorSearchListAdapter extends BaseAdapter {
                         mContext.startActivity(intent);
                     }
                 });
-            } else {
-                vi = inflater.inflate(R.layout.item_search_doctor_add, parent, false);
-                vi.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        GAManager.sendEvent(new HospitalClickFABEvent(GALabel.ADD_DOCTOR));
-
-                        Intent intent = new Intent(mContext, AddDoctorActivity.class);
-                        mContext.startActivity(intent);
-                    }
-                });
+            } else if (mType == SearchableActivity.LIST_TYPE.NOT_MORE) {
+                vi = inflateAddDoctor(vi, parent);
+            } else if (mType == SearchableActivity.LIST_TYPE.MORE) {
+                if (position == mDoctors.size())
+                    vi = inflateMore(vi, parent);
+                else
+                    vi = inflateAddDoctor(vi, parent);
             }
         }
         return vi;
     }
+
+    private View inflateAddDoctor(View vi, ViewGroup parent) {
+        vi = inflater.inflate(R.layout.item_search_doctor_add, parent, false);
+        vi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GAManager.sendEvent(new HospitalClickFABEvent(GALabel.ADD_DOCTOR));
+
+                Intent intent = new Intent(mContext, AddDoctorActivity.class);
+                mContext.startActivity(intent);
+            }
+        });
+        return vi;
+    }
+
+    private View inflateMore(View vi, ViewGroup parent) {
+        vi = inflater.inflate(R.layout.item_search_more, parent, false);
+        vi.setOnClickListener(mMoreClickListener);
+        return vi;
+    }
+
+
 }

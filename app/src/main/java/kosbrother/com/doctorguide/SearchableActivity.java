@@ -28,6 +28,12 @@ import kosbrother.com.doctorguide.entity.Hospital;
 public class SearchableActivity extends AppCompatActivity {
 
     private ActionBar actionbar;
+    private final int SEARCH_NUM = 5;
+
+    public enum LIST_TYPE {
+        MORE,
+        NOT_MORE
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +81,8 @@ public class SearchableActivity extends AppCompatActivity {
 
         @Override
         protected Object doInBackground(Object... params) {
-            search_result_doctors = DoctorGuideApi.searchDoctors(query);
-            search_result_hospitals = DoctorGuideApi.searchHospitals(query);
+            search_result_doctors = DoctorGuideApi.searchDoctors(query, SEARCH_NUM);
+            search_result_hospitals = DoctorGuideApi.searchHospitals(query, SEARCH_NUM);
             return null;
         }
 
@@ -84,18 +90,50 @@ public class SearchableActivity extends AppCompatActivity {
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             mProgressDialog.dismiss();
-            ListView doctorSearchListView = (ListView) findViewById(R.id.doctorListView);
+
+            setDoctorListView();
+            setHospitalListView();
+        }
+
+        private void setHospitalListView() {
             ListView hospitalSearchListView = (ListView) findViewById(R.id.hospitalListView);
-            DoctorSearchListAdapter doctorSearchAdapter = new DoctorSearchListAdapter(SearchableActivity.this, search_result_doctors);
-            HospitalSearchAdapter hospitalSearchAdapter = new HospitalSearchAdapter(SearchableActivity.this, search_result_hospitals);
-
-
-            doctorSearchListView.setAdapter(doctorSearchAdapter);
+            HospitalSearchAdapter hospitalSearchAdapter;
+            if (search_result_hospitals.size() == SEARCH_NUM) {
+                View.OnClickListener moreListener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(SearchableActivity.this, SearchMoreActivity.class);
+                        intent.putExtra("TYPE", "HOSPITAL");
+                        intent.putExtra("QUERY", query);
+                        startActivity(intent);
+                    }
+                };
+                hospitalSearchAdapter = new HospitalSearchAdapter(SearchableActivity.this, search_result_hospitals, LIST_TYPE.MORE, moreListener);
+            } else
+                hospitalSearchAdapter = new HospitalSearchAdapter(SearchableActivity.this, search_result_hospitals, LIST_TYPE.NOT_MORE);
 
             hospitalSearchListView.setAdapter(hospitalSearchAdapter);
-
-            ListUtils.setDynamicHeight(doctorSearchListView);
             ListUtils.setDynamicHeight(hospitalSearchListView);
+        }
+
+        private void setDoctorListView() {
+            ListView doctorSearchListView = (ListView) findViewById(R.id.doctorListView);
+            DoctorSearchListAdapter doctorSearchAdapter;
+            if (search_result_doctors.size() == SEARCH_NUM) {
+                View.OnClickListener moreListener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(SearchableActivity.this, SearchMoreActivity.class);
+                        intent.putExtra("TYPE", "DOCTOR");
+                        intent.putExtra("QUERY", query);
+                        startActivity(intent);
+                    }
+                };
+                doctorSearchAdapter = new DoctorSearchListAdapter(SearchableActivity.this, search_result_doctors, LIST_TYPE.MORE, moreListener);
+            } else
+                doctorSearchAdapter = new DoctorSearchListAdapter(SearchableActivity.this, search_result_doctors, LIST_TYPE.NOT_MORE);
+            doctorSearchListView.setAdapter(doctorSearchAdapter);
+            ListUtils.setDynamicHeight(doctorSearchListView);
         }
 
     }
