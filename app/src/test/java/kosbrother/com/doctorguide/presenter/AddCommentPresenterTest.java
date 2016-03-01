@@ -50,6 +50,7 @@ public class AddCommentPresenterTest extends TestCase {
         verify(view).hideProgressDialog();
         verify(view).setDivisionSpinner(model.getDivisions(), model.getDivisionSelection());
         verify(view).setDoctorSpinner(model.getDoctors(), model.getDoctorSelection());
+        verify(view).sendIsDirectSubmitToBroadcast(model.isDirectSubmit());
     }
 
     public void testOnDivisionItemSelected() throws Exception {
@@ -62,24 +63,14 @@ public class AddCommentPresenterTest extends TestCase {
         verify(view).sendAddCommentClickDivisionSpinnerEvent(model.getDivisionFromPosition(position));
     }
 
-    public void testOnDoctorItemSelected_canDirectSubmit() throws Exception {
+    public void testOnDoctorItemSelected() throws Exception {
         int position = 0;
 
         presenter.onDoctorItemSelected(position);
 
         verify(model).updateDoctor(position);
         verify(view).sendAddCommentClickDoctorSpinnerEvent(model.getDoctorFromPosition(position));
-        verify(view).sendIsDirectSubmitToBroadcast(true);
-    }
-
-    public void testOnDoctorItemSelected_canNotDirectSubmit() throws Exception {
-        int position = 1;
-
-        presenter.onDoctorItemSelected(position);
-
-        verify(model).updateDoctor(position);
-        verify(view).sendAddCommentClickDoctorSpinnerEvent(model.getDoctorFromPosition(position));
-        verify(view).sendIsDirectSubmitToBroadcast(false);
+        verify(view).sendIsDirectSubmitToBroadcast(model.isDirectSubmit());
     }
 
     public void testOnPassParams() throws Exception {

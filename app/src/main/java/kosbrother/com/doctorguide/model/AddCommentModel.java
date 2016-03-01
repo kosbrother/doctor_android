@@ -40,4 +40,6 @@ public interface AddCommentModel {
     DatePickerViewModel getDatePickerViewModel();
 
     void requestSubmitComment(SubmitCommentTask.SubmitCommentListener listener);
+
+    boolean isDirectSubmit();
 }

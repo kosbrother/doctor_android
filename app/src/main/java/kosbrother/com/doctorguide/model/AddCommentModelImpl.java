@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-import kosbrother.com.doctorguide.viewmodel.AddCommentViewModel;
-import kosbrother.com.doctorguide.viewmodel.DatePickerViewModel;
 import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.task.GetDivisionScoreTask;
 import kosbrother.com.doctorguide.task.SubmitCommentTask;
+import kosbrother.com.doctorguide.viewmodel.AddCommentViewModel;
+import kosbrother.com.doctorguide.viewmodel.DatePickerViewModel;
 
 public class AddCommentModelImpl implements AddCommentModel {
     private final int hospitalId;
@@ -194,5 +194,10 @@ public class AddCommentModelImpl implements AddCommentModel {
     @Override
     public void requestSubmitComment(SubmitCommentTask.SubmitCommentListener listener) {
         new SubmitCommentTask(listener).execute(submitParams);
+    }
+
+    @Override
+    public boolean isDirectSubmit() {
+        return doctorId == 0;
     }
 }

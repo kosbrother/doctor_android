@@ -41,6 +41,7 @@ public class AddCommentPresenter implements
         view.hideProgressDialog();
         view.setDivisionSpinner(model.getDivisions(), model.getDivisionSelection());
         view.setDoctorSpinner(model.getDoctors(), model.getDoctorSelection());
+        view.sendIsDirectSubmitToBroadcast(model.isDirectSubmit());
     }
 
     public void onDivisionItemSelected(int position) {
@@ -55,8 +56,7 @@ public class AddCommentPresenter implements
         model.updateDoctor(position);
 
         view.sendAddCommentClickDoctorSpinnerEvent(model.getDoctorFromPosition(position));
-        boolean isDirectSubmit = position == 0;
-        view.sendIsDirectSubmitToBroadcast(isDirectSubmit);
+        view.sendIsDirectSubmitToBroadcast(model.isDirectSubmit());
     }
 
     public void onPassParams(HashMap<String, String> map) {
