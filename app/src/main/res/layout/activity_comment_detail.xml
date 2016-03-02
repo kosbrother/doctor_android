@@ -9,472 +9,530 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/grey_pretty_light"
+            android:padding="12dp"
+            android:text="@string/comment_detail_info"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/doctor_fragment_title_size" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:id="@+id/comment_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:textColor="@color/grey_text_color"
+                android:textSize="@dimen/comment_score_size"
+                tools:text="2015/12/5" />
+
+            <TextView
+                android:id="@+id/comment_time_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/comment_time"
+                android:layout_toStartOf="@id/comment_time"
+                android:text="@string/comment_detail_comment_time"
+                android:textColor="@color/grey_text_color"
+                android:textSize="@dimen/comment_score_size" />
+
+            <TextView
+                android:id="@+id/commenter_title"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:text="@string/comment_detail_commenter"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/doctor_fragment_title_size" />
+
+            <TextView
+                android:id="@+id/commenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_toEndOf="@id/commenter_title"
+                android:layout_toLeftOf="@id/comment_time_title"
+                android:layout_toRightOf="@id/commenter_title"
+                android:layout_toStartOf="@id/comment_time_title"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/doctor_fragment_title_size"
+                tools:text="李俊俋" />
+
+
+        </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:background="@color/grey_pretty_light"
-            >
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
             <TextView
-                android:layout_margin="12dp"
+                android:id="@+id/hospital_title"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:text="@string/comment_detail_hospital"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/doctor_fragment_title_size" />
+
+            <TextView
+                android:id="@+id/hospital"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="就診資訊"
-                android:textColor="@color/colorPrimary"
+                android:layout_toEndOf="@id/hospital_title"
+                android:layout_toRightOf="@id/hospital_title"
+                android:textColor="@color/black_text"
                 android:textSize="@dimen/doctor_fragment_title_size"
-                />
+                tools:text="台北市立聯合醫院" />
+
+            <TextView
+                android:id="@+id/division"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/hospital"
+                android:layout_toEndOf="@id/hospital_title"
+                android:layout_toRightOf="@id/hospital_title"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/doctor_fragment_title_size"
+                tools:text="家醫科" />
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="12dp">
-            <TextView
-                android:layout_width="64dp"
-                android:layout_height="wrap_content"
-                android:text="評論人"
-                android:textSize="@dimen/doctor_fragment_title_size"
-                android:layout_marginRight="20dp"
-                android:textColor="@color/black_text"/>
-            <TextView
-                android:id="@+id/commentor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="李俊俋"
-                android:textSize="@dimen/doctor_fragment_title_size"
-                android:textColor="@color/black_text"/>
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                >
-                <TextView
-                    android:layout_marginRight="8dp"
-                    android:id="@+id/comment_time"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2015/12/5"
-                    android:textColor="@color/grey_text_color"
-                    android:textSize="@dimen/comment_score_size"/>
-                <TextView
-                    android:id="@+id/textview2"
-                    android:layout_toLeftOf="@id/comment_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="評論時間 : "
-                    android:textColor="@color/grey_text_color"
-                    android:textSize="@dimen/comment_score_size"/>
-            </RelativeLayout>
-        </LinearLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="12dp">
-            <TextView
-                android:id="@+id/text8"
-                android:layout_width="64dp"
-                android:layout_height="wrap_content"
-                android:text="就診醫院"
-                android:textSize="@dimen/doctor_fragment_title_size"
-                android:layout_marginRight="20dp"
-                android:textColor="@color/black_text"/>
-            <TextView
-                android:layout_toRightOf="@id/text8"
-                android:id="@+id/mHostital"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="台北市立聯合醫院"
-                android:textSize="@dimen/doctor_fragment_title_size"
-                android:textColor="@color/black_text"/>
-            <TextView
-                android:layout_toRightOf="@id/text8"
-                android:layout_below="@+id/mHostital"
-                android:id="@+id/division"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="家醫科"
-                android:textSize="@dimen/doctor_fragment_title_size"
-                android:textColor="@color/black_text"/>
-        </RelativeLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="12dp">
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="64dp"
                 android:layout_height="wrap_content"
-                android:text="門診醫師"
-                android:textSize="@dimen/doctor_fragment_title_size"
+                android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:textColor="@color/black_text"/>
+                android:text="@string/comment_detail_doctor"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/doctor_fragment_title_size" />
+
             <TextView
                 android:id="@+id/doctor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="趙錢孫 醫師"
+                android:textColor="@color/black_text"
                 android:textSize="@dimen/doctor_fragment_title_size"
-                android:textColor="@color/black_text"/>
+                tools:text="趙錢孫 醫師" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="12dp">
+            android:orientation="horizontal"
+            android:visibility="gone">
+
             <TextView
                 android:layout_width="64dp"
                 android:layout_height="wrap_content"
-                android:text="就醫時間"
-                android:textSize="@dimen/doctor_fragment_title_size"
+                android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:textColor="@color/black_text"/>
+                android:text="@string/comment_detail_go_to_a_doctor_time"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/doctor_fragment_title_size" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2015/12/10"
+                android:textColor="@color/black_text"
                 android:textSize="@dimen/doctor_fragment_title_size"
-                android:textColor="@color/black_text"/>
+                tools:text="2015/12/10" />
         </LinearLayout>
 
-
-
-        <LinearLayout
-            android:layout_marginTop="16dp"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
+            android:layout_marginTop="16dp"
             android:background="@color/grey_pretty_light"
-            >
-            <TextView
-                android:layout_margin="12dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="科別評論"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/doctor_fragment_title_size"
-                />
-        </LinearLayout>
+            android:gravity="center_vertical"
+            android:padding="12dp"
+            android:text="@string/comment_detail_division"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/doctor_fragment_title_size" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginLeft="12dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="16dp">
+
             <TextView
-                android:id="@+id/text2"
+                android:id="@+id/env_score_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="環境衛生"
-                android:textSize="@dimen/doctor_fragment_title_size"
-                android:textColor="@color/black_text"/>
+                android:text="@string/comment_detail_environment"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/doctor_fragment_title_size" />
+
             <TextView
                 android:id="@+id/env_score"
-                android:layout_marginLeft="4dp"
-                android:layout_toRightOf="@+id/text2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3.0"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@id/env_score_title"
+                android:layout_toRightOf="@id/env_score_title"
                 android:textColor="@color/black_text"
                 android:textSize="@dimen/doctor_fragment_title_size"
-                />
+                tools:text="3.0" />
+
             <RatingBar
                 android:id="@+id/env_rating_bar"
-                android:layout_marginLeft="4dp"
-                android:layout_toRightOf="@+id/env_score"
-                android:stepSize="0.5"
-                android:numStars="5"
+                style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@id/env_score"
+                android:layout_toRightOf="@id/env_score"
+                android:numStars="5"
+                android:stepSize="0.5" />
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginLeft="12dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="10dp">
+
             <TextView
-                android:id="@+id/text3"
+                android:id="@+id/equipment_score_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="醫療設備"
-                android:textSize="@dimen/doctor_fragment_title_size"
-                android:textColor="@color/black_text"/>
+                android:text="@string/comment_detail_equipment"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/doctor_fragment_title_size" />
+
             <TextView
                 android:id="@+id/equipment_score"
-                android:layout_marginLeft="4dp"
-                android:layout_toRightOf="@+id/text3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3.0"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@id/equipment_score_title"
+                android:layout_toRightOf="@id/equipment_score_title"
                 android:textColor="@color/black_text"
                 android:textSize="@dimen/doctor_fragment_title_size"
-                />
+                tools:text="3.0" />
+
             <RatingBar
                 android:id="@+id/equipment_rating_bar"
-                android:layout_marginLeft="4dp"
-                android:layout_toRightOf="@+id/equipment_score"
-                android:stepSize="0.5"
-                android:numStars="5"
+                style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@id/equipment_score"
+                android:layout_toRightOf="@id/equipment_score"
+                android:numStars="5"
+                android:stepSize="0.5" />
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginLeft="12dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="10dp">
+
             <TextView
-                android:id="@+id/text4"
+                android:id="@+id/spe_score_div_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="醫護專業"
-                android:textSize="@dimen/doctor_fragment_title_size"
-                android:textColor="@color/black_text"/>
+                android:text="@string/comment_detail_division_specialty"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/doctor_fragment_title_size" />
+
             <TextView
                 android:id="@+id/spe_score_div"
-                android:layout_marginLeft="4dp"
-                android:layout_toRightOf="@+id/text4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3.0"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@id/spe_score_div_title"
+                android:layout_toRightOf="@id/spe_score_div_title"
                 android:textColor="@color/black_text"
                 android:textSize="@dimen/doctor_fragment_title_size"
-                />
+                tools:text="3.0" />
+
             <RatingBar
                 android:id="@+id/spe_div_rating_bar"
-                android:layout_marginLeft="4dp"
-                android:layout_toRightOf="@+id/spe_score_div"
-                android:stepSize="0.5"
-                android:numStars="5"
+                style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@id/spe_score_div"
+                android:layout_toRightOf="@id/spe_score_div"
+                android:numStars="5"
+                android:stepSize="0.5" />
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginLeft="12dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="10dp">
+
             <TextView
-                android:id="@+id/text5"
+                android:id="@+id/friend_score_div_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="服務態度"
-                android:textSize="@dimen/doctor_fragment_title_size"
-                android:textColor="@color/black_text"/>
+                android:text="@string/comment_detail_division_friend"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/doctor_fragment_title_size" />
+
             <TextView
                 android:id="@+id/friend_score_div"
-                android:layout_marginLeft="4dp"
-                android:layout_toRightOf="@+id/text5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/doctor_fragment_title_size"
-                android:text="3.0"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@id/friend_score_div_title"
+                android:layout_toRightOf="@id/friend_score_div_title"
                 android:textColor="@color/black_text"
-                />
+                android:textSize="@dimen/doctor_fragment_title_size"
+                tools:text="3.0" />
+
             <RatingBar
                 android:id="@+id/friend_div_rating_bar"
-                android:layout_marginLeft="4dp"
-                android:layout_toRightOf="@+id/friend_score_div"
-                android:stepSize="0.5"
-                android:numStars="5"
+                style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@id/friend_score_div"
+                android:layout_toRightOf="@id/friend_score_div"
+                android:numStars="5"
+                android:stepSize="0.5" />
         </RelativeLayout>
+
         <View
-            android:layout_margin="10dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/grey_divider_color"></View>
+            android:layout_margin="10dp"
+            android:background="@color/grey_divider_color" />
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_marginBottom="4dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            >
+            android:text="@string/comment_detail_division"
+            android:textColor="@color/grey_text_color"
+            android:textSize="@dimen/comment_score_size" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="科別評論"
-                android:textColor="@color/grey_text_color"
-                android:textSize="@dimen/comment_score_size"
-                android:layout_marginBottom="4dp"/>
-
-            <TextView
-                android:id="@+id/div_comment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="醫院的服務很用心，非常感謝！但是護士小姐的動作太粗魯，家裡長輩打針的時候，找不到血管，要找……"
-                android:textColor="@color/black_text"
-                android:textSize="@dimen/doctor_fragment_title_size"/>
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="8dp"
+        <TextView
+            android:id="@+id/div_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:textColor="@color/black_text"
+            android:textSize="@dimen/doctor_fragment_title_size"
+            tools:text="醫院的服務很用心，非常感謝！但是護士小姐的動作太粗魯，家裡長輩打針的時候，找不到血管，要找……" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:background="@color/grey_pretty_light"
-            >
-            <TextView
-                android:layout_margin="12dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="醫師評論"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/doctor_fragment_title_size"
-                />
-        </LinearLayout>
+            android:padding="12dp"
+            android:text="@string/comment_detail_doctor_comment"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/doctor_fragment_title_size" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <LinearLayout
-                android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_margin="12dp"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
                 <ImageView
-                    android:id="@+id/awrad"
+                    android:id="@+id/award"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/award"/>
+                    android:src="@mipmap/award" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="已推薦"
-                    android:textSize="@dimen/comment_score_size"/>
+                    android:text="@string/comment_detail_award"
+                    android:textSize="@dimen/comment_score_size" />
             </LinearLayout>
+
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginLeft="12dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="10dp">
+
                     <TextView
-                        android:id="@+id/text6"
+                        android:id="@+id/doctor_friend_score_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="醫師態度"
-                        android:textSize="@dimen/doctor_fragment_title_size"
-                        android:textColor="@color/black_text"/>
-                    <TextView
-                        android:id="@+id/friend_score"
-                        android:layout_marginLeft="4dp"
-                        android:layout_toRightOf="@+id/text6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="3.0"
-                        android:textSize="@dimen/doctor_fragment_title_size"
+                        android:text="@string/comment_detail_doctor_friend"
                         android:textColor="@color/black_text"
-                        />
-                    <RatingBar
-                        android:id="@+id/friend_rating_bar"
-                        android:layout_marginLeft="4dp"
-                        android:layout_toRightOf="@+id/friend_score"
-                        android:stepSize="0.5"
-                        android:numStars="5"
+                        android:textSize="@dimen/doctor_fragment_title_size" />
+
+                    <TextView
+                        android:id="@+id/doctor_friend_score"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_toEndOf="@id/doctor_friend_score_title"
+                        android:layout_toRightOf="@id/doctor_friend_score_title"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/doctor_fragment_title_size"
+                        tools:text="3.0" />
+
+                    <RatingBar
+                        android:id="@+id/doctor_friend_rating_bar"
                         style="?android:attr/ratingBarStyleSmall"
-                        android:layout_centerVertical="true"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_toEndOf="@id/doctor_friend_score"
+                        android:layout_toRightOf="@id/doctor_friend_score"
+                        android:numStars="5"
+                        android:stepSize="0.5" />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginLeft="12dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="10dp">
+
                     <TextView
-                        android:id="@+id/text7"
+                        android:id="@+id/spe_score_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="醫師專業"
-                        android:textSize="@dimen/doctor_fragment_title_size"
-                        android:textColor="@color/black_text"/>
+                        android:text="@string/comment_detail_doctor_specialty"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/doctor_fragment_title_size" />
+
                     <TextView
                         android:id="@+id/spe_score"
-                        android:layout_marginLeft="4dp"
-                        android:layout_toRightOf="@+id/text7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3.0"
-                        android:textSize="@dimen/doctor_fragment_title_size"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_toEndOf="@id/spe_score_title"
+                        android:layout_toRightOf="@id/spe_score_title"
                         android:textColor="@color/black_text"
-                        />
+                        android:textSize="@dimen/doctor_fragment_title_size"
+                        tools:text="3.0" />
+
                     <RatingBar
                         android:id="@+id/spe_rating_bar"
-                        android:layout_marginLeft="4dp"
-                        android:layout_toRightOf="@+id/spe_score"
-                        android:stepSize="0.5"
-                        android:numStars="5"
+                        style="?android:attr/ratingBarStyleSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="?android:attr/ratingBarStyleSmall"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_toEndOf="@id/spe_score"
+                        android:layout_toRightOf="@id/spe_score"
+                        android:numStars="5"
+                        android:stepSize="0.5" />
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
 
         <View
-            android:layout_margin="10dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/grey_divider_color"></View>
+            android:layout_margin="10dp"
+            android:background="@color/grey_divider_color" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_marginBottom="4dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:layout_marginBottom="12dp">
+            android:text="@string/comment_detail_doctor_comment"
+            android:textColor="@color/grey_text_color"
+            android:textSize="@dimen/comment_score_size" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="醫師評論"
-                android:textColor="@color/grey_text_color"
-                android:textSize="@dimen/comment_score_size"
-                android:layout_marginBottom="4dp"/>
-
-            <TextView
-                android:id="@+id/dr_comment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="趙醫師的問診讓我感覺很窩心，不會像例行公事三兩下就結束，細心又關心病人！！我們家的小孩都是⋯⋯"
-                android:textColor="@color/black_text"
-                android:textSize="@dimen/doctor_fragment_title_size"/>
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/dr_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:textColor="@color/black_text"
+            android:textSize="@dimen/doctor_fragment_title_size"
+            tools:text="趙醫師的問診讓我感覺很窩心，不會像例行公事三兩下就結束，細心又關心病人！！我們家的小孩都是⋯⋯" />
 
     </LinearLayout>
 </ScrollView>
