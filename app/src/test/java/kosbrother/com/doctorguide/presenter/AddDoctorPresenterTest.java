@@ -1,6 +1,7 @@
 package kosbrother.com.doctorguide.presenter;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
 import kosbrother.com.doctorguide.model.AddDoctorModel;
@@ -10,20 +11,20 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-public class AddDoctorPresenterTest extends TestCase {
+public class AddDoctorPresenterTest {
 
     private AddDoctorView view;
     private AddDoctorModel model;
     private AddDoctorPresenter presenter;
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         view = mock(AddDoctorView.class);
         model = mock(AddDoctorModel.class);
         presenter = spy(new AddDoctorPresenter(view, model));
     }
 
+    @Test
     public void testOnCreate() throws Exception {
         presenter.onCreate();
 
@@ -33,6 +34,7 @@ public class AddDoctorPresenterTest extends TestCase {
         verify(view).setHospitalText(model.getHospitalName());
     }
 
+    @Test
     public void testOnSubmitClick_noDoctorName() throws Exception {
         String doctorName = "";
         String hospitalName = "";
@@ -42,6 +44,7 @@ public class AddDoctorPresenterTest extends TestCase {
         verify(view).showNoDoctorSnackBar();
     }
 
+    @Test
     public void testOnSubmitClick_noHospitalName() throws Exception {
         String doctorName = "doctor";
         String hospitalName = "";
@@ -51,6 +54,7 @@ public class AddDoctorPresenterTest extends TestCase {
         verify(view).showNoHospitalSnackBar();
     }
 
+    @Test
     public void testOnSubmitClick_submitData() throws Exception {
         String doctorName = "doctor";
         String hospitalName = "hospital";
@@ -60,6 +64,7 @@ public class AddDoctorPresenterTest extends TestCase {
         verify(model).requestSubmitAddDoctor(view.getSubmitData(), presenter);
     }
 
+    @Test
     public void testOnSubmitResultSuccess() throws Exception {
         presenter.onSubmitResultSuccess();
 
@@ -67,6 +72,7 @@ public class AddDoctorPresenterTest extends TestCase {
         verify(view).showSubmitSuccessDialog();
     }
 
+    @Test
     public void testOnHomeItemSelected() throws Exception {
         presenter.onHomeItemSelected();
 
