@@ -36,7 +36,20 @@
     <string name="division_page">科別資訊頁</string>
     <string name="doctor_page">醫師資訊頁</string>
 
+    <!--Add Doctor-->
     <string name="add_doctor_title">就醫指南APP:新增醫師</string>
+    <string name="add_doctor_action_bar_title">新增醫師</string>
+    <string name="add_doctor_submit">送出審核</string>
+    <string name="add_doctor_content">就醫指南盡力搜集全台醫院及醫生資料，希望能幫助到有需要的人。我們非常歡迎您為醫院\'新增醫師\'，一起完善醫療的資料庫，讓台灣的就醫環境能更加友善方便！！</string>
+    <string name="add_doctor_name">醫師姓名</string>
+    <string name="add_doctor_hospital">服務醫院</string>
+    <string name="add_doctor_hospital_hint">如：大學眼科診所</string>
+    <string name="add_doctor_division">服務科別</string>
+    <string name="add_doctor_division_hint">如：眼料</string>
+    <string name="add_doctor_specialty">醫師專長</string>
+    <string name="add_doctor_specialty_hint">如：眼科、玻璃體、視網膜疾病手術及雷射治療、白內障…</string>
+    <string name="add_doctor_experience">醫師經歷</string>
+    <string name="add_doctor_experience_hint">如：臺北市立聯合醫院忠孝院區 [眼科]</string>
 
     <string name="confirm">確定</string>
     <string name="cancel">取消</string>
