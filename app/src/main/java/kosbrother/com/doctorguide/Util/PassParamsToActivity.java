@@ -7,5 +7,5 @@ import java.util.HashMap;
  */
 public interface PassParamsToActivity{
     void passParams(HashMap<String,String> map);
-    void submitPost();
+    void onSubmitClick();
 }

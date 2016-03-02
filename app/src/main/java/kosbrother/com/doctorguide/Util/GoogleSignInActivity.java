@@ -1,7 +1,13 @@
 package kosbrother.com.doctorguide.Util;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.Auth;
@@ -46,8 +52,8 @@ public class GoogleSignInActivity extends AppCompatActivity implements GoogleApi
     @Override
     public void onStart() {
         super.onStart();
-        if (!Util.isNetworkConnected(this)) {
-            Util.showRequireNetworkDialog(this);
+        if (!isNetworkConnected(this)) {
+            showRequireNetworkDialog(this);
             return;
         }
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
@@ -68,8 +74,8 @@ public class GoogleSignInActivity extends AppCompatActivity implements GoogleApi
     }
 
     protected void signIn() {
-        if (!Util.isNetworkConnected(this)) {
-            Util.showRequireNetworkDialog(this);
+        if (!isNetworkConnected(this)) {
+            showRequireNetworkDialog(this);
             return;
         }
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
@@ -85,5 +91,24 @@ public class GoogleSignInActivity extends AppCompatActivity implements GoogleApi
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         }
+    }
+
+    private boolean isNetworkConnected(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+    private void showRequireNetworkDialog(final Context context) {
+        new AlertDialog.Builder(context)
+                .setTitle("訊息通知")
+                .setMessage("就醫指南需要網路才能運行，請按確認鍵至手機設定畫面，開啟網路連結，謝謝！")
+                .setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        context.startActivity(new Intent(Settings.ACTION_SETTINGS));
+                    }
+                })
+                .show();
     }
 }

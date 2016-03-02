@@ -53,4 +53,11 @@
     <string name="setting_sign_out">登出</string>
     <string name="setting_sign_out_success">成功登出</string>
 
+    <!--Add Comment-->
+    <string name="add_comment_title">新增評論</string>
+    <string name="add_comment_division_title">科別評論</string>
+    <string name="add_comment_doctor_title">醫師評論</string>
+    <!-- \u0020 for a blank-->
+    <string name="add_comment_date_title">就診日期\u0020\u0020</string>
+
 </resources>
