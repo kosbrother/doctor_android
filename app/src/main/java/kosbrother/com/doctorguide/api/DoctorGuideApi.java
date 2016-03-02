@@ -21,7 +21,7 @@ import okhttp3.Response;
  * Created by steven on 1/6/16.
  */
 public class DoctorGuideApi {
-    final static String HOST = "http://130.211.247.159";
+    final static String HOST = "http://doctorguide.tw";
     private final static ObjectMapper mapper = new ObjectMapper();
 
     public static ArrayList<Comment> getUserComments(String email) {
