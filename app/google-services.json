@@ -11,7 +11,8 @@
         "client_id": "android:kosbrother.com.doctorguide",
         "client_type": 1,
         "android_client_info": {
-          "package_name": "kosbrother.com.doctorguide"
+          "package_name": "kosbrother.com.doctorguide",
+          "certificate_hash": []
         }
       },
       "oauth_client": [
@@ -20,8 +21,12 @@
           "client_type": 1,
           "android_info": {
             "package_name": "kosbrother.com.doctorguide",
-            "certificate_hash": "947C044B1D5340A78B42C7844732F2611703B040"
+            "certificate_hash": "A79999C9A25D242BCDC51E2528C48AA565AC3F77"
           }
+        },
+        {
+          "client_id": "422229901752-mbv1bh5d0vtr3us8c5it39m11bsls9aj.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [],
@@ -30,7 +35,7 @@
           "status": 1
         },
         "cloud_messaging_service": {
-          "status": 1,
+          "status": 2,
           "apns_config": []
         },
         "appinvite_service": {
