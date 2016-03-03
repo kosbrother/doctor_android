@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 
@@ -34,7 +35,7 @@ public class ProblemReportActivity extends AppCompatActivity {
     private int doctorId;
     private int hospitalId;
     private int divisionId;
-    private HashMap<String,String> submitParams = new HashMap<String,String>();
+    private HashMap<String, String> submitParams = new HashMap<>();
     private EditText reportContent;
 
     @Override
@@ -44,16 +45,17 @@ public class ProblemReportActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            divisionName = extras.getString("DIVISION_NAME");
-            hospitalName = extras.getString("HOSPITAL_NAME");
-            doctorName = extras.getString("DOCTOR_NAME");
-            reportType = extras.getString("REPORT_TYPE");
-            doctorId = extras.getInt("DOCTOR_ID");
-            hospitalId = extras.getInt("HOSPITAL_ID");
-            divisionId = extras.getInt("DIVISION_ID");
+            divisionName = extras.getString(ExtraKey.DIVISION_NAME);
+            hospitalName = extras.getString(ExtraKey.HOSPITAL_NAME);
+            doctorName = extras.getString(ExtraKey.DOCTOR_NAME);
+            reportType = extras.getString(ExtraKey.REPORT_TYPE);
+            doctorId = extras.getInt(ExtraKey.DOCTOR_ID);
+            hospitalId = extras.getInt(ExtraKey.HOSPITAL_ID);
+            divisionId = extras.getInt(ExtraKey.DIVISION_ID);
         }
 
         actionbar = getSupportActionBar();
+        assert actionbar != null;
         actionbar.setTitle("問題回報");
         actionbar.setDisplayHomeAsUpEnabled(true);
 
@@ -70,15 +72,15 @@ public class ProblemReportActivity extends AppCompatActivity {
     }
 
     private void setSubmit() {
-        Button submit = (Button)findViewById(R.id.submit);
-        reportContent = (EditText)findViewById(R.id.report_content);
+        Button submit = (Button) findViewById(R.id.submit);
+        reportContent = (EditText) findViewById(R.id.report_content);
 
         submit.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(reportContent.getText().toString().equals("")){
+                if (reportContent.getText().toString().equals("")) {
                     Util.showSnackBar(v, "請填寫問題內容");
-                }else {
+                } else {
                     setSubmitParams();
                     new PostProblemTask().execute();
                 }
@@ -87,13 +89,13 @@ public class ProblemReportActivity extends AppCompatActivity {
     }
 
     private void setSubmitParams() {
-        if(doctorId != 0)
-            submitParams.put("doctor_id",doctorId+"");
-        if(hospitalId != 0)
-            submitParams.put("hospital_id",hospitalId+"");
-        if(divisionId != 0)
-            submitParams.put("division_id",divisionId+"");
-        submitParams.put("content",reportContent.getText().toString());
+        if (doctorId != 0)
+            submitParams.put("doctor_id", doctorId + "");
+        if (hospitalId != 0)
+            submitParams.put("hospital_id", hospitalId + "");
+        if (divisionId != 0)
+            submitParams.put("division_id", divisionId + "");
+        submitParams.put("content", reportContent.getText().toString());
     }
 
     private class PostProblemTask extends AsyncTask {
@@ -106,6 +108,7 @@ public class ProblemReportActivity extends AppCompatActivity {
             super.onPreExecute();
             mProgressDialog = Util.showProgressDialog(ProblemReportActivity.this);
         }
+
         @Override
         protected Object doInBackground(Object... params) {
             isSuccess = DoctorGuideApi.postProblem(submitParams);
@@ -116,7 +119,7 @@ public class ProblemReportActivity extends AppCompatActivity {
         protected void onPostExecute(Object result) {
             super.onPostExecute(result);
             mProgressDialog.dismiss();
-            if(isSuccess){
+            if (isSuccess) {
                 new AlertDialog.Builder(ProblemReportActivity.this)
                         .setTitle("成功提交")
                         .setMessage("我們會儘速改進，謝謝你的提報！")
@@ -134,15 +137,15 @@ public class ProblemReportActivity extends AppCompatActivity {
     }
 
     private void setViews() {
-        reportTypeText = (TextView)findViewById(R.id.report_type);
+        reportTypeText = (TextView) findViewById(R.id.report_type);
         reportTypeText.setText(reportType);
 
-        reportText = (TextView)findViewById(R.id.report_string);
+        reportText = (TextView) findViewById(R.id.report_string);
         reportString = "";
         reportString = hospitalName;
-        if(doctorName != null){
+        if (doctorName != null) {
             reportString += " | " + doctorName + " 醫師";
-        }else if(divisionName != null)
+        } else if (divisionName != null)
             reportString += " | " + divisionName;
         reportText.setText(reportString);
     }

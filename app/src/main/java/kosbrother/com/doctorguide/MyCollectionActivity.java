@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
 import kosbrother.com.doctorguide.entity.realm.RealmHospital;
 import kosbrother.com.doctorguide.fragments.DoctorMyCollectionFragment;
@@ -25,9 +26,6 @@ import kosbrother.com.doctorguide.fragments.HospitalMyCollecionFragment;
 
 public class MyCollectionActivity extends AppCompatActivity implements DoctorMyCollectionFragment.OnListFragmentInteractionListener, HospitalMyCollecionFragment.OnListFragmentInteractionListener {
 
-    private ActionBar actionbar;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
     private ViewPagerAdapter adapter;
 
     @Override
@@ -35,15 +33,16 @@ public class MyCollectionActivity extends AppCompatActivity implements DoctorMyC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_collection);
 
-        actionbar = getSupportActionBar();
+        ActionBar actionbar = getSupportActionBar();
+        assert actionbar != null;
         actionbar.setTitle("我的收藏");
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setElevation(0);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -56,10 +55,10 @@ public class MyCollectionActivity extends AppCompatActivity implements DoctorMyC
 
     @Override
     public void onListFragmentInteraction(View view, final RealmHospital item) {
-        if(view.getId() == R.id.heart){
+        if (view.getId() == R.id.heart) {
             String message = "確定要取消收藏「" + item.getName() + "」嗎？";
 
-            new AlertDialog.Builder(MyCollectionActivity.this,R.style.AppCompatAlertDialogStyle)
+            new AlertDialog.Builder(MyCollectionActivity.this, R.style.AppCompatAlertDialogStyle)
                     .setTitle("取消收藏")
                     .setMessage(message)
                     .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
@@ -81,11 +80,11 @@ public class MyCollectionActivity extends AppCompatActivity implements DoctorMyC
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     }).show();
-        }else{
+        } else {
             Intent intent = new Intent(this, HospitalActivity.class);
-            intent.putExtra("HOSPITAL_ID",item.getId());
-            intent.putExtra("HOSPITAL_GRADE",item.getGrade());
-            intent.putExtra("HOSPITAL_NAME",item.getName());
+            intent.putExtra(ExtraKey.HOSPITAL_ID, item.getId());
+            intent.putExtra(ExtraKey.HOSPITAL_GRADE, item.getGrade());
+            intent.putExtra(ExtraKey.HOSPITAL_NAME, item.getName());
             startActivity(intent);
         }
 
@@ -93,10 +92,10 @@ public class MyCollectionActivity extends AppCompatActivity implements DoctorMyC
 
     @Override
     public void onListFragmentInteraction(View view, final RealmDoctor item) {
-        if(view.getId() == R.id.heart){
-            String message = "確定要取消收藏「" + item.getName() + " 醫師" +"」嗎？";
+        if (view.getId() == R.id.heart) {
+            String message = "確定要取消收藏「" + item.getName() + " 醫師" + "」嗎？";
 
-            new AlertDialog.Builder(MyCollectionActivity.this,R.style.AppCompatAlertDialogStyle)
+            new AlertDialog.Builder(MyCollectionActivity.this, R.style.AppCompatAlertDialogStyle)
                     .setTitle("取消收藏")
                     .setMessage(message)
                     .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
@@ -118,12 +117,12 @@ public class MyCollectionActivity extends AppCompatActivity implements DoctorMyC
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     }).show();
-        }else{
+        } else {
             Intent intent = new Intent(this, DoctorActivity.class);
-            intent.putExtra("HOSPITAL_ID",item.getHospitalId());
-            intent.putExtra("DOCTOR_ID",item.getId());
-            intent.putExtra("DOCTOR_NAME",item.getName());
-            intent.putExtra("HOSPITAL_NAME",item.getHospital());
+            intent.putExtra(ExtraKey.HOSPITAL_ID, item.getHospitalId());
+            intent.putExtra(ExtraKey.DOCTOR_ID, item.getId());
+            intent.putExtra(ExtraKey.DOCTOR_NAME, item.getName());
+            intent.putExtra(ExtraKey.HOSPITAL_NAME, item.getHospital());
             startActivity(intent);
         }
     }
@@ -157,7 +156,7 @@ public class MyCollectionActivity extends AppCompatActivity implements DoctorMyC
         }
 
         @Override
-        public int getItemPosition(Object object){
+        public int getItemPosition(Object object) {
             return POSITION_NONE;
         }
     }

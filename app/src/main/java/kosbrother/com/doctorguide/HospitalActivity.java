@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Category;
@@ -63,12 +64,13 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            hospitalId = extras.getInt("HOSPITAL_ID");
-            hospitalGrade = extras.getString("HOSPITAL_GRADE");
-            hospitalName = extras.getString("HOSPITAL_NAME");
+            hospitalId = extras.getInt(ExtraKey.HOSPITAL_ID);
+            hospitalGrade = extras.getString(ExtraKey.HOSPITAL_GRADE);
+            hospitalName = extras.getString(ExtraKey.HOSPITAL_NAME);
         }
 
         actionbar = getSupportActionBar();
+        assert actionbar != null;
         actionbar.setTitle("醫院資訊");
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setElevation(0);
@@ -94,11 +96,11 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
             builder.show();
         } else {
             Intent intent = new Intent(HospitalActivity.this, DivisionActivity.class);
-            intent.putExtra("DIVISION_ID", division.id);
-            intent.putExtra("DIVISION_NAME", division.name);
-            intent.putExtra("HOSPITAL_ID", division.hospital_id);
-            intent.putExtra("HOSPITAL_GRADE", division.hospital_grade);
-            intent.putExtra("HOSPITAL_NAME", division.hospital_name);
+            intent.putExtra(ExtraKey.DIVISION_ID, division.id);
+            intent.putExtra(ExtraKey.DIVISION_NAME, division.name);
+            intent.putExtra(ExtraKey.HOSPITAL_ID, division.hospital_id);
+            intent.putExtra(ExtraKey.HOSPITAL_GRADE, division.hospital_grade);
+            intent.putExtra(ExtraKey.HOSPITAL_NAME, division.hospital_name);
             startActivity(intent);
         }
     }
@@ -181,9 +183,9 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
                     GAManager.sendEvent(new HospitalClickFABEvent(GALabel.PROBLEM_REPORT));
 
                     intent = new Intent(HospitalActivity.this, ProblemReportActivity.class);
-                    intent.putExtra("REPORT_TYPE", getString(R.string.hospital_page));
-                    intent.putExtra("HOSPITAL_NAME", hospitalName);
-                    intent.putExtra("HOSPITAL_ID", hospitalId);
+                    intent.putExtra(ExtraKey.REPORT_TYPE, getString(R.string.hospital_page));
+                    intent.putExtra(ExtraKey.HOSPITAL_NAME, hospitalName);
+                    intent.putExtra(ExtraKey.HOSPITAL_ID, hospitalId);
                     startActivity(intent);
                     break;
                 case R.id.fab_share:
@@ -199,8 +201,8 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
                     GAManager.sendEvent(new HospitalClickFABEvent(GALabel.ADD_DOCTOR));
 
                     intent = new Intent(HospitalActivity.this, AddDoctorActivity.class);
-                    intent.putExtra("HOSPITAL_NAME", hospitalName);
-                    intent.putExtra("HOSPITAL_ID", hospitalId);
+                    intent.putExtra(ExtraKey.HOSPITAL_NAME, hospitalName);
+                    intent.putExtra(ExtraKey.HOSPITAL_ID, hospitalId);
                     startActivity(intent);
                     break;
             }

@@ -15,14 +15,12 @@ import java.util.ArrayList;
 
 import kosbrother.com.doctorguide.HospitalDoctorActivity;
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.entity.Category;
 import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.event.main.MainClickCategoryListEvent;
 import kosbrother.com.doctorguide.google_analytics.event.main.MainClickDivisionInfoEvent;
 
-/**
- * Created by steven on 12/25/15.
- */
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
     private final LayoutInflater mLayoutInflater;
@@ -63,8 +61,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 GAManager.sendEvent(new MainClickCategoryListEvent(mCategories.get(position).name));
 
                 Intent intent = new Intent(mContext, HospitalDoctorActivity.class);
-                intent.putExtra("CATEGORY_NAME", mCategories.get(position).name);
-                intent.putExtra("CATEGORY_ID", mCategories.get(position).id);
+                intent.putExtra(ExtraKey.CATEGORY_NAME, mCategories.get(position).name);
+                intent.putExtra(ExtraKey.CATEGORY_ID, mCategories.get(position).id);
                 mContext.startActivity(intent);
             }
         });

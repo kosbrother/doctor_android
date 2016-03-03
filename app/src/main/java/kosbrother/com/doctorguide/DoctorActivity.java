@@ -33,6 +33,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import kosbrother.com.doctorguide.Util.CreateUserTask;
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
@@ -69,10 +70,10 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            doctorId = extras.getInt("DOCTOR_ID");
-            doctorName = extras.getString("DOCTOR_NAME");
-            hospitalName = extras.getString("HOSPITAL_NAME");
-            hospitalId = extras.getInt("HOSPITAL_ID");
+            doctorId = extras.getInt(ExtraKey.DOCTOR_ID);
+            doctorName = extras.getString(ExtraKey.DOCTOR_NAME);
+            hospitalName = extras.getString(ExtraKey.HOSPITAL_NAME);
+            hospitalId = extras.getInt(ExtraKey.HOSPITAL_ID);
         }
 
         actionbar = getSupportActionBar();
@@ -169,11 +170,11 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
                     GAManager.sendEvent(new DoctorClickFABEvent(GALabel.PROBLEM_REPORT));
 
                     intent = new Intent(DoctorActivity.this, ProblemReportActivity.class);
-                    intent.putExtra("REPORT_TYPE", getString(R.string.doctor_page));
-                    intent.putExtra("HOSPITAL_NAME", hospitalName);
-                    intent.putExtra("DOCTOR_NAME", doctorName);
-                    intent.putExtra("DOCTOR_ID", doctorId);
-                    intent.putExtra("HOSPITAL_ID", hospitalId);
+                    intent.putExtra(ExtraKey.REPORT_TYPE, getString(R.string.doctor_page));
+                    intent.putExtra(ExtraKey.HOSPITAL_NAME, hospitalName);
+                    intent.putExtra(ExtraKey.DOCTOR_NAME, doctorName);
+                    intent.putExtra(ExtraKey.DOCTOR_ID, doctorId);
+                    intent.putExtra(ExtraKey.HOSPITAL_ID, hospitalId);
                     startActivity(intent);
                     break;
                 case R.id.fab_share:
@@ -242,10 +243,10 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
 
     private void startCommentActivity() {
         Intent intent = new Intent(DoctorActivity.this, AddCommentActivity.class);
-        intent.putExtra("DOCTOR_ID", doctorId);
-        intent.putExtra("HOSPITAL_NAME", hospitalName);
-        intent.putExtra("HOSPITAL_ID", hospitalId);
-        intent.putExtra("USER", email);
+        intent.putExtra(ExtraKey.DOCTOR_ID, doctorId);
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, hospitalName);
+        intent.putExtra(ExtraKey.HOSPITAL_ID, hospitalId);
+        intent.putExtra(ExtraKey.USER, email);
         startActivity(intent);
     }
 

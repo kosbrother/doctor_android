@@ -39,6 +39,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import kosbrother.com.doctorguide.Util.CreateUserTask;
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
@@ -87,11 +88,11 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            divisionId = extras.getInt("DIVISION_ID");
-            divisionName = extras.getString("DIVISION_NAME");
-            hospitalId = extras.getInt("HOSPITAL_ID");
-            hospitalGrade = extras.getString("HOSPITAL_GRADE");
-            hospitalName = extras.getString("HOSPITAL_NAME");
+            divisionId = extras.getInt(ExtraKey.DIVISION_ID);
+            divisionName = extras.getString(ExtraKey.DIVISION_NAME);
+            hospitalId = extras.getInt(ExtraKey.HOSPITAL_ID);
+            hospitalGrade = extras.getString(ExtraKey.HOSPITAL_GRADE);
+            hospitalName = extras.getString(ExtraKey.HOSPITAL_NAME);
         }
 
         setViews();
@@ -252,10 +253,10 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
             adapter.notifyDataSetChanged();
         } else {
             Intent intent = new Intent(this, DoctorActivity.class);
-            intent.putExtra("HOSPITAL_ID", hospitalId);
-            intent.putExtra("DOCTOR_ID", item.id);
-            intent.putExtra("DOCTOR_NAME", item.name);
-            intent.putExtra("HOSPITAL_NAME", hospitalName);
+            intent.putExtra(ExtraKey.HOSPITAL_ID, hospitalId);
+            intent.putExtra(ExtraKey.DOCTOR_ID, item.id);
+            intent.putExtra(ExtraKey.DOCTOR_NAME, item.name);
+            intent.putExtra(ExtraKey.HOSPITAL_NAME, hospitalName);
             startActivity(intent);
         }
     }
@@ -337,11 +338,11 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
 
                     if (startInteract) {
                         Intent intent = new Intent(DivisionActivity.this, DivisionActivity.class);
-                        intent.putExtra("DIVISION_ID", hospitalDivisions.get(position).id);
-                        intent.putExtra("DIVISION_NAME", hospitalDivisions.get(position).name);
-                        intent.putExtra("HOSPITAL_ID", hospitalId);
-                        intent.putExtra("HOSPITAL_GRADE", hospitalGrade);
-                        intent.putExtra("HOSPITAL_NAME", hospitalName);
+                        intent.putExtra(ExtraKey.DIVISION_ID, hospitalDivisions.get(position).id);
+                        intent.putExtra(ExtraKey.DIVISION_NAME, hospitalDivisions.get(position).name);
+                        intent.putExtra(ExtraKey.HOSPITAL_ID, hospitalId);
+                        intent.putExtra(ExtraKey.HOSPITAL_GRADE, hospitalGrade);
+                        intent.putExtra(ExtraKey.HOSPITAL_NAME, hospitalName);
                         startActivity(intent);
                         finish();
                     } else
@@ -360,9 +361,9 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
         GAManager.sendEvent(new DivisionClickHospitalTextEvent(hospitalName));
 
         Intent intent = new Intent(this, HospitalActivity.class);
-        intent.putExtra("HOSPITAL_ID", hospitalId);
-        intent.putExtra("HOSPITAL_GRADE", hospitalGrade);
-        intent.putExtra("HOSPITAL_NAME", hospitalName);
+        intent.putExtra(ExtraKey.HOSPITAL_ID, hospitalId);
+        intent.putExtra(ExtraKey.HOSPITAL_GRADE, hospitalGrade);
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, hospitalName);
         startActivity(intent);
     }
 
@@ -387,11 +388,11 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
                     GAManager.sendEvent(new DivisionClickFABEvent(GALabel.PROBLEM_REPORT));
 
                     intent = new Intent(DivisionActivity.this, ProblemReportActivity.class);
-                    intent.putExtra("REPORT_TYPE", getString(R.string.division_page));
-                    intent.putExtra("HOSPITAL_NAME", hospitalName);
-                    intent.putExtra("DIVISION_NAME", divisionName);
-                    intent.putExtra("DIVISION_ID", divisionId);
-                    intent.putExtra("HOSPITAL_ID", hospitalId);
+                    intent.putExtra(ExtraKey.REPORT_TYPE, getString(R.string.division_page));
+                    intent.putExtra(ExtraKey.HOSPITAL_NAME, hospitalName);
+                    intent.putExtra(ExtraKey.DIVISION_NAME, divisionName);
+                    intent.putExtra(ExtraKey.DIVISION_ID, divisionId);
+                    intent.putExtra(ExtraKey.HOSPITAL_ID, hospitalId);
                     startActivity(intent);
                     break;
                 case R.id.fab_share:
@@ -429,10 +430,10 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
                     GAManager.sendEvent(new DivisionClickFABEvent(GALabel.ADD_DOCTOR));
 
                     intent = new Intent(DivisionActivity.this, AddDoctorActivity.class);
-                    intent.putExtra("HOSPITAL_NAME", hospitalName);
-                    intent.putExtra("DIVISION_NAME", divisionName);
-                    intent.putExtra("HOSPITAL_ID", hospitalId);
-                    intent.putExtra("DIVISION_ID", divisionId);
+                    intent.putExtra(ExtraKey.HOSPITAL_NAME, hospitalName);
+                    intent.putExtra(ExtraKey.DIVISION_NAME, divisionName);
+                    intent.putExtra(ExtraKey.HOSPITAL_ID, hospitalId);
+                    intent.putExtra(ExtraKey.DIVISION_ID, divisionId);
                     startActivity(intent);
                     break;
             }
@@ -470,10 +471,10 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
 
     private void startCommentActivity() {
         Intent intent = new Intent(DivisionActivity.this, AddCommentActivity.class);
-        intent.putExtra("HOSPITAL_ID", hospitalId);
-        intent.putExtra("DIVISION_ID", divisionId);
-        intent.putExtra("HOSPITAL_NAME", hospitalName);
-        intent.putExtra("USER", email);
+        intent.putExtra(ExtraKey.HOSPITAL_ID, hospitalId);
+        intent.putExtra(ExtraKey.DIVISION_ID, divisionId);
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, hospitalName);
+        intent.putExtra(ExtraKey.USER, email);
         startActivity(intent);
     }
 

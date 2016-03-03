@@ -18,6 +18,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.DoctorSearchListAdapter;
 import kosbrother.com.doctorguide.adapters.HospitalSearchAdapter;
@@ -103,8 +104,8 @@ public class SearchableActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(SearchableActivity.this, SearchMoreActivity.class);
-                        intent.putExtra("TYPE", "HOSPITAL");
-                        intent.putExtra("QUERY", query);
+                        intent.putExtra(ExtraKey.TYPE, "HOSPITAL");
+                        intent.putExtra(ExtraKey.QUERY, query);
                         startActivity(intent);
                     }
                 };
@@ -124,8 +125,8 @@ public class SearchableActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(SearchableActivity.this, SearchMoreActivity.class);
-                        intent.putExtra("TYPE", "DOCTOR");
-                        intent.putExtra("QUERY", query);
+                        intent.putExtra(ExtraKey.TYPE, "DOCTOR");
+                        intent.putExtra(ExtraKey.QUERY, query);
                         startActivity(intent);
                     }
                 };

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -30,6 +31,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import kosbrother.com.doctorguide.Util.CreateUserTask;
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
 import kosbrother.com.doctorguide.adapters.CategoryAdapter;
 import kosbrother.com.doctorguide.entity.Category;
@@ -223,7 +225,7 @@ public class MainActivity extends GoogleSignInActivity
 
             Intent intent = new Intent(this, MyCommentActivity.class);
             if (user != null)
-                intent.putExtra("USER_EMAIL", user.email);
+                intent.putExtra(ExtraKey.USER_EMAIL, user.email);
             startActivity(intent);
         } else if (id == R.id.setting) {
             GAManager.sendEvent(new MainClickAccountEvent(GALabel.SETTING));
@@ -245,7 +247,7 @@ public class MainActivity extends GoogleSignInActivity
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(MainActivity.this, getString(R.string.login_fail), Toast.LENGTH_LONG).show();
     }
 

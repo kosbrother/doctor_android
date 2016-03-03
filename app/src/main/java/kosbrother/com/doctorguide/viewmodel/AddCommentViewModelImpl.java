@@ -3,6 +3,8 @@ package kosbrother.com.doctorguide.viewmodel;
 import android.content.Intent;
 import android.os.Bundle;
 
+import kosbrother.com.doctorguide.Util.ExtraKey;
+
 public class AddCommentViewModelImpl implements AddCommentViewModel {
     private int hospitalId;
     private int divisionId;
@@ -20,11 +22,11 @@ public class AddCommentViewModelImpl implements AddCommentViewModel {
             return;
         }
 
-        divisionId = extras.getInt("DIVISION_ID");
-        doctorId = extras.getInt("DOCTOR_ID");
-        hospitalId = extras.getInt("HOSPITAL_ID");
-        hospitalName = extras.getString("HOSPITAL_NAME");
-        user = extras.getString("USER");
+        divisionId = extras.getInt(ExtraKey.DIVISION_ID);
+        doctorId = extras.getInt(ExtraKey.DOCTOR_ID);
+        hospitalId = extras.getInt(ExtraKey.HOSPITAL_ID);
+        hospitalName = extras.getString(ExtraKey.HOSPITAL_NAME);
+        user = extras.getString(ExtraKey.USER);
     }
 
     @Override

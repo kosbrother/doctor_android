@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.model.CommentDetailModelImpl;
 import kosbrother.com.doctorguide.presenter.CommentDetailPresenter;
@@ -109,7 +110,7 @@ public class CommentDetailActivity extends AppCompatActivity implements CommentD
         int commentId = 0;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            commentId = extras.getInt("COMMENT_ID");
+            commentId = extras.getInt(ExtraKey.COMMENT_ID);
         }
         return commentId;
     }

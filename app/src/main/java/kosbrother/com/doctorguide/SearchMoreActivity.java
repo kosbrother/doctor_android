@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.DoctorSearchListAdapter;
 import kosbrother.com.doctorguide.adapters.HospitalSearchAdapter;
@@ -30,8 +31,8 @@ public class SearchMoreActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            type = extras.getString("TYPE");
-            query = extras.getString("QUERY");
+            type = extras.getString(ExtraKey.TYPE);
+            query = extras.getString(ExtraKey.QUERY);
         }
 
         ActionBar actionbar = getSupportActionBar();

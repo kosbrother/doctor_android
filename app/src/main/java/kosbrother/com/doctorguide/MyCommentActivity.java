@@ -22,6 +22,7 @@ import com.google.android.gms.common.SignInButton;
 import java.util.ArrayList;
 
 import kosbrother.com.doctorguide.Util.CreateUserTask;
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.CommentAdapter;
@@ -51,7 +52,7 @@ public class MyCommentActivity extends GoogleSignInActivity implements CreateUse
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            userEmail = extras.getString("USER_EMAIL");
+            userEmail = extras.getString(ExtraKey.USER_EMAIL);
         }
 
         if (userEmail == null) {
