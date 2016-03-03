@@ -73,4 +73,21 @@
     <!-- \u0020 for a blank-->
     <string name="add_comment_date_title">就診日期\u0020\u0020</string>
 
+    <!--Comment Detail-->
+    <string name="comment_detail_info">就診資訊</string>
+    <string name="comment_detail_commenter">評論人</string>
+    <string name="comment_detail_comment_time">評論時間\u0020:\u0020</string>
+    <string name="comment_detail_hospital">就診醫院</string>
+    <string name="comment_detail_doctor">門診醫師</string>
+    <string name="comment_detail_go_to_a_doctor_time">就醫時間</string>
+    <string name="comment_detail_division">科別評論</string>
+    <string name="comment_detail_environment">環境衛生</string>
+    <string name="comment_detail_equipment">醫療設備</string>
+    <string name="comment_detail_division_specialty">醫護專業</string>
+    <string name="comment_detail_division_friend">服務態度</string>
+    <string name="comment_detail_doctor_comment">醫師評論</string>
+    <string name="comment_detail_award">已推薦</string>
+    <string name="comment_detail_doctor_friend">醫師態度</string>
+    <string name="comment_detail_doctor_specialty">醫師專業</string>
+
 </resources>

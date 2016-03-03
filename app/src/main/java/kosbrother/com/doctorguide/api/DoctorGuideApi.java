@@ -17,15 +17,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-/**
- * Created by steven on 1/6/16.
- */
 public class DoctorGuideApi {
     final static String HOST = "http://doctorguide.tw";
     private final static ObjectMapper mapper = new ObjectMapper();
 
     public static ArrayList<Comment> getUserComments(String email) {
-        ArrayList<Comment> comments = new ArrayList<Comment>();
+        ArrayList<Comment> comments = new ArrayList<>();
         try {
             String message = runHttpGet(HOST + "/api/v1/comments/user_comments.json?user=" + email);
             comments = mapper.readValue(message, new TypeReference<ArrayList<Comment>>() {
@@ -63,12 +60,11 @@ public class DoctorGuideApi {
     }
 
     public static Comment getComment(int comment_id) {
-        Comment comment = new Comment();
+        Comment comment = null;
         try {
             String message = runHttpGet(HOST + "/api/v1/comments/" + comment_id + ".json");
             comment = mapper.readValue(message, new TypeReference<Comment>() {
             });
-            return comment;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -76,7 +72,7 @@ public class DoctorGuideApi {
     }
 
     public static ArrayList<Comment> getHospitalComments(int hospital_id) {
-        ArrayList<Comment> comments = new ArrayList<Comment>();
+        ArrayList<Comment> comments = new ArrayList<>();
         try {
             String message = runHttpGet(HOST + "/api/v1/hospitals/" + hospital_id + "/comments.json");
             comments = mapper.readValue(message, new TypeReference<ArrayList<Comment>>() {
@@ -89,7 +85,7 @@ public class DoctorGuideApi {
     }
 
     public static ArrayList<Comment> getDivisionComments(int division_id, int hospital_id) {
-        ArrayList<Comment> comments = new ArrayList<Comment>();
+        ArrayList<Comment> comments = new ArrayList<>();
         try {
             String message = runHttpGet(HOST + "/api/v1/divisions/" + division_id + "/comments.json?hospital_id=" + hospital_id);
             comments = mapper.readValue(message, new TypeReference<ArrayList<Comment>>() {
@@ -102,7 +98,7 @@ public class DoctorGuideApi {
     }
 
     public static ArrayList<Comment> getDoctorComments(int doctor_id) {
-        ArrayList<Comment> comments = new ArrayList<Comment>();
+        ArrayList<Comment> comments = new ArrayList<>();
         try {
             String message = runHttpGet(HOST + "/api/v1/doctors/" + doctor_id + "/comments.json");
             comments = mapper.readValue(message, new TypeReference<ArrayList<Comment>>() {
@@ -120,7 +116,6 @@ public class DoctorGuideApi {
             String message = runHttpGet(HOST + "/api/v1/doctors/" + doctorId + "/score.json");
             doctor = mapper.readValue(message, new TypeReference<Doctor>() {
             });
-            return doctor;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -133,7 +128,6 @@ public class DoctorGuideApi {
             String message = runHttpGet(HOST + "/api/v1/divisions/" + divisionId + "/score.json?hospital_id=" + hospitalId);
             division = mapper.readValue(message, new TypeReference<Division>() {
             });
-            return division;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -146,7 +140,6 @@ public class DoctorGuideApi {
             String message = runHttpGet(HOST + "/api/v1/doctors/" + doctorId + ".json");
             doctor = mapper.readValue(message, new TypeReference<Doctor>() {
             });
-            return doctor;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -159,7 +152,6 @@ public class DoctorGuideApi {
             String message = runHttpGet(HOST + "/api/v1/hospitals/" + hospitalId + ".json");
             hospital = mapper.readValue(message, new TypeReference<Hospital>() {
             });
-            return hospital;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -167,7 +159,7 @@ public class DoctorGuideApi {
     }
 
     public static ArrayList<Hospital> getHospitalsByAreaAndCategory(int areaId, int categoryId, int page, double latitude, double longitude, String order) {
-        ArrayList<Hospital> hospitals = new ArrayList<Hospital>();
+        ArrayList<Hospital> hospitals = new ArrayList<>();
         try {
             String message = runHttpGet(HOST + "/api/v1/hospitals/by_area_category.json?area_id=" + areaId + "&category_id=" + categoryId + "&page=" + page + "&latitude=" + latitude + "&longitude=" + longitude + "&order=" + order);
             hospitals = readHospitalJson(message);
@@ -179,7 +171,7 @@ public class DoctorGuideApi {
     }
 
     public static ArrayList<Doctor> getDoctorsByAreaAndCategory(int areaId, int categoryId, int page, double latitude, double longitude, String order) {
-        ArrayList<Doctor> doctors = new ArrayList<Doctor>();
+        ArrayList<Doctor> doctors = new ArrayList<>();
         try {
             String message = runHttpGet(HOST + "/api/v1/doctors/by_area_category.json?area_id=" + areaId + "&category_id=" + categoryId + "&page=" + page + "&latitude=" + latitude + "&longitude=" + longitude + "&order=" + order);
             doctors = readDoctorJson(message);
@@ -191,7 +183,7 @@ public class DoctorGuideApi {
     }
 
     public static ArrayList<Doctor> getDoctorsByHospitalAndDivision(int hospitalID, int divisionId) {
-        ArrayList<Doctor> doctors = new ArrayList<Doctor>();
+        ArrayList<Doctor> doctors = new ArrayList<>();
         try {
             String message = runHttpGet(HOST + "/api/v1/doctors/by_hospital_division.json?hospital_id=" + hospitalID + "&division_id=" + divisionId);
             doctors = readDoctorJson(message);
@@ -203,7 +195,7 @@ public class DoctorGuideApi {
     }
 
     public static ArrayList<Division> getDivisionByHospitalAndCategory(int hospitalId, int categoryId) {
-        ArrayList<Division> divisions = new ArrayList<Division>();
+        ArrayList<Division> divisions = new ArrayList<>();
         try {
             String message = runHttpGet(HOST + "/api/v1/divisions/by_hospital_category.json?hospital_id=" + hospitalId + "&category_id=" + categoryId);
             divisions = readDivisionJson(message);
@@ -215,7 +207,7 @@ public class DoctorGuideApi {
     }
 
     public static ArrayList<Division> getDivisionsWithDoctorsByHospital(int hospitalId) {
-        ArrayList<Division> divisions = new ArrayList<Division>();
+        ArrayList<Division> divisions = new ArrayList<>();
         try {
             String message = runHttpGet(HOST + "/api/v1/hospitals/" + hospitalId + "/divisions_with_doctors.json");
             divisions = readDivisionJson(message);
@@ -227,7 +219,7 @@ public class DoctorGuideApi {
     }
 
     public static ArrayList<Division> getDivisionByHospital(int hospitalId) {
-        ArrayList<Division> divisions = new ArrayList<Division>();
+        ArrayList<Division> divisions = new ArrayList<>();
         try {
             String message = runHttpGet(HOST + "/api/v1/divisions/by_hospital.json?hospital_id=" + hospitalId);
             divisions = readDivisionJson(message);
@@ -239,7 +231,7 @@ public class DoctorGuideApi {
     }
 
     private static ArrayList<Division> readDivisionJson(String jsonString) {
-        ArrayList<Division> divisionsList = new ArrayList<Division>();
+        ArrayList<Division> divisionsList = new ArrayList<>();
         try {
             divisionsList = mapper.readValue(jsonString, new TypeReference<ArrayList<Division>>() {
             });
@@ -252,7 +244,7 @@ public class DoctorGuideApi {
 
 
     private static ArrayList<Doctor> readDoctorJson(String jsonString) {
-        ArrayList<Doctor> doctorsList = new ArrayList<Doctor>();
+        ArrayList<Doctor> doctorsList = new ArrayList<>();
         try {
             doctorsList = mapper.readValue(jsonString, new TypeReference<ArrayList<Doctor>>() {
             });
@@ -264,7 +256,7 @@ public class DoctorGuideApi {
     }
 
     private static ArrayList<Hospital> readHospitalJson(String jsonString) {
-        ArrayList<Hospital> hospitalList = new ArrayList<Hospital>();
+        ArrayList<Hospital> hospitalList = new ArrayList<>();
         try {
             hospitalList = mapper.readValue(jsonString, new TypeReference<ArrayList<Hospital>>() {
             });
@@ -381,7 +373,7 @@ public class DoctorGuideApi {
     }
 
     public static ArrayList<Hospital> searchHospitals(String name, int itemNum) {
-        ArrayList<Hospital> hospitals = new ArrayList<Hospital>();
+        ArrayList<Hospital> hospitals = new ArrayList<>();
         try {
             String message = runHttpGet(HOST + "/api/v1/search_hospitals/" + name + ".json?" + "num=" + itemNum);
             hospitals = mapper.readValue(message, new TypeReference<ArrayList<Hospital>>() {
@@ -394,7 +386,7 @@ public class DoctorGuideApi {
     }
 
     public static ArrayList<Doctor> searchDoctors(String name, int itemNum) {
-        ArrayList<Doctor> doctors = new ArrayList<Doctor>();
+        ArrayList<Doctor> doctors = new ArrayList<>();
         try {
             String message = runHttpGet(HOST + "/api/v1/search_doctors/" + name + ".json?" + "num=" + itemNum);
             doctors = mapper.readValue(message, new TypeReference<ArrayList<Doctor>>() {
