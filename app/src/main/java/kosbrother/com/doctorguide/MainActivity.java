@@ -1,5 +1,6 @@
 package kosbrother.com.doctorguide;
 
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -30,9 +31,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import kosbrother.com.doctorguide.Util.CreateUserTask;
 import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
+import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.CategoryAdapter;
 import kosbrother.com.doctorguide.entity.Category;
 import kosbrother.com.doctorguide.entity.User;
@@ -41,15 +42,19 @@ import kosbrother.com.doctorguide.google_analytics.event.main.MainClickAccountEv
 import kosbrother.com.doctorguide.google_analytics.event.main.MainClickSearchIconEvent;
 import kosbrother.com.doctorguide.google_analytics.event.main.MainSubmitSearchTextEvent;
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
+import kosbrother.com.doctorguide.task.CreateUserTask;
 
-public class MainActivity extends GoogleSignInActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener, CreateUserTask.AfterCreateUser {
+public class MainActivity extends GoogleSignInActivity implements
+        NavigationView.OnNavigationItemSelectedListener,
+        GoogleApiClient.OnConnectionFailedListener,
+        CreateUserTask.CreateUserListener {
 
     RecyclerView mRecyclerView;
     private SignInButton signInBtn;
     private TextView logInEmail;
     private DrawerLayout drawer;
     private User user;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,10 +128,23 @@ public class MainActivity extends GoogleSignInActivity
                 if (acct.getPhotoUrl() != null)
                     user.pic_url = acct.getPhotoUrl().toString();
             }
-            new CreateUserTask(this, user).execute();
+            mProgressDialog = Util.showProgressDialog(this);
+            new CreateUserTask(this).execute(user);
         } else {
             drawNavigationSignInPart(false);
         }
+    }
+
+    @Override
+    public void onCreateUserSuccess() {
+        mProgressDialog.dismiss();
+        drawNavigationSignInPart(true);
+    }
+
+    @Override
+    public void onCreateUserFail() {
+        mProgressDialog.dismiss();
+        Toast.makeText(this, "登入失敗", Toast.LENGTH_SHORT).show();
     }
 
     private void drawNavigationSignInPart(boolean signedIn) {
@@ -251,8 +269,4 @@ public class MainActivity extends GoogleSignInActivity
         Toast.makeText(MainActivity.this, getString(R.string.login_fail), Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void afterCreateUser() {
-        drawNavigationSignInPart(true);
-    }
 }

@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
@@ -18,9 +19,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 
-/**
- * Created by steven on 1/8/16.
- */
 public class GoogleSignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleApiClient mGoogleApiClient;
@@ -45,7 +43,7 @@ public class GoogleSignInActivity extends AppCompatActivity implements GoogleApi
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 
@@ -62,7 +60,7 @@ public class GoogleSignInActivity extends AppCompatActivity implements GoogleApi
         } else {
             opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
-                public void onResult(GoogleSignInResult googleSignInResult) {
+                public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
                     handleSignInResult(googleSignInResult);
                 }
             });
@@ -73,7 +71,7 @@ public class GoogleSignInActivity extends AppCompatActivity implements GoogleApi
         isSignIn = result.isSuccess();
     }
 
-    protected void signIn() {
+    public void signIn() {
         if (!isNetworkConnected(this)) {
             showRequireNetworkDialog(this);
             return;

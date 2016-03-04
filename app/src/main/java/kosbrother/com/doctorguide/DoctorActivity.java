@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import kosbrother.com.doctorguide.Util.CreateUserTask;
+import kosbrother.com.doctorguide.task.CreateUserTask;
 import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
@@ -49,7 +50,8 @@ import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickColle
 import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickFABEvent;
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
 
-public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreFragment.GetDoctor, CreateUserTask.AfterCreateUser {
+public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreFragment.GetDoctor,
+        CreateUserTask.CreateUserListener {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -62,6 +64,7 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
     private Doctor doctor;
     private int hospitalId;
     private String email;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -232,13 +235,21 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
             user.name = acct.getDisplayName();
             if (acct.getPhotoUrl() != null)
                 user.pic_url = acct.getPhotoUrl().toString();
-            new CreateUserTask(this, user).execute();
+            mProgressDialog = Util.showProgressDialog(this);
+            new CreateUserTask(this).execute(user);
         }
     }
 
     @Override
-    public void afterCreateUser() {
+    public void onCreateUserSuccess() {
+        mProgressDialog.dismiss();
         startCommentActivity();
+    }
+
+    @Override
+    public void onCreateUserFail() {
+        mProgressDialog.dismiss();
+        Toast.makeText(this, "登入失敗", Toast.LENGTH_SHORT).show();
     }
 
     private void startCommentActivity() {

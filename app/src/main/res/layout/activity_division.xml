@@ -1,203 +1,226 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/div_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ic_hospital_biggest"
-                android:layout_marginLeft="16dp"
                 android:layout_centerVertical="true"
-                />
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:src="@mipmap/ic_hospital_biggest" />
+
             <LinearLayout
-                android:layout_toRightOf="@+id/div_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="18dp"
+                android:layout_marginStart="18dp"
+                android:layout_toEndOf="@id/div_image"
+                android:layout_toRightOf="@id/div_image"
                 android:gravity="center_vertical"
-                android:layout_marginLeft="18dp">
+                android:orientation="vertical">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
+                    android:layout_height="wrap_content">
+
                     <TextView
                         android:id="@+id/hospial_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/your_string_here"
-                        android:layout_marginRight="16dp"
-                        android:textColor="@color/tab_text_act"
-                        android:textSize="@dimen/doctor_fragment_text_size"
                         android:layout_centerVertical="true"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
                         android:clickable="true"
                         android:onClick="onHospitalClick"
-                        />
+                        android:text="@string/your_string_here"
+                        android:textColor="@color/tab_text_act"
+                        android:textSize="@dimen/doctor_fragment_text_size" />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp">
+
                     <RelativeLayout
                         android:id="@+id/comment_part"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        >
+                        android:gravity="center_vertical">
+
                         <ImageView
                             android:id="@+id/thumb"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@mipmap/thumb_whte"
-                            android:layout_marginRight="5dp"
                             android:layout_centerVertical="true"
-                            />
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginRight="5dp"
+                            android:src="@mipmap/thumb_whte" />
+
                         <TextView
                             android:id="@+id/recommend_num"
-                            android:textColor="@color/textColorPrimary"
-                            android:layout_toRightOf="@+id/thumb"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="900"
-                            android:textSize="@dimen/division_score"
                             android:layout_centerVertical="true"
-                            android:layout_marginRight="5dp"/>
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_toEndOf="@id/thumb"
+                            android:layout_toRightOf="@id/thumb"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="@dimen/division_score"
+                            tools:text="900" />
+
                         <ImageView
                             android:id="@+id/sms"
-                            android:layout_toRightOf="@+id/recommend_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@mipmap/sms_white"
-                            android:layout_marginRight="5dp"
                             android:layout_centerVertical="true"
-                            />
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_toEndOf="@id/recommend_num"
+                            android:layout_toRightOf="@id/recommend_num"
+                            android:src="@mipmap/sms_white" />
+
                         <TextView
                             android:id="@+id/comment_num"
-                            android:textColor="@color/textColorPrimary"
-                            android:layout_toRightOf="@+id/sms"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="20"
-                            android:layout_marginRight="5dp"
                             android:layout_centerVertical="true"
-                            android:textSize="@dimen/division_score"/>
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_toEndOf="@id/sms"
+                            android:layout_toRightOf="@id/sms"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="@dimen/division_score"
+                            tools:text="20" />
+
                         <ImageView
                             android:id="@+id/star"
-                            android:layout_toRightOf="@+id/comment_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@mipmap/star_white"
-                            android:layout_marginRight="5dp"
                             android:layout_centerVertical="true"
-                            />
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_toEndOf="@id/comment_num"
+                            android:layout_toRightOf="@id/comment_num"
+                            android:src="@mipmap/star_white" />
+
                         <TextView
                             android:id="@+id/score"
-                            android:textColor="@color/textColorPrimary"
-                            android:layout_toRightOf="@+id/star"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
+                            android:layout_toEndOf="@id/star"
+                            android:layout_toRightOf="@id/star"
+                            android:textColor="@color/textColorPrimary"
                             android:textSize="@dimen/division_score"
-                            android:text="4.2"/>
+                            tools:text="4.2" />
                     </RelativeLayout>
+
                     <Spinner
-                        android:layout_below="@+id/comment_part"
                         android:id="@+id/division_spinner"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/doctor_fragment_title_size"
-                        />
+                        android:layout_below="@+id/comment_part"
+                        android:textSize="@dimen/doctor_fragment_title_size" />
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
+            style="@style/MyCustomTabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabMode="fixed"
             app:tabGravity="fill"
-            style="@style/MyCustomTabLayout"
-            />
+            app:tabMode="fixed" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="bottom|end"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        fab:menu_icon="@mipmap/ic_fab"
         fab:menu_animationDelayPerItem="0"
-        fab:menu_labels_maxLines="2"
-        fab:menu_labels_ellipsize="end"
+        fab:menu_backgroundColor="#ccffffff"
         fab:menu_colorNormal="@color/colorAccent"
         fab:menu_colorPressed="#C3520C"
         fab:menu_colorRipple="#99FFFFFF"
-        fab:menu_backgroundColor="#ccffffff"
-       >
+        fab:menu_icon="@mipmap/ic_fab"
+        fab:menu_labels_ellipsize="end"
+        fab:menu_labels_maxLines="2">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_problem_report"
+            style="@style/MenuButtonsStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onFabProblemReportClick"
             android:src="@mipmap/ic_fab_problem"
-            fab:fab_label="問題回報"
-            style="@style/MenuButtonsStyle"
             fab:fab_colorNormal="#32B9CB"
             fab:fab_colorPressed="#19A9BD"
-            fab:fab_colorRipple="#0A6E7C" />
+            fab:fab_colorRipple="#0A6E7C"
+            fab:fab_label="問題回報" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_share"
+            style="@style/MenuButtonsStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onFabShareClick"
             android:src="@mipmap/ic_fab_share"
-            fab:fab_label="分享"
-            style="@style/MenuButtonsStyle"
             fab:fab_colorNormal="#96C364"
             fab:fab_colorPressed="#71AC2F"
-            fab:fab_colorRipple="#3D6016"/>
+            fab:fab_colorRipple="#3D6016"
+            fab:fab_label="分享" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_comment"
+            style="@style/MenuButtonsStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onFabCommentClick"
             android:src="@mipmap/ic_fab_comment"
-            fab:fab_label="評論"
-            style="@style/MenuButtonsStyle"
             fab:fab_colorNormal="#7055A1"
             fab:fab_colorPressed="#491B9B"
             fab:fab_colorRipple="#2C0D63"
-            />
+            fab:fab_label="評論" />
+
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_add_doctor"
+            style="@style/MenuButtonsStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onFabAddDoctorClick"
             android:src="@mipmap/ic_fab_add_doctor"
-            fab:fab_label="新增醫師"
-            style="@style/MenuButtonsStyle"
             fab:fab_colorNormal="#F2D03D"
             fab:fab_colorPressed="#F2AB00"
-            fab:fab_colorRipple="#D99200"/>
+            fab:fab_colorRipple="#D99200"
+            fab:fab_label="新增醫師" />
 
     </com.github.clans.fab.FloatingActionMenu>
 

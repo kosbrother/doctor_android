@@ -87,6 +87,7 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 @Override
                 public void onClick(View v) {
                     if (null != mListener) {
+                        // TODO: 2016/3/3 move logic to activity
                         Doctor doctor = mDoctors.get(position);
 
                         if (mFragmentViewType == HEARTTYPE) {

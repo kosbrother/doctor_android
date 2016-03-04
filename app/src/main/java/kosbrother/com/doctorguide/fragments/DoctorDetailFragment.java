@@ -20,6 +20,7 @@ import kosbrother.com.doctorguide.DivisionActivity;
 import kosbrother.com.doctorguide.HospitalActivity;
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.Util.ExtraKey;
+import kosbrother.com.doctorguide.Util.StringUtil;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Division;
@@ -113,7 +114,7 @@ public class DoctorDetailFragment extends Fragment {
                     tv.setTextColor(ContextCompat.getColor(getContext(), R.color.orange_text_link));
                     tv.setClickable(true);
                     tv.setLayoutParams(lparams);
-                    String htmlString = "<u>" + div.hospital_name + "</u>";
+                    String htmlString = StringUtil.appendHtmlUnderline(div.hospital_name);
                     tv.setText(Html.fromHtml(htmlString));
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -135,7 +136,7 @@ public class DoctorDetailFragment extends Fragment {
                 tv2.setTextColor(ContextCompat.getColor(getContext(), R.color.orange_text_link));
                 tv2.setClickable(true);
                 tv2.setLayoutParams(lparams);
-                String htmlString2 = "<u>" + div.name + "</u>";
+                String htmlString2 = StringUtil.appendHtmlUnderline(div.name);
                 tv2.setText(Html.fromHtml(htmlString2));
                 tv2.setOnClickListener(new View.OnClickListener() {
                     @Override
