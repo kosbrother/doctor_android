@@ -26,41 +26,6 @@ public class FabPresenterTest {
     }
 
     @Test
-    public void testOnCreate() throws Exception {
-        presenter.onCreate();
-
-        verify(view).initFab();
-    }
-
-    @Test
-    public void testOnFabMenuToggle() throws Exception {
-        boolean opened = anyBoolean();
-
-        presenter.onFabMenuToggle(opened);
-
-        verify(view).sendClickFabEvent(GALabel.FAB_MENU);
-        verify(view).setFabImageDrawable(model.getFabDrawableId(opened));
-    }
-
-    @Test
-    public void testOnFabProblemReportClick() throws Exception {
-        presenter.onFabProblemReportClick();
-
-        verify(view).closeFab();
-        verify(view).sendClickFabEvent(GALabel.PROBLEM_REPORT);
-        verify(view).startProblemReportActivity(model.getViewModel());
-    }
-
-    @Test
-    public void testOnFabShareClick() throws Exception {
-        presenter.onFabShareClick();
-
-        verify(view).closeFab();
-        verify(view).sendClickFabEvent(GALabel.SHARE);
-        verify(view).startShareActivity();
-    }
-
-    @Test
     public void testOnFabCommentClick_isSignin() throws Exception {
         presenter.onFabCommentClick(true);
 

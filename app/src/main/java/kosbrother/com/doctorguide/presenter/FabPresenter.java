@@ -1,40 +1,20 @@
 package kosbrother.com.doctorguide.presenter;
 
-import kosbrother.com.doctorguide.model.FabModel;
-import kosbrother.com.doctorguide.view.FabView;
 import kosbrother.com.doctorguide.entity.User;
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
+import kosbrother.com.doctorguide.model.FabModel;
 import kosbrother.com.doctorguide.task.CreateUserTask;
+import kosbrother.com.doctorguide.view.FabView;
 
-public class FabPresenter implements CreateUserTask.CreateUserListener {
+public class FabPresenter extends BaseFabPresenter implements CreateUserTask.CreateUserListener {
 
     private final FabView view;
     private final FabModel model;
 
     public FabPresenter(FabView view, FabModel model) {
+        super(view, model);
         this.view = view;
         this.model = model;
-    }
-
-    public void onCreate() {
-        view.initFab();
-    }
-
-    public void onFabMenuToggle(boolean opened) {
-        view.sendClickFabEvent(GALabel.FAB_MENU);
-        view.setFabImageDrawable(model.getFabDrawableId(opened));
-    }
-
-    public void onFabProblemReportClick() {
-        view.closeFab();
-        view.sendClickFabEvent(GALabel.PROBLEM_REPORT);
-        view.startProblemReportActivity(model.getViewModel());
-    }
-
-    public void onFabShareClick() {
-        view.closeFab();
-        view.sendClickFabEvent(GALabel.SHARE);
-        view.startShareActivity();
     }
 
     public void onFabCommentClick(boolean isSignIn) {
