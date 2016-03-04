@@ -7,5 +7,4 @@ public interface AboutUsView {
 
     void startFeedbackActivity();
 
-    void finish();
 }

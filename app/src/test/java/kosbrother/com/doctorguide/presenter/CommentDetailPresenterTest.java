@@ -46,10 +46,4 @@ public class CommentDetailPresenterTest {
         verify(view).setDoctorComment(model.getDoctorCommentViewModel());
     }
 
-    @Test
-    public void testOnHomeMenuItemSelected() throws Exception {
-        presenter.onHomeMenuItemSelected();
-
-        verify(view).finish();
-    }
 }

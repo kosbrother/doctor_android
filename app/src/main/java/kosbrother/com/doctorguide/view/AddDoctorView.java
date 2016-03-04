@@ -24,6 +24,4 @@ public interface AddDoctorView {
     void showSubmitSuccessDialog();
 
     HashMap<String,String> getSubmitData();
-
-    void finish();
 }

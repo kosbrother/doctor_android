@@ -2,9 +2,9 @@ package kosbrother.com.doctorguide.presenter;
 
 import java.util.ArrayList;
 
-import kosbrother.com.doctorguide.model.DivisionModel;
 import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.entity.Doctor;
+import kosbrother.com.doctorguide.model.DivisionModel;
 import kosbrother.com.doctorguide.task.GetDivisionTask;
 import kosbrother.com.doctorguide.task.GetDivisionsTask;
 import kosbrother.com.doctorguide.view.DivisionView;
@@ -79,10 +79,6 @@ public class DivisionPresenter implements
     public void onConfirmCancelCollectClick() {
         view.updateAdapter();
         view.executeCancelCollectDoctor(model.getDoctorId());
-    }
-
-    public void onHomeItemSelected() {
-        view.finish();
     }
 
     public Division getDivision() {

@@ -15,8 +15,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -45,7 +43,7 @@ import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickC
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickFABEvent;
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
 
-public class HospitalActivity extends AppCompatActivity implements DivisionListFragment.OnListFragmentInteractionListener, DivisionListFragment.GetDivisions, HospitalDetailFragment.GetHospital {
+public class HospitalActivity extends BaseActivity implements DivisionListFragment.OnListFragmentInteractionListener, DivisionListFragment.GetDivisions, HospitalDetailFragment.GetHospital {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -332,14 +330,4 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case android.R.id.home:
-                finish();
-        }
-        return true;
-    }
 }

@@ -44,6 +44,4 @@ public interface AddCommentView {
     void moveToDivisionPage();
 
     void moveToDoctorPage();
-
-    void finish();
 }

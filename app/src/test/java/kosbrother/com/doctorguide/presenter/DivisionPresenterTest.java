@@ -127,13 +127,6 @@ public class DivisionPresenterTest {
     }
 
     @Test
-    public void testOnHomeItemSelected() throws Exception {
-        presenter.onHomeItemSelected();
-
-        verify(view).finish();
-    }
-
-    @Test
     public void testGetDivision() throws Exception {
         Division expected = model.getDivision();
 

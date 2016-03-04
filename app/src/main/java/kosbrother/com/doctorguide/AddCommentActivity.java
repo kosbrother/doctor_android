@@ -10,8 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -42,7 +40,7 @@ import kosbrother.com.doctorguide.viewmodel.AddCommentViewModelImpl;
 import kosbrother.com.doctorguide.viewmodel.DatePickerViewModel;
 
 
-public class AddCommentActivity extends AppCompatActivity implements
+public class AddCommentActivity extends BaseActivity implements
         DatePickerDialog.OnDateSetListener,
         AddDivisionCommentFragment.EnablePagerSlide,
         PassParamsToActivity,
@@ -221,14 +219,6 @@ public class AddCommentActivity extends AppCompatActivity implements
             default:
                 break;
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            presenter.onHomeItemSelected();
-        }
-        return true;
     }
 
     public void onDateButtonClick(View v) {

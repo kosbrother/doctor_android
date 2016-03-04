@@ -17,7 +17,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.text.Html;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -366,14 +365,6 @@ public class DivisionActivity extends GoogleSignInActivity implements
 
     public void onHospitalClick(View v) {
         divisionPresenter.onHospitalTextViewClick();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            divisionPresenter.onHomeItemSelected();
-        }
-        return true;
     }
 
     @Override

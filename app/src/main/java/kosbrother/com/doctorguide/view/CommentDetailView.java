@@ -18,6 +18,4 @@ public interface CommentDetailView {
     void setDoctorComment(DoctorCommentViewModel doctorCommentViewModel);
 
     void setDivisionComment(DivisionCommentViewModel divisionCommentViewModel);
-
-    void finish();
 }

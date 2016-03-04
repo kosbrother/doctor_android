@@ -15,7 +15,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -33,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import kosbrother.com.doctorguide.task.CreateUserTask;
 import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
@@ -49,6 +47,7 @@ import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickCollectEvent;
 import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickFABEvent;
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
+import kosbrother.com.doctorguide.task.CreateUserTask;
 
 public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreFragment.GetDoctor,
         CreateUserTask.CreateUserListener {
@@ -356,16 +355,5 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case android.R.id.home:
-                finish();
-        }
-        return true;
     }
 }

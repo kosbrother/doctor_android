@@ -144,15 +144,4 @@ public class MyCommentActivity extends GoogleSignInActivity implements
         mRecyclerView.setAdapter(new CommentAdapter(mComments, this, GACategory.MY_COMMENT));
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case android.R.id.home:
-                finish();
-        }
-        return true;
-    }
-
 }

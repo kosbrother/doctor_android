@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -16,7 +14,7 @@ import kosbrother.com.doctorguide.google_signin.GoogleSigninInteractorImpl;
 import kosbrother.com.doctorguide.presenter.SettingPresenter;
 import kosbrother.com.doctorguide.view.SettingView;
 
-public class SettingActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, SettingView {
+public class SettingActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener, SettingView {
 
     private SettingPresenter presenter;
 
@@ -58,14 +56,6 @@ public class SettingActivity extends AppCompatActivity implements GoogleApiClien
         Snackbar.make(findViewById(R.id.setting_rootLayout),
                 getString(R.string.setting_sign_out_success),
                 Snackbar.LENGTH_LONG).show();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            presenter.onHomeItemSelected();
-        }
-        return true;
     }
 
     @Override

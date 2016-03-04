@@ -33,13 +33,6 @@ public class SettingPresenterTest {
     }
 
     @Test
-    public void testOnHomeItemSelected() throws Exception {
-        presenter.onHomeItemSelected();
-
-        verify(view).finish();
-    }
-
-    @Test
     public void testOnAboutUsClick() throws Exception {
         presenter.onAboutUsClick();
 

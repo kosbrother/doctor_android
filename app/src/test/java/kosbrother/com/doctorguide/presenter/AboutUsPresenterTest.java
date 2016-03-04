@@ -35,10 +35,4 @@ public class AboutUsPresenterTest {
         verify(view).startFeedbackActivity();
     }
 
-    @Test
-    public void testOnHomeItemSelected() throws Exception {
-        presenter.onHomeItemSelected();
-
-        verify(view).finish();
-    }
 }

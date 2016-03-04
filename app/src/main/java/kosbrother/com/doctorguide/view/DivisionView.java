@@ -2,11 +2,11 @@ package kosbrother.com.doctorguide.view;
 
 import java.util.List;
 
-import kosbrother.com.doctorguide.viewmodel.DivisionScoreViewModel;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.viewmodel.DivisionAndHospitalViewModel;
+import kosbrother.com.doctorguide.viewmodel.DivisionScoreViewModel;
 
-public interface DivisionView extends ProgressDialogView {
+public interface DivisionView extends BaseView, ProgressDialogView {
     void setContentView();
 
     void initActionBar();
@@ -41,5 +41,4 @@ public interface DivisionView extends ProgressDialogView {
 
     void startHospitalActivity(DivisionAndHospitalViewModel viewModel);
 
-    void finish();
 }

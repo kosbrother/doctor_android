@@ -10,8 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -24,7 +22,7 @@ import kosbrother.com.doctorguide.entity.realm.RealmHospital;
 import kosbrother.com.doctorguide.fragments.DoctorMyCollectionFragment;
 import kosbrother.com.doctorguide.fragments.HospitalMyCollecionFragment;
 
-public class MyCollectionActivity extends AppCompatActivity implements DoctorMyCollectionFragment.OnListFragmentInteractionListener, HospitalMyCollecionFragment.OnListFragmentInteractionListener {
+public class MyCollectionActivity extends BaseActivity implements DoctorMyCollectionFragment.OnListFragmentInteractionListener, HospitalMyCollecionFragment.OnListFragmentInteractionListener {
 
     private ViewPagerAdapter adapter;
 
@@ -161,14 +159,4 @@ public class MyCollectionActivity extends AppCompatActivity implements DoctorMyC
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case android.R.id.home:
-                finish();
-        }
-        return true;
-    }
 }

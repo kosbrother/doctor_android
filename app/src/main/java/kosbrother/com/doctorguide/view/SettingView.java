@@ -6,8 +6,6 @@ public interface SettingView {
 
     void initActionBar();
 
-    void finish();
-
     void startAboutUsActivity();
 
     void showSignOutSuccessSnackBar();

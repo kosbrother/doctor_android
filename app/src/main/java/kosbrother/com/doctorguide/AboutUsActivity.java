@@ -3,15 +3,13 @@ package kosbrother.com.doctorguide;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import kosbrother.com.doctorguide.presenter.AboutUsPresenter;
 import kosbrother.com.doctorguide.view.AboutUsView;
 
-public class AboutUsActivity extends AppCompatActivity implements AboutUsView {
+public class AboutUsActivity extends BaseActivity implements AboutUsView {
 
     private AboutUsPresenter presenter;
 
@@ -55,11 +53,4 @@ public class AboutUsActivity extends AppCompatActivity implements AboutUsView {
         startActivity(new Intent(this, FeedbackActivity.class));
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            presenter.onHomeItemSelected();
-        }
-        return true;
-    }
 }

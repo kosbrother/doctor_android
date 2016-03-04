@@ -1,9 +1,9 @@
 package kosbrother.com.doctorguide.presenter;
 
-import kosbrother.com.doctorguide.model.AddDoctorModel;
-import kosbrother.com.doctorguide.view.AddDoctorView;
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
+import kosbrother.com.doctorguide.model.AddDoctorModel;
 import kosbrother.com.doctorguide.task.SubmitAddDoctorTask;
+import kosbrother.com.doctorguide.view.AddDoctorView;
 
 public class AddDoctorPresenter implements SubmitAddDoctorTask.SubmitAddDoctorListener {
     private final AddDoctorView view;
@@ -41,7 +41,4 @@ public class AddDoctorPresenter implements SubmitAddDoctorTask.SubmitAddDoctorLi
         view.showSubmitSuccessDialog();
     }
 
-    public void onHomeItemSelected() {
-        view.finish();
-    }
 }

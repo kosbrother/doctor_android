@@ -18,7 +18,4 @@ public class AboutUsPresenter {
         view.startFeedbackActivity();
     }
 
-    public void onHomeItemSelected() {
-        view.finish();
-    }
 }
