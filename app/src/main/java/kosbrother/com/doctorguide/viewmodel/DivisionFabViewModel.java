@@ -5,14 +5,14 @@ import android.os.Bundle;
 
 import kosbrother.com.doctorguide.Util.ExtraKey;
 
-public class DivisionAndHospitalViewModel {
-    private int divisionId;
-    private String divisionName;
-    private int hospitalId;
-    private String hospitalGrade;
-    private String hospitalName;
+public class DivisionFabViewModel {
 
-    public DivisionAndHospitalViewModel(Intent intent) {
+    private int divisionId = 0;
+    private String divisionName = "";
+    private int hospitalId = 0;
+    private String hospitalName = "";
+
+    public DivisionFabViewModel(Intent intent) {
         if (intent == null) {
             return;
         }
@@ -21,7 +21,6 @@ public class DivisionAndHospitalViewModel {
             divisionId = extras.getInt(ExtraKey.DIVISION_ID);
             divisionName = extras.getString(ExtraKey.DIVISION_NAME);
             hospitalId = extras.getInt(ExtraKey.HOSPITAL_ID);
-            hospitalGrade = extras.getString(ExtraKey.HOSPITAL_GRADE);
             hospitalName = extras.getString(ExtraKey.HOSPITAL_NAME);
         }
     }
@@ -30,16 +29,12 @@ public class DivisionAndHospitalViewModel {
         return divisionId;
     }
 
-    public int getHospitalId() {
-        return hospitalId;
-    }
-
     public String getDivisionName() {
         return divisionName;
     }
 
-    public String getHospitalGrade() {
-        return hospitalGrade;
+    public int getHospitalId() {
+        return hospitalId;
     }
 
     public String getHospitalName() {

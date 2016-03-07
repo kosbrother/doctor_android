@@ -23,12 +23,6 @@ public class BaseFabPresenter {
         view.setFabImageDrawable(model.getFabDrawableId(opened));
     }
 
-    public void onFabProblemReportClick() {
-        view.closeFab();
-        view.sendClickFabEvent(GALabel.PROBLEM_REPORT);
-        view.startProblemReportActivity(model.getViewModel());
-    }
-
     public void onFabShareClick() {
         view.closeFab();
         view.sendClickFabEvent(GALabel.SHARE);

@@ -4,24 +4,33 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
-import kosbrother.com.doctorguide.model.FabModel;
-import kosbrother.com.doctorguide.view.FabView;
+import kosbrother.com.doctorguide.model.DivisionFabModel;
+import kosbrother.com.doctorguide.view.DivisionFabView;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class FabPresenterTest {
+public class DivisionFabPresenterTest {
 
-    private FabView view;
-    private FabModel model;
-    private FabPresenter presenter;
+    private DivisionFabView view;
+    private DivisionFabModel model;
+    private DivisionFabPresenter presenter;
 
     @Before
     public void setUp() throws Exception {
-        view = mock(FabView.class);
-        model = mock(FabModel.class);
-        presenter = new FabPresenter(view, model);
+        view = mock(DivisionFabView.class);
+        model = mock(DivisionFabModel.class);
+        presenter = new DivisionFabPresenter(view, model);
+    }
+
+    @Test
+    public void testOnFabProblemReportClick() throws Exception {
+        presenter.onFabProblemReportClick();
+
+        verify(view).closeFab();
+        verify(view).sendClickFabEvent(GALabel.PROBLEM_REPORT);
+        verify(view).startProblemReportActivity(model.getViewModel());
     }
 
     @Test

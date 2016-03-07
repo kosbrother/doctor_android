@@ -2,12 +2,15 @@ package kosbrother.com.doctorguide.model;
 
 import kosbrother.com.doctorguide.google_signin.GoogleSignInManager;
 import kosbrother.com.doctorguide.task.CreateUserTask;
-import kosbrother.com.doctorguide.viewmodel.DivisionAndHospitalViewModel;
+import kosbrother.com.doctorguide.viewmodel.DivisionFabViewModel;
 
-public class FabModel extends BaseFabModel {
+public class DivisionFabModel extends BaseFabModel {
 
-    public FabModel(DivisionAndHospitalViewModel viewModel) {
-        super(viewModel);
+    private DivisionFabViewModel viewModel;
+
+    public DivisionFabModel(DivisionFabViewModel viewModel) {
+        super();
+        this.viewModel = viewModel;
     }
 
     public boolean isSignIn() {
@@ -20,5 +23,9 @@ public class FabModel extends BaseFabModel {
 
     public void requestCreateUser(CreateUserTask.CreateUserListener listener) {
         new CreateUserTask(listener).execute(GoogleSignInManager.getInstance().getUser());
+    }
+
+    public DivisionFabViewModel getViewModel() {
+        return viewModel;
     }
 }

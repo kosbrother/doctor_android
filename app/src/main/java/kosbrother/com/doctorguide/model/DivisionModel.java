@@ -9,18 +9,18 @@ import kosbrother.com.doctorguide.factory.DivisionFactory;
 import kosbrother.com.doctorguide.task.GetDivisionTask;
 import kosbrother.com.doctorguide.task.GetDivisionTask.GetDivisionListener;
 import kosbrother.com.doctorguide.task.GetDivisionsTask;
-import kosbrother.com.doctorguide.viewmodel.DivisionAndHospitalViewModel;
+import kosbrother.com.doctorguide.viewmodel.DivisionActivityViewModel;
 import kosbrother.com.doctorguide.viewmodel.DivisionScoreViewModel;
 
 import static kosbrother.com.doctorguide.task.GetDivisionsTask.GetDivisionsListener;
 
 public class DivisionModel {
-    private final DivisionAndHospitalViewModel viewModel;
+    private final DivisionActivityViewModel viewModel;
     private Division division;
     private ArrayList<Division> divisions;
     private int doctorId;
 
-    public DivisionModel(DivisionAndHospitalViewModel viewModel) {
+    public DivisionModel(DivisionActivityViewModel viewModel) {
         this.viewModel = viewModel;
     }
 
@@ -99,7 +99,7 @@ public class DivisionModel {
         new GetDivisionsTask(listener).execute(getHospitalId());
     }
 
-    public DivisionAndHospitalViewModel getDivisionInputViewModel() {
+    public DivisionActivityViewModel getDivisionInputViewModel() {
         return viewModel;
     }
 }
