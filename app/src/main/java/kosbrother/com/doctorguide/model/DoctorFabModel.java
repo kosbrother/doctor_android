@@ -1,14 +1,14 @@
 package kosbrother.com.doctorguide.model;
 
-import kosbrother.com.doctorguide.viewmodel.DoctorFabViewModel;
 import kosbrother.com.doctorguide.google_signin.GoogleSignInManager;
 import kosbrother.com.doctorguide.task.CreateUserTask;
+import kosbrother.com.doctorguide.viewmodel.DoctorActivityViewModel;
 
 public class DoctorFabModel extends BaseFabModel {
 
-    private DoctorFabViewModel viewModel;
+    private DoctorActivityViewModel viewModel;
 
-    public DoctorFabModel(DoctorFabViewModel viewModel) {
+    public DoctorFabModel(DoctorActivityViewModel viewModel) {
         super();
         this.viewModel = viewModel;
     }
@@ -25,7 +25,7 @@ public class DoctorFabModel extends BaseFabModel {
         new CreateUserTask(listener).execute(GoogleSignInManager.getInstance().getUser());
     }
 
-    public DoctorFabViewModel getViewModel() {
+    public DoctorActivityViewModel getViewModel() {
         return viewModel;
     }
 }

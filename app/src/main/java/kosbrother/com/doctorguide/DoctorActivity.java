@@ -47,7 +47,6 @@ import kosbrother.com.doctorguide.presenter.DoctorPresenter;
 import kosbrother.com.doctorguide.view.DoctorFabView;
 import kosbrother.com.doctorguide.view.DoctorView;
 import kosbrother.com.doctorguide.viewmodel.DoctorActivityViewModel;
-import kosbrother.com.doctorguide.viewmodel.DoctorFabViewModel;
 import kosbrother.com.doctorguide.viewmodel.DoctorScoreViewModel;
 
 public class DoctorActivity extends GoogleSignInActivity implements
@@ -70,8 +69,7 @@ public class DoctorActivity extends GoogleSignInActivity implements
         doctorPresenter = new DoctorPresenter(this, new DoctorModel(viewModel, realm));
         doctorPresenter.onCreate();
 
-        DoctorFabViewModel fabViewModel = new DoctorFabViewModel(getIntent());
-        fabPresenter = new DoctorFabPresenter(this, new DoctorFabModel(fabViewModel));
+        fabPresenter = new DoctorFabPresenter(this, new DoctorFabModel(viewModel));
         fabPresenter.onCreate();
     }
 
@@ -231,7 +229,7 @@ public class DoctorActivity extends GoogleSignInActivity implements
     }
 
     @Override
-    public void startCommentActivity(DoctorFabViewModel viewModel, String email) {
+    public void startCommentActivity(DoctorActivityViewModel viewModel, String email) {
         Intent intent = new Intent(DoctorActivity.this, AddCommentActivity.class);
         intent.putExtra(ExtraKey.DOCTOR_ID, viewModel.getDoctorId());
         intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
@@ -273,7 +271,7 @@ public class DoctorActivity extends GoogleSignInActivity implements
     }
 
     @Override
-    public void startProblemReportActivity(DoctorFabViewModel viewModel) {
+    public void startProblemReportActivity(DoctorActivityViewModel viewModel) {
         Intent intent = new Intent(DoctorActivity.this, ProblemReportActivity.class);
         intent.putExtra(ExtraKey.REPORT_TYPE, getString(R.string.doctor_page));
         intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());

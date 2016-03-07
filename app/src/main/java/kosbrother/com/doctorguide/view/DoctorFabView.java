@@ -1,6 +1,6 @@
 package kosbrother.com.doctorguide.view;
 
-import kosbrother.com.doctorguide.viewmodel.DoctorFabViewModel;
+import kosbrother.com.doctorguide.viewmodel.DoctorActivityViewModel;
 
 public interface DoctorFabView extends BaseFabView, ProgressDialogView {
     void showSignInDialog();
@@ -15,7 +15,7 @@ public interface DoctorFabView extends BaseFabView, ProgressDialogView {
 
     void signIn();
 
-    void startProblemReportActivity(DoctorFabViewModel viewModel);
+    void startProblemReportActivity(DoctorActivityViewModel viewModel);
 
-    void startCommentActivity(DoctorFabViewModel viewModel, String email);
+    void startCommentActivity(DoctorActivityViewModel viewModel, String email);
 }

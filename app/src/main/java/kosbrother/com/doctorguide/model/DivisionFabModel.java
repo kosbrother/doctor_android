@@ -2,13 +2,13 @@ package kosbrother.com.doctorguide.model;
 
 import kosbrother.com.doctorguide.google_signin.GoogleSignInManager;
 import kosbrother.com.doctorguide.task.CreateUserTask;
-import kosbrother.com.doctorguide.viewmodel.DivisionFabViewModel;
+import kosbrother.com.doctorguide.viewmodel.DivisionActivityViewModel;
 
 public class DivisionFabModel extends BaseFabModel {
 
-    private DivisionFabViewModel viewModel;
+    private DivisionActivityViewModel viewModel;
 
-    public DivisionFabModel(DivisionFabViewModel viewModel) {
+    public DivisionFabModel(DivisionActivityViewModel viewModel) {
         super();
         this.viewModel = viewModel;
     }
@@ -25,7 +25,7 @@ public class DivisionFabModel extends BaseFabModel {
         new CreateUserTask(listener).execute(GoogleSignInManager.getInstance().getUser());
     }
 
-    public DivisionFabViewModel getViewModel() {
+    public DivisionActivityViewModel getViewModel() {
         return viewModel;
     }
 }

@@ -1,6 +1,6 @@
 package kosbrother.com.doctorguide.view;
 
-import kosbrother.com.doctorguide.viewmodel.DivisionFabViewModel;
+import kosbrother.com.doctorguide.viewmodel.DivisionActivityViewModel;
 
 public interface DivisionFabView extends BaseFabView, ProgressDialogView {
     void showSignInDialog();
@@ -13,11 +13,11 @@ public interface DivisionFabView extends BaseFabView, ProgressDialogView {
 
     void signIn();
 
-    void startCommentActivity(DivisionFabViewModel viewModel, String email);
+    void startCommentActivity(DivisionActivityViewModel viewModel, String email);
 
-    void startAddDoctorActivity(DivisionFabViewModel viewModel);
+    void startAddDoctorActivity(DivisionActivityViewModel viewModel);
 
-    void startProblemReportActivity(DivisionFabViewModel viewModel);
+    void startProblemReportActivity(DivisionActivityViewModel viewModel);
 
     boolean isNetworkConnected();
 }

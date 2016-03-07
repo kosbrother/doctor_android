@@ -57,7 +57,6 @@ import kosbrother.com.doctorguide.presenter.DivisionPresenter;
 import kosbrother.com.doctorguide.view.DivisionFabView;
 import kosbrother.com.doctorguide.view.DivisionView;
 import kosbrother.com.doctorguide.viewmodel.DivisionActivityViewModel;
-import kosbrother.com.doctorguide.viewmodel.DivisionFabViewModel;
 import kosbrother.com.doctorguide.viewmodel.DivisionScoreViewModel;
 
 public class DivisionActivity extends GoogleSignInActivity implements
@@ -81,8 +80,7 @@ public class DivisionActivity extends GoogleSignInActivity implements
         divisionPresenter = new DivisionPresenter(this, new DivisionModel(viewModel));
         divisionPresenter.onCreate();
 
-        DivisionFabViewModel fabViewModel = new DivisionFabViewModel(getIntent());
-        fabPresenter = new DivisionFabPresenter(this, new DivisionFabModel(fabViewModel));
+        fabPresenter = new DivisionFabPresenter(this, new DivisionFabModel(viewModel));
         fabPresenter.onCreate();
     }
 
@@ -302,7 +300,7 @@ public class DivisionActivity extends GoogleSignInActivity implements
         startActivity(intent);
     }
 
-    public void startProblemReportActivity(DivisionFabViewModel viewModel) {
+    public void startProblemReportActivity(DivisionActivityViewModel viewModel) {
         Intent intent = new Intent(DivisionActivity.this, ProblemReportActivity.class);
         intent.putExtra(ExtraKey.REPORT_TYPE, getString(R.string.division_page));
         intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
@@ -321,7 +319,7 @@ public class DivisionActivity extends GoogleSignInActivity implements
     }
 
     @Override
-    public void startCommentActivity(DivisionFabViewModel viewModel, String email) {
+    public void startCommentActivity(DivisionActivityViewModel viewModel, String email) {
         Intent intent = new Intent(DivisionActivity.this, AddCommentActivity.class);
         intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
         intent.putExtra(ExtraKey.DIVISION_ID, viewModel.getDivisionId());
@@ -331,7 +329,7 @@ public class DivisionActivity extends GoogleSignInActivity implements
     }
 
     @Override
-    public void startAddDoctorActivity(DivisionFabViewModel viewModel) {
+    public void startAddDoctorActivity(DivisionActivityViewModel viewModel) {
         Intent intent = new Intent(DivisionActivity.this, AddDoctorActivity.class);
         intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
         intent.putExtra(ExtraKey.DIVISION_NAME, viewModel.getDivisionName());
