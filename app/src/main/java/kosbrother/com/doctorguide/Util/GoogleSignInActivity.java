@@ -24,7 +24,6 @@ import kosbrother.com.doctorguide.google_signin.GoogleSignInManager;
 public class GoogleSignInActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleApiClient mGoogleApiClient;
-    protected boolean isSignIn;
     protected static final int RC_SIGN_IN = 9002;
 
     @Override
@@ -81,7 +80,6 @@ public class GoogleSignInActivity extends BaseActivity implements GoogleApiClien
 
     protected void handleSignInResult(GoogleSignInResult result) {
         GoogleSignInManager.getInstance().handleSignInResult(result);
-        isSignIn = result.isSuccess();
     }
 
     public boolean isNetworkConnected() {

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -16,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 
@@ -28,8 +26,8 @@ import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.CommentAdapter;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Comment;
-import kosbrother.com.doctorguide.entity.User;
 import kosbrother.com.doctorguide.google_analytics.category.GACategory;
+import kosbrother.com.doctorguide.google_signin.GoogleSignInManager;
 import kosbrother.com.doctorguide.task.CreateUserTask;
 
 public class MyCommentActivity extends GoogleSignInActivity implements
@@ -114,19 +112,12 @@ public class MyCommentActivity extends GoogleSignInActivity implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN && isSignIn) {
+        if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            GoogleSignInAccount acct = result.getSignInAccount();
-            User user = new User();
-            if (acct != null) {
-                user.email = acct.getEmail();
-                userEmail = acct.getEmail();
-                user.name = acct.getDisplayName();
-                if (acct.getPhotoUrl() != null)
-                    user.pic_url = acct.getPhotoUrl().toString();
+            if (result.isSuccess()) {
+                mProgressDialog = Util.showProgressDialog(MyCommentActivity.this);
+                new CreateUserTask(this).execute(GoogleSignInManager.getInstance().getUser());
             }
-            mProgressDialog = Util.showProgressDialog(MyCommentActivity.this);
-            new CreateUserTask(this).execute(user);
         }
     }
 

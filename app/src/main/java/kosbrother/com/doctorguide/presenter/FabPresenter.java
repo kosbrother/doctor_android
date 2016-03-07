@@ -1,6 +1,5 @@
 package kosbrother.com.doctorguide.presenter;
 
-import kosbrother.com.doctorguide.entity.User;
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
 import kosbrother.com.doctorguide.model.FabModel;
 import kosbrother.com.doctorguide.task.CreateUserTask;
@@ -17,10 +16,10 @@ public class FabPresenter extends BaseFabPresenter implements CreateUserTask.Cre
         this.model = model;
     }
 
-    public void onFabCommentClick(boolean isSignIn) {
+    public void onFabCommentClick() {
         view.closeFab();
         view.sendClickFabEvent(GALabel.COMMENT);
-        if (isSignIn) {
+        if (model.isSignIn()) {
             view.startCommentActivity(model.getViewModel(), model.getEmail());
         } else {
             view.showSignInDialog();
@@ -34,17 +33,17 @@ public class FabPresenter extends BaseFabPresenter implements CreateUserTask.Cre
     }
 
     public void onSignInButtonClick() {
-        view.signIn();
         view.dismissSignInDialog();
+        if (!view.isNetworkConnected()) {
+            view.showRequireNetworkDialog();
+            return;
+        }
+        view.signIn();
     }
 
-    public void onHandleSignInResultSuccess(String email) {
-        model.setEmail(email);
-    }
-
-    public void onSignInActivityResultSuccess(User user) {
+    public void onSignInActivityResultSuccess() {
         view.showProgressDialog();
-        model.requestCreateUser(user, this);
+        model.requestCreateUser(this);
     }
 
     @Override

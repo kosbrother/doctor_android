@@ -24,7 +24,6 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 
@@ -37,7 +36,6 @@ import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Doctor;
-import kosbrother.com.doctorguide.entity.User;
 import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
 import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DoctorDetailFragment;
@@ -47,6 +45,7 @@ import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickCollectEvent;
 import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickFABEvent;
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
+import kosbrother.com.doctorguide.google_signin.GoogleSignInManager;
 import kosbrother.com.doctorguide.task.CreateUserTask;
 
 public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreFragment.GetDoctor,
@@ -191,7 +190,7 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
                 case R.id.fab_comment:
                     GAManager.sendEvent(new DoctorClickFABEvent(GALabel.COMMENT));
 
-                    if (isSignIn) {
+                    if (GoogleSignInManager.getInstance().isSignIn()) {
                         startCommentActivity();
                     } else {
                         final Dialog dialog = new Dialog(DoctorActivity.this);
@@ -219,27 +218,14 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
     };
 
     @Override
-    protected void handleSignInResult(GoogleSignInResult result) {
-        super.handleSignInResult(result);
-        if (result.isSuccess()) {
-            GoogleSignInAccount acct = result.getSignInAccount();
-            email = acct.getEmail();
-        }
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN && isSignIn) {
+        if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            GoogleSignInAccount acct = result.getSignInAccount();
-            User user = new User();
-            user.email = acct.getEmail();
-            user.name = acct.getDisplayName();
-            if (acct.getPhotoUrl() != null)
-                user.pic_url = acct.getPhotoUrl().toString();
-            mProgressDialog = Util.showProgressDialog(this);
-            new CreateUserTask(this).execute(user);
+            if (result.isSuccess()) {
+                mProgressDialog = Util.showProgressDialog(this);
+                new CreateUserTask(this).execute(GoogleSignInManager.getInstance().getUser());
+            }
         }
     }
 

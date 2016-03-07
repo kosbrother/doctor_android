@@ -2,6 +2,7 @@ package kosbrother.com.doctorguide.google_signin;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -19,10 +20,6 @@ public class GoogleSignInManager implements GoogleApiClient.OnConnectionFailedLi
 
     private static GoogleSignInManager instance;
     private Context context;
-    private String email;
-    private String name;
-    private String picUrl;
-    private User user;
 
     private GoogleSignInManager() {
     }
@@ -36,38 +33,63 @@ public class GoogleSignInManager implements GoogleApiClient.OnConnectionFailedLi
 
     public void init(Context context) {
         this.context = context;
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_USER, 0);
-        email = sharedPreferences.getString(USER_EMAIL, "");
-        name = sharedPreferences.getString(USER_NAME, "");
-        picUrl = sharedPreferences.getString(USER_PIC_URL, "");
     }
 
     public void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
             if (acct != null) {
-                user = createUser(acct);
-                SharedPreferences.Editor edit = context.getSharedPreferences(PREF_USER, 0).edit();
-                edit.putString(USER_EMAIL, user.email);
-                edit.putString(USER_NAME, user.name);
-                edit.putString(USER_PIC_URL, user.pic_url);
-                edit.apply();
+                editUserData(acct.getEmail(), acct.getDisplayName(), getPhotoUrl(acct));
             }
         }
     }
 
-    private User createUser(GoogleSignInAccount acct) {
+    public User getUser() {
         User user = new User();
-        user.email = acct.getEmail();
-        user.name = acct.getDisplayName();
-        if (acct.getPhotoUrl() != null) {
-            user.pic_url = acct.getPhotoUrl().toString();
-        }
+        user.email = getEmail();
+        user.name = getName();
+        user.pic_url = getPicUrl();
         return user;
     }
 
+    public boolean isSignIn() {
+        return !getEmail().isEmpty();
+    }
+
+    public void clearUserData() {
+        editUserData("", "", "");
+    }
+
+    @NonNull
     public String getEmail() {
-        return email;
+        return getSharedPreferences().getString(USER_EMAIL, "");
+    }
+
+    @NonNull
+    public String getName() {
+        return getSharedPreferences().getString(USER_NAME, "");
+    }
+
+    @NonNull
+    private String getPicUrl() {
+        return getSharedPreferences().getString(USER_PIC_URL, "");
+    }
+
+    private SharedPreferences getSharedPreferences() {
+        return context.getSharedPreferences(PREF_USER, 0);
+    }
+
+    private void editUserData(String email, String name, String photoUrl) {
+        SharedPreferences.Editor edit = getSharedPreferences().edit();
+        edit.putString(USER_EMAIL, email);
+        edit.putString(USER_NAME, name);
+        edit.putString(USER_PIC_URL, photoUrl);
+        edit.apply();
+    }
+
+    private String getPhotoUrl(GoogleSignInAccount acct) {
+        Uri photoUrl = acct.getPhotoUrl();
+        return photoUrl == null ? "" : photoUrl.toString();
     }
 
     @Override

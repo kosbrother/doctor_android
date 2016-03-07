@@ -9,9 +9,13 @@ public interface FabView extends BaseFabView, ProgressDialogView {
 
     void showCreateUserFailToast();
 
+    void showRequireNetworkDialog();
+
     void signIn();
 
     void startCommentActivity(DivisionAndHospitalViewModel viewModel, String email);
 
     void startAddDoctorActivity(DivisionAndHospitalViewModel viewModel);
+
+    boolean isNetworkConnected();
 }

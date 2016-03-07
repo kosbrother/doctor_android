@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -29,7 +28,6 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 
@@ -43,7 +41,6 @@ import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
 import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.entity.Doctor;
-import kosbrother.com.doctorguide.entity.User;
 import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
 import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DivisionScoreFragment;
@@ -217,6 +214,11 @@ public class DivisionActivity extends GoogleSignInActivity implements
     }
 
     @Override
+    public void showRequireNetworkDialog() {
+        showRequireNetworkDialog(this);
+    }
+
+    @Override
     public void updateAdapter() {
         adapter.notifyDataSetChanged();
     }
@@ -367,30 +369,6 @@ public class DivisionActivity extends GoogleSignInActivity implements
         divisionPresenter.onHospitalTextViewClick();
     }
 
-    @Override
-    protected void handleSignInResult(GoogleSignInResult result) {
-        super.handleSignInResult(result);
-        if (result.isSuccess()) {
-            GoogleSignInAccount acct = result.getSignInAccount();
-            if (acct != null) {
-                String email = acct.getEmail();
-                fabPresenter.onHandleSignInResultSuccess(email);
-            }
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN && isSignIn) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            GoogleSignInAccount acct = result.getSignInAccount();
-            if (acct != null) {
-                fabPresenter.onSignInActivityResultSuccess(getUser(acct));
-            }
-        }
-    }
-
     public void onFabProblemReportClick(View view) {
         fabPresenter.onFabProblemReportClick();
     }
@@ -400,7 +378,7 @@ public class DivisionActivity extends GoogleSignInActivity implements
     }
 
     public void onFabCommentClick(View view) {
-        fabPresenter.onFabCommentClick(isSignIn);
+        fabPresenter.onFabCommentClick();
     }
 
     public void onFabAddDoctorClick(View view) {
@@ -408,20 +386,20 @@ public class DivisionActivity extends GoogleSignInActivity implements
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                fabPresenter.onSignInActivityResultSuccess();
+            }
+        }
+    }
+
+    @Override
     public Division getDivision() {
         // TODO: 2016/3/3 need to refactoring
         return divisionPresenter.getDivision();
-    }
-
-    @NonNull
-    private User getUser(GoogleSignInAccount acct) {
-        User user = new User();
-        user.email = acct.getEmail();
-        user.name = acct.getDisplayName();
-        if (acct.getPhotoUrl() != null) {
-            user.pic_url = acct.getPhotoUrl().toString();
-        }
-        return user;
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
