@@ -203,6 +203,10 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
                         signInBtn.setOnClickListener(new Button.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                if (!isNetworkConnected()) {
+                                    showRequireNetworkDialog(DoctorActivity.this);
+                                    return;
+                                }
                                 signIn();
                                 dialog.dismiss();
                             }

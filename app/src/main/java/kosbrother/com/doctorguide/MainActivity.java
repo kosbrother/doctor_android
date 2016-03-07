@@ -110,9 +110,23 @@ public class MainActivity extends GoogleSignInActivity implements
             public void onClick(View v) {
                 GAManager.sendEvent(new MainClickAccountEvent(GALabel.SIGN_IN));
 
+                if (!isNetworkConnected()) {
+                    showRequireNetworkDialog(MainActivity.this);
+                    return;
+                }
                 signIn();
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!isNetworkConnected()) {
+            showRequireNetworkDialog(this);
+            return;
+        }
+        silentSignIn();
     }
 
     @Override

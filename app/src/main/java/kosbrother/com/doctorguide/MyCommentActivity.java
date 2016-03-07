@@ -68,6 +68,10 @@ public class MyCommentActivity extends GoogleSignInActivity implements
             signInBtn.setOnClickListener(new Button.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (!isNetworkConnected()) {
+                        showRequireNetworkDialog(MyCommentActivity.this);
+                        return;
+                    }
                     signIn();
                     dialog.dismiss();
                 }
