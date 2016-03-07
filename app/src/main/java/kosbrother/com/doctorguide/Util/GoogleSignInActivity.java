@@ -19,6 +19,7 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 
 import kosbrother.com.doctorguide.BaseActivity;
+import kosbrother.com.doctorguide.google_signin.GoogleSignInManager;
 
 public class GoogleSignInActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -79,6 +80,7 @@ public class GoogleSignInActivity extends BaseActivity implements GoogleApiClien
     }
 
     protected void handleSignInResult(GoogleSignInResult result) {
+        GoogleSignInManager.getInstance().handleSignInResult(result);
         isSignIn = result.isSuccess();
     }
 
