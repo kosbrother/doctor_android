@@ -22,10 +22,6 @@ public class SettingPresenter implements ResultCallback<Status> {
         view.initActionBar();
     }
 
-    public void onHomeItemSelected() {
-        view.finish();
-    }
-
     public void onAboutUsClick() {
         view.startAboutUsActivity();
     }

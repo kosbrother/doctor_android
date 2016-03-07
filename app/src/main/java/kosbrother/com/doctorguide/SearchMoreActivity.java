@@ -4,12 +4,11 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.DoctorSearchListAdapter;
 import kosbrother.com.doctorguide.adapters.HospitalSearchAdapter;
@@ -17,7 +16,7 @@ import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.entity.Hospital;
 
-public class SearchMoreActivity extends AppCompatActivity {
+public class SearchMoreActivity extends BaseActivity {
 
     private static final int SEARCH_NUM = 30;
     private String type;
@@ -30,8 +29,8 @@ public class SearchMoreActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            type = extras.getString("TYPE");
-            query = extras.getString("QUERY");
+            type = extras.getString(ExtraKey.TYPE);
+            query = extras.getString(ExtraKey.QUERY);
         }
 
         ActionBar actionbar = getSupportActionBar();
@@ -78,14 +77,4 @@ public class SearchMoreActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case android.R.id.home:
-                finish();
-        }
-        return true;
-    }
 }

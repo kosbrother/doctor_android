@@ -32,7 +32,4 @@ public class CommentDetailPresenter implements GetCommentTask.GetCommentListener
         view.setDoctorComment(model.getDoctorCommentViewModel());
     }
 
-    public void onHomeMenuItemSelected() {
-        view.finish();
-    }
 }

@@ -72,10 +72,4 @@ public class AddDoctorPresenterTest {
         verify(view).showSubmitSuccessDialog();
     }
 
-    @Test
-    public void testOnHomeItemSelected() throws Exception {
-        presenter.onHomeItemSelected();
-
-        verify(view).finish();
-    }
 }

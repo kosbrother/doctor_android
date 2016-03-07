@@ -5,12 +5,11 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.model.CommentDetailModelImpl;
 import kosbrother.com.doctorguide.presenter.CommentDetailPresenter;
@@ -19,15 +18,14 @@ import kosbrother.com.doctorguide.viewmodel.CommentInfoViewModel;
 import kosbrother.com.doctorguide.viewmodel.DivisionCommentViewModel;
 import kosbrother.com.doctorguide.viewmodel.DoctorCommentViewModel;
 
-public class CommentDetailActivity extends AppCompatActivity implements CommentDetailView {
+public class CommentDetailActivity extends BaseActivity implements CommentDetailView {
 
-    private CommentDetailPresenter presenter;
     private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new CommentDetailPresenter(this, new CommentDetailModelImpl(getCommentId()));
+        CommentDetailPresenter presenter = new CommentDetailPresenter(this, new CommentDetailModelImpl(getCommentId()));
         presenter.onCreate();
     }
 
@@ -99,17 +97,11 @@ public class CommentDetailActivity extends AppCompatActivity implements CommentD
         DrawableCompat.setTint(speRatingBar.getProgressDrawable(), ContextCompat.getColor(this, R.color.rating_bar_color));
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) presenter.onHomeMenuItemSelected();
-        return true;
-    }
-
     private int getCommentId() {
         int commentId = 0;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            commentId = extras.getInt("COMMENT_ID");
+            commentId = extras.getInt(ExtraKey.COMMENT_ID);
         }
         return commentId;
     }

@@ -137,13 +137,6 @@ public class AddCommentPresenterTest {
     }
 
     @Test
-    public void testOnHomeItemSelected() throws Exception {
-        presenter.onHomeItemSelected();
-
-        verify(view).finish();
-    }
-
-    @Test
     public void testOnDivisionNextClick() throws Exception {
         presenter.onDivisionNextClick();
 

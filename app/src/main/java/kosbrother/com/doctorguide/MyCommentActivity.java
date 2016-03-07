@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -21,7 +22,7 @@ import com.google.android.gms.common.SignInButton;
 
 import java.util.ArrayList;
 
-import kosbrother.com.doctorguide.Util.CreateUserTask;
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.CommentAdapter;
@@ -29,14 +30,17 @@ import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Comment;
 import kosbrother.com.doctorguide.entity.User;
 import kosbrother.com.doctorguide.google_analytics.category.GACategory;
+import kosbrother.com.doctorguide.task.CreateUserTask;
 
-public class MyCommentActivity extends GoogleSignInActivity implements CreateUserTask.AfterCreateUser {
+public class MyCommentActivity extends GoogleSignInActivity implements
+        CreateUserTask.CreateUserListener {
 
     private ActionBar actionbar;
     RecyclerView mRecyclerView;
     private String userEmail;
     private ArrayList<Comment> mComments;
     private LinearLayout noCommentLayout;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +55,7 @@ public class MyCommentActivity extends GoogleSignInActivity implements CreateUse
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            userEmail = extras.getString("USER_EMAIL");
+            userEmail = extras.getString(ExtraKey.USER_EMAIL);
         }
 
         if (userEmail == null) {
@@ -117,8 +121,21 @@ public class MyCommentActivity extends GoogleSignInActivity implements CreateUse
                 if (acct.getPhotoUrl() != null)
                     user.pic_url = acct.getPhotoUrl().toString();
             }
-            new CreateUserTask(this, user).execute();
+            mProgressDialog = Util.showProgressDialog(MyCommentActivity.this);
+            new CreateUserTask(this).execute(user);
         }
+    }
+
+    @Override
+    public void onCreateUserSuccess() {
+        mProgressDialog.dismiss();
+        new GetMyCommentsTask().execute();
+    }
+
+    @Override
+    public void onCreateUserFail() {
+        mProgressDialog.dismiss();
+        Toast.makeText(this, "登入失敗", Toast.LENGTH_SHORT).show();
     }
 
     private void setRecyclerView() {
@@ -127,19 +144,4 @@ public class MyCommentActivity extends GoogleSignInActivity implements CreateUse
         mRecyclerView.setAdapter(new CommentAdapter(mComments, this, GACategory.MY_COMMENT));
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case android.R.id.home:
-                finish();
-        }
-        return true;
-    }
-
-    @Override
-    public void afterCreateUser() {
-        new GetMyCommentsTask().execute();
-    }
 }

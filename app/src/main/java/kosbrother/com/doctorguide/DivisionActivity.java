@@ -6,8 +6,8 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,7 +17,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.text.Html;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -26,8 +25,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -38,11 +37,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import kosbrother.com.doctorguide.Util.CreateUserTask;
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
-import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.entity.User;
@@ -55,209 +53,375 @@ import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickDivisionSpinnerEvent;
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickFABEvent;
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickHospitalTextEvent;
-import kosbrother.com.doctorguide.google_analytics.label.GALabel;
+import kosbrother.com.doctorguide.model.DivisionModel;
+import kosbrother.com.doctorguide.model.FabModel;
+import kosbrother.com.doctorguide.presenter.DivisionPresenter;
+import kosbrother.com.doctorguide.presenter.FabPresenter;
+import kosbrother.com.doctorguide.view.DivisionView;
+import kosbrother.com.doctorguide.view.FabView;
+import kosbrother.com.doctorguide.viewmodel.DivisionAndHospitalViewModel;
+import kosbrother.com.doctorguide.viewmodel.DivisionScoreViewModel;
 
-public class DivisionActivity extends GoogleSignInActivity implements DoctorFragment.OnListFragmentInteractionListener, DivisionScoreFragment.GetDivision, CreateUserTask.AfterCreateUser {
+public class DivisionActivity extends GoogleSignInActivity implements
+        DoctorFragment.OnListFragmentInteractionListener,
+        DivisionScoreFragment.GetDivision,
+        DivisionView,
+        FabView {
 
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
     private FloatingActionMenu fab;
-    private int hospitalId;
-    private ArrayList<Division> hospitalDivisions;
-    private int divisionId;
-    private String divisionName;
-    private boolean startInteract = false;
-    private String hospitalGrade;
-    private String hospitalName;
     private ViewPagerAdapter adapter;
-    private Division division;
-    private String email;
+
+    private DivisionPresenter divisionPresenter;
+    private ProgressDialog progressDialog;
+    private Dialog dialog;
+    private FabPresenter fabPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_division);
-
-        ActionBar actionbar = getSupportActionBar();
-        if (actionbar != null) {
-            actionbar.setTitle("科別資訊");
-            actionbar.setDisplayHomeAsUpEnabled(true);
-            actionbar.setElevation(0);
-        }
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            divisionId = extras.getInt("DIVISION_ID");
-            divisionName = extras.getString("DIVISION_NAME");
-            hospitalId = extras.getInt("HOSPITAL_ID");
-            hospitalGrade = extras.getString("HOSPITAL_GRADE");
-            hospitalName = extras.getString("HOSPITAL_NAME");
-        }
-
-        setViews();
-        setSpinner();
-
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-
-        setFab();
-        new GetDivisionScoreTask().execute();
+        DivisionAndHospitalViewModel viewModel = new DivisionAndHospitalViewModel(getIntent());
+        divisionPresenter = new DivisionPresenter(this, new DivisionModel(viewModel));
+        fabPresenter = new FabPresenter(this, new FabModel(viewModel));
+        divisionPresenter.onCreate();
+        fabPresenter.onCreate();
     }
 
     @Override
-    public Division getDivision() {
-        return division;
+    public void setContentView() {
+        setContentView(R.layout.activity_division);
     }
 
-    private class GetDivisionScoreTask extends AsyncTask {
-
-        private ProgressDialog mProgressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mProgressDialog = Util.showProgressDialog(DivisionActivity.this);
-        }
-
-        @Override
-        protected Object doInBackground(Object... params) {
-            division = DoctorGuideApi.getDivisionScore(divisionId, hospitalId);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-            super.onPostExecute(result);
-            mProgressDialog.dismiss();
-            TextView mCommentNum = (TextView) findViewById(R.id.comment_num);
-            TextView mRecommendNum = (TextView) findViewById(R.id.recommend_num);
-            TextView mScore = (TextView) findViewById(R.id.score);
-
-            mCommentNum.setText(division.comment_num + "");
-            mRecommendNum.setText(division.recommend_num + "");
-            mScore.setText(String.format("%.1f", division.avg));
-
-            setupViewPager(viewPager);
-            tabLayout.setupWithViewPager(viewPager);
-        }
-
+    @Override
+    public void initActionBar() {
+        ActionBar actionbar = getSupportActionBar();
+        assert actionbar != null;
+        actionbar.setTitle("科別資訊");
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setElevation(0);
     }
 
-    private void setFab() {
+    @Override
+    public void setDivisionImage(int divisionImageResId) {
+        ((ImageView) findViewById(R.id.div_image)).setImageResource(divisionImageResId);
+    }
+
+    @Override
+    public void setHospitalNameFromHtml(String htmlString) {
+        ((TextView) findViewById(R.id.hospial_name)).setText(Html.fromHtml(htmlString));
+    }
+
+    @Override
+    public void setDivisionScoreText(DivisionScoreViewModel divisionScoreViewModel) {
+        ((TextView) findViewById(R.id.comment_num)).setText(divisionScoreViewModel.getCommentNumText());
+        ((TextView) findViewById(R.id.recommend_num)).setText(divisionScoreViewModel.getRecommendNumText());
+        ((TextView) findViewById(R.id.score)).setText(divisionScoreViewModel.getScoreAvgText());
+    }
+
+    @Override
+    public void initFab() {
         fab = (FloatingActionMenu) findViewById(R.id.menu2);
+        fab.setClosedOnTouchOutside(true);
         fab.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
             public void onMenuToggle(boolean opened) {
-                GAManager.sendEvent(new DivisionClickFABEvent(GALabel.FAB_MENU));
-
-                int drawableId;
-                if (opened) {
-                    drawableId = R.mipmap.ic_close;
-                } else {
-                    drawableId = R.mipmap.ic_fab;
-                }
-                Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), drawableId);
-                fab.getMenuIconView().setImageDrawable(drawable);
+                fabPresenter.onFabMenuToggle(opened);
             }
         });
-        fab.setClosedOnTouchOutside(true);
-
-        FloatingActionButton fabProblemReport = (FloatingActionButton) findViewById(R.id.fab_problem_report);
-        FloatingActionButton fabShare = (FloatingActionButton) findViewById(R.id.fab_share);
-        FloatingActionButton fabComment = (FloatingActionButton) findViewById(R.id.fab_comment);
-        FloatingActionButton fabAddDoctor = (FloatingActionButton) findViewById(R.id.fab_add_doctor);
-
-        fabProblemReport.setOnClickListener(clickListener);
-        fabShare.setOnClickListener(clickListener);
-        fabComment.setOnClickListener(clickListener);
-        fabAddDoctor.setOnClickListener(clickListener);
     }
 
-    private void setViews() {
-        ImageView divImage = (ImageView) findViewById(R.id.div_image);
-        TextView hospital = (TextView) findViewById(R.id.hospial_name);
-        switch (hospitalGrade) {
-            case "醫學中心":
-                divImage.setImageResource(R.mipmap.ic_hospital_biggest);
-                break;
-            case "區域醫院":
-                divImage.setImageResource(R.mipmap.ic_hospital_medium);
-                break;
-            case "地區醫院":
-                divImage.setImageResource(R.mipmap.ic_hospital_small);
-                break;
-            case "診所":
-                divImage.setImageResource(R.mipmap.ic_hospital_smallest);
-                break;
-        }
-        String htmlString = "<u>" + hospitalName + "</u>";
-        hospital.setText(Html.fromHtml(htmlString));
+    @Override
+    public void setFabImageDrawable(int drawableId) {
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), drawableId);
+        fab.getMenuIconView().setImageDrawable(drawable);
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    @Override
+    public void setupViewPager(int hospitalId, int divisionId) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.HEARTTYPE, hospitalId, divisionId), "科內醫生");
         adapter.addFragment(DivisionScoreFragment.newInstance(), "本科評分");
         adapter.addFragment(CommentFragment.newInstance(hospitalId, divisionId, null, GACategory.DIVISION), "本科評論");
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(2);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void setupSpinner(List<String> divisionNames, String divisionName) {
+        Spinner spinner = (Spinner) findViewById(R.id.division_spinner);
+
+        ArrayAdapter<String> areaAdapter = new ArrayAdapter<>(this,
+                R.layout.spinner_item, divisionNames);
+        areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(areaAdapter);
+        spinner.setSelection(areaAdapter.getPosition(divisionName), false);
+        spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                divisionPresenter.onDivisionSpinnerItemClick(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    @Override
+    public void showCancelCollectDialog(String message) {
+        new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                .setTitle("取消收藏")
+                .setMessage(message)
+                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        divisionPresenter.onConfirmCancelCollectClick();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    @Override
+    public void showCollectSuccessSnackBar() {
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.tabs), "成功收藏", Snackbar.LENGTH_SHORT);
+        View snackBarView = snackbar.getView();
+        TextView tv = (TextView) snackBarView.findViewById(android.support.design.R.id.snackbar_text);
+        tv.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary));
+        snackbar.show();
+    }
+
+    public void showSignInDialog() {
+        dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_login);
+
+        SignInButton signInBtn = (SignInButton) dialog.findViewById(R.id.sign_in_button);
+        signInBtn.setSize(SignInButton.SIZE_WIDE);
+        signInBtn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fabPresenter.onSignInButtonClick();
+            }
+        });
+        dialog.show();
+    }
+
+    public void showCreateUserFailToast() {
+        Toast.makeText(this, "登入失敗", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void updateAdapter() {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void executeCancelCollectDoctor(final int doctorId) {
+        Realm realm = Realm.getInstance(getBaseContext());
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmDoctor doc = realm.where(RealmDoctor.class).equalTo("id", doctorId).findFirst();
+                if (doc != null) {
+                    doc.removeFromRealm();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void executeCollectDoctor(final Doctor doctor, final String hospitalName, final int hospitalId) {
+        Realm realm = Realm.getInstance(getBaseContext());
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmDoctor realmDoctor = new RealmDoctor();
+                realmDoctor.setId(doctor.id);
+                realmDoctor.setName(doctor.name);
+                realmDoctor.setAddress(doctor.address);
+                realmDoctor.setHospital(hospitalName);
+                realmDoctor.setHospitalId(hospitalId);
+                realm.copyToRealmOrUpdate(realmDoctor);
+            }
+        });
+    }
+
+    @Override
+    public void sendDivisionClickDivisionSpinnerEvent(String clickDivisionName) {
+        GAManager.sendEvent(new DivisionClickDivisionSpinnerEvent(clickDivisionName));
+    }
+
+    @Override
+    public void sendDivisionClickHospitalTextEvent(String hospitalName) {
+        GAManager.sendEvent(new DivisionClickHospitalTextEvent(hospitalName));
+    }
+
+    public void sendClickFabEvent(String label) {
+        GAManager.sendEvent(new DivisionClickFABEvent(label));
+    }
+
+    @Override
+    public void startDoctorActivity(Doctor doctor, DivisionAndHospitalViewModel viewModel) {
+        Intent intent = new Intent(this, DoctorActivity.class);
+        intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
+        intent.putExtra(ExtraKey.DOCTOR_ID, doctor.id);
+        intent.putExtra(ExtraKey.DOCTOR_NAME, doctor.name);
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
+        startActivity(intent);
+    }
+
+    @Override
+    public void startDivisionActivity(DivisionAndHospitalViewModel viewModel,
+                                      int clickDivisionId, String clickDivisionName) {
+        Intent intent = new Intent(DivisionActivity.this, DivisionActivity.class);
+        intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
+        intent.putExtra(ExtraKey.HOSPITAL_GRADE, viewModel.getHospitalGrade());
+        intent.putExtra(ExtraKey.DIVISION_ID, clickDivisionId);
+        intent.putExtra(ExtraKey.DIVISION_NAME, clickDivisionName);
+        startActivity(intent);
+    }
+
+    @Override
+    public void startHospitalActivity(DivisionAndHospitalViewModel viewModel) {
+        Intent intent = new Intent(this, HospitalActivity.class);
+        intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
+        intent.putExtra(ExtraKey.HOSPITAL_GRADE, viewModel.getHospitalGrade());
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
+        startActivity(intent);
+    }
+
+    @Override
+    public void startProblemReportActivity(DivisionAndHospitalViewModel viewModel) {
+        Intent intent = new Intent(DivisionActivity.this, ProblemReportActivity.class);
+        intent.putExtra(ExtraKey.REPORT_TYPE, getString(R.string.division_page));
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
+        intent.putExtra(ExtraKey.DIVISION_NAME, viewModel.getDivisionName());
+        intent.putExtra(ExtraKey.DIVISION_ID, viewModel.getDivisionId());
+        intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
+        startActivity(intent);
+    }
+
+    public void startShareActivity() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
+    }
+
+    @Override
+    public void startCommentActivity(DivisionAndHospitalViewModel viewModel, String email) {
+        Intent intent = new Intent(DivisionActivity.this, AddCommentActivity.class);
+        intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
+        intent.putExtra(ExtraKey.DIVISION_ID, viewModel.getDivisionId());
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
+        intent.putExtra(ExtraKey.USER, email);
+        startActivity(intent);
+    }
+
+    @Override
+    public void startAddDoctorActivity(DivisionAndHospitalViewModel viewModel) {
+        Intent intent = new Intent(DivisionActivity.this, AddDoctorActivity.class);
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
+        intent.putExtra(ExtraKey.DIVISION_NAME, viewModel.getDivisionName());
+        intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
+        intent.putExtra(ExtraKey.DIVISION_ID, viewModel.getDivisionId());
+        startActivity(intent);
+    }
+
+    public void dismissSignInDialog() {
+        dialog.dismiss();
+    }
+
+    public void closeFab() {
+        fab.close(true);
+    }
+
+    @Override
+    public void showProgressDialog() {
+        progressDialog = Util.showProgressDialog(this);
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        progressDialog.dismiss();
     }
 
     @Override
     public void onListFragmentInteraction(View view, final Doctor item) {
         if (view.getId() == R.id.heart) {
-            if (item.isCollected) {
-                String message = "確定要取消收藏「" + item.name + " 醫師" + "」嗎？";
-                new AlertDialog.Builder(DivisionActivity.this, R.style.AppCompatAlertDialogStyle)
-                        .setTitle("取消收藏")
-                        .setMessage(message)
-                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Realm realm = Realm.getInstance(getBaseContext());
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        RealmDoctor doc = realm.where(RealmDoctor.class).equalTo("id", item.id).findFirst();
-                                        doc.removeFromRealm();
-                                    }
-                                });
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        }).show();
-            } else {
-                Realm realm = Realm.getInstance(getBaseContext());
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmDoctor doctor = new RealmDoctor();
-                        doctor.setId(item.id);
-                        doctor.setName(item.name);
-                        doctor.setAddress(item.address);
-                        doctor.setHospital(hospitalName);
-                        doctor.setHospitalId(hospitalId);
-                        realm.copyToRealmOrUpdate(doctor);
-                    }
-                });
-                Snackbar snackbar = Snackbar.make(tabLayout, "成功收藏", Snackbar.LENGTH_SHORT);
-                View snackbrView = snackbar.getView();
-                TextView tv = (TextView) snackbrView.findViewById(android.support.design.R.id.snackbar_text);
-                tv.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary));
-                snackbar.show();
-            }
-            adapter.notifyDataSetChanged();
+            divisionPresenter.onListFragmentHeartClick(item);
         } else {
-            Intent intent = new Intent(this, DoctorActivity.class);
-            intent.putExtra("HOSPITAL_ID", hospitalId);
-            intent.putExtra("DOCTOR_ID", item.id);
-            intent.putExtra("DOCTOR_NAME", item.name);
-            intent.putExtra("HOSPITAL_NAME", hospitalName);
-            startActivity(intent);
+            divisionPresenter.onListFragmentDoctorClick(item);
         }
+    }
+
+    public void onHospitalClick(View v) {
+        divisionPresenter.onHospitalTextViewClick();
+    }
+
+    @Override
+    protected void handleSignInResult(GoogleSignInResult result) {
+        super.handleSignInResult(result);
+        if (result.isSuccess()) {
+            GoogleSignInAccount acct = result.getSignInAccount();
+            if (acct != null) {
+                String email = acct.getEmail();
+                fabPresenter.onHandleSignInResultSuccess(email);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN && isSignIn) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            GoogleSignInAccount acct = result.getSignInAccount();
+            if (acct != null) {
+                fabPresenter.onSignInActivityResultSuccess(getUser(acct));
+            }
+        }
+    }
+
+    public void onFabProblemReportClick(View view) {
+        fabPresenter.onFabProblemReportClick();
+    }
+
+    public void onFabShareClick(View view) {
+        fabPresenter.onFabShareClick();
+    }
+
+    public void onFabCommentClick(View view) {
+        fabPresenter.onFabCommentClick(isSignIn);
+    }
+
+    public void onFabAddDoctorClick(View view) {
+        fabPresenter.onFabAddDoctorClick();
+    }
+
+    @Override
+    public Division getDivision() {
+        // TODO: 2016/3/3 need to refactoring
+        return divisionPresenter.getDivision();
+    }
+
+    @NonNull
+    private User getUser(GoogleSignInAccount acct) {
+        User user = new User();
+        user.email = acct.getEmail();
+        user.name = acct.getDisplayName();
+        if (acct.getPhotoUrl() != null) {
+            user.pic_url = acct.getPhotoUrl().toString();
+        }
+        return user;
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -292,189 +456,6 @@ public class DivisionActivity extends GoogleSignInActivity implements DoctorFrag
         public int getItemPosition(Object object) {
             return POSITION_NONE;
         }
-    }
-
-    private void setSpinner() {
-        new SetDivisionTask().execute();
-    }
-
-    private class SetDivisionTask extends AsyncTask {
-
-        private ProgressDialog mProgressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mProgressDialog = Util.showProgressDialog(DivisionActivity.this);
-        }
-
-        @Override
-        protected Object doInBackground(Object... params) {
-            hospitalDivisions = DoctorGuideApi.getDivisionByHospital(hospitalId);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-            super.onPostExecute(result);
-            mProgressDialog.dismiss();
-
-            Spinner spinner = (Spinner) findViewById(R.id.division_spinner);
-            List<String> strings = new ArrayList<>();
-            for (Division div : hospitalDivisions)
-                strings.add(div.name);
-
-            ArrayAdapter<String> areaAdapter = new ArrayAdapter<>(DivisionActivity.this,
-                    R.layout.spinner_item, strings.toArray(new String[strings.size()]));
-            areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(areaAdapter);
-            int spinnerPosition = areaAdapter.getPosition(divisionName);
-            spinner.setSelection(spinnerPosition);
-            spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    GAManager.sendEvent(new DivisionClickDivisionSpinnerEvent(hospitalDivisions.get(position).name));
-
-                    if (startInteract) {
-                        Intent intent = new Intent(DivisionActivity.this, DivisionActivity.class);
-                        intent.putExtra("DIVISION_ID", hospitalDivisions.get(position).id);
-                        intent.putExtra("DIVISION_NAME", hospitalDivisions.get(position).name);
-                        intent.putExtra("HOSPITAL_ID", hospitalId);
-                        intent.putExtra("HOSPITAL_GRADE", hospitalGrade);
-                        intent.putExtra("HOSPITAL_NAME", hospitalName);
-                        startActivity(intent);
-                        finish();
-                    } else
-                        startInteract = true;
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-        }
-    }
-
-    public void onHospitalClick(View v) {
-        GAManager.sendEvent(new DivisionClickHospitalTextEvent(hospitalName));
-
-        Intent intent = new Intent(this, HospitalActivity.class);
-        intent.putExtra("HOSPITAL_ID", hospitalId);
-        intent.putExtra("HOSPITAL_GRADE", hospitalGrade);
-        intent.putExtra("HOSPITAL_NAME", hospitalName);
-        startActivity(intent);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case android.R.id.home:
-                finish();
-        }
-        return true;
-    }
-
-    private View.OnClickListener clickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            fab.close(true);
-            Intent intent;
-            switch (v.getId()) {
-                case R.id.fab_problem_report:
-                    GAManager.sendEvent(new DivisionClickFABEvent(GALabel.PROBLEM_REPORT));
-
-                    intent = new Intent(DivisionActivity.this, ProblemReportActivity.class);
-                    intent.putExtra("REPORT_TYPE", getString(R.string.division_page));
-                    intent.putExtra("HOSPITAL_NAME", hospitalName);
-                    intent.putExtra("DIVISION_NAME", divisionName);
-                    intent.putExtra("DIVISION_ID", divisionId);
-                    intent.putExtra("HOSPITAL_ID", hospitalId);
-                    startActivity(intent);
-                    break;
-                case R.id.fab_share:
-                    GAManager.sendEvent(new DivisionClickFABEvent(GALabel.SHARE));
-
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-                    sendIntent.setType("text/plain");
-                    startActivity(sendIntent);
-                    break;
-                case R.id.fab_comment:
-                    GAManager.sendEvent(new DivisionClickFABEvent(GALabel.COMMENT));
-
-                    if (isSignIn) {
-                        startCommentActivity();
-                    } else {
-                        final Dialog dialog = new Dialog(DivisionActivity.this);
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialog.setContentView(R.layout.dialog_login);
-
-                        SignInButton signInBtn = (SignInButton) dialog.findViewById(R.id.sign_in_button);
-                        signInBtn.setSize(SignInButton.SIZE_WIDE);
-                        signInBtn.setOnClickListener(new Button.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                signIn();
-                                dialog.dismiss();
-                            }
-                        });
-                        dialog.show();
-                    }
-                    break;
-                case R.id.fab_add_doctor:
-                    GAManager.sendEvent(new DivisionClickFABEvent(GALabel.ADD_DOCTOR));
-
-                    intent = new Intent(DivisionActivity.this, AddDoctorActivity.class);
-                    intent.putExtra("HOSPITAL_NAME", hospitalName);
-                    intent.putExtra("DIVISION_NAME", divisionName);
-                    intent.putExtra("HOSPITAL_ID", hospitalId);
-                    intent.putExtra("DIVISION_ID", divisionId);
-                    startActivity(intent);
-                    break;
-            }
-        }
-    };
-
-    @Override
-    protected void handleSignInResult(GoogleSignInResult result) {
-        super.handleSignInResult(result);
-        if (result.isSuccess()) {
-            GoogleSignInAccount acct = result.getSignInAccount();
-            email = acct.getEmail();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN && isSignIn) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            GoogleSignInAccount acct = result.getSignInAccount();
-            User user = new User();
-            user.email = acct.getEmail();
-            user.name = acct.getDisplayName();
-            if (acct.getPhotoUrl() != null)
-                user.pic_url = acct.getPhotoUrl().toString();
-            new CreateUserTask(this, user).execute();
-        }
-    }
-
-    @Override
-    public void afterCreateUser() {
-        startCommentActivity();
-    }
-
-    private void startCommentActivity() {
-        Intent intent = new Intent(DivisionActivity.this, AddCommentActivity.class);
-        intent.putExtra("HOSPITAL_ID", hospitalId);
-        intent.putExtra("DIVISION_ID", divisionId);
-        intent.putExtra("HOSPITAL_NAME", hospitalName);
-        intent.putExtra("USER", email);
-        startActivity(intent);
     }
 
 }

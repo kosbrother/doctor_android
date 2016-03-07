@@ -15,11 +15,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import kosbrother.com.doctorguide.Util.CreateUserTask;
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
@@ -47,8 +47,10 @@ import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickCollectEvent;
 import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickFABEvent;
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
+import kosbrother.com.doctorguide.task.CreateUserTask;
 
-public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreFragment.GetDoctor, CreateUserTask.AfterCreateUser {
+public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreFragment.GetDoctor,
+        CreateUserTask.CreateUserListener {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -61,6 +63,7 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
     private Doctor doctor;
     private int hospitalId;
     private String email;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +72,10 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            doctorId = extras.getInt("DOCTOR_ID");
-            doctorName = extras.getString("DOCTOR_NAME");
-            hospitalName = extras.getString("HOSPITAL_NAME");
-            hospitalId = extras.getInt("HOSPITAL_ID");
+            doctorId = extras.getInt(ExtraKey.DOCTOR_ID);
+            doctorName = extras.getString(ExtraKey.DOCTOR_NAME);
+            hospitalName = extras.getString(ExtraKey.HOSPITAL_NAME);
+            hospitalId = extras.getInt(ExtraKey.HOSPITAL_ID);
         }
 
         actionbar = getSupportActionBar();
@@ -169,11 +172,11 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
                     GAManager.sendEvent(new DoctorClickFABEvent(GALabel.PROBLEM_REPORT));
 
                     intent = new Intent(DoctorActivity.this, ProblemReportActivity.class);
-                    intent.putExtra("REPORT_TYPE", getString(R.string.doctor_page));
-                    intent.putExtra("HOSPITAL_NAME", hospitalName);
-                    intent.putExtra("DOCTOR_NAME", doctorName);
-                    intent.putExtra("DOCTOR_ID", doctorId);
-                    intent.putExtra("HOSPITAL_ID", hospitalId);
+                    intent.putExtra(ExtraKey.REPORT_TYPE, getString(R.string.doctor_page));
+                    intent.putExtra(ExtraKey.HOSPITAL_NAME, hospitalName);
+                    intent.putExtra(ExtraKey.DOCTOR_NAME, doctorName);
+                    intent.putExtra(ExtraKey.DOCTOR_ID, doctorId);
+                    intent.putExtra(ExtraKey.HOSPITAL_ID, hospitalId);
                     startActivity(intent);
                     break;
                 case R.id.fab_share:
@@ -231,21 +234,29 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
             user.name = acct.getDisplayName();
             if (acct.getPhotoUrl() != null)
                 user.pic_url = acct.getPhotoUrl().toString();
-            new CreateUserTask(this, user).execute();
+            mProgressDialog = Util.showProgressDialog(this);
+            new CreateUserTask(this).execute(user);
         }
     }
 
     @Override
-    public void afterCreateUser() {
+    public void onCreateUserSuccess() {
+        mProgressDialog.dismiss();
         startCommentActivity();
+    }
+
+    @Override
+    public void onCreateUserFail() {
+        mProgressDialog.dismiss();
+        Toast.makeText(this, "登入失敗", Toast.LENGTH_SHORT).show();
     }
 
     private void startCommentActivity() {
         Intent intent = new Intent(DoctorActivity.this, AddCommentActivity.class);
-        intent.putExtra("DOCTOR_ID", doctorId);
-        intent.putExtra("HOSPITAL_NAME", hospitalName);
-        intent.putExtra("HOSPITAL_ID", hospitalId);
-        intent.putExtra("USER", email);
+        intent.putExtra(ExtraKey.DOCTOR_ID, doctorId);
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, hospitalName);
+        intent.putExtra(ExtraKey.HOSPITAL_ID, hospitalId);
+        intent.putExtra(ExtraKey.USER, email);
         startActivity(intent);
     }
 
@@ -344,16 +355,5 @@ public class DoctorActivity extends GoogleSignInActivity implements DoctorScoreF
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case android.R.id.home:
-                finish();
-        }
-        return true;
     }
 }

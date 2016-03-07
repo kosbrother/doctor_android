@@ -9,6 +9,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -19,8 +20,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -33,6 +32,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.List;
 
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.GetLocation;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
@@ -43,7 +43,7 @@ import kosbrother.com.doctorguide.entity.Hospital;
 import kosbrother.com.doctorguide.fragments.DoctorFragment;
 import kosbrother.com.doctorguide.fragments.HospitalFragment;
 
-public class HospitalDoctorActivity extends AppCompatActivity implements HospitalFragment.OnListFragmentInteractionListener, DoctorFragment.OnListFragmentInteractionListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ActivityCompat.OnRequestPermissionsResultCallback, GetLocation {
+public class HospitalDoctorActivity extends BaseActivity implements HospitalFragment.OnListFragmentInteractionListener, DoctorFragment.OnListFragmentInteractionListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ActivityCompat.OnRequestPermissionsResultCallback, GetLocation {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -65,9 +65,9 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String title = extras.getString("CATEGORY_NAME");
+            String title = extras.getString(ExtraKey.CATEGORY_NAME);
             actionbar.setTitle(title);
-            categoryId = extras.getInt("CATEGORY_ID");
+            categoryId = extras.getInt(ExtraKey.CATEGORY_ID);
         }
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -186,7 +186,7 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 
@@ -231,11 +231,11 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
                 showDivisionDialog(divisions, item);
             else {
                 Intent intent = new Intent(HospitalDoctorActivity.this, DivisionActivity.class);
-                intent.putExtra("DIVISION_ID", divisions.get(0).id);
-                intent.putExtra("DIVISION_NAME", divisions.get(0).name);
-                intent.putExtra("HOSPITAL_ID", item.id);
-                intent.putExtra("HOSPITAL_GRADE", item.grade);
-                intent.putExtra("HOSPITAL_NAME", item.name);
+                intent.putExtra(ExtraKey.DIVISION_ID, divisions.get(0).id);
+                intent.putExtra(ExtraKey.DIVISION_NAME, divisions.get(0).name);
+                intent.putExtra(ExtraKey.HOSPITAL_ID, item.id);
+                intent.putExtra(ExtraKey.HOSPITAL_GRADE, item.grade);
+                intent.putExtra(ExtraKey.HOSPITAL_NAME, item.name);
                 startActivity(intent);
             }
         }
@@ -243,7 +243,7 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
     }
 
     private void showDivisionDialog(final ArrayList<Division> divisions, final Hospital item) {
-        List<String> strings = new ArrayList<String>();
+        List<String> strings = new ArrayList<>();
         for (Division div : divisions)
             strings.add(div.name);
         String[] items = strings.toArray(new String[strings.size()]);
@@ -252,11 +252,11 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int position) {
                 Intent intent = new Intent(HospitalDoctorActivity.this, DivisionActivity.class);
-                intent.putExtra("DIVISION_ID", divisions.get(position).id);
-                intent.putExtra("DIVISION_NAME", divisions.get(position).name);
-                intent.putExtra("HOSPITAL_ID", item.id);
-                intent.putExtra("HOSPITAL_GRADE", item.grade);
-                intent.putExtra("HOSPITAL_NAME", item.name);
+                intent.putExtra(ExtraKey.DIVISION_ID, divisions.get(position).id);
+                intent.putExtra(ExtraKey.DIVISION_NAME, divisions.get(position).name);
+                intent.putExtra(ExtraKey.HOSPITAL_ID, item.id);
+                intent.putExtra(ExtraKey.HOSPITAL_GRADE, item.grade);
+                intent.putExtra(ExtraKey.HOSPITAL_NAME, item.name);
                 startActivity(intent);
             }
         });
@@ -272,10 +272,10 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
     @Override
     public void onListFragmentInteraction(View v, Doctor item) {
         Intent intent = new Intent(this, DoctorActivity.class);
-        intent.putExtra("DOCTOR_ID", item.id);
-        intent.putExtra("HOSPITAL_ID", item.hospital_id);
-        intent.putExtra("DOCTOR_NAME", item.name);
-        intent.putExtra("HOSPITAL_NAME", item.hospital);
+        intent.putExtra(ExtraKey.DOCTOR_ID, item.id);
+        intent.putExtra(ExtraKey.HOSPITAL_ID, item.hospital_id);
+        intent.putExtra(ExtraKey.DOCTOR_NAME, item.name);
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, item.hospital);
         startActivity(intent);
     }
 
@@ -308,14 +308,4 @@ public class HospitalDoctorActivity extends AppCompatActivity implements Hospita
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case android.R.id.home:
-                finish();
-        }
-        return true;
-    }
 }

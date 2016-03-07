@@ -15,8 +15,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Category;
@@ -44,7 +43,7 @@ import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickC
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickFABEvent;
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
 
-public class HospitalActivity extends AppCompatActivity implements DivisionListFragment.OnListFragmentInteractionListener, DivisionListFragment.GetDivisions, HospitalDetailFragment.GetHospital {
+public class HospitalActivity extends BaseActivity implements DivisionListFragment.OnListFragmentInteractionListener, DivisionListFragment.GetDivisions, HospitalDetailFragment.GetHospital {
 
     private ActionBar actionbar;
     private TabLayout tabLayout;
@@ -63,12 +62,13 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            hospitalId = extras.getInt("HOSPITAL_ID");
-            hospitalGrade = extras.getString("HOSPITAL_GRADE");
-            hospitalName = extras.getString("HOSPITAL_NAME");
+            hospitalId = extras.getInt(ExtraKey.HOSPITAL_ID);
+            hospitalGrade = extras.getString(ExtraKey.HOSPITAL_GRADE);
+            hospitalName = extras.getString(ExtraKey.HOSPITAL_NAME);
         }
 
         actionbar = getSupportActionBar();
+        assert actionbar != null;
         actionbar.setTitle("醫院資訊");
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setElevation(0);
@@ -94,11 +94,11 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
             builder.show();
         } else {
             Intent intent = new Intent(HospitalActivity.this, DivisionActivity.class);
-            intent.putExtra("DIVISION_ID", division.id);
-            intent.putExtra("DIVISION_NAME", division.name);
-            intent.putExtra("HOSPITAL_ID", division.hospital_id);
-            intent.putExtra("HOSPITAL_GRADE", division.hospital_grade);
-            intent.putExtra("HOSPITAL_NAME", division.hospital_name);
+            intent.putExtra(ExtraKey.DIVISION_ID, division.id);
+            intent.putExtra(ExtraKey.DIVISION_NAME, division.name);
+            intent.putExtra(ExtraKey.HOSPITAL_ID, division.hospital_id);
+            intent.putExtra(ExtraKey.HOSPITAL_GRADE, division.hospital_grade);
+            intent.putExtra(ExtraKey.HOSPITAL_NAME, division.hospital_name);
             startActivity(intent);
         }
     }
@@ -181,9 +181,9 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
                     GAManager.sendEvent(new HospitalClickFABEvent(GALabel.PROBLEM_REPORT));
 
                     intent = new Intent(HospitalActivity.this, ProblemReportActivity.class);
-                    intent.putExtra("REPORT_TYPE", getString(R.string.hospital_page));
-                    intent.putExtra("HOSPITAL_NAME", hospitalName);
-                    intent.putExtra("HOSPITAL_ID", hospitalId);
+                    intent.putExtra(ExtraKey.REPORT_TYPE, getString(R.string.hospital_page));
+                    intent.putExtra(ExtraKey.HOSPITAL_NAME, hospitalName);
+                    intent.putExtra(ExtraKey.HOSPITAL_ID, hospitalId);
                     startActivity(intent);
                     break;
                 case R.id.fab_share:
@@ -199,8 +199,8 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
                     GAManager.sendEvent(new HospitalClickFABEvent(GALabel.ADD_DOCTOR));
 
                     intent = new Intent(HospitalActivity.this, AddDoctorActivity.class);
-                    intent.putExtra("HOSPITAL_NAME", hospitalName);
-                    intent.putExtra("HOSPITAL_ID", hospitalId);
+                    intent.putExtra(ExtraKey.HOSPITAL_NAME, hospitalName);
+                    intent.putExtra(ExtraKey.HOSPITAL_ID, hospitalId);
                     startActivity(intent);
                     break;
             }
@@ -330,14 +330,4 @@ public class HospitalActivity extends AppCompatActivity implements DivisionListF
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case android.R.id.home:
-                finish();
-        }
-        return true;
-    }
 }

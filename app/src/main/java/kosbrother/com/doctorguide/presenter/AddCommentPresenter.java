@@ -94,10 +94,6 @@ public class AddCommentPresenter implements
         }
     }
 
-    public void onHomeItemSelected() {
-        view.finish();
-    }
-
     public void onDivisionNextClick() {
         view.enableTabClickAndPagerSwipe();
         view.moveToDoctorPage();

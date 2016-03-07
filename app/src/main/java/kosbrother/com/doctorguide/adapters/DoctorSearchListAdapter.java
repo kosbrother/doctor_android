@@ -14,14 +14,12 @@ import kosbrother.com.doctorguide.AddDoctorActivity;
 import kosbrother.com.doctorguide.DoctorActivity;
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.SearchableActivity;
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickFABEvent;
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
 
-/**
- * Created by steven on 1/2/16.
- */
 public class DoctorSearchListAdapter extends BaseAdapter {
 
     private final SearchableActivity.LIST_TYPE mType;
@@ -87,27 +85,27 @@ public class DoctorSearchListAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         Doctor doctor = mDoctors.get(position);
                         Intent intent = new Intent(mContext, DoctorActivity.class);
-                        intent.putExtra("HOSPITAL_ID", doctor.search_hospital_id);
-                        intent.putExtra("DOCTOR_ID", doctor.id);
-                        intent.putExtra("DOCTOR_NAME", doctor.name);
-                        intent.putExtra("HOSPITAL_NAME", doctor.search_hospital);
+                        intent.putExtra(ExtraKey.HOSPITAL_ID, doctor.search_hospital_id);
+                        intent.putExtra(ExtraKey.DOCTOR_ID, doctor.id);
+                        intent.putExtra(ExtraKey.DOCTOR_NAME, doctor.name);
+                        intent.putExtra(ExtraKey.HOSPITAL_NAME, doctor.search_hospital);
                         mContext.startActivity(intent);
                     }
                 });
             } else if (mType == SearchableActivity.LIST_TYPE.NOT_MORE) {
-                vi = inflateAddDoctor(vi, parent);
+                vi = inflateAddDoctor(parent);
             } else if (mType == SearchableActivity.LIST_TYPE.MORE) {
                 if (position == mDoctors.size())
-                    vi = inflateMore(vi, parent);
+                    vi = inflateMore(parent);
                 else
-                    vi = inflateAddDoctor(vi, parent);
+                    vi = inflateAddDoctor(parent);
             }
         }
         return vi;
     }
 
-    private View inflateAddDoctor(View vi, ViewGroup parent) {
-        vi = inflater.inflate(R.layout.item_search_doctor_add, parent, false);
+    private View inflateAddDoctor(ViewGroup parent) {
+        View vi = inflater.inflate(R.layout.item_search_doctor_add, parent, false);
         vi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,8 +118,8 @@ public class DoctorSearchListAdapter extends BaseAdapter {
         return vi;
     }
 
-    private View inflateMore(View vi, ViewGroup parent) {
-        vi = inflater.inflate(R.layout.item_search_more, parent, false);
+    private View inflateMore(ViewGroup parent) {
+        View vi = inflater.inflate(R.layout.item_search_more, parent, false);
         vi.setOnClickListener(mMoreClickListener);
         return vi;
     }

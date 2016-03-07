@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -20,7 +18,7 @@ import kosbrother.com.doctorguide.presenter.AddDoctorPresenter;
 import kosbrother.com.doctorguide.view.AddDoctorView;
 import kosbrother.com.doctorguide.viewmodel.AddDoctorViewModelImpl;
 
-public class AddDoctorActivity extends AppCompatActivity implements AddDoctorView {
+public class AddDoctorActivity extends BaseActivity implements AddDoctorView {
 
     private AddDoctorPresenter presenter;
     private ProgressDialog mProgressDialog;
@@ -118,11 +116,4 @@ public class AddDoctorActivity extends AppCompatActivity implements AddDoctorVie
         return ((EditText) findViewById(editTextId)).getText().toString();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            presenter.onHomeItemSelected();
-        }
-        return true;
-    }
 }

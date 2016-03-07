@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import kosbrother.com.doctorguide.CommentDetailActivity;
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.entity.Comment;
 import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.category.GACategory;
@@ -25,11 +26,7 @@ import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickComme
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickCommentListEvent;
 import kosbrother.com.doctorguide.google_analytics.event.mycomment.MyCommentClickCommentListEvent;
 
-/**
- * Created by steven on 12/26/15.
- */
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
-
 
     private final ArrayList<Comment> mComments;
     private final Context mContext;
@@ -70,7 +67,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 }
 
                 Intent intent = new Intent(mContext, CommentDetailActivity.class);
-                intent.putExtra("COMMENT_ID", comment.id);
+                intent.putExtra(ExtraKey.COMMENT_ID, comment.id);
                 mContext.startActivity(intent);
             }
         });

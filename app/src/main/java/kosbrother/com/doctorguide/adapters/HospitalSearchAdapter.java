@@ -13,11 +13,9 @@ import java.util.ArrayList;
 import kosbrother.com.doctorguide.HospitalActivity;
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.SearchableActivity;
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.entity.Hospital;
 
-/**
- * Created by steven on 1/2/16.
- */
 public class HospitalSearchAdapter extends BaseAdapter {
 
     private final SearchableActivity.LIST_TYPE mType;
@@ -83,9 +81,9 @@ public class HospitalSearchAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         Hospital hospital = mHospitals.get(position);
                         Intent intent = new Intent(mContext, HospitalActivity.class);
-                        intent.putExtra("HOSPITAL_ID", hospital.id);
-                        intent.putExtra("HOSPITAL_GRADE", hospital.grade);
-                        intent.putExtra("HOSPITAL_NAME", hospital.name);
+                        intent.putExtra(ExtraKey.HOSPITAL_ID, hospital.id);
+                        intent.putExtra(ExtraKey.HOSPITAL_GRADE, hospital.grade);
+                        intent.putExtra(ExtraKey.HOSPITAL_NAME, hospital.name);
                         mContext.startActivity(intent);
                     }
                 });

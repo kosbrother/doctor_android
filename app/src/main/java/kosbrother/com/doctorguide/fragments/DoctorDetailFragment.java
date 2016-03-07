@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import kosbrother.com.doctorguide.DivisionActivity;
 import kosbrother.com.doctorguide.HospitalActivity;
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.Util.ExtraKey;
+import kosbrother.com.doctorguide.Util.StringUtil;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Division;
@@ -112,7 +114,7 @@ public class DoctorDetailFragment extends Fragment {
                     tv.setTextColor(ContextCompat.getColor(getContext(), R.color.orange_text_link));
                     tv.setClickable(true);
                     tv.setLayoutParams(lparams);
-                    String htmlString = "<u>" + div.hospital_name + "</u>";
+                    String htmlString = StringUtil.appendHtmlUnderline(div.hospital_name);
                     tv.setText(Html.fromHtml(htmlString));
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -120,9 +122,9 @@ public class DoctorDetailFragment extends Fragment {
                             GAManager.sendEvent(new DoctorClickHospitalTextEvent(div.hospital_name));
 
                             Intent intent = new Intent(getContext(), HospitalActivity.class);
-                            intent.putExtra("HOSPITAL_ID", div.hospital_id);
-                            intent.putExtra("HOSPITAL_GRADE", div.hospital_grade);
-                            intent.putExtra("HOSPITAL_NAME", div.hospital_name);
+                            intent.putExtra(ExtraKey.HOSPITAL_ID, div.hospital_id);
+                            intent.putExtra(ExtraKey.HOSPITAL_GRADE, div.hospital_grade);
+                            intent.putExtra(ExtraKey.HOSPITAL_NAME, div.hospital_name);
                             startActivity(intent);
                         }
                     });
@@ -134,7 +136,7 @@ public class DoctorDetailFragment extends Fragment {
                 tv2.setTextColor(ContextCompat.getColor(getContext(), R.color.orange_text_link));
                 tv2.setClickable(true);
                 tv2.setLayoutParams(lparams);
-                String htmlString2 = "<u>" + div.name + "</u>";
+                String htmlString2 = StringUtil.appendHtmlUnderline(div.name);
                 tv2.setText(Html.fromHtml(htmlString2));
                 tv2.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -142,11 +144,11 @@ public class DoctorDetailFragment extends Fragment {
                         GAManager.sendEvent(new DoctorClickDivisionTextEvent(div.name));
 
                         Intent intent = new Intent(getContext(), DivisionActivity.class);
-                        intent.putExtra("DIVISION_ID", div.id);
-                        intent.putExtra("DIVISION_NAME", div.name);
-                        intent.putExtra("HOSPITAL_ID", div.hospital_id);
-                        intent.putExtra("HOSPITAL_GRADE", div.hospital_grade);
-                        intent.putExtra("HOSPITAL_NAME", div.hospital_name);
+                        intent.putExtra(ExtraKey.DIVISION_ID, div.id);
+                        intent.putExtra(ExtraKey.DIVISION_NAME, div.name);
+                        intent.putExtra(ExtraKey.HOSPITAL_ID, div.hospital_id);
+                        intent.putExtra(ExtraKey.HOSPITAL_GRADE, div.hospital_grade);
+                        intent.putExtra(ExtraKey.HOSPITAL_NAME, div.hospital_name);
                         startActivity(intent);
                     }
                 });
