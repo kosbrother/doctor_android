@@ -90,4 +90,12 @@
     <string name="comment_detail_doctor_friend">醫師態度</string>
     <string name="comment_detail_doctor_specialty">醫師專業</string>
 
+    <!--Feedback-->
+    <string name="feedback_content">我們非常重視您寶貴的意見，\n有您的建議，我們會做的更好！</string>
+    <string name="feedback_subject">主旨</string>
+    <string name="feedback_subject_hint">請輸入主旨</string>
+    <string name="feedback_opinion">意見</string>
+    <string name="feedback_opinion_hint">請輸入您的改進建議</string>
+    <string name="feedback_submit">送 出</string>
+
 </resources>
