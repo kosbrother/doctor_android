@@ -2,9 +2,9 @@ package kosbrother.com.doctorguide.factory;
 
 import kosbrother.com.doctorguide.R;
 
-public class DivisionFactory {
+public class HospitalFactory {
 
-    public static int createDivisionImageResId(String hospitalGrade) {
+    public static int createHospitalImageResId(String hospitalGrade) {
         int resId = 0;
         switch (hospitalGrade) {
             case "醫學中心":
