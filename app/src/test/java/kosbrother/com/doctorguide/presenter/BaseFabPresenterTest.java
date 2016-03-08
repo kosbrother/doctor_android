@@ -42,15 +42,6 @@ public class BaseFabPresenterTest {
     }
 
     @Test
-    public void testOnFabProblemReportClick() throws Exception {
-        presenter.onFabProblemReportClick();
-
-        verify(view).closeFab();
-        verify(view).sendClickFabEvent(GALabel.PROBLEM_REPORT);
-        verify(view).startProblemReportActivity(model.getViewModel());
-    }
-
-    @Test
     public void testOnFabShareClick() throws Exception {
         presenter.onFabShareClick();
 

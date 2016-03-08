@@ -3,7 +3,7 @@ package kosbrother.com.doctorguide.view;
 import java.util.List;
 
 import kosbrother.com.doctorguide.entity.Doctor;
-import kosbrother.com.doctorguide.viewmodel.DivisionAndHospitalViewModel;
+import kosbrother.com.doctorguide.viewmodel.DivisionActivityViewModel;
 import kosbrother.com.doctorguide.viewmodel.DivisionScoreViewModel;
 
 public interface DivisionView extends BaseView, ProgressDialogView {
@@ -35,10 +35,10 @@ public interface DivisionView extends BaseView, ProgressDialogView {
 
     void sendDivisionClickHospitalTextEvent(String hospitalName);
 
-    void startDoctorActivity(Doctor doctor, DivisionAndHospitalViewModel viewModel);
+    void startDoctorActivity(Doctor doctor, DivisionActivityViewModel viewModel);
 
-    void startDivisionActivity(DivisionAndHospitalViewModel viewModel, int clickDivisionId, String clickDivisionName);
+    void startDivisionActivity(DivisionActivityViewModel viewModel, int clickDivisionId, String clickDivisionName);
 
-    void startHospitalActivity(DivisionAndHospitalViewModel viewModel);
+    void startHospitalActivity(DivisionActivityViewModel viewModel);
 
 }

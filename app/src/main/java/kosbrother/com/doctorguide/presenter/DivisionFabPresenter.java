@@ -1,26 +1,31 @@
 package kosbrother.com.doctorguide.presenter;
 
-import kosbrother.com.doctorguide.entity.User;
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
-import kosbrother.com.doctorguide.model.FabModel;
+import kosbrother.com.doctorguide.model.DivisionFabModel;
 import kosbrother.com.doctorguide.task.CreateUserTask;
-import kosbrother.com.doctorguide.view.FabView;
+import kosbrother.com.doctorguide.view.DivisionFabView;
 
-public class FabPresenter extends BaseFabPresenter implements CreateUserTask.CreateUserListener {
+public class DivisionFabPresenter extends BaseFabPresenter implements CreateUserTask.CreateUserListener {
 
-    private final FabView view;
-    private final FabModel model;
+    private final DivisionFabView view;
+    private final DivisionFabModel model;
 
-    public FabPresenter(FabView view, FabModel model) {
+    public DivisionFabPresenter(DivisionFabView view, DivisionFabModel model) {
         super(view, model);
         this.view = view;
         this.model = model;
     }
 
-    public void onFabCommentClick(boolean isSignIn) {
+    public void onFabProblemReportClick() {
+        view.closeFab();
+        view.sendClickFabEvent(GALabel.PROBLEM_REPORT);
+        view.startProblemReportActivity(model.getViewModel());
+    }
+
+    public void onFabCommentClick() {
         view.closeFab();
         view.sendClickFabEvent(GALabel.COMMENT);
-        if (isSignIn) {
+        if (model.isSignIn()) {
             view.startCommentActivity(model.getViewModel(), model.getEmail());
         } else {
             view.showSignInDialog();
@@ -34,17 +39,17 @@ public class FabPresenter extends BaseFabPresenter implements CreateUserTask.Cre
     }
 
     public void onSignInButtonClick() {
-        view.signIn();
         view.dismissSignInDialog();
+        if (!view.isNetworkConnected()) {
+            view.showRequireNetworkDialog();
+            return;
+        }
+        view.signIn();
     }
 
-    public void onHandleSignInResultSuccess(String email) {
-        model.setEmail(email);
-    }
-
-    public void onSignInActivityResultSuccess(User user) {
+    public void onSignInActivityResultSuccess() {
         view.showProgressDialog();
-        model.requestCreateUser(user, this);
+        model.requestCreateUser(this);
     }
 
     @Override

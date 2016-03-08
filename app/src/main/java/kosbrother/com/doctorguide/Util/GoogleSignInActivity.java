@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -20,11 +19,11 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 
 import kosbrother.com.doctorguide.BaseActivity;
+import kosbrother.com.doctorguide.google_signin.GoogleSignInManager;
 
 public class GoogleSignInActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleApiClient mGoogleApiClient;
-    protected boolean isSignIn;
     protected static final int RC_SIGN_IN = 9002;
 
     @Override
@@ -49,13 +48,7 @@ public class GoogleSignInActivity extends BaseActivity implements GoogleApiClien
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (!isNetworkConnected(this)) {
-            showRequireNetworkDialog(this);
-            return;
-        }
+    public void silentSignIn() {
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
         if (opr.isDone()) {
             handleSignInResult(opr.get());
@@ -69,15 +62,7 @@ public class GoogleSignInActivity extends BaseActivity implements GoogleApiClien
         }
     }
 
-    protected void handleSignInResult(GoogleSignInResult result) {
-        isSignIn = result.isSuccess();
-    }
-
     public void signIn() {
-        if (!isNetworkConnected(this)) {
-            showRequireNetworkDialog(this);
-            return;
-        }
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -93,13 +78,17 @@ public class GoogleSignInActivity extends BaseActivity implements GoogleApiClien
         }
     }
 
-    private boolean isNetworkConnected(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    protected void handleSignInResult(GoogleSignInResult result) {
+        GoogleSignInManager.getInstance().handleSignInResult(result);
+    }
+
+    public boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
     }
 
-    private void showRequireNetworkDialog(final Context context) {
+    public void showRequireNetworkDialog(final Context context) {
         new AlertDialog.Builder(context)
                 .setTitle("訊息通知")
                 .setMessage("就醫指南需要網路才能運行，請按確認鍵至手機設定畫面，開啟網路連結，謝謝！")

@@ -3,31 +3,41 @@ package kosbrother.com.doctorguide.presenter;
 import org.junit.Before;
 import org.junit.Test;
 
-import kosbrother.com.doctorguide.model.FabModel;
-import kosbrother.com.doctorguide.view.FabView;
-import kosbrother.com.doctorguide.entity.User;
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
+import kosbrother.com.doctorguide.model.DivisionFabModel;
+import kosbrother.com.doctorguide.view.DivisionFabView;
 
-import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-public class FabPresenterTest {
+public class DivisionFabPresenterTest {
 
-    private FabView view;
-    private FabModel model;
-    private FabPresenter presenter;
+    private DivisionFabView view;
+    private DivisionFabModel model;
+    private DivisionFabPresenter presenter;
 
     @Before
     public void setUp() throws Exception {
-        view = mock(FabView.class);
-        model = mock(FabModel.class);
-        presenter = new FabPresenter(view, model);
+        view = mock(DivisionFabView.class);
+        model = mock(DivisionFabModel.class);
+        presenter = new DivisionFabPresenter(view, model);
+    }
+
+    @Test
+    public void testOnFabProblemReportClick() throws Exception {
+        presenter.onFabProblemReportClick();
+
+        verify(view).closeFab();
+        verify(view).sendClickFabEvent(GALabel.PROBLEM_REPORT);
+        verify(view).startProblemReportActivity(model.getViewModel());
     }
 
     @Test
     public void testOnFabCommentClick_isSignin() throws Exception {
-        presenter.onFabCommentClick(true);
+        when(model.isSignIn()).thenReturn(true);
+
+        presenter.onFabCommentClick();
 
         verify(view).closeFab();
         verify(view).sendClickFabEvent(GALabel.COMMENT);
@@ -36,7 +46,9 @@ public class FabPresenterTest {
 
     @Test
     public void testOnFabCommentClick_notSignin() throws Exception {
-        presenter.onFabCommentClick(false);
+        when(model.isSignIn()).thenReturn(false);
+
+        presenter.onFabCommentClick();
 
         verify(view).closeFab();
         verify(view).sendClickFabEvent(GALabel.COMMENT);
@@ -53,30 +65,31 @@ public class FabPresenterTest {
     }
 
     @Test
-    public void testOnSignInButtonClick() throws Exception {
+    public void testOnSignInButtonClick_networkConnected() throws Exception {
+        when(view.isNetworkConnected()).thenReturn(true);
+
         presenter.onSignInButtonClick();
 
-        verify(view).signIn();
         verify(view).dismissSignInDialog();
+        verify(view).signIn();
     }
 
     @Test
-    public void testOnHandleSignInResultSuccess() throws Exception {
-        String email = "email";
+    public void testOnSignInButtonClick_networkNotConnected() throws Exception {
+        when(view.isNetworkConnected()).thenReturn(false);
 
-        presenter.onHandleSignInResultSuccess(email);
+        presenter.onSignInButtonClick();
 
-        verify(model).setEmail(email);
+        verify(view).dismissSignInDialog();
+        verify(view).showRequireNetworkDialog();
     }
 
     @Test
     public void testOnSignInActivityResultSuccess() throws Exception {
-        User user = new User();
-
-        presenter.onSignInActivityResultSuccess(user);
+        presenter.onSignInActivityResultSuccess();
 
         verify(view).showProgressDialog();
-        verify(model).requestCreateUser(user, presenter);
+        verify(model).requestCreateUser(presenter);
     }
 
     @Test

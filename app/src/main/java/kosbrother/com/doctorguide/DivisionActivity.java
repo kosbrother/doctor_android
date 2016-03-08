@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -29,7 +28,6 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 
@@ -43,7 +41,6 @@ import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
 import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.entity.Doctor;
-import kosbrother.com.doctorguide.entity.User;
 import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
 import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DivisionScoreFragment;
@@ -53,36 +50,37 @@ import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickDivisionSpinnerEvent;
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickFABEvent;
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickHospitalTextEvent;
+import kosbrother.com.doctorguide.model.DivisionFabModel;
 import kosbrother.com.doctorguide.model.DivisionModel;
-import kosbrother.com.doctorguide.model.FabModel;
+import kosbrother.com.doctorguide.presenter.DivisionFabPresenter;
 import kosbrother.com.doctorguide.presenter.DivisionPresenter;
-import kosbrother.com.doctorguide.presenter.FabPresenter;
+import kosbrother.com.doctorguide.view.DivisionFabView;
 import kosbrother.com.doctorguide.view.DivisionView;
-import kosbrother.com.doctorguide.view.FabView;
-import kosbrother.com.doctorguide.viewmodel.DivisionAndHospitalViewModel;
+import kosbrother.com.doctorguide.viewmodel.DivisionActivityViewModel;
 import kosbrother.com.doctorguide.viewmodel.DivisionScoreViewModel;
 
 public class DivisionActivity extends GoogleSignInActivity implements
         DoctorFragment.OnListFragmentInteractionListener,
         DivisionScoreFragment.GetDivision,
         DivisionView,
-        FabView {
+        DivisionFabView {
+
+    private DivisionPresenter divisionPresenter;
+    private DivisionFabPresenter fabPresenter;
 
     private FloatingActionMenu fab;
     private ViewPagerAdapter adapter;
-
-    private DivisionPresenter divisionPresenter;
     private ProgressDialog progressDialog;
     private Dialog dialog;
-    private FabPresenter fabPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DivisionAndHospitalViewModel viewModel = new DivisionAndHospitalViewModel(getIntent());
+        DivisionActivityViewModel viewModel = new DivisionActivityViewModel(getIntent());
         divisionPresenter = new DivisionPresenter(this, new DivisionModel(viewModel));
-        fabPresenter = new FabPresenter(this, new FabModel(viewModel));
         divisionPresenter.onCreate();
+
+        fabPresenter = new DivisionFabPresenter(this, new DivisionFabModel(viewModel));
         fabPresenter.onCreate();
     }
 
@@ -217,6 +215,11 @@ public class DivisionActivity extends GoogleSignInActivity implements
     }
 
     @Override
+    public void showRequireNetworkDialog() {
+        showRequireNetworkDialog(this);
+    }
+
+    @Override
     public void updateAdapter() {
         adapter.notifyDataSetChanged();
     }
@@ -267,7 +270,7 @@ public class DivisionActivity extends GoogleSignInActivity implements
     }
 
     @Override
-    public void startDoctorActivity(Doctor doctor, DivisionAndHospitalViewModel viewModel) {
+    public void startDoctorActivity(Doctor doctor, DivisionActivityViewModel viewModel) {
         Intent intent = new Intent(this, DoctorActivity.class);
         intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
         intent.putExtra(ExtraKey.DOCTOR_ID, doctor.id);
@@ -277,7 +280,7 @@ public class DivisionActivity extends GoogleSignInActivity implements
     }
 
     @Override
-    public void startDivisionActivity(DivisionAndHospitalViewModel viewModel,
+    public void startDivisionActivity(DivisionActivityViewModel viewModel,
                                       int clickDivisionId, String clickDivisionName) {
         Intent intent = new Intent(DivisionActivity.this, DivisionActivity.class);
         intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
@@ -289,7 +292,7 @@ public class DivisionActivity extends GoogleSignInActivity implements
     }
 
     @Override
-    public void startHospitalActivity(DivisionAndHospitalViewModel viewModel) {
+    public void startHospitalActivity(DivisionActivityViewModel viewModel) {
         Intent intent = new Intent(this, HospitalActivity.class);
         intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
         intent.putExtra(ExtraKey.HOSPITAL_GRADE, viewModel.getHospitalGrade());
@@ -297,8 +300,7 @@ public class DivisionActivity extends GoogleSignInActivity implements
         startActivity(intent);
     }
 
-    @Override
-    public void startProblemReportActivity(DivisionAndHospitalViewModel viewModel) {
+    public void startProblemReportActivity(DivisionActivityViewModel viewModel) {
         Intent intent = new Intent(DivisionActivity.this, ProblemReportActivity.class);
         intent.putExtra(ExtraKey.REPORT_TYPE, getString(R.string.division_page));
         intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
@@ -317,7 +319,7 @@ public class DivisionActivity extends GoogleSignInActivity implements
     }
 
     @Override
-    public void startCommentActivity(DivisionAndHospitalViewModel viewModel, String email) {
+    public void startCommentActivity(DivisionActivityViewModel viewModel, String email) {
         Intent intent = new Intent(DivisionActivity.this, AddCommentActivity.class);
         intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
         intent.putExtra(ExtraKey.DIVISION_ID, viewModel.getDivisionId());
@@ -327,7 +329,7 @@ public class DivisionActivity extends GoogleSignInActivity implements
     }
 
     @Override
-    public void startAddDoctorActivity(DivisionAndHospitalViewModel viewModel) {
+    public void startAddDoctorActivity(DivisionActivityViewModel viewModel) {
         Intent intent = new Intent(DivisionActivity.this, AddDoctorActivity.class);
         intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
         intent.putExtra(ExtraKey.DIVISION_NAME, viewModel.getDivisionName());
@@ -367,30 +369,6 @@ public class DivisionActivity extends GoogleSignInActivity implements
         divisionPresenter.onHospitalTextViewClick();
     }
 
-    @Override
-    protected void handleSignInResult(GoogleSignInResult result) {
-        super.handleSignInResult(result);
-        if (result.isSuccess()) {
-            GoogleSignInAccount acct = result.getSignInAccount();
-            if (acct != null) {
-                String email = acct.getEmail();
-                fabPresenter.onHandleSignInResultSuccess(email);
-            }
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN && isSignIn) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            GoogleSignInAccount acct = result.getSignInAccount();
-            if (acct != null) {
-                fabPresenter.onSignInActivityResultSuccess(getUser(acct));
-            }
-        }
-    }
-
     public void onFabProblemReportClick(View view) {
         fabPresenter.onFabProblemReportClick();
     }
@@ -400,7 +378,7 @@ public class DivisionActivity extends GoogleSignInActivity implements
     }
 
     public void onFabCommentClick(View view) {
-        fabPresenter.onFabCommentClick(isSignIn);
+        fabPresenter.onFabCommentClick();
     }
 
     public void onFabAddDoctorClick(View view) {
@@ -408,20 +386,20 @@ public class DivisionActivity extends GoogleSignInActivity implements
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                fabPresenter.onSignInActivityResultSuccess();
+            }
+        }
+    }
+
+    @Override
     public Division getDivision() {
         // TODO: 2016/3/3 need to refactoring
         return divisionPresenter.getDivision();
-    }
-
-    @NonNull
-    private User getUser(GoogleSignInAccount acct) {
-        User user = new User();
-        user.email = acct.getEmail();
-        user.name = acct.getDisplayName();
-        if (acct.getPhotoUrl() != null) {
-            user.pic_url = acct.getPhotoUrl().toString();
-        }
-        return user;
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

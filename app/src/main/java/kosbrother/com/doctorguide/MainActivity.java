@@ -25,7 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
@@ -36,12 +35,12 @@ import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.CategoryAdapter;
 import kosbrother.com.doctorguide.entity.Category;
-import kosbrother.com.doctorguide.entity.User;
 import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.event.main.MainClickAccountEvent;
 import kosbrother.com.doctorguide.google_analytics.event.main.MainClickSearchIconEvent;
 import kosbrother.com.doctorguide.google_analytics.event.main.MainSubmitSearchTextEvent;
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
+import kosbrother.com.doctorguide.google_signin.GoogleSignInManager;
 import kosbrother.com.doctorguide.task.CreateUserTask;
 
 public class MainActivity extends GoogleSignInActivity implements
@@ -53,7 +52,6 @@ public class MainActivity extends GoogleSignInActivity implements
     private SignInButton signInBtn;
     private TextView logInEmail;
     private DrawerLayout drawer;
-    private User user;
     private ProgressDialog mProgressDialog;
 
     @Override
@@ -110,9 +108,23 @@ public class MainActivity extends GoogleSignInActivity implements
             public void onClick(View v) {
                 GAManager.sendEvent(new MainClickAccountEvent(GALabel.SIGN_IN));
 
+                if (!isNetworkConnected()) {
+                    showRequireNetworkDialog(MainActivity.this);
+                    return;
+                }
                 signIn();
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!isNetworkConnected()) {
+            showRequireNetworkDialog(this);
+            return;
+        }
+        silentSignIn();
     }
 
     @Override
@@ -120,16 +132,8 @@ public class MainActivity extends GoogleSignInActivity implements
         super.handleSignInResult(result);
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
-            user = new User();
-            if (acct != null) {
-                user.email = acct.getEmail();
-                user.name = acct.getDisplayName();
-                if (acct.getPhotoUrl() != null)
-                    user.pic_url = acct.getPhotoUrl().toString();
-            }
             mProgressDialog = Util.showProgressDialog(this);
-            new CreateUserTask(this).execute(user);
+            new CreateUserTask(this).execute(GoogleSignInManager.getInstance().getUser());
         } else {
             drawNavigationSignInPart(false);
         }
@@ -149,7 +153,7 @@ public class MainActivity extends GoogleSignInActivity implements
 
     private void drawNavigationSignInPart(boolean signedIn) {
         if (signedIn) {
-            logInEmail.setText(user.name);
+            logInEmail.setText(GoogleSignInManager.getInstance().getName());
             logInEmail.setVisibility(View.VISIBLE);
             signInBtn.setVisibility(View.GONE);
         } else {
@@ -242,8 +246,9 @@ public class MainActivity extends GoogleSignInActivity implements
             GAManager.sendEvent(new MainClickAccountEvent(GALabel.MY_COMMENT));
 
             Intent intent = new Intent(this, MyCommentActivity.class);
-            if (user != null)
-                intent.putExtra(ExtraKey.USER_EMAIL, user.email);
+            GoogleSignInManager googleSignInManager = GoogleSignInManager.getInstance();
+            if (googleSignInManager.isSignIn())
+                intent.putExtra(ExtraKey.USER_EMAIL, googleSignInManager.getEmail());
             startActivity(intent);
         } else if (id == R.id.setting) {
             GAManager.sendEvent(new MainClickAccountEvent(GALabel.SETTING));

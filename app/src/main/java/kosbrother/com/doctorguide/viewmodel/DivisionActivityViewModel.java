@@ -5,14 +5,14 @@ import android.os.Bundle;
 
 import kosbrother.com.doctorguide.Util.ExtraKey;
 
-public class DivisionAndHospitalViewModel {
-    private int divisionId;
-    private String divisionName;
-    private int hospitalId;
-    private String hospitalGrade;
-    private String hospitalName;
+public class DivisionActivityViewModel {
+    private int divisionId = 0;
+    private String divisionName = "";
+    private int hospitalId = 0;
+    private String hospitalGrade = "";
+    private String hospitalName = "";
 
-    public DivisionAndHospitalViewModel(Intent intent) {
+    public DivisionActivityViewModel(Intent intent) {
         if (intent == null) {
             return;
         }

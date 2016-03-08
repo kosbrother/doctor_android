@@ -11,6 +11,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import kosbrother.com.doctorguide.google_signin.GoogleSigninInteractorImpl;
+import kosbrother.com.doctorguide.model.SettingModel;
 import kosbrother.com.doctorguide.presenter.SettingPresenter;
 import kosbrother.com.doctorguide.view.SettingView;
 
@@ -21,7 +22,7 @@ public class SettingActivity extends BaseActivity implements GoogleApiClient.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new SettingPresenter(this, new GoogleSigninInteractorImpl(this, this));
+        presenter = new SettingPresenter(this, new SettingModel(), new GoogleSigninInteractorImpl(this, this));
         presenter.onCreate();
     }
 
