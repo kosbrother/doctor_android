@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -20,7 +19,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
@@ -29,11 +27,9 @@ import java.util.List;
 import io.realm.Realm;
 import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.Util;
-import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Category;
 import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.entity.Hospital;
-import kosbrother.com.doctorguide.entity.realm.RealmHospital;
 import kosbrother.com.doctorguide.fragments.CommentFragment;
 import kosbrother.com.doctorguide.fragments.DivisionListFragment;
 import kosbrother.com.doctorguide.fragments.HospitalDetailFragment;
@@ -41,264 +37,237 @@ import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickCollectEvent;
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickFABEvent;
-import kosbrother.com.doctorguide.google_analytics.label.GALabel;
+import kosbrother.com.doctorguide.model.HospitalFabModel;
+import kosbrother.com.doctorguide.model.HospitalModel;
+import kosbrother.com.doctorguide.presenter.HospitalFabPresenter;
+import kosbrother.com.doctorguide.presenter.HospitalPresenter;
+import kosbrother.com.doctorguide.view.HospitalFabView;
+import kosbrother.com.doctorguide.view.HospitalView;
+import kosbrother.com.doctorguide.viewmodel.HospitalActivityViewModel;
+import kosbrother.com.doctorguide.viewmodel.HospitalScoreViewModel;
 
-public class HospitalActivity extends BaseActivity implements DivisionListFragment.OnListFragmentInteractionListener, DivisionListFragment.GetDivisions, HospitalDetailFragment.GetHospital {
+public class HospitalActivity extends BaseActivity implements
+        DivisionListFragment.OnListFragmentInteractionListener,
+        HospitalView, HospitalFabView {
 
-    private ActionBar actionbar;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private boolean collected;
-    private int hospitalId;
-    private String hospitalGrade;
-    private String hospitalName;
+    private HospitalPresenter presenter;
+    private HospitalFabPresenter fabPresenter;
+
     private FloatingActionMenu fab;
-    private Hospital hospital;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        HospitalActivityViewModel viewModel = new HospitalActivityViewModel(getIntent());
+        Realm realm = Realm.getInstance(getBaseContext());
+        presenter = new HospitalPresenter(this, new HospitalModel(viewModel, realm));
+        presenter.onCreate();
+
+        fabPresenter = new HospitalFabPresenter(this, new HospitalFabModel(viewModel));
+        fabPresenter.onCreate();
+    }
+
+    @Override
+    public void setContentView() {
         setContentView(R.layout.activity_hospital);
+    }
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            hospitalId = extras.getInt(ExtraKey.HOSPITAL_ID);
-            hospitalGrade = extras.getString(ExtraKey.HOSPITAL_GRADE);
-            hospitalName = extras.getString(ExtraKey.HOSPITAL_NAME);
-        }
-
-        actionbar = getSupportActionBar();
+    @Override
+    public void setActionBar() {
+        ActionBar actionbar = getSupportActionBar();
         assert actionbar != null;
         actionbar.setTitle("醫院資訊");
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setElevation(0);
+    }
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+    @Override
+    public void setHospitalImage(int hospitalImageRedId) {
+        ((ImageView) findViewById(R.id.div_image)).setImageResource(hospitalImageRedId);
+    }
 
-        setViews();
-        setHeatButton();
-        setFab();
+    @Override
+    public void setHospitalName(String hospitalName) {
+        ((TextView) findViewById(R.id.hospial_name)).setText(hospitalName);
+    }
 
-        new SetFragmentTask().execute();
+    @Override
+    public void setHeartButtonBackground(int resId) {
+        findViewById(R.id.heart).setBackgroundResource(resId);
+    }
+
+    @Override
+    public void setHeartButton() {
+        findViewById(R.id.heart).setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.onHeartButtonClick();
+            }
+        });
+    }
+
+    @Override
+    public void setHospitalScore(HospitalScoreViewModel scoreViewModel) {
+        ((TextView) findViewById(R.id.comment_num)).setText(scoreViewModel.getCommentNum());
+        ((TextView) findViewById(R.id.recommend_num)).setText(scoreViewModel.getRecommendNum());
+        ((TextView) findViewById(R.id.score)).setText(scoreViewModel.getAvgScore());
+    }
+
+    @Override
+    public void setViewPager(int hospitalId, Hospital hospital) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(HospitalDetailFragment.newInstance(hospital), "關於本院");
+        adapter.addFragment(DivisionListFragment.newInstance(hospital.divisions), "院內科別");
+        adapter.addFragment(CommentFragment.newInstance(hospitalId, null, null, GACategory.HOSPITAL), "本院評論");
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(2);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void sendHospitalClickCollectEvent(String hospitalName) {
+        GAManager.sendEvent(new HospitalClickCollectEvent(hospitalName));
+    }
+
+    @Override
+    public void showRemoveFromCollectSuccessSnackBar() {
+        showSnackBar("取消收藏", Color.RED);
+    }
+
+    @Override
+    public void showAddToCollectSuccessSnackBar() {
+        showSnackBar("成功收藏", ContextCompat.getColor(getBaseContext(), R.color.colorPrimary));
+    }
+
+    @Override
+    public void showDivisionInfoDialog(Division division) {
+        Category categoryById = Category.getCategoryById(division.category_id);
+        if (categoryById != null) {
+            AlertDialog.Builder builder =
+                    new AlertDialog.Builder(HospitalActivity.this, R.style.AppCompatAlertDialogStyle);
+            builder.setTitle(categoryById.name);
+            builder.setMessage(categoryById.intro);
+            builder.setPositiveButton("確定", null);
+            builder.show();
+        }
+    }
+
+    @Override
+    public void startDivisionActivity(Division division) {
+        Intent intent = new Intent(HospitalActivity.this, DivisionActivity.class);
+        intent.putExtra(ExtraKey.DIVISION_ID, division.id);
+        intent.putExtra(ExtraKey.DIVISION_NAME, division.name);
+        intent.putExtra(ExtraKey.HOSPITAL_ID, division.hospital_id);
+        intent.putExtra(ExtraKey.HOSPITAL_GRADE, division.hospital_grade);
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, division.hospital_name);
+        startActivity(intent);
+    }
+
+    private void showSnackBar(String message, int color) {
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.heart), message, Snackbar.LENGTH_SHORT);
+        View view = snackbar.getView();
+        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+        tv.setTextColor(color);
+        snackbar.show();
     }
 
     @Override
     public void onListFragmentInteraction(View view, Division division) {
         if (view.getId() == R.id.detail_button) {
-            AlertDialog.Builder builder =
-                    new AlertDialog.Builder(HospitalActivity.this, R.style.AppCompatAlertDialogStyle);
-            builder.setTitle(Category.getCategoryById(division.category_id).name);
-            builder.setMessage(Category.getCategoryById(division.category_id).intro);
-            builder.setPositiveButton("確定", null);
-            builder.show();
+            presenter.onDivisionInfoClick(division);
         } else {
-            Intent intent = new Intent(HospitalActivity.this, DivisionActivity.class);
-            intent.putExtra(ExtraKey.DIVISION_ID, division.id);
-            intent.putExtra(ExtraKey.DIVISION_NAME, division.name);
-            intent.putExtra(ExtraKey.HOSPITAL_ID, division.hospital_id);
-            intent.putExtra(ExtraKey.HOSPITAL_GRADE, division.hospital_grade);
-            intent.putExtra(ExtraKey.HOSPITAL_NAME, division.hospital_name);
-            startActivity(intent);
+            presenter.onDivisionClick(division);
         }
     }
 
     @Override
-    public Hospital getHospital() {
-        return hospital;
+    public void showProgressDialog() {
+        progressDialog = Util.showProgressDialog(this);
     }
 
-    private class SetFragmentTask extends AsyncTask {
-
-        private ProgressDialog mProgressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mProgressDialog = Util.showProgressDialog(HospitalActivity.this);
-        }
-
-        @Override
-        protected Object doInBackground(Object... params) {
-            hospital = DoctorGuideApi.getHospitalInfo(hospitalId);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-            super.onPostExecute(result);
-
-            TextView mCommentNum = (TextView) findViewById(R.id.comment_num);
-            TextView mRecommendNum = (TextView) findViewById(R.id.recommend_num);
-            TextView mScore = (TextView) findViewById(R.id.score);
-
-            mCommentNum.setText(hospital.comment_num + "");
-            mRecommendNum.setText(hospital.recommend_num + "");
-            mScore.setText(String.format("%.1f", hospital.avg));
-
-
-            mProgressDialog.dismiss();
-            setupViewPager(viewPager);
-            tabLayout.setupWithViewPager(viewPager);
-        }
-
-    }
-
-    private void setFab() {
-        fab = (FloatingActionMenu) findViewById(R.id.menu2);
-        fab.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
-            @Override
-            public void onMenuToggle(boolean opened) {
-                GAManager.sendEvent(new HospitalClickFABEvent(GALabel.FAB_MENU));
-
-                int drawableId;
-                if (opened) {
-                    drawableId = R.mipmap.ic_close;
-                } else {
-                    drawableId = R.mipmap.ic_fab;
-                }
-                Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), drawableId);
-                fab.getMenuIconView().setImageDrawable(drawable);
-            }
-        });
-        fab.setClosedOnTouchOutside(true);
-
-        FloatingActionButton fabProblemReport = (FloatingActionButton) findViewById(R.id.fab_problem_report);
-        FloatingActionButton fabShare = (FloatingActionButton) findViewById(R.id.fab_share);
-        FloatingActionButton fabAddDoctor = (FloatingActionButton) findViewById(R.id.fab_add_doctor);
-        fabProblemReport.setOnClickListener(clickListener);
-        fabShare.setOnClickListener(clickListener);
-        fabAddDoctor.setOnClickListener(clickListener);
+    @Override
+    public void hideProgressDialog() {
+        progressDialog.dismiss();
     }
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            fab.close(true);
-            Intent intent;
             switch (v.getId()) {
                 case R.id.fab_problem_report:
-                    GAManager.sendEvent(new HospitalClickFABEvent(GALabel.PROBLEM_REPORT));
-
-                    intent = new Intent(HospitalActivity.this, ProblemReportActivity.class);
-                    intent.putExtra(ExtraKey.REPORT_TYPE, getString(R.string.hospital_page));
-                    intent.putExtra(ExtraKey.HOSPITAL_NAME, hospitalName);
-                    intent.putExtra(ExtraKey.HOSPITAL_ID, hospitalId);
-                    startActivity(intent);
+                    fabPresenter.onProblemReportClick();
                     break;
                 case R.id.fab_share:
-                    GAManager.sendEvent(new HospitalClickFABEvent(GALabel.SHARE));
-
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-                    sendIntent.setType("text/plain");
-                    startActivity(sendIntent);
+                    fabPresenter.onFabShareClick();
                     break;
                 case R.id.fab_add_doctor:
-                    GAManager.sendEvent(new HospitalClickFABEvent(GALabel.ADD_DOCTOR));
-
-                    intent = new Intent(HospitalActivity.this, AddDoctorActivity.class);
-                    intent.putExtra(ExtraKey.HOSPITAL_NAME, hospitalName);
-                    intent.putExtra(ExtraKey.HOSPITAL_ID, hospitalId);
-                    startActivity(intent);
+                    fabPresenter.onAddDoctorClick();
                     break;
             }
         }
     };
 
-    private void setViews() {
-        ImageView divImage = (ImageView) findViewById(R.id.div_image);
-        TextView hospital = (TextView) findViewById(R.id.hospial_name);
-        switch (hospitalGrade) {
-            case "醫學中心":
-                divImage.setImageResource(R.mipmap.ic_hospital_biggest);
-                break;
-            case "區域醫院":
-                divImage.setImageResource(R.mipmap.ic_hospital_medium);
-                break;
-            case "地區醫院":
-                divImage.setImageResource(R.mipmap.ic_hospital_small);
-                break;
-            case "診所":
-                divImage.setImageResource(R.mipmap.ic_hospital_smallest);
-                break;
-        }
-        hospital.setText(hospitalName);
-    }
-
-    private void setHeatButton() {
-        final Button heart = (Button) findViewById(R.id.heart);
-
-        final Realm realm = Realm.getInstance(getBaseContext());
-        RealmHospital hosp = realm.where(RealmHospital.class).equalTo("id", hospitalId).findFirst();
-        if (hosp == null) {
-            collected = false;
-            heart.setBackgroundResource(R.drawable.heart_white_to_red_button);
-        } else {
-            collected = true;
-            heart.setBackgroundResource(R.drawable.heart_read_to_white_button);
-        }
-
-        heart.setOnClickListener(new Button.OnClickListener() {
+    @Override
+    public void initFab() {
+        fab = (FloatingActionMenu) findViewById(R.id.menu2);
+        fab.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
-            public void onClick(View v) {
-                GAManager.sendEvent(new HospitalClickCollectEvent(hospitalName));
-
-                if (collected) {
-
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmHospital hosp = realm.where(RealmHospital.class).equalTo("id", hospitalId).findFirst();
-                            hosp.removeFromRealm();
-                        }
-                    });
-
-                    heart.setBackgroundResource(R.drawable.heart_white_to_red_button);
-                    collected = false;
-                    Snackbar snackbar = Snackbar.make(v, "取消收藏", Snackbar.LENGTH_SHORT);
-                    View view = snackbar.getView();
-                    TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-                    tv.setTextColor(Color.RED);
-                    snackbar.show();
-                } else {
-
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmHospital hosp = realm.createObject(RealmHospital.class);
-                            hosp.setId(hospitalId);
-                            hosp.setGrade(hospitalGrade);
-                            hosp.setName(hospitalName);
-                            hosp.setAddress(hospital.address);
-                        }
-                    });
-
-                    heart.setBackgroundResource(R.drawable.heart_read_to_white_button);
-                    collected = true;
-                    Snackbar snackbar = Snackbar.make(v, "成功收藏", Snackbar.LENGTH_SHORT);
-                    View view = snackbar.getView();
-                    TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-                    tv.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary));
-                    snackbar.show();
-                }
+            public void onMenuToggle(boolean opened) {
+                fabPresenter.onFabMenuToggle(opened);
             }
         });
-    }
+        fab.setClosedOnTouchOutside(true);
 
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(HospitalDetailFragment.newInstance(), "關於本院");
-        adapter.addFragment(DivisionListFragment.newInstance(hospitalId), "院內科別");
-        adapter.addFragment(CommentFragment.newInstance(hospitalId, null, null, GACategory.HOSPITAL), "本院評論");
-        viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(2);
+        findViewById(R.id.fab_problem_report).setOnClickListener(clickListener);
+        findViewById(R.id.fab_share).setOnClickListener(clickListener);
+        findViewById(R.id.fab_add_doctor).setOnClickListener(clickListener);
     }
 
     @Override
-    public List<Division> getDivisions() {
-        return hospital.divisions;
+    public void setFabImageDrawable(int fabDrawableId) {
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), fabDrawableId);
+        fab.getMenuIconView().setImageDrawable(drawable);
+    }
+
+    @Override
+    public void closeFab() {
+        fab.close(true);
+    }
+
+    @Override
+    public void sendClickFabEvent(String label) {
+        GAManager.sendEvent(new HospitalClickFABEvent(label));
+    }
+
+    @Override
+    public void startShareActivity() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
+    }
+
+    @Override
+    public void startProblemReportActivity(HospitalActivityViewModel viewModel) {
+        Intent intent = new Intent(HospitalActivity.this, ProblemReportActivity.class);
+        intent.putExtra(ExtraKey.REPORT_TYPE, getString(R.string.hospital_page));
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
+        intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void startAddDoctorActivity(HospitalActivityViewModel viewModel) {
+        Intent intent = new Intent(HospitalActivity.this, AddDoctorActivity.class);
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
+        intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
+        startActivity(intent);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
