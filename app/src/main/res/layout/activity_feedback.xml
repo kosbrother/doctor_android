@@ -83,6 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/primary_color_button"
+        android:onClick="onFeedbackSubmitButtonClick"
         android:text="@string/feedback_submit"
         android:textColor="@color/textColorPrimary"
         android:textSize="@dimen/doctor_fragment_text_size" />
