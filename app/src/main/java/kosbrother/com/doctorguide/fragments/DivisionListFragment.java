@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.Serializable;
 import java.util.List;
 
 import kosbrother.com.doctorguide.R;
@@ -17,15 +18,14 @@ import kosbrother.com.doctorguide.entity.Division;
 
 /**
  * A fragment representing a list of Items.
- * <p />
+ * <p/>
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
 public class DivisionListFragment extends Fragment {
 
-    private static final String ARG_HOSPITAL_ID = "ARG_HOSPITAL_ID";
+    private static final String ARG_DIVISIONS = "ARG_DIVISIONS";
     private static List<Division> mDivisions;
-    private int mHospitalId;
     private OnListFragmentInteractionListener mListener;
 
     /**
@@ -37,20 +37,20 @@ public class DivisionListFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static DivisionListFragment newInstance(int hospitalId) {
+    public static DivisionListFragment newInstance(List<Division> divisions) {
         DivisionListFragment fragment = new DivisionListFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_HOSPITAL_ID, hospitalId);
+        args.putSerializable(ARG_DIVISIONS, (Serializable) divisions);
         fragment.setArguments(args);
         return fragment;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
-            mHospitalId = getArguments().getInt(ARG_HOSPITAL_ID);
+            mDivisions = (List<Division>) getArguments().getSerializable(ARG_DIVISIONS);
         }
     }
 
@@ -79,13 +79,6 @@ public class DivisionListFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
-
-        if (context instanceof GetDivisions) {
-            mDivisions = ((GetDivisions) context).getDivisions();
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement GetDivisions");
-        }
     }
 
     @Override
@@ -99,7 +92,4 @@ public class DivisionListFragment extends Fragment {
         void onListFragmentInteraction(View view, Division division);
     }
 
-    public interface GetDivisions{
-        List<Division> getDivisions();
-    }
 }

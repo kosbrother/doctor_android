@@ -1,11 +1,9 @@
 package kosbrother.com.doctorguide.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by steven on 1/6/16.
- */
-public class Division {
+public class Division implements Serializable{
     public int id;
     public String name;
     public int hospital_id;

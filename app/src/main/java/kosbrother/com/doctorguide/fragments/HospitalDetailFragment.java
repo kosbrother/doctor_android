@@ -29,15 +29,16 @@ import kosbrother.com.doctorguide.entity.Hospital;
  */
 public class HospitalDetailFragment extends Fragment {
 
-    private static final String ARG_HOSPITAL_ID = "ARG_HOSPITAL_ID";
+    private static final String BUNDLE_HOSPITAL = "BUNDLE_HOSPITAL";
     private static Hospital mHospital;
 
     public HospitalDetailFragment() {
     }
 
-    public static HospitalDetailFragment newInstance() {
+    public static HospitalDetailFragment newInstance(Hospital hospital) {
         HospitalDetailFragment fragment = new HospitalDetailFragment();
         Bundle args = new Bundle();
+        args.putSerializable(BUNDLE_HOSPITAL, hospital);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,6 +46,7 @@ public class HospitalDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mHospital = (Hospital) getArguments().getSerializable(BUNDLE_HOSPITAL);
     }
 
     @Override
@@ -125,19 +127,4 @@ public class HospitalDetailFragment extends Fragment {
         return hour;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        if (context instanceof GetHospital) {
-            mHospital = ((GetHospital) context).getHospital();
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement GetDoctor");
-        }
-    }
-
-    public interface GetHospital {
-        Hospital getHospital();
-    }
 }

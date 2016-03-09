@@ -5,7 +5,7 @@ import java.util.List;
 
 import kosbrother.com.doctorguide.Util.StringUtil;
 import kosbrother.com.doctorguide.entity.Division;
-import kosbrother.com.doctorguide.factory.DivisionFactory;
+import kosbrother.com.doctorguide.factory.HospitalFactory;
 import kosbrother.com.doctorguide.task.GetDivisionTask;
 import kosbrother.com.doctorguide.task.GetDivisionTask.GetDivisionListener;
 import kosbrother.com.doctorguide.task.GetDivisionsTask;
@@ -41,7 +41,7 @@ public class DivisionModel {
     }
 
     public int getDivisionImageResId() {
-        return DivisionFactory.createDivisionImageResId(viewModel.getHospitalGrade());
+        return HospitalFactory.createHospitalImageResId(viewModel.getHospitalGrade());
     }
 
     public String getHospitalNameWithUnderline() {
