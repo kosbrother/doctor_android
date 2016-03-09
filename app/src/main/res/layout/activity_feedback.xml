@@ -12,63 +12,69 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
+
         <ImageView
-            android:layout_marginTop="32dp"
             android:id="@+id/appicon"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_centerHorizontal="true"
-            android:src="@mipmap/ic_aboutus_logo"/>
+            android:layout_marginTop="32dp"
+            android:src="@mipmap/ic_aboutus_logo" />
+
         <TextView
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="10dp"
             android:id="@+id/appname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textSize="@dimen/doctor_fragment_link_text_size"
-            android:textColor="@color/black_text"
+            android:layout_below="@+id/appicon"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/appicon"/>
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/app_name"
+            android:textColor="@color/black_text"
+            android:textSize="@dimen/doctor_fragment_link_text_size" />
+
         <TextView
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="我們非常重視您寶貴的意見，\n有您的建議，我們會做的更好！"
-            android:lineSpacingMultiplier="1.2"
+            android:layout_below="@+id/appname"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/appname"/>
+            android:lineSpacingMultiplier="1.2"
+            android:text="@string/feedback_content" />
 
         <TextView
-            android:layout_marginTop="12dp"
             android:id="@+id/text1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="主旨"
-            android:textSize="@dimen/doctor_fragment_text_size"
+            android:layout_below="@+id/text"
+            android:layout_marginTop="12dp"
+            android:text="@string/feedback_subject"
             android:textColor="@color/colorPrimary"
-            android:layout_below="@+id/text"/>
+            android:textSize="@dimen/doctor_fragment_text_size" />
+
         <EditText
             android:id="@+id/feedback_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="請輸入主旨"
-            android:layout_below="@+id/text1"/>
+            android:layout_below="@+id/text1"
+            android:hint="@string/feedback_subject_hint" />
+
         <TextView
-            android:layout_marginTop="12dp"
             android:id="@+id/text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="意見"
-            android:textSize="@dimen/doctor_fragment_text_size"
+            android:layout_below="@+id/feedback_title"
+            android:layout_marginTop="12dp"
+            android:text="@string/feedback_opinion"
             android:textColor="@color/colorPrimary"
-            android:layout_below="@+id/feedback_title"/>
+            android:textSize="@dimen/doctor_fragment_text_size" />
+
         <EditText
             android:id="@+id/feedback_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="請輸入您的改進建議"
-            android:layout_below="@+id/text2"/>
+            android:layout_below="@+id/text2"
+            android:hint="@string/feedback_opinion_hint" />
     </RelativeLayout>
 
     <Button
@@ -77,9 +83,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/primary_color_button"
-        android:text="送 出"
+        android:onClick="onFeedbackSubmitButtonClick"
+        android:text="@string/feedback_submit"
         android:textColor="@color/textColorPrimary"
-        android:textSize="@dimen/doctor_fragment_text_size"
-        />
+        android:textSize="@dimen/doctor_fragment_text_size" />
 
 </RelativeLayout>
