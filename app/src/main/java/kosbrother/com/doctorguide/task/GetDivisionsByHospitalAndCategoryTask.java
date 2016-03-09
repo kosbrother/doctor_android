@@ -8,9 +8,9 @@ import kosbrother.com.doctorguide.entity.Division;
 
 public class GetDivisionsByHospitalAndCategoryTask extends AsyncTask<Integer, Void, ArrayList<Division>> {
 
-    private GetDivisionsByHospitalAndCategoryListener listener;
+    private GetDivisionsListener listener;
 
-    public GetDivisionsByHospitalAndCategoryTask(GetDivisionsByHospitalAndCategoryListener listener) {
+    public GetDivisionsByHospitalAndCategoryTask(GetDivisionsListener listener) {
         this.listener = listener;
     }
 
@@ -23,11 +23,11 @@ public class GetDivisionsByHospitalAndCategoryTask extends AsyncTask<Integer, Vo
     protected void onPostExecute(ArrayList<Division> divisions) {
         super.onPostExecute(divisions);
         if (divisions != null && divisions.size() > 0) {
-            listener.onGetDivionsSuccess(divisions);
+            listener.onGetDivisionsSuccess(divisions);
         }
     }
 
-    public interface GetDivisionsByHospitalAndCategoryListener {
-        void onGetDivionsSuccess(ArrayList<Division> divisions);
+    public interface GetDivisionsListener {
+        void onGetDivisionsSuccess(ArrayList<Division> divisions);
     }
 }
