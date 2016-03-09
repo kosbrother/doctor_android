@@ -88,14 +88,14 @@ public class GoogleSignInActivity extends BaseActivity implements GoogleApiClien
         return networkInfo != null && networkInfo.isConnected();
     }
 
-    public void showRequireNetworkDialog(final Context context) {
-        new AlertDialog.Builder(context)
+    public void showRequireNetworkDialog() {
+        new AlertDialog.Builder(this)
                 .setTitle("訊息通知")
                 .setMessage("就醫指南需要網路才能運行，請按確認鍵至手機設定畫面，開啟網路連結，謝謝！")
                 .setPositiveButton("確認", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        context.startActivity(new Intent(Settings.ACTION_SETTINGS));
+                        GoogleSignInActivity.this.startActivity(new Intent(Settings.ACTION_SETTINGS));
                     }
                 })
                 .show();

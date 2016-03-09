@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="kosbrother.com.doctorguide"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="1"
-    android:versionName="1.0">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="kosbrother.com.doctorguide">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -106,7 +103,7 @@
         <activity
             android:name=".CommentDetailActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".SearchMoreActivity"></activity>
+        <activity android:name=".SearchMoreActivity" />
     </application>
 
 </manifest>

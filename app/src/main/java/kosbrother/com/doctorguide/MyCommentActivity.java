@@ -67,7 +67,7 @@ public class MyCommentActivity extends GoogleSignInActivity implements
                 @Override
                 public void onClick(View v) {
                     if (!isNetworkConnected()) {
-                        showRequireNetworkDialog(MyCommentActivity.this);
+                        showRequireNetworkDialog();
                         return;
                     }
                     signIn();
