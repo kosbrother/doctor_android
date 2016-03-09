@@ -6,12 +6,12 @@ import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.model.DivisionModel;
 import kosbrother.com.doctorguide.task.GetDivisionTask;
-import kosbrother.com.doctorguide.task.GetDivisionsTask;
+import kosbrother.com.doctorguide.task.GetDivisionsByHospitalTask;
 import kosbrother.com.doctorguide.view.DivisionView;
 
 public class DivisionPresenter implements
         GetDivisionTask.GetDivisionListener,
-        GetDivisionsTask.GetDivisionsListener {
+        GetDivisionsByHospitalTask.GetDivisionsListener {
 
     private final DivisionView view;
     private final DivisionModel model;

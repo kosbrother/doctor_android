@@ -8,11 +8,11 @@ import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.factory.HospitalFactory;
 import kosbrother.com.doctorguide.task.GetDivisionTask;
 import kosbrother.com.doctorguide.task.GetDivisionTask.GetDivisionListener;
-import kosbrother.com.doctorguide.task.GetDivisionsTask;
+import kosbrother.com.doctorguide.task.GetDivisionsByHospitalTask;
 import kosbrother.com.doctorguide.viewmodel.DivisionActivityViewModel;
 import kosbrother.com.doctorguide.viewmodel.DivisionScoreViewModel;
 
-import static kosbrother.com.doctorguide.task.GetDivisionsTask.GetDivisionsListener;
+import static kosbrother.com.doctorguide.task.GetDivisionsByHospitalTask.GetDivisionsListener;
 
 public class DivisionModel {
     private final DivisionActivityViewModel viewModel;
@@ -96,7 +96,7 @@ public class DivisionModel {
     }
 
     public void requestGetDivisions(GetDivisionsListener listener) {
-        new GetDivisionsTask(listener).execute(getHospitalId());
+        new GetDivisionsByHospitalTask(listener).execute(getHospitalId());
     }
 
     public DivisionActivityViewModel getDivisionInputViewModel() {
