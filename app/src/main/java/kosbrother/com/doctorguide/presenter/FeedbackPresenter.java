@@ -1,10 +1,10 @@
 package kosbrother.com.doctorguide.presenter;
 
 import kosbrother.com.doctorguide.model.FeedbackModel;
+import kosbrother.com.doctorguide.task.PostFeedbackTask;
 import kosbrother.com.doctorguide.view.FeedbackView;
-import kosbrother.com.doctorguide.task.PostCommentTask;
 
-public class FeedbackPresenter implements PostCommentTask.PostCommentListener {
+public class FeedbackPresenter implements PostFeedbackTask.PostFeedbackListener {
     private final FeedbackView view;
     private final FeedbackModel model;
 
@@ -25,13 +25,13 @@ public class FeedbackPresenter implements PostCommentTask.PostCommentListener {
             view.showNoContentSnackBar();
         } else {
             view.showProgressDialog();
-            model.requestPostComment(title, content, this);
+            model.requestPostFeedback(title, content, this);
         }
     }
 
     @Override
-    public void onPostCommentSuccess() {
+    public void onPostFeedbackSuccess() {
         view.hideProgressDialog();
-        view.showPostCommentSuccessDialog();
+        view.showPostFeedbackSuccessDialog();
     }
 }

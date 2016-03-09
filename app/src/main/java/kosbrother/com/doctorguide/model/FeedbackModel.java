@@ -1,9 +1,9 @@
 package kosbrother.com.doctorguide.model;
 
-import kosbrother.com.doctorguide.task.PostCommentTask;
+import kosbrother.com.doctorguide.task.PostFeedbackTask;
 
 public class FeedbackModel {
-    public void requestPostComment(String title, String content, PostCommentTask.PostCommentListener listener) {
-        new PostCommentTask(title, content, listener).execute();
+    public void requestPostFeedback(String title, String content, PostFeedbackTask.PostFeedbackListener listener) {
+        new PostFeedbackTask(title, content, listener).execute();
     }
 }

@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kosbrother.com.doctorguide.model.FeedbackModel;
-import kosbrother.com.doctorguide.presenter.FeedbackPresenter;
 import kosbrother.com.doctorguide.view.FeedbackView;
 
 import static org.mockito.Mockito.mock;
@@ -53,14 +52,14 @@ public class FeedbackPresenterTest {
         presenter.onSubmitClick(title, content);
 
         verify(view).showProgressDialog();
-        verify(model).requestPostComment(title, content, presenter);
+        verify(model).requestPostFeedback(title, content, presenter);
     }
 
     @Test
     public void testOnPostCommentSuccess() throws Exception {
-        presenter.onPostCommentSuccess();
+        presenter.onPostFeedbackSuccess();
 
         verify(view).hideProgressDialog();
-        verify(view).showPostCommentSuccessDialog();
+        verify(view).showPostFeedbackSuccessDialog();
     }
 }

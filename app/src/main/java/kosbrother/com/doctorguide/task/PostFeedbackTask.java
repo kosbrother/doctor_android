@@ -3,12 +3,12 @@ package kosbrother.com.doctorguide.task;
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 
-public class PostCommentTask extends AsyncTask<Void, Void, Boolean> {
+public class PostFeedbackTask extends AsyncTask<Void, Void, Boolean> {
     private String subject;
     private String content;
-    private PostCommentListener listener;
+    private PostFeedbackListener listener;
 
-    public PostCommentTask(String subject, String content, PostCommentListener listener) {
+    public PostFeedbackTask(String subject, String content, PostFeedbackListener listener) {
         this.subject = subject;
         this.content = content;
         this.listener = listener;
@@ -23,11 +23,11 @@ public class PostCommentTask extends AsyncTask<Void, Void, Boolean> {
     protected void onPostExecute(Boolean isSuccess) {
         super.onPostExecute(isSuccess);
         if (isSuccess) {
-            listener.onPostCommentSuccess();
+            listener.onPostFeedbackSuccess();
         }
     }
 
-    public interface PostCommentListener {
-        void onPostCommentSuccess();
+    public interface PostFeedbackListener {
+        void onPostFeedbackSuccess();
     }
 }

@@ -49,7 +49,7 @@ public class FeedbackActivity extends BaseActivity implements FeedbackView {
     }
 
     @Override
-    public void showPostCommentSuccessDialog() {
+    public void showPostFeedbackSuccessDialog() {
         new AlertDialog.Builder(FeedbackActivity.this)
                 .setTitle("成功提交")
                 .setMessage("我們會儘速改進，謝謝你的意見！")
