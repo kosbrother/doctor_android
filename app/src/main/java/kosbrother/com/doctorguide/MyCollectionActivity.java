@@ -21,107 +21,129 @@ import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
 import kosbrother.com.doctorguide.entity.realm.RealmHospital;
 import kosbrother.com.doctorguide.fragments.DoctorMyCollectionFragment;
 import kosbrother.com.doctorguide.fragments.HospitalMyCollecionFragment;
+import kosbrother.com.doctorguide.model.MyCollectionModel;
+import kosbrother.com.doctorguide.presenter.MyCollectionPresenter;
+import kosbrother.com.doctorguide.view.MyCollectionView;
 
-public class MyCollectionActivity extends BaseActivity implements DoctorMyCollectionFragment.OnListFragmentInteractionListener, HospitalMyCollecionFragment.OnListFragmentInteractionListener {
+public class MyCollectionActivity extends BaseActivity implements
+        DoctorMyCollectionFragment.OnListFragmentInteractionListener,
+        HospitalMyCollecionFragment.OnListFragmentInteractionListener,
+        MyCollectionView {
 
     private ViewPagerAdapter adapter;
+    private MyCollectionPresenter presenter;
+    private DialogInterface.OnClickListener confirmCancelHospitalListener;
+    private DialogInterface.OnClickListener confirmCancelDoctorListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_collection);
+        Realm realm = Realm.getInstance(getBaseContext());
+        MyCollectionModel model = new MyCollectionModel(realm);
+        presenter = new MyCollectionPresenter(this, model);
+        presenter.onCreate();
+    }
 
+    @Override
+    public void setContentView() {
+        setContentView(R.layout.activity_my_collection);
+    }
+
+    @Override
+    public void setActionBar() {
         ActionBar actionbar = getSupportActionBar();
         assert actionbar != null;
         actionbar.setTitle("我的收藏");
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setElevation(0);
+    }
 
+    @Override
+    public void setViewPager() {
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new HospitalMyCollecionFragment(), "收藏醫院");
+        adapter.addFragment(new DoctorMyCollectionFragment(), "收藏醫生");
+        viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new HospitalMyCollecionFragment(), "收藏醫院");
-        adapter.addFragment(new DoctorMyCollectionFragment(), "收藏醫生");
-        viewPager.setAdapter(adapter);
-    }
-
     @Override
-    public void onListFragmentInteraction(View view, final RealmHospital item) {
-        if (view.getId() == R.id.heart) {
-            String message = "確定要取消收藏「" + item.getName() + "」嗎？";
-
-            new AlertDialog.Builder(MyCollectionActivity.this, R.style.AppCompatAlertDialogStyle)
-                    .setTitle("取消收藏")
-                    .setMessage(message)
-                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Realm realm = Realm.getInstance(getBaseContext());
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    RealmHospital hosp = realm.where(RealmHospital.class).equalTo("id", item.getId()).findFirst();
-                                    hosp.removeFromRealm();
-                                }
-                            });
-                            adapter.notifyDataSetChanged();
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    }).show();
-        } else {
-            Intent intent = new Intent(this, HospitalActivity.class);
-            intent.putExtra(ExtraKey.HOSPITAL_ID, item.getId());
-            intent.putExtra(ExtraKey.HOSPITAL_GRADE, item.getGrade());
-            intent.putExtra(ExtraKey.HOSPITAL_NAME, item.getName());
-            startActivity(intent);
+    public void showCancelHospitalCollectDialog(String message) {
+        if (confirmCancelHospitalListener == null) {
+            confirmCancelHospitalListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    presenter.onConfirmCancelCollectHospitalClick();
+                }
+            };
         }
-
+        showCancelCollectDialog(message, confirmCancelHospitalListener);
     }
 
     @Override
-    public void onListFragmentInteraction(View view, final RealmDoctor item) {
-        if (view.getId() == R.id.heart) {
-            String message = "確定要取消收藏「" + item.getName() + " 醫師" + "」嗎？";
+    public void showCancelDoctorCollectDialog(String message) {
+        if (confirmCancelDoctorListener == null) {
+            confirmCancelDoctorListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    presenter.onConfirmCancelCollectDoctorClick();
+                }
+            };
+        }
+        showCancelCollectDialog(message, confirmCancelDoctorListener);
+    }
 
-            new AlertDialog.Builder(MyCollectionActivity.this, R.style.AppCompatAlertDialogStyle)
-                    .setTitle("取消收藏")
-                    .setMessage(message)
-                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Realm realm = Realm.getInstance(getBaseContext());
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    RealmDoctor doc = realm.where(RealmDoctor.class).equalTo("id", item.getId()).findFirst();
-                                    doc.removeFromRealm();
-                                }
-                            });
-                            adapter.notifyDataSetChanged();
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    }).show();
+    private void showCancelCollectDialog(String message, DialogInterface.OnClickListener listener) {
+        new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                .setTitle("取消收藏")
+                .setMessage(message)
+                .setPositiveButton(R.string.confirm, listener)
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    @Override
+    public void updateAdapter() {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void startHospitalActivity(RealmHospital hospital) {
+        Intent intent = new Intent(this, HospitalActivity.class);
+        intent.putExtra(ExtraKey.HOSPITAL_ID, hospital.getId());
+        intent.putExtra(ExtraKey.HOSPITAL_GRADE, hospital.getGrade());
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, hospital.getName());
+        startActivity(intent);
+    }
+
+    @Override
+    public void startDoctorActivity(RealmDoctor doctor) {
+        Intent intent = new Intent(this, DoctorActivity.class);
+        intent.putExtra(ExtraKey.HOSPITAL_ID, doctor.getHospitalId());
+        intent.putExtra(ExtraKey.DOCTOR_ID, doctor.getId());
+        intent.putExtra(ExtraKey.DOCTOR_NAME, doctor.getName());
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, doctor.getHospital());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onListFragmentInteraction(View view, final RealmHospital hospital) {
+        if (view.getId() == R.id.heart) {
+            presenter.onHospitalHeartClick(hospital);
         } else {
-            Intent intent = new Intent(this, DoctorActivity.class);
-            intent.putExtra(ExtraKey.HOSPITAL_ID, item.getHospitalId());
-            intent.putExtra(ExtraKey.DOCTOR_ID, item.getId());
-            intent.putExtra(ExtraKey.DOCTOR_NAME, item.getName());
-            intent.putExtra(ExtraKey.HOSPITAL_NAME, item.getHospital());
-            startActivity(intent);
+            presenter.onHospitalItemClick(hospital);
+        }
+    }
+
+    @Override
+    public void onListFragmentInteraction(View view, final RealmDoctor doctor) {
+        if (view.getId() == R.id.heart) {
+            presenter.onDoctorHeartClick(doctor);
+        } else {
+            presenter.onDoctorItemClick(doctor);
         }
     }
 
