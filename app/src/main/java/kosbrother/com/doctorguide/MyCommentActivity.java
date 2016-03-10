@@ -3,7 +3,6 @@ package kosbrother.com.doctorguide;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,14 +23,14 @@ import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.CommentAdapter;
-import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Comment;
 import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 import kosbrother.com.doctorguide.google_signin.GoogleSignInManager;
 import kosbrother.com.doctorguide.task.CreateUserTask;
+import kosbrother.com.doctorguide.task.GetMyCommentsTask;
 
 public class MyCommentActivity extends GoogleSignInActivity implements
-        CreateUserTask.CreateUserListener {
+        CreateUserTask.CreateUserListener, GetMyCommentsTask.GetMyCommentsListener {
 
     private ActionBar actionbar;
     RecyclerView mRecyclerView;
@@ -76,37 +75,11 @@ public class MyCommentActivity extends GoogleSignInActivity implements
             });
             dialog.show();
         } else {
-            new GetMyCommentsTask().execute();
+            mProgressDialog = Util.showProgressDialog(MyCommentActivity.this);
+            new GetMyCommentsTask(this).execute(userEmail);
         }
 
         noCommentLayout = (LinearLayout) findViewById(R.id.no_comment_layout);
-    }
-
-    private class GetMyCommentsTask extends AsyncTask {
-
-        private ProgressDialog mProgressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mProgressDialog = Util.showProgressDialog(MyCommentActivity.this);
-        }
-
-        @Override
-        protected Object doInBackground(Object... params) {
-            mComments = DoctorGuideApi.getUserComments(userEmail);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-            super.onPostExecute(result);
-            mProgressDialog.dismiss();
-            if (mComments.size() == 0)
-                noCommentLayout.setVisibility(View.VISIBLE);
-            setRecyclerView();
-        }
-
     }
 
     @Override
@@ -123,8 +96,16 @@ public class MyCommentActivity extends GoogleSignInActivity implements
 
     @Override
     public void onCreateUserSuccess() {
+        new GetMyCommentsTask(this).execute(userEmail);
+    }
+
+    @Override
+    public void onGetMyCommentsSuccess(ArrayList<Comment> comments) {
+        mComments = comments;
         mProgressDialog.dismiss();
-        new GetMyCommentsTask().execute();
+        if (mComments.size() == 0)
+            noCommentLayout.setVisibility(View.VISIBLE);
+        setRecyclerView();
     }
 
     @Override
