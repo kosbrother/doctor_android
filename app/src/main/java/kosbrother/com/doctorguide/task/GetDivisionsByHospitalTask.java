@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Division;
 
-public class GetDivisionsTask extends AsyncTask<Integer, Void, ArrayList<Division>> {
+public class GetDivisionsByHospitalTask extends AsyncTask<Integer, Void, ArrayList<Division>> {
 
     private GetDivisionsListener listener;
 
-    public GetDivisionsTask(GetDivisionsListener listener) {
+    public GetDivisionsByHospitalTask(GetDivisionsListener listener) {
         this.listener = listener;
     }
 
