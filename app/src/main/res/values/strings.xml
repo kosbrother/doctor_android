@@ -107,4 +107,8 @@
     <string name="problem_report_content_hint">具體描述</string>
     <string name="problem_report_submit">送出</string>
 
+    <!--Searchable-->
+    <string name="searchable_doctor">醫師</string>
+    <string name="searchable_hospital">醫院</string>
+
 </resources>
