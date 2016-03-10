@@ -215,11 +215,6 @@ public class DivisionActivity extends GoogleSignInActivity implements
     }
 
     @Override
-    public void showRequireNetworkDialog() {
-        showRequireNetworkDialog(this);
-    }
-
-    @Override
     public void updateAdapter() {
         adapter.notifyDataSetChanged();
     }

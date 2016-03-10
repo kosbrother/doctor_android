@@ -214,11 +214,6 @@ public class DoctorActivity extends GoogleSignInActivity implements
     }
 
     @Override
-    public void showRequireNetworkDialog() {
-        showRequireNetworkDialog(this);
-    }
-
-    @Override
     public void showCreateUserFailToast() {
         Toast.makeText(this, "登入失敗", Toast.LENGTH_SHORT).show();
     }
