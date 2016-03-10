@@ -98,4 +98,11 @@
     <string name="feedback_opinion_hint">請輸入您的改進建議</string>
     <string name="feedback_submit">送 出</string>
 
+    <!--Problem report-->
+    <string name="problem_report_thanks_user">非常感謝您使用就醫指南，若系統錯誤造成您使用上的不便，我們深感抱歉！我們會盡快修正，感謝您的回報！！</string>
+    <string name="problem_report_page">勘誤位置</string>
+    <string name="problem_report_content">勘誤內容</string>
+    <string name="problem_report_content_hint">具體描述</string>
+    <string name="problem_report_submit">送出</string>
+
 </resources>

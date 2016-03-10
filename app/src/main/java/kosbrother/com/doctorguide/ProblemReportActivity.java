@@ -2,150 +2,106 @@ package kosbrother.com.doctorguide;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.HashMap;
-
 import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.Util;
-import kosbrother.com.doctorguide.api.DoctorGuideApi;
+import kosbrother.com.doctorguide.model.ProblemReportModel;
+import kosbrother.com.doctorguide.presenter.ProblemReportPresenter;
+import kosbrother.com.doctorguide.view.ProblemReportView;
+import kosbrother.com.doctorguide.viewmodel.ProblemReportViewModel;
 
-public class ProblemReportActivity extends BaseActivity {
+public class ProblemReportActivity extends BaseActivity implements ProblemReportView {
 
-    private ActionBar actionbar;
-    private String divisionName;
-    private String hospitalName;
-    private String reportType;
-    private String version;
-    private TextView reportText;
-    private String reportString;
-    private String doctorName;
-    private TextView reportTypeText;
-    private int doctorId;
-    private int hospitalId;
-    private int divisionId;
-    private HashMap<String, String> submitParams = new HashMap<>();
-    private EditText reportContent;
+    private ProblemReportPresenter presenter;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ProblemReportModel model = new ProblemReportModel(getViewModel());
+        presenter = new ProblemReportPresenter(this, model);
+        presenter.onCreate();
+    }
+
+    @Override
+    public void setContentView() {
         setContentView(R.layout.activity_problem_report);
+    }
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            divisionName = extras.getString(ExtraKey.DIVISION_NAME);
-            hospitalName = extras.getString(ExtraKey.HOSPITAL_NAME);
-            doctorName = extras.getString(ExtraKey.DOCTOR_NAME);
-            reportType = extras.getString(ExtraKey.REPORT_TYPE);
-            doctorId = extras.getInt(ExtraKey.DOCTOR_ID);
-            hospitalId = extras.getInt(ExtraKey.HOSPITAL_ID);
-            divisionId = extras.getInt(ExtraKey.DIVISION_ID);
-        }
-
-        actionbar = getSupportActionBar();
+    @Override
+    public void setActionBar() {
+        ActionBar actionbar = getSupportActionBar();
         assert actionbar != null;
         actionbar.setTitle("問題回報");
         actionbar.setDisplayHomeAsUpEnabled(true);
-
-        PackageInfo pInfo = null;
-        try {
-            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        version = pInfo.versionName;
-
-        setViews();
-        setSubmit();
     }
 
-    private void setSubmit() {
-        Button submit = (Button) findViewById(R.id.submit);
-        reportContent = (EditText) findViewById(R.id.report_content);
+    @Override
+    public void setReportType(String reportTypeText) {
+        ((TextView) findViewById(R.id.report_type)).setText(reportTypeText);
+    }
 
-        submit.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (reportContent.getText().toString().equals("")) {
-                    Util.showSnackBar(v, "請填寫問題內容");
-                } else {
-                    setSubmitParams();
-                    new PostProblemTask().execute();
-                }
+    @Override
+    public void setReportPage(String reportPageText) {
+        ((TextView) findViewById(R.id.report_page)).setText(reportPageText);
+    }
+
+    @Override
+    public void showNoContentSnackBar() {
+        Util.showSnackBar(findViewById(R.id.submit), "請填寫問題內容");
+    }
+
+    @Override
+    public void showSubmitSuccessDialog() {
+        new AlertDialog.Builder(ProblemReportActivity.this)
+                .setTitle("成功提交")
+                .setMessage("我們會儘速改進，謝謝你的提報！")
+                .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    public void showProgressDialog() {
+        progressDialog = Util.showProgressDialog(this);
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        progressDialog.dismiss();
+    }
+
+    public void onReportSubmitButtonClick(View view) {
+        String content = ((EditText) findViewById(R.id.report_content)).getText().toString();
+        presenter.onSubmitClick(content);
+    }
+
+    private ProblemReportViewModel getViewModel() {
+        ProblemReportViewModel viewModel = new ProblemReportViewModel();
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                viewModel.setDivisionName(extras.getString(ExtraKey.DIVISION_NAME));
+                viewModel.setHospitalName(extras.getString(ExtraKey.HOSPITAL_NAME));
+                viewModel.setDoctorName(extras.getString(ExtraKey.DOCTOR_NAME));
+                viewModel.setReportType(extras.getString(ExtraKey.REPORT_TYPE));
+                viewModel.setDoctorId(extras.getInt(ExtraKey.DOCTOR_ID));
+                viewModel.setHospitalId(extras.getInt(ExtraKey.HOSPITAL_ID));
+                viewModel.setDivisionId(extras.getInt(ExtraKey.DIVISION_ID));
             }
-        });
-    }
-
-    private void setSubmitParams() {
-        if (doctorId != 0)
-            submitParams.put("doctor_id", doctorId + "");
-        if (hospitalId != 0)
-            submitParams.put("hospital_id", hospitalId + "");
-        if (divisionId != 0)
-            submitParams.put("division_id", divisionId + "");
-        submitParams.put("content", reportContent.getText().toString());
-    }
-
-    private class PostProblemTask extends AsyncTask {
-
-        private ProgressDialog mProgressDialog;
-        private Boolean isSuccess;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mProgressDialog = Util.showProgressDialog(ProblemReportActivity.this);
         }
-
-        @Override
-        protected Object doInBackground(Object... params) {
-            isSuccess = DoctorGuideApi.postProblem(submitParams);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-            super.onPostExecute(result);
-            mProgressDialog.dismiss();
-            if (isSuccess) {
-                new AlertDialog.Builder(ProblemReportActivity.this)
-                        .setTitle("成功提交")
-                        .setMessage("我們會儘速改進，謝謝你的提報！")
-                        .setPositiveButton("確定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
-                        })
-                        .show();
-            }
-
-        }
-
+        return viewModel;
     }
-
-    private void setViews() {
-        reportTypeText = (TextView) findViewById(R.id.report_type);
-        reportTypeText.setText(reportType);
-
-        reportText = (TextView) findViewById(R.id.report_string);
-        reportString = "";
-        reportString = hospitalName;
-        if (doctorName != null) {
-            reportString += " | " + doctorName + " 醫師";
-        } else if (divisionName != null)
-            reportString += " | " + divisionName;
-        reportText.setText(reportString);
-    }
-
 }
