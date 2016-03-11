@@ -106,7 +106,12 @@
         <activity
             android:name=".CommentDetailActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".SearchMoreActivity" />
+        <activity
+            android:name=".SearchMoreDoctorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SearchMoreHospitalActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
