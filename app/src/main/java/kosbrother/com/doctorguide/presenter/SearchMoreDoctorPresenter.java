@@ -7,7 +7,8 @@ import kosbrother.com.doctorguide.model.SearchMoreDoctorModel;
 import kosbrother.com.doctorguide.task.SearchDoctorsTask;
 import kosbrother.com.doctorguide.view.SearchMoreDoctorView;
 
-public class SearchMoreDoctorPresenter extends SearchMorePresenter implements SearchDoctorsTask.SearchDoctorsListener {
+public class SearchMoreDoctorPresenter extends SearchMorePresenter implements
+        SearchDoctorsTask.SearchDoctorsListener {
 
     private final SearchMoreDoctorView view;
     private final SearchMoreDoctorModel model;
