@@ -120,7 +120,7 @@ public class HospitalDoctorActivity extends BaseActivity implements
         if (viewPager.getAdapter() == null) {
             ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
             adapter.addFragment(HospitalFragment.newInstance(categoryId), "醫院");
-            adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.DISTANCETYPE, categoryId), "醫生");
+            adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.DISTANCE_TYPE, categoryId), "醫生");
             viewPager.setAdapter(adapter);
             tabLayout.setupWithViewPager(viewPager);
         }

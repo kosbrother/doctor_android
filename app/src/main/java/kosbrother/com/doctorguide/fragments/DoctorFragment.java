@@ -114,7 +114,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
             }
         });
 
-        if (fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE) {
+        if (fragmentType == MyDoctorRecyclerViewAdapter.HEART_TYPE) {
             view.findViewById(R.id.selector).setVisibility(View.GONE);
             setHeartTypeRecyclerAdapter();
         } else {
@@ -212,7 +212,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
 
         @Override
         protected Object doInBackground(Object... params) {
-            if (fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE) {
+            if (fragmentType == MyDoctorRecyclerViewAdapter.HEART_TYPE) {
                 doctors = DoctorGuideApi.getDoctorsByHospitalAndDivision(mHospitalId, mDivisionId);
                 Realm realm = Realm.getInstance(getContext());
                 realm.executeTransaction(new Realm.Transaction() {
@@ -240,7 +240,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
             super.onPostExecute(result);
             if (page == 1)
                 mProgressDialog.dismiss();
-            if (fragmentType == MyDoctorRecyclerViewAdapter.HEARTTYPE) {
+            if (fragmentType == MyDoctorRecyclerViewAdapter.HEART_TYPE) {
                 adatper = new MyDoctorRecyclerViewAdapter(doctors, mListener, fragmentType, location);
                 recyclerView.setAdapter(adatper);
                 adatper.notifyDataSetChanged();
