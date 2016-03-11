@@ -33,10 +33,10 @@ public class SearchablePresenter implements SearchableModel.GetSearchResultListe
     }
 
     public void onSearchMoreHospitalClick() {
-        view.startSearchMoreActivity("HOSPITAL", model.getQueryString());
+        view.startSearchMoreHospitalActivity(model.getQueryString());
     }
 
     public void onSearchMoreDoctorClick() {
-        view.startSearchMoreActivity("DOCTOR", model.getQueryString());
+        view.startSearchMoreDoctorActivity(model.getQueryString());
     }
 }

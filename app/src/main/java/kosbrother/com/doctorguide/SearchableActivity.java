@@ -122,9 +122,15 @@ public class SearchableActivity extends BaseActivity implements SearchableView {
     }
 
     @Override
-    public void startSearchMoreActivity(String type, String queryString) {
-        Intent intent = new Intent(this, SearchMoreActivity.class);
-        intent.putExtra(ExtraKey.TYPE, type);
+    public void startSearchMoreHospitalActivity(String queryString) {
+        Intent intent = new Intent(this, SearchMoreHospitalActivity.class);
+        intent.putExtra(ExtraKey.QUERY, queryString);
+        startActivity(intent);
+    }
+
+    @Override
+    public void startSearchMoreDoctorActivity(String queryString) {
+        Intent intent = new Intent(this, SearchMoreDoctorActivity.class);
         intent.putExtra(ExtraKey.QUERY, queryString);
         startActivity(intent);
     }

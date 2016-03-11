@@ -15,7 +15,6 @@ public class ExtraKey {
     public static final String REPORT_TYPE = "REPORT_TYPE";
     public static final String USER = "USER";
     public static final String USER_EMAIL = "USER_EMAIL";
-    public static final String TYPE = "TYPE";
     public static final String QUERY = "QUERY";
 
 }

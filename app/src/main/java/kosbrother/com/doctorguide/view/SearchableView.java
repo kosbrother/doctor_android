@@ -16,5 +16,7 @@ public interface SearchableView extends ProgressDialogView{
 
     void setHospitalListView(ArrayList<Hospital> hospitals);
 
-    void startSearchMoreActivity(String type, String queryString);
+    void startSearchMoreHospitalActivity(String queryString);
+
+    void startSearchMoreDoctorActivity(String queryString);
 }

@@ -55,13 +55,13 @@ public class SearchablePresenterTest {
     public void testOnSearchMoreHospitalClick() throws Exception {
         presenter.onSearchMoreHospitalClick();
 
-        verify(view).startSearchMoreActivity("HOSPITAL", model.getQueryString());
+        verify(view).startSearchMoreHospitalActivity(model.getQueryString());
     }
 
     @Test
     public void testOnSearchMoreDoctorClick() throws Exception {
         presenter.onSearchMoreDoctorClick();
 
-        verify(view).startSearchMoreActivity("DOCTOR", model.getQueryString());
+        verify(view).startSearchMoreDoctorActivity(model.getQueryString());
     }
 }
