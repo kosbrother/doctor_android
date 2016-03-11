@@ -29,8 +29,8 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private final ArrayList<Doctor> mDoctors;
     private final DoctorFragment.OnListFragmentInteractionListener mListener;
     private int mFragmentViewType;
-    public static final int DISTANCETYPE = 0;
-    public static final int HEARTTYPE = 1;
+    public static final int DISTANCE_TYPE = 0;
+    public static final int HEART_TYPE = 1;
     private LatLng mLocation;
 
     public enum ITEM_TYPE {
@@ -50,7 +50,7 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         if (viewType == ITEM_TYPE.ITEM.ordinal()) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.fragment_doctor, parent, false);
-            if (mFragmentViewType == DISTANCETYPE) {
+            if (mFragmentViewType == DISTANCE_TYPE) {
                 view.findViewById(R.id.heart).setVisibility(View.GONE);
             } else {
                 view.findViewById(R.id.hospial_name).setVisibility(View.GONE);
@@ -69,19 +69,33 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     public void onBindViewHolder(final RecyclerView.ViewHolder oHolder, final int position) {
         if (oHolder instanceof ViewHolder) {
             ViewHolder holder = (ViewHolder) oHolder;
+            if (mFragmentViewType == DISTANCE_TYPE) {
+                double distance = computeDistanceBetween(mLocation,
+                        new LatLng(mDoctors.get(position).latitude, mDoctors.get(position).longitude));
+                holder.mDistance.setText(Util.formatNumber(distance));
+                holder.mhospialName.setText(mDoctors.get(position).hospital);
+            } else {
+                if (mDoctors.get(position).isCollected) {
+                    holder.heart.setBackgroundResource(R.drawable.heart_read_to_white_button);
+                } else {
+                    holder.heart.setBackgroundResource(R.drawable.heart_red_line_to_red_button);
+                }
+                holder.heart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (null != mListener) {
+                            Doctor doctor = mDoctors.get(position);
+                            GAManager.sendEvent(new DoctorClickCollectEvent(doctor.name));
+
+                            mListener.onListFragmentInteraction(v, doctor);
+                        }
+                    }
+                });
+            }
             holder.mName.setText(mDoctors.get(position).name);
-            holder.mhospialName.setText(mDoctors.get(position).hospital);
-            double distance = computeDistanceBetween(mLocation, new LatLng(mDoctors.get(position).latitude, mDoctors.get(position).longitude));
-            holder.mDistance.setText(Util.formatNumber(distance));
             holder.mCommentNum.setText(mDoctors.get(position).comment_num + "");
             holder.mRecommendNum.setText(mDoctors.get(position).recommend_num + "");
             holder.mScore.setText(String.format("%.1f", mDoctors.get(position).avg));
-
-            if (mDoctors.get(position).isCollected) {
-                holder.heart.setBackgroundResource(R.drawable.heart_read_to_white_button);
-            } else {
-                holder.heart.setBackgroundResource(R.drawable.heart_red_line_to_red_button);
-            }
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -90,23 +104,11 @@ public class MyDoctorRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         // TODO: 2016/3/3 move logic to activity
                         Doctor doctor = mDoctors.get(position);
 
-                        if (mFragmentViewType == HEARTTYPE) {
+                        if (mFragmentViewType == HEART_TYPE) {
                             GAManager.sendEvent(new DivisionClickDoctorListEvent(doctor.name));
                         } else {
                             GAManager.sendEvent(new HospitalDoctorClickDoctorListEvent(doctor.name));
                         }
-                        mListener.onListFragmentInteraction(v, doctor);
-                    }
-                }
-            });
-
-            holder.heart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != mListener) {
-                        Doctor doctor = mDoctors.get(position);
-                        GAManager.sendEvent(new DoctorClickCollectEvent(doctor.name));
-
                         mListener.onListFragmentInteraction(v, doctor);
                     }
                 }

@@ -136,7 +136,7 @@ public class DivisionActivity extends GoogleSignInActivity implements
     @Override
     public void setupViewPager(int hospitalId, int divisionId) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.HEARTTYPE, hospitalId, divisionId), "科內醫生");
+        adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.HEART_TYPE, hospitalId, divisionId), "科內醫生");
         adapter.addFragment(DivisionScoreFragment.newInstance(), "本科評分");
         adapter.addFragment(CommentFragment.newInstance(hospitalId, divisionId, null, GACategory.DIVISION), "本科評論");
 
