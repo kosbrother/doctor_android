@@ -1,5 +1,12 @@
 package kosbrother.com.doctorguide;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import com.facebook.appevents.AppEventsLogger;
+
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
@@ -25,11 +32,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
@@ -322,5 +324,21 @@ public class MainActivity extends GoogleSignInActivity implements
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         presenter.onConnectionFailed();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Logs 'install' and 'app activate' App Events.
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Logs 'app deactivate' App Event.
+        AppEventsLogger.deactivateApp(this);
     }
 }
