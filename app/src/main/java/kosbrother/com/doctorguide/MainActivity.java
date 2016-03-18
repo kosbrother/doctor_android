@@ -154,8 +154,8 @@ public class MainActivity extends GoogleSignInActivity implements
     public void setTabAndViewPager() {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new MainDivisionFragment(), "科別尋找");
         adapter.addFragment(new MainAreaFragment(), "地區尋找");
+        adapter.addFragment(new MainDivisionFragment(), "科別尋找");
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
