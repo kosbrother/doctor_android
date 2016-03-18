@@ -32,7 +32,7 @@ public class MainPresenterTest {
         verify(view).setToolBarAndDrawer();
         verify(view).setAppVersionName(model.getVersionName());
         verify(view).setNavigationView();
-        verify(view).setRecyclerView();
+        verify(view).setTabAndViewPager();
     }
 
     @Test

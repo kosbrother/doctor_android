@@ -9,7 +9,7 @@ public interface MainView extends ProgressDialogView{
 
     void setAppVersionName(String versionName);
 
-    void setRecyclerView();
+    void setTabAndViewPager();
 
     void setUserName(String userName);
 
