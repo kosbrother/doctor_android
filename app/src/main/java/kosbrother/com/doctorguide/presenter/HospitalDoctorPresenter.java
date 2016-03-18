@@ -21,54 +21,10 @@ public class HospitalDoctorPresenter implements GetDivisionsListener {
     public void onCreate() {
         view.setContentView();
         view.setActionBar();
-
-        if (model.getSdkInt() >= 23) {
-            view.checkLocationPermission();
-        } else {
-            view.setGoogleClient();
-        }
     }
 
-    public void onPermissionGranted() {
-        view.setGoogleClient();
-    }
-
-    public void onPermissionNotGranted() {
-        view.checkShouldShowRequestPermissionRationale();
-    }
-
-    public void onShouldShowRequestPermissionRationale() {
-        view.requestLocationPermission();
-    }
-
-    public void onShouldNotShowRequestPermissionRationale() {
-        view.showRequestPermissionSnackBar();
-        view.requestLocationPermission();
-    }
-
-    public void onRequestPermissionResultSuccess() {
-        view.setGoogleClient();
-    }
-
-    public void onRequestPermissionResultDenied() {
-        view.showRequestPermissionDeniedSnackBar();
-    }
-
-    public void onGetLastLocationNull() {
-        view.requestLocationUpdates();
-    }
-
-    public void onGetLastLocationSuccess() {
+    public void onGetLocationSuccess() {
         view.setViewPager();
-    }
-
-    public void onStop() {
-        view.disconnectGoogleClient();
-    }
-
-    public void onLocationChanged() {
-        view.setViewPager();
-        view.removeLocationUpdatesListener();
     }
 
     public void onListFragmentInteraction(Hospital hospital) {
@@ -88,11 +44,11 @@ public class HospitalDoctorPresenter implements GetDivisionsListener {
         }
     }
 
-    public void onListFragmentInteraction(Doctor doctor) {
-        view.startDoctorActivity(doctor);
-    }
-
     public void onDivisionsDialogClick(int position) {
         view.startDivisionActivity(model.getDivisions(), model.getHospital(), position);
+    }
+
+    public void onListFragmentInteraction(Doctor doctor) {
+        view.startDoctorActivity(doctor);
     }
 }

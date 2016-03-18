@@ -11,27 +11,9 @@ public interface HospitalDoctorView extends ProgressDialogView {
 
     void setActionBar();
 
-    void setGoogleClient();
-
     void setViewPager();
 
-    void checkLocationPermission();
-
-    void checkShouldShowRequestPermissionRationale();
-
-    void requestLocationPermission();
-
-    void requestLocationUpdates();
-
-    void showRequestPermissionSnackBar();
-
-    void showRequestPermissionDeniedSnackBar();
-
     void showDivisionsDialog(String[] divisionNameArray, Hospital hospital);
-
-    void disconnectGoogleClient();
-
-    void removeLocationUpdatesListener();
 
     void startDivisionActivity(ArrayList<Division> divisions, Hospital hospital, int position);
 
