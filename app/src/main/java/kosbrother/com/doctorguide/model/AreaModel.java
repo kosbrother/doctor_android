@@ -16,16 +16,16 @@ import static kosbrother.com.doctorguide.task.GetHospitalsByAreaTask.GetHospital
 
 public class AreaModel {
 
-    private int orderSelection = OrderStrings.getStringIndex(OrderStrings.COMMENT_NUM);
-    private int areaSelection;
+    private int sortPosition = OrderStrings.getStringIndex(OrderStrings.COMMENT_NUM);
+    private int areaPosition;
     private int page = 1;
     private boolean isLoadCompleted = false;
 
     private LatLng latLng;
     private ArrayList<Hospital> hospitals;
 
-    public AreaModel(int areaSelection) {
-        this.areaSelection = areaSelection;
+    public AreaModel(int areaPosition) {
+        this.areaPosition = areaPosition;
     }
 
     public void requestGetHospitals(GetHospitalsByAreaListener listener) {
@@ -35,10 +35,10 @@ public class AreaModel {
     @NonNull
     private GetHospitalsByAreaInput getInput() {
         GetHospitalsByAreaInput input = new GetHospitalsByAreaInput();
-        input.setAreaId(Area.getAreas().get(areaSelection).id);
+        input.setAreaId(Area.getAreas().get(areaPosition).id);
         input.setLatitude(latLng.latitude);
         input.setLongitude(latLng.longitude);
-        input.setOrderString(OrderStrings.getOrderString(orderSelection));
+        input.setOrderString(OrderStrings.getOrderString(sortPosition));
         input.setPage(page);
         return input;
     }
@@ -52,23 +52,23 @@ public class AreaModel {
     }
 
     public String getAreaName() {
-        return Area.getAreaStrings().get(areaSelection);
+        return Area.getAreaStrings().get(areaPosition);
     }
 
-    public void setAreaSelection(int areaSelection) {
-        this.areaSelection = areaSelection;
+    public void setAreaPosition(int areaPosition) {
+        this.areaPosition = areaPosition;
     }
 
-    public int getAreaSelection() {
-        return areaSelection;
+    public int getAreaPosition() {
+        return areaPosition;
     }
 
-    public void setOrderSelection(int orderSelection) {
-        this.orderSelection = orderSelection;
+    public void setSortPosition(int sortPosition) {
+        this.sortPosition = sortPosition;
     }
 
-    public int getOrderSelection() {
-        return orderSelection;
+    public int getSortPosition() {
+        return sortPosition;
     }
 
     public void setHospitals(ArrayList<Hospital> hospitals) {

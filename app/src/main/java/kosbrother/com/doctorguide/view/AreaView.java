@@ -13,9 +13,9 @@ public interface AreaView extends ProgressDialogView{
 
     void setActionBarTitle(String title);
 
-    void setOrderSpinner(int sortSelection, String[] orderStringArray);
+    void setOrderSpinner(int sortPosition, String[] orderStringArray);
 
-    void setAreaSpinner(int areaSelection, String[] areaStringArray);
+    void setAreaSpinner(int areaPosition, String[] areaStringArray);
 
     void setRecyclerView(ArrayList<Hospital> hospitals, LatLng latLng);
 
@@ -28,4 +28,10 @@ public interface AreaView extends ProgressDialogView{
     void updateRecyclerView(ArrayList<Hospital> hospitals);
 
     void startHospitalActivity(Hospital hospital);
+
+    void sendAreaClickAreaSpinnerEvent(String areaName);
+
+    void sendAreaClickSortSpinnerEvent(String sortString);
+
+    void sendAreaClickHospitalItemEvent(String hospitalName);
 }

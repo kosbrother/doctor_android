@@ -21,6 +21,10 @@ import kosbrother.com.doctorguide.adapters.MyHospitalRecyclerViewAdapter;
 import kosbrother.com.doctorguide.custom.LoadMoreRecyclerView;
 import kosbrother.com.doctorguide.entity.Hospital;
 import kosbrother.com.doctorguide.fragments.HospitalFragment;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.event.area.AreaClickAreaSpinnerEvent;
+import kosbrother.com.doctorguide.google_analytics.event.area.AreaClickHospitalListEvent;
+import kosbrother.com.doctorguide.google_analytics.event.area.AreaClickSortSpinnerEvent;
 import kosbrother.com.doctorguide.model.AreaModel;
 import kosbrother.com.doctorguide.presenter.AreaPresenter;
 import kosbrother.com.doctorguide.view.AreaView;
@@ -67,25 +71,25 @@ public class AreaActivity extends GetLocationActivity implements
     }
 
     @Override
-    public void setOrderSpinner(int sortSelection, String[] orderStringArray) {
-        Spinner spinner = (Spinner) findViewById(R.id.order);
-        setSpinner(sortSelection, orderStringArray, spinner);
+    public void setOrderSpinner(int sortPosition, String[] orderStringArray) {
+        Spinner spinner = (Spinner) findViewById(R.id.sort);
+        setSpinner(sortPosition, orderStringArray, spinner);
     }
 
     @Override
-    public void setAreaSpinner(int areaSelection, String[] areaStringArray) {
+    public void setAreaSpinner(int areaPosition, String[] areaStringArray) {
         Spinner spinner = (Spinner) findViewById(R.id.area);
-        setSpinner(areaSelection, areaStringArray, spinner);
+        setSpinner(areaPosition, areaStringArray, spinner);
     }
 
-    private void setSpinner(int selection, String[] stringArray, Spinner spinner) {
+    private void setSpinner(int position, String[] stringArray, Spinner spinner) {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_area_item,
                 stringArray);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner.setAdapter(arrayAdapter);
-        spinner.setSelection(selection, false);
+        spinner.setSelection(position, false);
         spinner.setOnItemSelectedListener(this);
     }
 
@@ -135,6 +139,21 @@ public class AreaActivity extends GetLocationActivity implements
     }
 
     @Override
+    public void sendAreaClickAreaSpinnerEvent(String areaName) {
+        GAManager.sendEvent(new AreaClickAreaSpinnerEvent(areaName));
+    }
+
+    @Override
+    public void sendAreaClickSortSpinnerEvent(String sortString) {
+        GAManager.sendEvent(new AreaClickSortSpinnerEvent(sortString));
+    }
+
+    @Override
+    public void sendAreaClickHospitalItemEvent(String hospitalName) {
+        GAManager.sendEvent(new AreaClickHospitalListEvent(hospitalName));
+    }
+
+    @Override
     public void showProgressDialog() {
         progressDialog = Util.showProgressDialog(this);
     }
@@ -150,8 +169,8 @@ public class AreaActivity extends GetLocationActivity implements
             case R.id.area:
                 presenter.onAreaItemSelected(position);
                 break;
-            case R.id.order:
-                presenter.onOrderItemSelected(position);
+            case R.id.sort:
+                presenter.onSortItemSelected(position);
                 break;
             default:
                 break;
@@ -172,7 +191,7 @@ public class AreaActivity extends GetLocationActivity implements
         if (getIntent() != null) {
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
-                return extras.getInt(ExtraKey.INT_AREA_SELECTION);
+                return extras.getInt(ExtraKey.INT_AREA_POSITION);
             }
         }
         return 0;

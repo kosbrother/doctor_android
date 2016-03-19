@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import kosbrother.com.doctorguide.entity.Hospital;
+import kosbrother.com.doctorguide.entity.OrderStrings;
 import kosbrother.com.doctorguide.model.AreaModel;
 import kosbrother.com.doctorguide.view.AreaView;
 
@@ -55,8 +56,8 @@ public class AreaPresenterTest {
         presenter.onGetLocationSuccess(latLng);
 
         verify(model).setLatLng(latLng);
-        verify(view).setOrderSpinner(model.getOrderSelection(), model.getOrderStringNameArray());
-        verify(view).setAreaSpinner(model.getAreaSelection(), model.getAreaStringArray());
+        verify(view).setOrderSpinner(model.getSortPosition(), model.getOrderStringNameArray());
+        verify(view).setAreaSpinner(model.getAreaPosition(), model.getAreaStringArray());
         verify(presenter).requestHospitalsWithProgressDialog();
     }
 
@@ -117,21 +118,26 @@ public class AreaPresenterTest {
 
         presenter.onAreaItemSelected(position);
 
-        verify(model).setAreaSelection(position);
+        verify(model).setAreaPosition(position);
         verify(model).resetToFirstLoad();
-        verify(view).setActionBarTitle(model.getAreaName());
+        String areaName = model.getAreaName();
+        verify(view).setActionBarTitle(areaName);
+        verify(view).sendAreaClickAreaSpinnerEvent(areaName);
 
         verify(presenter).requestHospitalsWithProgressDialog();
     }
 
     @Test
     public void testOnSortItemSelected() throws Exception {
+        String[] orderStringArray = OrderStrings.getOrderStringNameArray();
+        when(model.getOrderStringNameArray()).thenReturn(orderStringArray);
         int position = 0;
 
-        presenter.onOrderItemSelected(position);
+        presenter.onSortItemSelected(position);
 
-        verify(model).setOrderSelection(position);
+        verify(model).setSortPosition(position);
         verify(model).resetToFirstLoad();
+        verify(view).sendAreaClickSortSpinnerEvent(model.getOrderStringNameArray()[position]);
 
         verify(presenter).requestHospitalsWithProgressDialog();
     }
@@ -171,6 +177,7 @@ public class AreaPresenterTest {
         presenter.onHospitalItemClick(hospital);
 
         verify(view).startHospitalActivity(hospital);
+        verify(view).sendAreaClickHospitalItemEvent(hospital.name);
     }
 
 }

@@ -26,8 +26,8 @@ public class AreaPresenter implements GetHospitalsByAreaListener {
 
     public void onGetLocationSuccess(LatLng latLng) {
         model.setLatLng(latLng);
-        view.setOrderSpinner(model.getOrderSelection(), model.getOrderStringNameArray());
-        view.setAreaSpinner(model.getAreaSelection(), model.getAreaStringArray());
+        view.setOrderSpinner(model.getSortPosition(), model.getOrderStringNameArray());
+        view.setAreaSpinner(model.getAreaPosition(), model.getAreaStringArray());
 
         requestHospitalsWithProgressDialog();
     }
@@ -62,16 +62,19 @@ public class AreaPresenter implements GetHospitalsByAreaListener {
     }
 
     public void onAreaItemSelected(int position) {
-        model.setAreaSelection(position);
+        model.setAreaPosition(position);
         model.resetToFirstLoad();
-        view.setActionBarTitle(model.getAreaName());
+        String areaName = model.getAreaName();
+        view.setActionBarTitle(areaName);
+        view.sendAreaClickAreaSpinnerEvent(areaName);
 
         requestHospitalsWithProgressDialog();
     }
 
-    public void onOrderItemSelected(int position) {
-        model.setOrderSelection(position);
+    public void onSortItemSelected(int position) {
+        model.setSortPosition(position);
         model.resetToFirstLoad();
+        view.sendAreaClickSortSpinnerEvent(model.getOrderStringNameArray()[position]);
 
         requestHospitalsWithProgressDialog();
     }
@@ -91,5 +94,6 @@ public class AreaPresenter implements GetHospitalsByAreaListener {
 
     public void onHospitalItemClick(Hospital hospital) {
         view.startHospitalActivity(hospital);
+        view.sendAreaClickHospitalItemEvent(hospital.name);
     }
 }

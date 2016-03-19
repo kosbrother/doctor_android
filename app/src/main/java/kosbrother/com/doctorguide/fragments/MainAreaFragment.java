@@ -15,6 +15,8 @@ import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.adapters.AreaAdapter;
 import kosbrother.com.doctorguide.entity.Area;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
+import kosbrother.com.doctorguide.google_analytics.event.main.MainClickAreaListEvent;
 
 public class MainAreaFragment extends Fragment implements AreaAdapter.RecyclerViewClickListener {
 
@@ -29,8 +31,9 @@ public class MainAreaFragment extends Fragment implements AreaAdapter.RecyclerVi
 
     @Override
     public void onItemClick(int position) {
+        GAManager.sendEvent(new MainClickAreaListEvent(Area.getAreaStrings().get(position)));
         Intent intent = new Intent(getActivity(), AreaActivity.class);
-        intent.putExtra(ExtraKey.INT_AREA_SELECTION, position);
+        intent.putExtra(ExtraKey.INT_AREA_POSITION, position);
         startActivity(intent);
     }
 }
