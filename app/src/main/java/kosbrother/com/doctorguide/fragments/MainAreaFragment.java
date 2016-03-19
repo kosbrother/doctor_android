@@ -1,5 +1,6 @@
 package kosbrother.com.doctorguide.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,11 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import kosbrother.com.doctorguide.AreaActivity;
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.Util.ExtraKey;
 import kosbrother.com.doctorguide.adapters.AreaAdapter;
 import kosbrother.com.doctorguide.entity.Area;
 
-public class MainAreaFragment extends Fragment implements View.OnClickListener {
+public class MainAreaFragment extends Fragment implements AreaAdapter.RecyclerViewClickListener {
 
     @Nullable
     @Override
@@ -25,7 +28,9 @@ public class MainAreaFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
-        // TODO: 2016/3/14  start to area activity
+    public void onItemClick(int position) {
+        Intent intent = new Intent(getActivity(), AreaActivity.class);
+        intent.putExtra(ExtraKey.INT_AREA_SELECTION, position);
+        startActivity(intent);
     }
 }

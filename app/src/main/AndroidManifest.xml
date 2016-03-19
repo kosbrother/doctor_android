@@ -48,6 +48,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".AreaActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".HospitalDoctorActivity"
             android:screenOrientation="portrait" />
         <activity

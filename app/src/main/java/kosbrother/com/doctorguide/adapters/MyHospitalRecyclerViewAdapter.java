@@ -81,6 +81,10 @@ public class MyHospitalRecyclerViewAdapter extends RecyclerView.Adapter<MyHospit
         return mHospitals.size();
     }
 
+    public void addHospitals(ArrayList<Hospital> hospitals) {
+        mHospitals.addAll(hospitals);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public View mView;
         public TextView mName;

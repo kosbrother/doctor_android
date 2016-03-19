@@ -11,19 +11,27 @@ import kosbrother.com.doctorguide.R;
 public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.ViewHolder> {
 
     private final String[] areaStrings;
-    private View.OnClickListener listener;
+    private final RecyclerViewClickListener listener;
 
-    public AreaAdapter(String[] areaStrings, View.OnClickListener listener) {
+    public AreaAdapter(String[] areaStrings, RecyclerViewClickListener listener) {
         this.areaStrings = areaStrings;
         this.listener = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+        View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_area, parent, false);
-        v.setOnClickListener(listener);
-        return new ViewHolder(v);
+        final ViewHolder viewHolder = new ViewHolder(itemView);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(viewHolder.getLayoutPosition());
+            }
+        });
+
+        return viewHolder;
     }
 
     @Override
@@ -44,5 +52,10 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.ViewHolder> {
             super(itemView);
             areaTextView = (TextView) itemView;
         }
+
+    }
+
+    public interface RecyclerViewClickListener {
+        void onItemClick(int position);
     }
 }

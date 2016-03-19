@@ -122,7 +122,7 @@ public class HospitalDoctorActivity extends GetLocationActivity implements
     }
 
     @Override
-    protected void onGetLocationSuccess() {
+    protected void onGetLocationSuccess(LatLng latLng) {
         presenter.onGetLocationSuccess();
     }
 

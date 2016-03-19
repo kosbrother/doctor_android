@@ -15,6 +15,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
 import kosbrother.com.doctorguide.presenter.GetLocationPresenter;
 import kosbrother.com.doctorguide.view.GetLocationView;
@@ -103,7 +104,7 @@ public abstract class GetLocationActivity extends BaseActivity implements
         if (mLastLocation == null) {
             presenter.onGetLastLocationNull();
         } else {
-            onGetLocationSuccess();
+            onGetLocationSuccess(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
         }
     }
 
@@ -119,10 +120,10 @@ public abstract class GetLocationActivity extends BaseActivity implements
     public void onLocationChanged(Location location) {
         mLastLocation = location;
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        onGetLocationSuccess();
+        onGetLocationSuccess(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
     }
 
-    protected abstract void onGetLocationSuccess();
+    protected abstract void onGetLocationSuccess(LatLng latLng);
 
     @Override
     public void onConnectionSuspended(int i) {

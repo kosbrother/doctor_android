@@ -30,7 +30,7 @@ public class GetHospitalsByAreaTask extends AsyncTask<GetHospitalsByAreaTask.Get
         void onGetHospitalsSuccess(ArrayList<Hospital> hospitals);
     }
 
-    public class GetHospitalsByAreaInput {
+    public static class GetHospitalsByAreaInput {
         private int areaId;
         private int page;
         private double latitude;
