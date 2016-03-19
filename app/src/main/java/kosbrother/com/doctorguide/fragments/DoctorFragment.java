@@ -30,6 +30,7 @@ import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.custom.LoadMoreRecyclerView;
 import kosbrother.com.doctorguide.entity.Area;
 import kosbrother.com.doctorguide.entity.Doctor;
+import kosbrother.com.doctorguide.entity.OrderStrings;
 import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
 import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.event.hospitaldoctor.HospitalDoctorClickAreaSpinnerEvent;
@@ -55,7 +56,6 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
     private boolean isLoadCompleted = false;
     private MyDoctorRecyclerViewAdapter adatper;
     private View view;
-    private String[] values;
     private String orderString;
 
 
@@ -129,20 +129,20 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
     }
 
     private void setSortSpinner(View view) {
-
         Spinner sort = (Spinner) view.findViewById(R.id.sort);
-        ArrayAdapter<CharSequence> sort_adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.sort_options, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> sort_adapter = new ArrayAdapter<>(getContext(),
+                R.layout.spinner_area_item, OrderStrings.getOrderStringNameArray());
         sort_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sort.setAdapter(sort_adapter);
+        int commentNumPosition = OrderStrings.getStringIndex(OrderStrings.COMMENT_NUM);
+        sort.setSelection(commentNumPosition);
         sort.setOnItemSelectedListener(this);
-        values = getResources().getStringArray(R.array.sort_values);
     }
 
     private void setAreaSpinner(View view) {
         Spinner spinner = (Spinner) view.findViewById(R.id.area);
         ArrayAdapter<String> areaAdapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, Area.getAreaStrings().toArray(new String[Area.getAreas().size()]));
+                R.layout.spinner_area_item, Area.getAreaStrings().toArray(new String[Area.getAreas().size()]));
         areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(areaAdapter);
         int closest = Util.getClosestAreaPosition(location);
@@ -184,7 +184,7 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
             GAManager.sendEvent(new HospitalDoctorClickAreaSpinnerEvent(Area.getAreaStrings().get(position)));
         } else if (spinner.getId() == R.id.sort) {
             sortSrting = (String) parent.getItemAtPosition(position);
-            orderString = values[position];
+            orderString = OrderStrings.getOrderString(position);
 
             GAManager.sendEvent(new HospitalDoctorClickSortSpinnerEvent(sortSrting));
         }
