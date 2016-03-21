@@ -1,5 +1,11 @@
 package kosbrother.com.doctorguide;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+
+import com.github.clans.fab.FloatingActionMenu;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -25,11 +31,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.SignInButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,22 +151,28 @@ public class DivisionActivity extends GoogleSignInActivity implements
 
     @Override
     public void setupSpinner(List<String> divisionNames, String divisionName) {
-        Spinner spinner = (Spinner) findViewById(R.id.division_spinner);
+        final Spinner spinner = (Spinner) findViewById(R.id.division_spinner);
 
         ArrayAdapter<String> areaAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, divisionNames);
         areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(areaAdapter);
-        spinner.setSelection(areaAdapter.getPosition(divisionName), false);
-        spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                divisionPresenter.onDivisionSpinnerItemClick(position);
-            }
+        final int originPosition = areaAdapter.getPosition(divisionName);
+        spinner.setSelection(originPosition);
+        spinner.post(new Runnable() {
+            public void run() {
+                spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        if (originPosition != position)
+                            divisionPresenter.onDivisionSpinnerItemClick(position);
+                    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
 
+                    }
+                });
             }
         });
     }
