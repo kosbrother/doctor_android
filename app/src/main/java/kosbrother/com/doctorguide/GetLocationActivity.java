@@ -143,14 +143,15 @@ public abstract class GetLocationActivity extends BaseActivity implements
 
     @Override
     public void showRequestPermissionSnackBar() {
-        Snackbar.make(findViewById(R.id.tabs),
+        Snackbar.make(findViewById(android.R.id.content),
                 "就醫指南需要位置的權限，才能幫你找到附近的醫院，醫生",
                 Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void showRequestPermissionDeniedSnackBar() {
-        Snackbar.make(findViewById(R.id.tabs), "位置存取權限被拒絕！無法讀取資料", Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(findViewById(android.R.id.content),
+                "位置存取權限被拒絕！無法讀取資料", Snackbar.LENGTH_INDEFINITE)
                 .setAction("確定", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
