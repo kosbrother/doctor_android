@@ -62,6 +62,9 @@ public class AreaPresenter implements GetHospitalsByAreaListener {
     }
 
     public void onAreaItemSelected(int position) {
+        if (model.getAreaPosition() == position) {
+            return;
+        }
         model.setAreaPosition(position);
         model.resetToFirstLoad();
         String areaName = model.getAreaName();
@@ -72,6 +75,9 @@ public class AreaPresenter implements GetHospitalsByAreaListener {
     }
 
     public void onSortItemSelected(int position) {
+        if (model.getSortPosition() == position) {
+            return;
+        }
         model.setSortPosition(position);
         model.resetToFirstLoad();
         view.sendAreaClickSortSpinnerEvent(model.getOrderStringNameArray()[position]);

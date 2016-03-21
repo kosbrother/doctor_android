@@ -112,9 +112,26 @@ public class AreaPresenterTest {
         verify(view).hideLoadMoreLayout();
     }
 
-    @Test
-    public void testOnAreaItemSelected() throws Exception {
+    @Test // Prevent some device trigger item click event when set listener.
+    public void testOnAreaItemSelected_samePosition() throws Exception {
         int position = 0;
+        when(model.getAreaPosition()).thenReturn(position);
+
+        presenter.onAreaItemSelected(position);
+
+        verify(model, never()).setAreaPosition(position);
+        verify(model, never()).resetToFirstLoad();
+        String areaName = model.getAreaName();
+        verify(view, never()).setActionBarTitle(areaName);
+        verify(view, never()).sendAreaClickAreaSpinnerEvent(areaName);
+
+        verify(presenter, never()).requestHospitalsWithProgressDialog();
+    }
+
+    @Test
+    public void testOnAreaItemSelected_diffPosition() throws Exception {
+        int position = 0;
+        when(model.getAreaPosition()).thenReturn(position + 1);
 
         presenter.onAreaItemSelected(position);
 
@@ -127,11 +144,28 @@ public class AreaPresenterTest {
         verify(presenter).requestHospitalsWithProgressDialog();
     }
 
-    @Test
-    public void testOnSortItemSelected() throws Exception {
+    @Test // Prevent some device trigger item click event when set listener.
+    public void testOnSortItemSelected_samePosition() throws Exception {
         String[] orderStringArray = OrderStrings.getOrderStringNameArray();
         when(model.getOrderStringNameArray()).thenReturn(orderStringArray);
         int position = 0;
+        when(model.getSortPosition()).thenReturn(position);
+
+        presenter.onSortItemSelected(position);
+
+        verify(model, never()).setSortPosition(position);
+        verify(model, never()).resetToFirstLoad();
+        verify(view, never()).sendAreaClickSortSpinnerEvent(model.getOrderStringNameArray()[position]);
+
+        verify(presenter, never()).requestHospitalsWithProgressDialog();
+    }
+
+    @Test
+    public void testOnSortItemSelected_diffPosition() throws Exception {
+        String[] orderStringArray = OrderStrings.getOrderStringNameArray();
+        when(model.getOrderStringNameArray()).thenReturn(orderStringArray);
+        int position = 0;
+        when(model.getSortPosition()).thenReturn(position + 1);
 
         presenter.onSortItemSelected(position);
 
