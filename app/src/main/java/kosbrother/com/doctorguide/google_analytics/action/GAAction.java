@@ -6,6 +6,7 @@ public class GAAction {
     public static final String CLICK_DOCTOR_SPINNER = "CLICK_DOCTOR_SPINNER";
     public static final String CLICK_DIVISION_SPINNER = "CLICK_DIVISION_SPINNER";
 
+    public static final String CLICK_AREA_LIST = "CLICK_AREA_LIST";
     public static final String CLICK_CATEGORY_LIST = "CLICK_CATEGORY_LIST";
     public static final String CLICK_HOSPITAL_LIST = "CLICK_HOSPITAL_LIST";
     public static final String CLICK_DOCTOR_LIST = "CLICK_DOCTOR_LIST";

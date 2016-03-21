@@ -26,6 +26,7 @@ import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.custom.LoadMoreRecyclerView;
 import kosbrother.com.doctorguide.entity.Area;
 import kosbrother.com.doctorguide.entity.Hospital;
+import kosbrother.com.doctorguide.entity.OrderStrings;
 import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.event.hospitaldoctor.HospitalDoctorClickAreaSpinnerEvent;
 import kosbrother.com.doctorguide.google_analytics.event.hospitaldoctor.HospitalDoctorClickSortSpinnerEvent;
@@ -36,13 +37,11 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
     private static LatLng location;
     private int mCategoryId = 1;
     private OnListFragmentInteractionListener mListener;
-    private ArrayList<Hospital> hospitals = new ArrayList<>();
     private LoadMoreRecyclerView recyclerView;
     private MyHospitalRecyclerViewAdapter hospitalAdapter;
     private int page = 1;
     private LinearLayout loadmoreLayout;
     private boolean isLoadCompleted = false;
-    private String[] values;
     private String orderString;
 
     public HospitalFragment() {
@@ -92,12 +91,13 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
 
     private void setSortSpinner(View view) {
         Spinner sort = (Spinner) view.findViewById(R.id.sort);
-        ArrayAdapter<CharSequence> sort_adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.sort_options, R.layout.spinner_area_item);
+        ArrayAdapter<String> sort_adapter = new ArrayAdapter<>(getContext(),
+                R.layout.spinner_area_item, OrderStrings.getOrderStringNameArray());
         sort_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sort.setAdapter(sort_adapter);
+        int commentNumPosition = OrderStrings.getStringIndex(OrderStrings.COMMENT_NUM);
+        sort.setSelection(commentNumPosition);
         sort.setOnItemSelectedListener(this);
-        values = getResources().getStringArray(R.array.sort_values);
     }
 
     private void setAreaSpinner(View view) {
@@ -145,7 +145,7 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
             GAManager.sendEvent(new HospitalDoctorClickAreaSpinnerEvent(Area.getAreaStrings().get(position)));
         } else if (spinner.getId() == R.id.sort) {
             sortSrting = (String) parent.getItemAtPosition(position);
-            orderString = values[position];
+            orderString = OrderStrings.getOrderString(position);
 
             GAManager.sendEvent(new HospitalDoctorClickSortSpinnerEvent(sortSrting));
         }
@@ -187,14 +187,12 @@ public class HospitalFragment extends Fragment implements Spinner.OnItemSelected
 
             if (page == 1) {
                 page += 1;
-                hospitals = getHospitals;
-                hospitalAdapter = new MyHospitalRecyclerViewAdapter(hospitals, mListener, location);
+                hospitalAdapter = new MyHospitalRecyclerViewAdapter(getHospitals, mListener, location);
                 recyclerView.setAdapter(hospitalAdapter);
-                hospitalAdapter.notifyDataSetChanged();
             } else {
                 if (getHospitals.size() > 0) {
                     page += 1;
-                    hospitals.addAll(getHospitals);
+                    hospitalAdapter.addHospitals(getHospitals);
                     hospitalAdapter.notifyDataSetChanged();
                 } else {
                     isLoadCompleted = true;

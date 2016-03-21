@@ -13,7 +13,6 @@ import kosbrother.com.doctorguide.view.HospitalDoctorView;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class HospitalDoctorPresenterTest {
 
@@ -29,97 +28,18 @@ public class HospitalDoctorPresenterTest {
     }
 
     @Test
-    public void testOnCreate_sdkInkAbove23() throws Exception {
-        when(model.getSdkInt()).thenReturn(23);
-
+    public void testOnCreate() throws Exception {
         presenter.onCreate();
 
         verify(view).setContentView();
         verify(view).setActionBar();
-        verify(view).checkLocationPermission();
     }
 
     @Test
-    public void testOnCreate_sdkInkBelow23() throws Exception {
-        when(model.getSdkInt()).thenReturn(22);
-
-        presenter.onCreate();
-
-        verify(view).setContentView();
-        verify(view).setActionBar();
-        verify(view).setGoogleClient();
-    }
-
-    @Test
-    public void testOnPermissionGranted() throws Exception {
-        presenter.onPermissionGranted();
-
-        verify(view).setGoogleClient();
-    }
-
-    @Test
-    public void testOnPermissionNotGranted() throws Exception {
-        presenter.onPermissionNotGranted();
-
-        verify(view).checkShouldShowRequestPermissionRationale();
-    }
-
-    @Test
-    public void testOnShouldShowRequestPermissionRationale() throws Exception {
-        presenter.onShouldShowRequestPermissionRationale();
-
-        verify(view).requestLocationPermission();
-    }
-
-    @Test
-    public void testOnShouldNotShowRequestPermissionRationale() throws Exception {
-        presenter.onShouldNotShowRequestPermissionRationale();
-
-        verify(view).showRequestPermissionSnackBar();
-        verify(view).requestLocationPermission();
-    }
-
-    @Test
-    public void testOnRequestPermissionResultSuccess() throws Exception {
-        presenter.onRequestPermissionResultSuccess();
-
-        verify(view).setGoogleClient();
-    }
-
-    @Test
-    public void testOnRequestPermissionResultDenied() throws Exception {
-        presenter.onRequestPermissionResultDenied();
-
-        verify(view).showRequestPermissionDeniedSnackBar();
-    }
-
-    @Test
-    public void testOnGetLastLocationNull() throws Exception {
-        presenter.onGetLastLocationNull();
-
-        verify(view).requestLocationUpdates();
-    }
-
-    @Test
-    public void testOnGetLastLocationSuccess() throws Exception {
-        presenter.onGetLastLocationSuccess();
+    public void testOnGetLocationSuccess() throws Exception {
+        presenter.onGetLocationSuccess();
 
         verify(view).setViewPager();
-    }
-
-    @Test
-    public void testOnStop() throws Exception {
-        presenter.onStop();
-
-        verify(view).disconnectGoogleClient();
-    }
-
-    @Test
-    public void testOnLocationChanged() throws Exception {
-        presenter.onLocationChanged();
-
-        verify(view).setViewPager();
-        verify(view).removeLocationUpdatesListener();
     }
 
     @Test

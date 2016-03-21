@@ -12,6 +12,7 @@ import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.entity.Hospital;
 import kosbrother.com.doctorguide.entity.User;
+import kosbrother.com.doctorguide.task.GetHospitalsByAreaTask;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -170,6 +171,23 @@ public class DoctorGuideApi {
         return hospitals;
     }
 
+    public static ArrayList<Hospital> getHospitalsByArea(GetHospitalsByAreaTask.GetHospitalsByAreaInput input) {
+        ArrayList<Hospital> hospitals = new ArrayList<>();
+        try {
+            String message = runHttpGet(HOST
+                    + "/api/v1/hospitals/by_area.json?area_id=" + input.getAreaId()
+                    + "&page=" + input.getPage()
+                    + "&latitude=" + input.getLatitude()
+                    + "&longitude=" + input.getLongitude()
+                    + "&order=" + input.getOrderString());
+            hospitals = readHospitalJson(message);
+            return hospitals;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return hospitals;
+    }
+
     public static ArrayList<Doctor> getDoctorsByAreaAndCategory(int areaId, int categoryId, int page, double latitude, double longitude, String order) {
         ArrayList<Doctor> doctors = new ArrayList<>();
         try {
@@ -290,7 +308,7 @@ public class DoctorGuideApi {
                 .post(formBody.build())
                 .build();
 
-        Response response = null;
+        Response response;
         try {
             response = client.newCall(request).execute();
             response.body().string();
@@ -312,7 +330,7 @@ public class DoctorGuideApi {
                 .post(formBody.build())
                 .build();
 
-        Response response = null;
+        Response response;
         try {
             response = client.newCall(request).execute();
             response.body().string();
@@ -336,7 +354,7 @@ public class DoctorGuideApi {
                 .post(formBody.build())
                 .build();
 
-        Response response = null;
+        Response response;
         try {
             response = client.newCall(request).execute();
             response.body().string();
@@ -360,7 +378,7 @@ public class DoctorGuideApi {
                 .post(formBody.build())
                 .build();
 
-        Response response = null;
+        Response response;
         try {
             response = client.newCall(request).execute();
             response.body().string();
@@ -397,4 +415,5 @@ public class DoctorGuideApi {
         }
         return doctors;
     }
+
 }

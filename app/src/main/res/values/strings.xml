@@ -111,4 +111,8 @@
     <string name="searchable_doctor">醫師</string>
     <string name="searchable_hospital">醫院</string>
 
+    <!--Area-->
+    <string name="area_download_hospital">醫院資料下載中</string>
+    <string name="area_spinner_area_title">地區:</string>
+
 </resources>

@@ -19,7 +19,7 @@ public class MainPresenter implements CreateUserTask.CreateUserListener {
         view.setToolBarAndDrawer();
         view.setNavigationView();
         view.setAppVersionName(model.getVersionName());
-        view.setRecyclerView();
+        view.setTabAndViewPager();
     }
 
     public void onStart() {
