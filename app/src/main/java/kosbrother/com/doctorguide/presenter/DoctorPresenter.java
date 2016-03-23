@@ -1,7 +1,7 @@
 package kosbrother.com.doctorguide.presenter;
 
-import kosbrother.com.doctorguide.model.DoctorModel;
 import kosbrother.com.doctorguide.entity.Doctor;
+import kosbrother.com.doctorguide.model.DoctorModel;
 import kosbrother.com.doctorguide.task.GetDoctorTask;
 import kosbrother.com.doctorguide.view.DoctorView;
 
@@ -47,5 +47,9 @@ public class DoctorPresenter implements GetDoctorTask.GetDoctorListener {
 
     public Doctor getDoctor() {
         return model.getDoctor();
+    }
+
+    public void onAddCommentClick() {
+        view.sendDoctorClickAddCommentEvent(model.getDoctorLabel());
     }
 }

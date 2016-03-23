@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import kosbrother.com.doctorguide.DivisionActivity;
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.Util.GetLocation;
 import kosbrother.com.doctorguide.Util.Util;
@@ -30,7 +31,7 @@ import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.custom.LoadMoreRecyclerView;
 import kosbrother.com.doctorguide.entity.Area;
 import kosbrother.com.doctorguide.entity.Doctor;
-import kosbrother.com.doctorguide.entity.OrderStrings;
+import kosbrother.com.doctorguide.Util.OrderStrings;
 import kosbrother.com.doctorguide.entity.realm.RealmDoctor;
 import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.event.hospitaldoctor.HospitalDoctorClickAreaSpinnerEvent;
@@ -250,6 +251,14 @@ public class DoctorFragment extends Fragment implements Spinner.OnItemSelectedLi
                     LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                     View noDoctorView = inflater.inflate(R.layout.fragment_no_doctors_in_division, null);
                     noDoctorView.setLayoutParams(lparams);
+                    noDoctorView.findViewById(R.id.add_doctor_linear_layout).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (getActivity() instanceof DivisionActivity) {
+                                ((DivisionActivity) getActivity()).onAddDoctorClick();
+                            }
+                        }
+                    });
                     ((RelativeLayout) view.findViewById(R.id.baseLayout)).addView(noDoctorView);
                 }
 

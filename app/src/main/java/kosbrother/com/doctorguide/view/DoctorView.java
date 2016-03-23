@@ -22,4 +22,6 @@ public interface DoctorView extends ProgressDialogView {
     void showCollectSuccessSnackBar();
 
     void sendDoctorClickCollectEvent(String doctorName);
+
+    void sendDoctorClickAddCommentEvent(String label);
 }

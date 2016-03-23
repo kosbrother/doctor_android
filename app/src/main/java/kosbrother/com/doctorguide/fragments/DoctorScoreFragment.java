@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import kosbrother.com.doctorguide.DoctorActivity;
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.entity.Doctor;
 
@@ -59,7 +60,12 @@ public class DoctorScoreFragment extends Fragment {
             return view;
         }else{
             View view = inflater.inflate(R.layout.fragment_no_score, container, false);
-            ((TextView)view.findViewById(R.id.content)).setText("歡迎您為這位醫師評分，您寶貴的意見能讓台灣的醫療品質變得更好!!");
+            view.findViewById(R.id.add_comment_linear_layout).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((DoctorActivity)getActivity()).onAddCommentClick();
+                }
+            });
             return view;
         }
 
