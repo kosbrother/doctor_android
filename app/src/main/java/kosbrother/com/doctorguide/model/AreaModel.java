@@ -6,9 +6,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
+import kosbrother.com.doctorguide.Util.OrderStrings;
 import kosbrother.com.doctorguide.entity.Area;
 import kosbrother.com.doctorguide.entity.Hospital;
-import kosbrother.com.doctorguide.entity.OrderStrings;
 import kosbrother.com.doctorguide.task.GetHospitalsByAreaTask;
 
 import static kosbrother.com.doctorguide.task.GetHospitalsByAreaTask.GetHospitalsByAreaInput;

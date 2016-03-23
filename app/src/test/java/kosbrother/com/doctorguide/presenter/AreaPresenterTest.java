@@ -8,8 +8,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import kosbrother.com.doctorguide.Util.OrderStrings;
 import kosbrother.com.doctorguide.entity.Hospital;
-import kosbrother.com.doctorguide.entity.OrderStrings;
 import kosbrother.com.doctorguide.model.AreaModel;
 import kosbrother.com.doctorguide.view.AreaView;
 
