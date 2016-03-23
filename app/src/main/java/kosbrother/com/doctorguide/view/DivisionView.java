@@ -35,10 +35,13 @@ public interface DivisionView extends BaseView, ProgressDialogView {
 
     void sendDivisionClickHospitalTextEvent(String hospitalName);
 
+    void sendDivisionAddDoctorClickEvent(String label);
+
+    void sendDivisionClickAddCommentEvent(String label);
+
     void startDoctorActivity(Doctor doctor, DivisionActivityViewModel viewModel);
 
     void startDivisionActivity(DivisionActivityViewModel viewModel, int clickDivisionId, String clickDivisionName);
 
     void startHospitalActivity(DivisionActivityViewModel viewModel);
-
 }

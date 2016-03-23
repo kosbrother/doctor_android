@@ -1,31 +1,18 @@
 package kosbrother.com.doctorguide.model;
 
-import kosbrother.com.doctorguide.google_signin.GoogleSignInManager;
-import kosbrother.com.doctorguide.task.CreateUserTask;
-import kosbrother.com.doctorguide.viewmodel.DivisionActivityViewModel;
+public class DivisionFabModel {
 
-public class DivisionFabModel extends BaseFabModel {
+    private int lastPagePosition = 0;
 
-    private DivisionActivityViewModel viewModel;
-
-    public DivisionFabModel(DivisionActivityViewModel viewModel) {
-        super();
-        this.viewModel = viewModel;
+    public void setLastPagePosition(int changedPosition) {
+        lastPagePosition = changedPosition;
     }
 
-    public boolean isSignIn() {
-        return GoogleSignInManager.getInstance().isSignIn();
+    public boolean showAddDoctor(int changedPosition) {
+        return changedPosition == 0;
     }
 
-    public String getEmail() {
-        return GoogleSignInManager.getInstance().getEmail();
-    }
-
-    public void requestCreateUser(CreateUserTask.CreateUserListener listener) {
-        new CreateUserTask(listener).execute(GoogleSignInManager.getInstance().getUser());
-    }
-
-    public DivisionActivityViewModel getViewModel() {
-        return viewModel;
+    public boolean showAddComment(int changedPosition) {
+        return changedPosition == 1 && lastPagePosition == 0;
     }
 }

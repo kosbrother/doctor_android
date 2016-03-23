@@ -25,86 +25,40 @@ public class DivisionFabPresenterTest {
     }
 
     @Test
-    public void testOnFabProblemReportClick() throws Exception {
-        presenter.onFabProblemReportClick();
-
-        verify(view).closeFab();
-        verify(view).sendClickFabEvent(GALabel.PROBLEM_REPORT);
-        verify(view).startProblemReportActivity(model.getViewModel());
-    }
-
-    @Test
-    public void testOnFabCommentClick_isSignin() throws Exception {
-        when(model.isSignIn()).thenReturn(true);
-
+    public void testOnFabCommentClick() throws Exception {
         presenter.onFabCommentClick();
 
-        verify(view).closeFab();
         verify(view).sendClickFabEvent(GALabel.COMMENT);
-        verify(view).startCommentActivity(model.getViewModel(), model.getEmail());
-    }
-
-    @Test
-    public void testOnFabCommentClick_notSignin() throws Exception {
-        when(model.isSignIn()).thenReturn(false);
-
-        presenter.onFabCommentClick();
-
-        verify(view).closeFab();
-        verify(view).sendClickFabEvent(GALabel.COMMENT);
-        verify(view).showSignInDialog();
     }
 
     @Test
     public void testOnFabAddDoctorClick() throws Exception {
         presenter.onFabAddDoctorClick();
 
-        verify(view).closeFab();
         verify(view).sendClickFabEvent(GALabel.ADD_DOCTOR);
-        verify(view).startAddDoctorActivity(model.getViewModel());
     }
 
     @Test
-    public void testOnSignInButtonClick_networkConnected() throws Exception {
-        when(view.isNetworkConnected()).thenReturn(true);
+    public void testOnPageChanged_switchToDoctor() throws Exception {
+        int position = 0;
+        when(model.showAddComment(position)).thenReturn(true);
 
-        presenter.onSignInButtonClick();
+        presenter.onPageChanged(position);
 
-        verify(view).dismissSignInDialog();
-        verify(view).signIn();
+        verify(view).hideAddDoctorFab();
+        verify(view).showAddCommentFab();
+        verify(model).setLastPagePosition(position);
     }
 
     @Test
-    public void testOnSignInButtonClick_networkNotConnected() throws Exception {
-        when(view.isNetworkConnected()).thenReturn(false);
+    public void testOnPageChanged_switchToComment() throws Exception {
+        int position = 1;
+        when(model.showAddComment(position)).thenReturn(true);
 
-        presenter.onSignInButtonClick();
+        presenter.onPageChanged(position);
 
-        verify(view).dismissSignInDialog();
-        verify(view).showRequireNetworkDialog();
-    }
-
-    @Test
-    public void testOnSignInActivityResultSuccess() throws Exception {
-        presenter.onSignInActivityResultSuccess();
-
-        verify(view).showProgressDialog();
-        verify(model).requestCreateUser(presenter);
-    }
-
-    @Test
-    public void testOnCreateUserSuccess() throws Exception {
-        presenter.onCreateUserSuccess();
-
-        verify(view).hideProgressDialog();
-        verify(view).startCommentActivity(model.getViewModel(), model.getEmail());
-    }
-
-    @Test
-    public void testOnCreateUserFail() throws Exception {
-        presenter.onCreateUserFail();
-
-        verify(view).hideProgressDialog();
-        verify(view).showCreateUserFailToast();
+        verify(view).hideAddDoctorFab();
+        verify(view).showAddCommentFab();
+        verify(model).setLastPagePosition(position);
     }
 }

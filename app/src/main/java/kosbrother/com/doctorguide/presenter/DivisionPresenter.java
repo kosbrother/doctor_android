@@ -85,4 +85,11 @@ public class DivisionPresenter implements
         return model.getDivision();
     }
 
+    public void onAddDoctorClick() {
+        view.sendDivisionAddDoctorClickEvent(model.getDivisionLabel());
+    }
+
+    public void onAddCommentClick() {
+        view.sendDivisionClickAddCommentEvent(model.getDivisionLabel());
+    }
 }

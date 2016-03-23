@@ -1,23 +1,13 @@
 package kosbrother.com.doctorguide.view;
 
-import kosbrother.com.doctorguide.viewmodel.DivisionActivityViewModel;
+public interface DivisionFabView {
+    void hideAddDoctorFab();
 
-public interface DivisionFabView extends BaseFabView, ProgressDialogView {
-    void showSignInDialog();
+    void showAddDoctorFab();
 
-    void dismissSignInDialog();
+    void hideAddCommentFab();
 
-    void showCreateUserFailToast();
+    void showAddCommentFab();
 
-    void showRequireNetworkDialog();
-
-    void signIn();
-
-    void startCommentActivity(DivisionActivityViewModel viewModel, String email);
-
-    void startAddDoctorActivity(DivisionActivityViewModel viewModel);
-
-    void startProblemReportActivity(DivisionActivityViewModel viewModel);
-
-    boolean isNetworkConnected();
+    void sendClickFabEvent(String label);
 }
