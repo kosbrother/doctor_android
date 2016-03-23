@@ -17,6 +17,9 @@ public class GAAction {
     public static final String CLICK_DIVISION_TEXT = "CLICK_DIVISION_TEXT";
     public static final String CLICK_DATE_TEXT = "CLICK_DATE_TEXT";
 
+    public static final String CLICK_ADD_COMMENT = "CLICK_ADD_COMMENT";
+    public static final String CLICK_ADD_DOCTOR = "CLICK_ADD_DOCTOR";
+
     public static final String CLICK_ACCOUNT = "CLICK_ACCOUNT";
     public static final String CLICK_DIVISION_INFO = "CLICK_DIVISION_INFO";
     public static final String CLICK_SEARCH_ICON = "CLICK_SEARCH_ICON";
