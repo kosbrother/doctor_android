@@ -136,5 +136,7 @@
     <!--Common-->
     <string name="click">點選</string>
     <string name="for_add_comment">以新增評論！</string>
+    <string name="menu_title_share">分享</string>
+    <string name="menu_title_report_problem">問題回報</string>
 
 </resources>
