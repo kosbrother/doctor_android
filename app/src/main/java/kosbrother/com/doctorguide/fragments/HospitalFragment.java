@@ -20,13 +20,13 @@ import java.util.ArrayList;
 
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.Util.GetLocation;
+import kosbrother.com.doctorguide.Util.OrderStrings;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyHospitalRecyclerViewAdapter;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.custom.LoadMoreRecyclerView;
 import kosbrother.com.doctorguide.entity.Area;
 import kosbrother.com.doctorguide.entity.Hospital;
-import kosbrother.com.doctorguide.entity.OrderStrings;
 import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.event.hospitaldoctor.HospitalDoctorClickAreaSpinnerEvent;
 import kosbrother.com.doctorguide.google_analytics.event.hospitaldoctor.HospitalDoctorClickSortSpinnerEvent;

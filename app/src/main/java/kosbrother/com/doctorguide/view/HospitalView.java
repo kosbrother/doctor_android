@@ -23,6 +23,8 @@ public interface HospitalView extends ProgressDialogView {
 
     void sendHospitalClickCollectEvent(String hospitalName);
 
+    void sendHospitalClickAddCommentEvent(String label);
+
     void showRemoveFromCollectSuccessSnackBar();
 
     void showAddToCollectSuccessSnackBar();

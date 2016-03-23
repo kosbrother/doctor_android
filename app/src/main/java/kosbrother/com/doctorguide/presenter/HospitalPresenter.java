@@ -55,4 +55,8 @@ public class HospitalPresenter implements GetHospitalTask.GetHospitalListener {
     public void onDivisionClick(Division division) {
         view.startDivisionActivity(division);
     }
+
+    public void onAddCommentClick() {
+        view.sendHospitalClickAddCommentEvent(model.getHospitalLabel());
+    }
 }
