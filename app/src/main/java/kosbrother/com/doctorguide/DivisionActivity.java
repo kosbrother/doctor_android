@@ -1,17 +1,10 @@
 package kosbrother.com.doctorguide;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.SignInButton;
-
-import com.github.clans.fab.FloatingActionMenu;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -22,6 +15,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.text.Html;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -31,6 +27,11 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.clans.fab.FloatingActionButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,31 +49,52 @@ import kosbrother.com.doctorguide.fragments.DivisionScoreFragment;
 import kosbrother.com.doctorguide.fragments.DoctorFragment;
 import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.category.GACategory;
+import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickAddCommentEvent;
+import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickAddDoctorEvent;
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickDivisionSpinnerEvent;
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickFABEvent;
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickHospitalTextEvent;
+import kosbrother.com.doctorguide.model.ClickAddCommentModel;
+import kosbrother.com.doctorguide.model.ClickAddDoctorModel;
+import kosbrother.com.doctorguide.model.ClickProblemReportModel;
 import kosbrother.com.doctorguide.model.DivisionFabModel;
 import kosbrother.com.doctorguide.model.DivisionModel;
+import kosbrother.com.doctorguide.presenter.ClickAddCommentPresenter;
+import kosbrother.com.doctorguide.presenter.ClickAddDoctorPresenter;
+import kosbrother.com.doctorguide.presenter.ClickProblemReportPresenter;
+import kosbrother.com.doctorguide.presenter.ClickSharePresenter;
 import kosbrother.com.doctorguide.presenter.DivisionFabPresenter;
 import kosbrother.com.doctorguide.presenter.DivisionPresenter;
+import kosbrother.com.doctorguide.view.ClickAddCommentView;
+import kosbrother.com.doctorguide.view.ClickAddDoctorView;
+import kosbrother.com.doctorguide.view.ClickProblemReportView;
+import kosbrother.com.doctorguide.view.ClickShareView;
 import kosbrother.com.doctorguide.view.DivisionFabView;
 import kosbrother.com.doctorguide.view.DivisionView;
+import kosbrother.com.doctorguide.viewmodel.AddCommentViewModel;
+import kosbrother.com.doctorguide.viewmodel.AddDoctorViewModel;
 import kosbrother.com.doctorguide.viewmodel.DivisionActivityViewModel;
 import kosbrother.com.doctorguide.viewmodel.DivisionScoreViewModel;
+import kosbrother.com.doctorguide.viewmodel.ProblemReportViewModel;
 
 public class DivisionActivity extends GoogleSignInActivity implements
         DoctorFragment.OnListFragmentInteractionListener,
         DivisionScoreFragment.GetDivision,
         DivisionView,
-        DivisionFabView {
+        DivisionFabView,
+        ClickAddDoctorView,
+        ClickAddCommentView, ClickShareView, ClickProblemReportView {
 
     private DivisionPresenter divisionPresenter;
     private DivisionFabPresenter fabPresenter;
+    private ClickAddCommentPresenter clickAddCommentPresenter;
 
-    private FloatingActionMenu fab;
     private ViewPagerAdapter adapter;
     private ProgressDialog progressDialog;
     private Dialog dialog;
+    private ClickAddDoctorPresenter clickAddDoctorPresenter;
+    private ClickSharePresenter clickSharePresenter;
+    private ClickProblemReportPresenter clickProblemReportPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +103,12 @@ public class DivisionActivity extends GoogleSignInActivity implements
         divisionPresenter = new DivisionPresenter(this, new DivisionModel(viewModel));
         divisionPresenter.onCreate();
 
-        fabPresenter = new DivisionFabPresenter(this, new DivisionFabModel(viewModel));
-        fabPresenter.onCreate();
+        clickAddCommentPresenter = new ClickAddCommentPresenter(this, new ClickAddCommentModel(viewModel));
+        clickAddDoctorPresenter = new ClickAddDoctorPresenter(this, new ClickAddDoctorModel(viewModel));
+        clickSharePresenter = new ClickSharePresenter(this);
+        clickProblemReportPresenter = new ClickProblemReportPresenter(this, new ClickProblemReportModel(viewModel));
+
+        fabPresenter = new DivisionFabPresenter(this, new DivisionFabModel());
     }
 
     @Override
@@ -117,24 +143,6 @@ public class DivisionActivity extends GoogleSignInActivity implements
     }
 
     @Override
-    public void initFab() {
-        fab = (FloatingActionMenu) findViewById(R.id.menu2);
-        fab.setClosedOnTouchOutside(true);
-        fab.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
-            @Override
-            public void onMenuToggle(boolean opened) {
-                fabPresenter.onFabMenuToggle(opened);
-            }
-        });
-    }
-
-    @Override
-    public void setFabImageDrawable(int drawableId) {
-        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), drawableId);
-        fab.getMenuIconView().setImageDrawable(drawable);
-    }
-
-    @Override
     public void setupViewPager(int hospitalId, int divisionId) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(DoctorFragment.newInstance(MyDoctorRecyclerViewAdapter.HEART_TYPE, hospitalId, divisionId), "科內醫生");
@@ -144,8 +152,10 @@ public class DivisionActivity extends GoogleSignInActivity implements
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(2);
+        viewPager.addOnPageChangeListener(onPageChangeListener);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setOnTabSelectedListener(onTabSelectedListener);
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -211,7 +221,7 @@ public class DivisionActivity extends GoogleSignInActivity implements
         signInBtn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fabPresenter.onSignInButtonClick();
+                clickAddCommentPresenter.onSignInButtonClick();
             }
         });
         dialog.show();
@@ -219,6 +229,17 @@ public class DivisionActivity extends GoogleSignInActivity implements
 
     public void showCreateUserFailToast() {
         Toast.makeText(this, "登入失敗", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void startAddCommentActivity(AddCommentViewModel addCommentViewModel) {
+        Intent intent = new Intent(this, AddCommentActivity.class);
+        intent.putExtra(ExtraKey.HOSPITAL_ID, addCommentViewModel.getHospitalId());
+        intent.putExtra(ExtraKey.DIVISION_ID, addCommentViewModel.getDivisionId());
+        intent.putExtra(ExtraKey.DOCTOR_ID, addCommentViewModel.getDoctorId());
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, addCommentViewModel.getHospitalName());
+        intent.putExtra(ExtraKey.USER, addCommentViewModel.getUser());
+        startActivity(intent);
     }
 
     @Override
@@ -267,6 +288,44 @@ public class DivisionActivity extends GoogleSignInActivity implements
         GAManager.sendEvent(new DivisionClickHospitalTextEvent(hospitalName));
     }
 
+    @Override
+    public void sendDivisionAddDoctorClickEvent(String label) {
+        GAManager.sendEvent(new DivisionClickAddDoctorEvent(label));
+    }
+
+    @Override
+    public void sendDivisionClickAddCommentEvent(String label) {
+        GAManager.sendEvent(new DivisionClickAddCommentEvent(label));
+    }
+
+    @Override
+    public void hideAddDoctorFab() {
+        getAddDoctorFab().hide(true);
+    }
+
+    @Override
+    public void showAddDoctorFab() {
+        getAddDoctorFab().show(true);
+    }
+
+    @Override
+    public void hideAddCommentFab() {
+        getAddCommentFab().hide(true);
+    }
+
+    @Override
+    public void showAddCommentFab() {
+        getAddCommentFab().show(true);
+    }
+
+    private FloatingActionButton getAddCommentFab() {
+        return (FloatingActionButton) findViewById(R.id.fab_add_comment);
+    }
+
+    private FloatingActionButton getAddDoctorFab() {
+        return (FloatingActionButton) findViewById(R.id.fab_add_doctor);
+    }
+
     public void sendClickFabEvent(String label) {
         GAManager.sendEvent(new DivisionClickFABEvent(label));
     }
@@ -302,16 +361,6 @@ public class DivisionActivity extends GoogleSignInActivity implements
         startActivity(intent);
     }
 
-    public void startProblemReportActivity(DivisionActivityViewModel viewModel) {
-        Intent intent = new Intent(DivisionActivity.this, ProblemReportActivity.class);
-        intent.putExtra(ExtraKey.REPORT_TYPE, getString(R.string.division_page));
-        intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
-        intent.putExtra(ExtraKey.DIVISION_NAME, viewModel.getDivisionName());
-        intent.putExtra(ExtraKey.DIVISION_ID, viewModel.getDivisionId());
-        intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
-        startActivity(intent);
-    }
-
     public void startShareActivity() {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -320,9 +369,8 @@ public class DivisionActivity extends GoogleSignInActivity implements
         startActivity(sendIntent);
     }
 
-    @Override
     public void startCommentActivity(DivisionActivityViewModel viewModel, String email) {
-        Intent intent = new Intent(DivisionActivity.this, AddCommentActivity.class);
+        Intent intent = new Intent(this, AddCommentActivity.class);
         intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
         intent.putExtra(ExtraKey.DIVISION_ID, viewModel.getDivisionId());
         intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
@@ -330,22 +378,8 @@ public class DivisionActivity extends GoogleSignInActivity implements
         startActivity(intent);
     }
 
-    @Override
-    public void startAddDoctorActivity(DivisionActivityViewModel viewModel) {
-        Intent intent = new Intent(DivisionActivity.this, AddDoctorActivity.class);
-        intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
-        intent.putExtra(ExtraKey.DIVISION_NAME, viewModel.getDivisionName());
-        intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
-        intent.putExtra(ExtraKey.DIVISION_ID, viewModel.getDivisionId());
-        startActivity(intent);
-    }
-
     public void dismissSignInDialog() {
         dialog.dismiss();
-    }
-
-    public void closeFab() {
-        fab.close(true);
     }
 
     @Override
@@ -371,29 +405,13 @@ public class DivisionActivity extends GoogleSignInActivity implements
         divisionPresenter.onHospitalTextViewClick();
     }
 
-    public void onFabProblemReportClick(View view) {
-        fabPresenter.onFabProblemReportClick();
-    }
-
-    public void onFabShareClick(View view) {
-        fabPresenter.onFabShareClick();
-    }
-
-    public void onFabCommentClick(View view) {
-        fabPresenter.onFabCommentClick();
-    }
-
-    public void onFabAddDoctorClick(View view) {
-        fabPresenter.onFabAddDoctorClick();
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
-                fabPresenter.onSignInActivityResultSuccess();
+                clickAddCommentPresenter.onSignInActivityResultSuccess();
             }
         }
     }
@@ -404,7 +422,103 @@ public class DivisionActivity extends GoogleSignInActivity implements
         return divisionPresenter.getDivision();
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    public void onAddCommentClick() {
+        divisionPresenter.onAddCommentClick();
+        clickAddCommentPresenter.startAddComment();
+    }
+
+    public void onAddDoctorClick() {
+        divisionPresenter.onAddDoctorClick();
+        clickAddDoctorPresenter.startAddDoctor();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.share_and_report, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.share_item:
+                clickSharePresenter.onShareClick();
+                return true;
+            case R.id.report_problem_item:
+                clickProblemReportPresenter.onProblemReportClick();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void startAddDoctorActivity(AddDoctorViewModel addDoctorViewModel) {
+        Intent intent = new Intent(DivisionActivity.this, AddDoctorActivity.class);
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, addDoctorViewModel.getHospitalName());
+        intent.putExtra(ExtraKey.DIVISION_NAME, addDoctorViewModel.getDivisionName());
+        intent.putExtra(ExtraKey.HOSPITAL_ID, addDoctorViewModel.getHospitalId());
+        intent.putExtra(ExtraKey.DIVISION_ID, addDoctorViewModel.getDivisionId());
+        startActivity(intent);
+    }
+
+    public void onFabAddCommentClick(View view) {
+        fabPresenter.onFabCommentClick();
+        clickAddCommentPresenter.startAddComment();
+    }
+
+    public void onFabAddDoctorClick(View view) {
+        fabPresenter.onFabAddDoctorClick();
+        clickAddDoctorPresenter.startAddDoctor();
+    }
+
+    @Override
+    public void startProblemReportActivity(ProblemReportViewModel viewModel) {
+        Intent intent = new Intent(this, ProblemReportActivity.class);
+        intent.putExtra(ExtraKey.REPORT_TYPE, viewModel.getReportType());
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
+        intent.putExtra(ExtraKey.DIVISION_NAME, viewModel.getDivisionName());
+        intent.putExtra(ExtraKey.DIVISION_ID, viewModel.getDivisionId());
+        intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
+        startActivity(intent);
+    }
+
+    private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            onPageChanged(position);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+        }
+    };
+
+    private TabLayout.OnTabSelectedListener onTabSelectedListener = new TabLayout.OnTabSelectedListener() {
+        @Override
+        public void onTabSelected(TabLayout.Tab tab) {
+            onPageChanged(tab.getPosition());
+        }
+
+        @Override
+        public void onTabUnselected(TabLayout.Tab tab) {
+        }
+
+        @Override
+        public void onTabReselected(TabLayout.Tab tab) {
+        }
+    };
+
+    private void onPageChanged(int position) {
+        fabPresenter.onPageChanged(position);
+    }
+
+    static class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
@@ -437,5 +551,5 @@ public class DivisionActivity extends GoogleSignInActivity implements
             return POSITION_NONE;
         }
     }
-
 }
+

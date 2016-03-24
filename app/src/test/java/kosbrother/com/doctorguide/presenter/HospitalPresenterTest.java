@@ -94,4 +94,11 @@ public class HospitalPresenterTest {
 
         verify(view).startDivisionActivity(division);
     }
+
+    @Test
+    public void testOnAddCommentClick() throws Exception {
+        presenter.onAddCommentClick();
+
+        verify(view).sendHospitalClickAddCommentEvent(model.getHospitalLabel());
+    }
 }

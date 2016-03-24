@@ -68,9 +68,11 @@ public class AddCommentModelImpl implements AddCommentModel {
 
     private int getDivisionIdFromDoctors() {
         for (Division d : divisions) {
-            for (Doctor dr : d.doctors) {
-                if (dr.id == doctorId)
-                    return d.id;
+            if (d.doctors != null) {
+                for (Doctor dr : d.doctors) {
+                    if (dr.id == doctorId)
+                        return d.id;
+                }
             }
         }
         return 0;

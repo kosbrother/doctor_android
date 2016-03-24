@@ -1,9 +1,9 @@
 package kosbrother.com.doctorguide;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -14,18 +14,24 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.common.SignInButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
 import kosbrother.com.doctorguide.Util.ExtraKey;
+import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.entity.Category;
 import kosbrother.com.doctorguide.entity.Division;
@@ -35,37 +41,53 @@ import kosbrother.com.doctorguide.fragments.DivisionListFragment;
 import kosbrother.com.doctorguide.fragments.HospitalDetailFragment;
 import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.category.GACategory;
+import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickAddCommentEvent;
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickCollectEvent;
-import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickFABEvent;
-import kosbrother.com.doctorguide.model.HospitalFabModel;
+import kosbrother.com.doctorguide.model.ClickAddCommentModel;
+import kosbrother.com.doctorguide.model.ClickProblemReportModel;
 import kosbrother.com.doctorguide.model.HospitalModel;
-import kosbrother.com.doctorguide.presenter.HospitalFabPresenter;
+import kosbrother.com.doctorguide.presenter.ClickAddCommentPresenter;
+import kosbrother.com.doctorguide.presenter.ClickProblemReportPresenter;
+import kosbrother.com.doctorguide.presenter.ClickSharePresenter;
 import kosbrother.com.doctorguide.presenter.HospitalPresenter;
-import kosbrother.com.doctorguide.view.HospitalFabView;
+import kosbrother.com.doctorguide.view.ClickAddCommentView;
+import kosbrother.com.doctorguide.view.ClickAddDoctorView;
+import kosbrother.com.doctorguide.view.ClickProblemReportView;
+import kosbrother.com.doctorguide.view.ClickShareView;
 import kosbrother.com.doctorguide.view.HospitalView;
+import kosbrother.com.doctorguide.viewmodel.AddCommentViewModel;
+import kosbrother.com.doctorguide.viewmodel.AddDoctorViewModel;
 import kosbrother.com.doctorguide.viewmodel.HospitalActivityViewModel;
 import kosbrother.com.doctorguide.viewmodel.HospitalScoreViewModel;
+import kosbrother.com.doctorguide.viewmodel.ProblemReportViewModel;
 
-public class HospitalActivity extends BaseActivity implements
+public class HospitalActivity extends GoogleSignInActivity implements
         DivisionListFragment.OnListFragmentInteractionListener,
-        HospitalView, HospitalFabView {
+        HospitalView,
+        ClickAddCommentView,
+        ClickAddDoctorView,
+        ClickProblemReportView,
+        ClickShareView {
 
-    private HospitalPresenter presenter;
-    private HospitalFabPresenter fabPresenter;
+    private HospitalPresenter hospitalPresenter;
+    private ClickAddCommentPresenter clickAddCommentPresenter;
+    private ClickProblemReportPresenter clickProblemReportPresenter;
+    private ClickSharePresenter clickSharePresenter;
 
-    private FloatingActionMenu fab;
     private ProgressDialog progressDialog;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         HospitalActivityViewModel viewModel = new HospitalActivityViewModel(getIntent());
         Realm realm = Realm.getInstance(getBaseContext());
-        presenter = new HospitalPresenter(this, new HospitalModel(viewModel, realm));
-        presenter.onCreate();
+        hospitalPresenter = new HospitalPresenter(this, new HospitalModel(viewModel, realm));
+        hospitalPresenter.onCreate();
 
-        fabPresenter = new HospitalFabPresenter(this, new HospitalFabModel(viewModel));
-        fabPresenter.onCreate();
+        clickAddCommentPresenter = new ClickAddCommentPresenter(this, new ClickAddCommentModel(viewModel));
+        clickProblemReportPresenter = new ClickProblemReportPresenter(this, new ClickProblemReportModel(viewModel));
+        clickSharePresenter = new ClickSharePresenter(this);
     }
 
     @Override
@@ -102,7 +124,7 @@ public class HospitalActivity extends BaseActivity implements
         findViewById(R.id.heart).setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.onHeartButtonClick();
+                hospitalPresenter.onHeartButtonClick();
             }
         });
     }
@@ -132,6 +154,10 @@ public class HospitalActivity extends BaseActivity implements
     @Override
     public void sendHospitalClickCollectEvent(String hospitalName) {
         GAManager.sendEvent(new HospitalClickCollectEvent(hospitalName));
+    }
+
+    public void sendHospitalClickAddCommentEvent(String label) {
+        GAManager.sendEvent(new HospitalClickAddCommentEvent(label));
     }
 
     @Override
@@ -179,9 +205,9 @@ public class HospitalActivity extends BaseActivity implements
     @Override
     public void onListFragmentInteraction(View view, Division division) {
         if (view.getId() == R.id.detail_button) {
-            presenter.onDivisionInfoClick(division);
+            hospitalPresenter.onDivisionInfoClick(division);
         } else {
-            presenter.onDivisionClick(division);
+            hospitalPresenter.onDivisionClick(division);
         }
     }
 
@@ -195,55 +221,6 @@ public class HospitalActivity extends BaseActivity implements
         progressDialog.dismiss();
     }
 
-    private View.OnClickListener clickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.fab_problem_report:
-                    fabPresenter.onProblemReportClick();
-                    break;
-                case R.id.fab_share:
-                    fabPresenter.onFabShareClick();
-                    break;
-                case R.id.fab_add_doctor:
-                    fabPresenter.onAddDoctorClick();
-                    break;
-            }
-        }
-    };
-
-    @Override
-    public void initFab() {
-        fab = (FloatingActionMenu) findViewById(R.id.menu2);
-        fab.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
-            @Override
-            public void onMenuToggle(boolean opened) {
-                fabPresenter.onFabMenuToggle(opened);
-            }
-        });
-        fab.setClosedOnTouchOutside(true);
-
-        findViewById(R.id.fab_problem_report).setOnClickListener(clickListener);
-        findViewById(R.id.fab_share).setOnClickListener(clickListener);
-        findViewById(R.id.fab_add_doctor).setOnClickListener(clickListener);
-    }
-
-    @Override
-    public void setFabImageDrawable(int fabDrawableId) {
-        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), fabDrawableId);
-        fab.getMenuIconView().setImageDrawable(drawable);
-    }
-
-    @Override
-    public void closeFab() {
-        fab.close(true);
-    }
-
-    @Override
-    public void sendClickFabEvent(String label) {
-        GAManager.sendEvent(new HospitalClickFABEvent(label));
-    }
-
     @Override
     public void startShareActivity() {
         Intent sendIntent = new Intent();
@@ -253,9 +230,62 @@ public class HospitalActivity extends BaseActivity implements
         startActivity(sendIntent);
     }
 
+    public void onAddCommentClick() {
+        hospitalPresenter.onAddCommentClick();
+        clickAddCommentPresenter.startAddComment();
+    }
+
     @Override
-    public void startProblemReportActivity(HospitalActivityViewModel viewModel) {
-        Intent intent = new Intent(HospitalActivity.this, ProblemReportActivity.class);
+    public void showSignInDialog() {
+        dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_login);
+
+        SignInButton signInBtn = (SignInButton) dialog.findViewById(R.id.sign_in_button);
+        signInBtn.setSize(SignInButton.SIZE_WIDE);
+        signInBtn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickAddCommentPresenter.onSignInButtonClick();
+            }
+        });
+        dialog.show();
+    }
+
+    @Override
+    public void dismissSignInDialog() {
+        dialog.dismiss();
+    }
+
+    @Override
+    public void showCreateUserFailToast() {
+        Toast.makeText(this, "登入失敗", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void startAddCommentActivity(AddCommentViewModel addCommentViewModel) {
+        Intent intent = new Intent(this, AddCommentActivity.class);
+        intent.putExtra(ExtraKey.HOSPITAL_ID, addCommentViewModel.getHospitalId());
+        intent.putExtra(ExtraKey.DIVISION_ID, addCommentViewModel.getDivisionId());
+        intent.putExtra(ExtraKey.DOCTOR_ID, addCommentViewModel.getDoctorId());
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, addCommentViewModel.getHospitalName());
+        intent.putExtra(ExtraKey.USER, addCommentViewModel.getUser());
+        startActivity(intent);
+    }
+
+    @Override
+    public void startAddDoctorActivity(AddDoctorViewModel addDoctorViewModel) {
+        Intent intent = new Intent(this, AddDoctorActivity.class);
+        intent.putExtra(ExtraKey.HOSPITAL_NAME, addDoctorViewModel.getHospitalName());
+        intent.putExtra(ExtraKey.DIVISION_NAME, addDoctorViewModel.getDivisionName());
+        intent.putExtra(ExtraKey.HOSPITAL_ID, addDoctorViewModel.getHospitalId());
+        intent.putExtra(ExtraKey.DIVISION_ID, addDoctorViewModel.getDivisionId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void startProblemReportActivity(ProblemReportViewModel viewModel) {
+        Intent intent = new Intent(this, ProblemReportActivity.class);
         intent.putExtra(ExtraKey.REPORT_TYPE, getString(R.string.hospital_page));
         intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
         intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
@@ -263,14 +293,27 @@ public class HospitalActivity extends BaseActivity implements
     }
 
     @Override
-    public void startAddDoctorActivity(HospitalActivityViewModel viewModel) {
-        Intent intent = new Intent(HospitalActivity.this, AddDoctorActivity.class);
-        intent.putExtra(ExtraKey.HOSPITAL_NAME, viewModel.getHospitalName());
-        intent.putExtra(ExtraKey.HOSPITAL_ID, viewModel.getHospitalId());
-        startActivity(intent);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.share_and_report, menu);
+        return true;
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.share_item:
+                clickSharePresenter.onShareClick();
+                return true;
+            case R.id.report_problem_item:
+                clickProblemReportPresenter.onProblemReportClick();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    static class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
@@ -298,5 +341,5 @@ public class HospitalActivity extends BaseActivity implements
             return mFragmentTitleList.get(position);
         }
     }
-
 }
+

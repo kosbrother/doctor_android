@@ -102,4 +102,9 @@ public class DivisionModel {
     public DivisionActivityViewModel getDivisionInputViewModel() {
         return viewModel;
     }
+
+    public String getDivisionLabel() {
+        return "醫院: " + viewModel.getHospitalName() + "\n" +
+                "科別: " + viewModel.getDivisionName();
+    }
 }

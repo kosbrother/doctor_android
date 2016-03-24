@@ -7,9 +7,9 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import kosbrother.com.doctorguide.model.DivisionModel;
 import kosbrother.com.doctorguide.entity.Division;
 import kosbrother.com.doctorguide.entity.Doctor;
+import kosbrother.com.doctorguide.model.DivisionModel;
 import kosbrother.com.doctorguide.view.DivisionView;
 
 import static org.mockito.Mockito.mock;
@@ -135,4 +135,17 @@ public class DivisionPresenterTest {
         Assert.assertEquals(expected, actual);
     }
 
+    @Test
+    public void testOnAddDoctorClick() throws Exception {
+        presenter.onAddDoctorClick();
+
+        verify(view).sendDivisionAddDoctorClickEvent(model.getDivisionLabel());
+    }
+
+    @Test
+    public void testOnAddCommentClick() throws Exception {
+        presenter.onAddCommentClick();
+
+        verify(view).sendDivisionClickAddCommentEvent(model.getDivisionLabel());
+    }
 }

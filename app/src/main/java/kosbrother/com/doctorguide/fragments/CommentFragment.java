@@ -15,11 +15,15 @@ import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
+import kosbrother.com.doctorguide.DivisionActivity;
+import kosbrother.com.doctorguide.DoctorActivity;
+import kosbrother.com.doctorguide.HospitalActivity;
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.CommentAdapter;
 import kosbrother.com.doctorguide.api.DoctorGuideApi;
 import kosbrother.com.doctorguide.entity.Comment;
+import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 
 
 public class CommentFragment extends Fragment {
@@ -104,17 +108,37 @@ public class CommentFragment extends Fragment {
             if (comments.size() == 0) {
                 LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                View noDoctorView = inflater.inflate(R.layout.fragment_no_comment, null);
-                noDoctorView.setLayoutParams(lparams);
-                ((RelativeLayout) view.findViewById(R.id.baseLayout)).addView(noDoctorView);
+                View noCommentView = inflater.inflate(R.layout.fragment_no_comment, null);
+                noCommentView.setLayoutParams(lparams);
+                noCommentView.findViewById(R.id.add_comment_linear_layout).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onAddCommentClick();
+                    }
+                });
+                ((RelativeLayout) view.findViewById(R.id.baseLayout)).addView(noCommentView);
             } else {
                 RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
                 Context context = view.getContext();
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                recyclerView.setAdapter(new CommentAdapter(comments, getContext(),mGACategory));
+                recyclerView.setAdapter(new CommentAdapter(comments, getContext(), mGACategory));
             }
         }
 
+    }
+
+    private void onAddCommentClick() {
+        switch (mGACategory) {
+            case GACategory.DOCTOR:
+                ((DoctorActivity) getActivity()).onAddCommentClick();
+                break;
+            case GACategory.DIVISION:
+                ((DivisionActivity) getActivity()).onAddCommentClick();
+                break;
+            case GACategory.HOSPITAL:
+                ((HospitalActivity) getActivity()).onAddCommentClick();
+                break;
+        }
     }
 
 }

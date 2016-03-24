@@ -1,4 +1,4 @@
-package kosbrother.com.doctorguide.entity;
+package kosbrother.com.doctorguide.Util;
 
 public class OrderStrings {
     public static final String DISTANCE = "distance";

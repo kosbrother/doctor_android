@@ -78,4 +78,8 @@ public class HospitalModel {
     public Hospital getHospital() {
         return hospital;
     }
+
+    public String getHospitalLabel() {
+        return "醫院: " + viewModel.getHospitalName();
+    }
 }

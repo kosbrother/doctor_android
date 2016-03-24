@@ -72,4 +72,9 @@ public class DoctorModel {
     public DoctorScoreViewModel getDoctorScoreViewModel() {
         return new DoctorScoreViewModel(doctor);
     }
+
+    public String getDoctorLabel() {
+        return "醫院: " + viewModel.getHospitalName() + "\n" +
+                "醫師名稱: " + viewModel.getDoctorName();
+    }
 }

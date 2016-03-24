@@ -47,7 +47,7 @@
     <string name="add_doctor_hospital">服務醫院</string>
     <string name="add_doctor_hospital_hint">如：大學眼科診所</string>
     <string name="add_doctor_division">服務科別</string>
-    <string name="add_doctor_division_hint">如：眼料</string>
+    <string name="add_doctor_division_hint">如：眼科</string>
     <string name="add_doctor_specialty">醫師專長</string>
     <string name="add_doctor_specialty_hint">如：眼科、玻璃體、視網膜疾病手術及雷射治療、白內障…</string>
     <string name="add_doctor_experience">醫師經歷</string>
@@ -114,5 +114,29 @@
     <!--Area-->
     <string name="area_download_hospital">醫院資料下載中</string>
     <string name="area_spinner_area_title">地區:</string>
+
+    <!--No score-->
+    <string name="no_score">尚無評分資料！</string>
+    <string name="no_score_content">歡迎您為就醫指南新增評分資料，您寶貴的意見能讓台灣的醫療品質變得更好！！</string>
+    <string name="for_add_score">以新增評分！</string>
+
+    <!--No comment-->
+    <string name="no_comment">尚無評論資料！</string>
+    <string name="no_comment_content">歡迎您為就醫指南新增評論資料，您寶貴的意見能讓台灣的醫療品質變得更好！！</string>
+
+    <!--No Doctor-->
+    <string name="no_doctor">尚無醫師資料！</string>
+    <string name="no_doctor_content">歡迎您為就醫指南新增醫師資料，您寶貴的意見能讓台灣的醫療品質變得更好！！</string>
+    <string name="for_add_doctor">以新增醫師！</string>
+
+    <!--My Comment-->
+    <string name="my_comment_no_comment">您目前尚未評論！</string>
+    <string name="my_comment_no_comment_content">歡迎您至科別、醫師資訊頁分享您的就醫體驗，您寶貴的意見能讓台灣的醫療品質變得更好！！</string>
+
+    <!--Common-->
+    <string name="click">點選</string>
+    <string name="for_add_comment">以新增評論！</string>
+    <string name="menu_title_share">分享</string>
+    <string name="menu_title_report_problem">問題回報</string>
 
 </resources>

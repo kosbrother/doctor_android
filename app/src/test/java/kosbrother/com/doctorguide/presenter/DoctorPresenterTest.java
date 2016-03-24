@@ -84,4 +84,11 @@ public class DoctorPresenterTest {
 
         Assert.assertEquals(expect, actual);
     }
+
+    @Test
+    public void testOnAddCommentClick() throws Exception {
+        presenter.onAddCommentClick();
+
+        verify(view).sendDoctorClickAddCommentEvent(model.getDoctorLabel());
+    }
 }
