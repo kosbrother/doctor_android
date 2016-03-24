@@ -15,8 +15,8 @@ public class MainPresenter implements CreateUserTask.CreateUserListener {
     }
 
     public void onCreate() {
-        view.buildAppIndexClient();
         view.setContentView();
+        view.buildAppIndexClient();
         view.setToolBarAndDrawer();
         view.setNavigationView();
         view.setAppVersionName(model.getVersionName());
@@ -28,12 +28,14 @@ public class MainPresenter implements CreateUserTask.CreateUserListener {
             view.showRequireNetworkDialog();
         } else {
             view.silentSignIn();
-            view.startAppIndexApi();
+            view.connectAppIndexClient();
+            view.startAppIndexApi(MainModel.WEB_URL, MainModel.APP_URI);
         }
     }
 
     public void onStop() {
-        view.endAppIndexApi();
+        view.endAppIndexApi(MainModel.WEB_URL, MainModel.APP_URI);
+        view.disConnectAppIndexClient();
     }
 
     public void onSignInButtonClick() {

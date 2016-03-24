@@ -28,8 +28,8 @@ public class MainPresenterTest {
     public void testOnCreate() throws Exception {
         presenter.onCreate();
 
-        verify(view).buildAppIndexClient();
         verify(view).setContentView();
+        verify(view).buildAppIndexClient();
         verify(view).setToolBarAndDrawer();
         verify(view).setAppVersionName(model.getVersionName());
         verify(view).setNavigationView();
@@ -43,7 +43,8 @@ public class MainPresenterTest {
         presenter.onStart();
 
         verify(view).silentSignIn();
-        verify(view).startAppIndexApi();
+        verify(view).connectAppIndexClient();
+        verify(view).startAppIndexApi(MainModel.WEB_URL, MainModel.APP_URI);
     }
 
     @Test
@@ -59,7 +60,8 @@ public class MainPresenterTest {
     public void testOnStop() throws Exception {
         presenter.onStop();
 
-        verify(view).endAppIndexApi();
+        verify(view).endAppIndexApi(MainModel.WEB_URL, MainModel.APP_URI);
+        verify(view).disConnectAppIndexClient();
     }
 
     @Test

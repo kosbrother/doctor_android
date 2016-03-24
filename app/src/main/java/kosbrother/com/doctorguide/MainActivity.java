@@ -61,9 +61,6 @@ public class MainActivity extends GoogleSignInActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         MainView {
 
-    static final Uri APP_URI = Uri.parse("android-app://kosbrother.com.doctorguide/http/doctorguide.tw");
-    static final Uri WEB_URL = Uri.parse("http://doctorguide.tw/");
-
     private SignInButton signInBtn;
     private TextView logInEmail;
     private DrawerLayout drawer;
@@ -274,21 +271,29 @@ public class MainActivity extends GoogleSignInActivity implements
     }
 
     @Override
-    public void startAppIndexApi() {
+    public void connectAppIndexClient() {
         mClient.connect();
+    }
+
+    @Override
+    public void disConnectAppIndexClient() {
+        mClient.disconnect();
+    }
+
+    @Override
+    public void startAppIndexApi(Uri webUrl, Uri appUri) {
         // Construct the Action performed by the user
         Action viewAction = Action.newAction(Action.TYPE_VIEW, getTitle().toString(),
-                WEB_URL, APP_URI);
+                webUrl, appUri);
         // Call the App Indexing API start method after the view has completely rendered
         AppIndex.AppIndexApi.start(mClient, viewAction);
     }
 
     @Override
-    public void endAppIndexApi() {
+    public void endAppIndexApi(Uri webUrl, Uri appUri) {
         Action viewAction = Action.newAction(Action.TYPE_VIEW, getTitle().toString(),
-                WEB_URL, APP_URI);
+                webUrl, appUri);
         AppIndex.AppIndexApi.end(mClient, viewAction);
-        mClient.disconnect();
     }
 
     @Override

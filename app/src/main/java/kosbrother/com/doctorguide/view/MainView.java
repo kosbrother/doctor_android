@@ -1,5 +1,7 @@
 package kosbrother.com.doctorguide.view;
 
+import android.net.Uri;
+
 public interface MainView extends ProgressDialogView{
     void setContentView();
 
@@ -55,7 +57,11 @@ public interface MainView extends ProgressDialogView{
 
     void buildAppIndexClient();
 
-    void startAppIndexApi();
+    void connectAppIndexClient();
 
-    void endAppIndexApi();
+    void disConnectAppIndexClient();
+
+    void startAppIndexApi(Uri webUrl, Uri appUri);
+
+    void endAppIndexApi(Uri webUrl, Uri appUri);
 }

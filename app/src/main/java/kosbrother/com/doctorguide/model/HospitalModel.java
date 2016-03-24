@@ -1,5 +1,8 @@
 package kosbrother.com.doctorguide.model;
 
+import android.net.Uri;
+import android.support.annotation.NonNull;
+
 import io.realm.Realm;
 import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.entity.Hospital;
@@ -10,6 +13,14 @@ import kosbrother.com.doctorguide.viewmodel.HospitalActivityViewModel;
 import kosbrother.com.doctorguide.viewmodel.HospitalScoreViewModel;
 
 public class HospitalModel {
+    private static final String appUriString =
+            "android-app://kosbrother.com.doctorguide/http/doctorguide.tw/hospitals/";
+    private static final String webUriString =
+            "http://doctorguide.tw/hospitals/";
+
+    private Uri appUri;
+    private Uri webUrl;
+
     private final HospitalActivityViewModel viewModel;
     private final Realm realm;
     private Hospital hospital;
@@ -17,6 +28,16 @@ public class HospitalModel {
     public HospitalModel(HospitalActivityViewModel viewModel, Realm realm) {
         this.viewModel = viewModel;
         this.realm = realm;
+        setAppUri(viewModel);
+        setWebUrl(viewModel);
+    }
+
+    public Uri getAppUri() {
+        return appUri;
+    }
+
+    public Uri getWebUrl() {
+        return webUrl;
     }
 
     public int getHospitalImageRedId() {
@@ -81,5 +102,20 @@ public class HospitalModel {
 
     public String getHospitalLabel() {
         return "醫院: " + viewModel.getHospitalName();
+    }
+
+    private void setAppUri(HospitalActivityViewModel viewModel) {
+        appUri = Uri.parse(appUriString + getHospitalDataString(viewModel));
+    }
+
+    private void setWebUrl(HospitalActivityViewModel viewModel) {
+        webUrl = Uri.parse(webUriString + getHospitalDataString(viewModel));
+    }
+
+    @NonNull
+    private String getHospitalDataString(HospitalActivityViewModel viewModel) {
+        return viewModel.getHospitalId() + "-"
+                + viewModel.getHospitalName() + "-"
+                + viewModel.getHospitalGrade();
     }
 }
