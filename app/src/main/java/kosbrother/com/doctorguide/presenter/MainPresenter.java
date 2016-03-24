@@ -15,6 +15,7 @@ public class MainPresenter implements CreateUserTask.CreateUserListener {
     }
 
     public void onCreate() {
+        view.buildAppIndexClient();
         view.setContentView();
         view.setToolBarAndDrawer();
         view.setNavigationView();
@@ -27,7 +28,12 @@ public class MainPresenter implements CreateUserTask.CreateUserListener {
             view.showRequireNetworkDialog();
         } else {
             view.silentSignIn();
+            view.startAppIndexApi();
         }
+    }
+
+    public void onStop() {
+        view.endAppIndexApi();
     }
 
     public void onSignInButtonClick() {

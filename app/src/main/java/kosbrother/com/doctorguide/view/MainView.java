@@ -53,4 +53,9 @@ public interface MainView extends ProgressDialogView{
 
     void startFeedbackActivity();
 
+    void buildAppIndexClient();
+
+    void startAppIndexApi();
+
+    void endAppIndexApi();
 }

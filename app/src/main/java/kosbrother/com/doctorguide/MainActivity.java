@@ -6,6 +6,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -30,6 +31,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.appevents.AppEventsLogger;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
@@ -58,6 +61,9 @@ public class MainActivity extends GoogleSignInActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         MainView {
 
+    static final Uri APP_URI = Uri.parse("android-app://kosbrother.com.doctorguide/http/doctorguide.tw");
+    static final Uri WEB_URL = Uri.parse("http://doctorguide.tw/");
+
     private SignInButton signInBtn;
     private TextView logInEmail;
     private DrawerLayout drawer;
@@ -65,6 +71,7 @@ public class MainActivity extends GoogleSignInActivity implements
 
     private MainPresenter presenter;
     private SearchView searchView;
+    private GoogleApiClient mClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +84,12 @@ public class MainActivity extends GoogleSignInActivity implements
     public void onStart() {
         super.onStart();
         presenter.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        presenter.onStop();
+        super.onStop();
     }
 
     @Override
@@ -253,6 +266,29 @@ public class MainActivity extends GoogleSignInActivity implements
     @Override
     public void startFeedbackActivity() {
         startActivity(new Intent(this, FeedbackActivity.class));
+    }
+
+    @Override
+    public void buildAppIndexClient() {
+        mClient = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    @Override
+    public void startAppIndexApi() {
+        mClient.connect();
+        // Construct the Action performed by the user
+        Action viewAction = Action.newAction(Action.TYPE_VIEW, getTitle().toString(),
+                WEB_URL, APP_URI);
+        // Call the App Indexing API start method after the view has completely rendered
+        AppIndex.AppIndexApi.start(mClient, viewAction);
+    }
+
+    @Override
+    public void endAppIndexApi() {
+        Action viewAction = Action.newAction(Action.TYPE_VIEW, getTitle().toString(),
+                WEB_URL, APP_URI);
+        AppIndex.AppIndexApi.end(mClient, viewAction);
+        mClient.disconnect();
     }
 
     @Override

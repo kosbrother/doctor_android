@@ -28,6 +28,7 @@ public class MainPresenterTest {
     public void testOnCreate() throws Exception {
         presenter.onCreate();
 
+        verify(view).buildAppIndexClient();
         verify(view).setContentView();
         verify(view).setToolBarAndDrawer();
         verify(view).setAppVersionName(model.getVersionName());
@@ -42,6 +43,7 @@ public class MainPresenterTest {
         presenter.onStart();
 
         verify(view).silentSignIn();
+        verify(view).startAppIndexApi();
     }
 
     @Test
@@ -51,6 +53,13 @@ public class MainPresenterTest {
         presenter.onStart();
 
         verify(view).showRequireNetworkDialog();
+    }
+
+    @Test
+    public void testOnStop() throws Exception {
+        presenter.onStop();
+
+        verify(view).endAppIndexApi();
     }
 
     @Test
