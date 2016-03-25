@@ -53,12 +53,12 @@ public class DivisionFabPresenterTest {
     @Test
     public void testOnPageChanged_switchToComment() throws Exception {
         int position = 1;
-        when(model.showAddComment(position)).thenReturn(true);
+        when(model.showAddDoctor(position)).thenReturn(true);
 
         presenter.onPageChanged(position);
 
-        verify(view).hideAddDoctorFab();
-        verify(view).showAddCommentFab();
+        verify(view).hideAddCommentFab();
+        verify(view).showAddDoctorFab();
         verify(model).setLastPagePosition(position);
     }
 }

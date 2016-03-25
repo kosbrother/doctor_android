@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -24,7 +26,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +74,14 @@ public class HospitalActivity extends GoogleSignInActivity implements
         ClickProblemReportView,
         ClickShareView {
 
+    private static final String appUriString = "android-app://kosbrother.com.doctorguide/http/doctorguide.tw/hospitals/";
+    static Uri appUri;
+
+    private static final String webUriString = "http://doctorguide.tw/hospitals/";
+    static Uri webUrl;
+
+    private GoogleApiClient mClient;
+
     private HospitalPresenter hospitalPresenter;
     private ClickAddCommentPresenter clickAddCommentPresenter;
     private ClickProblemReportPresenter clickProblemReportPresenter;
@@ -81,6 +94,9 @@ public class HospitalActivity extends GoogleSignInActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         HospitalActivityViewModel viewModel = new HospitalActivityViewModel(getIntent());
+        setAppUri(viewModel);
+        setWebUrl(viewModel);
+
         Realm realm = Realm.getInstance(getBaseContext());
         hospitalPresenter = new HospitalPresenter(this, new HospitalModel(viewModel, realm));
         hospitalPresenter.onCreate();
@@ -88,6 +104,49 @@ public class HospitalActivity extends GoogleSignInActivity implements
         clickAddCommentPresenter = new ClickAddCommentPresenter(this, new ClickAddCommentModel(viewModel));
         clickProblemReportPresenter = new ClickProblemReportPresenter(this, new ClickProblemReportModel(viewModel));
         clickSharePresenter = new ClickSharePresenter(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        hospitalPresenter.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        hospitalPresenter.onStop();
+        super.onStop();
+    }
+
+    @Override
+    public void buildAppIndexClient() {
+        mClient = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    @Override
+    public void connectAppIndexClient() {
+        mClient.connect();
+    }
+
+    @Override
+    public void disConnectAppIndexClient() {
+        mClient.disconnect();
+    }
+
+    @Override
+    public void startAppIndexApi(String hospitalName, Uri webUrl, Uri appUri) {
+        // Construct the Action performed by the user
+        Action viewAction = Action.newAction(Action.TYPE_VIEW, hospitalName,
+                webUrl, appUri);
+        // Call the App Indexing API start method after the view has completely rendered
+        AppIndex.AppIndexApi.start(mClient, viewAction);
+    }
+
+    @Override
+    public void endAppIndexApi(String hospitalName, Uri webUrl, Uri appUri) {
+        Action viewAction = Action.newAction(Action.TYPE_VIEW, hospitalName,
+                webUrl, appUri);
+        AppIndex.AppIndexApi.end(mClient, viewAction);
     }
 
     @Override
@@ -311,6 +370,21 @@ public class HospitalActivity extends GoogleSignInActivity implements
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setAppUri(HospitalActivityViewModel viewModel) {
+        appUri = Uri.parse(appUriString + getHospitalDataString(viewModel));
+    }
+
+    private void setWebUrl(HospitalActivityViewModel viewModel) {
+        webUrl = Uri.parse(webUriString + getHospitalDataString(viewModel));
+    }
+
+    @NonNull
+    private String getHospitalDataString(HospitalActivityViewModel viewModel) {
+        return viewModel.getHospitalId() + "-"
+                + viewModel.getHospitalName() + "-"
+                + viewModel.getHospitalGrade();
     }
 
     static class ViewPagerAdapter extends FragmentPagerAdapter {

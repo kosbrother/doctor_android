@@ -40,6 +40,21 @@ public class HospitalPresenterTest {
     }
 
     @Test
+    public void testOnStart() throws Exception {
+        presenter.onStart();
+
+        verify(view).connectAppIndexClient();
+    }
+
+    @Test
+    public void testOnStop() throws Exception {
+        presenter.onStop();
+
+        verify(view).endAppIndexApi(model.getHospitalName(), model.getWebUrl(), model.getAppUri());
+        verify(view).disConnectAppIndexClient();
+    }
+
+    @Test
     public void testOnGetHospitalSuccess() throws Exception {
         Hospital hospital = new Hospital();
 
@@ -51,6 +66,7 @@ public class HospitalPresenterTest {
         verify(view).setHospitalScore(model.getHospitalScoreViewModel());
         verify(view).setViewPager(model.getHospitalId(), model.getHospital());
         verify(view).hideProgressDialog();
+        verify(view).startAppIndexApi(model.getHospitalName(), model.getWebUrl(), model.getAppUri());
     }
 
     @Test

@@ -16,6 +16,7 @@ public class HospitalPresenter implements GetHospitalTask.GetHospitalListener {
     }
 
     public void onCreate() {
+        view.buildAppIndexClient();
         view.setContentView();
         view.setActionBar();
         view.setHospitalImage(model.getHospitalImageRedId());
@@ -26,6 +27,15 @@ public class HospitalPresenter implements GetHospitalTask.GetHospitalListener {
         model.requestGetHospital(this);
     }
 
+    public void onStart() {
+        view.connectAppIndexClient();
+    }
+
+    public void onStop() {
+        view.endAppIndexApi(model.getHospitalName(), model.getWebUrl(), model.getAppUri());
+        view.disConnectAppIndexClient();
+    }
+
     @Override
     public void onGetHospitalSuccess(Hospital hospital) {
         model.setHospital(hospital);
@@ -34,6 +44,7 @@ public class HospitalPresenter implements GetHospitalTask.GetHospitalListener {
         view.setHospitalScore(model.getHospitalScoreViewModel());
         view.setViewPager(model.getHospitalId(), model.getHospital());
         view.hideProgressDialog();
+        view.startAppIndexApi(model.getHospitalName(), model.getWebUrl(), model.getAppUri());
     }
 
     public void onHeartButtonClick() {
