@@ -47,7 +47,6 @@ public class DivisionFabPresenterTest {
 
         verify(view).hideAddDoctorFab();
         verify(view).showAddCommentFab();
-        verify(model).setLastPagePosition(position);
     }
 
     @Test
@@ -59,6 +58,5 @@ public class DivisionFabPresenterTest {
 
         verify(view).hideAddCommentFab();
         verify(view).showAddDoctorFab();
-        verify(model).setLastPagePosition(position);
     }
 }
