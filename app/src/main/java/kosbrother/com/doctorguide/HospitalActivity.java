@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -74,12 +73,6 @@ public class HospitalActivity extends GoogleSignInActivity implements
         ClickProblemReportView,
         ClickShareView {
 
-    private static final String appUriString = "android-app://kosbrother.com.doctorguide/http/doctorguide.tw/hospitals/";
-    static Uri appUri;
-
-    private static final String webUriString = "http://doctorguide.tw/hospitals/";
-    static Uri webUrl;
-
     private GoogleApiClient mClient;
 
     private HospitalPresenter hospitalPresenter;
@@ -94,8 +87,6 @@ public class HospitalActivity extends GoogleSignInActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         HospitalActivityViewModel viewModel = new HospitalActivityViewModel(getIntent());
-        setAppUri(viewModel);
-        setWebUrl(viewModel);
 
         Realm realm = Realm.getInstance(getBaseContext());
         hospitalPresenter = new HospitalPresenter(this, new HospitalModel(viewModel, realm));
@@ -370,21 +361,6 @@ public class HospitalActivity extends GoogleSignInActivity implements
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void setAppUri(HospitalActivityViewModel viewModel) {
-        appUri = Uri.parse(appUriString + getHospitalDataString(viewModel));
-    }
-
-    private void setWebUrl(HospitalActivityViewModel viewModel) {
-        webUrl = Uri.parse(webUriString + getHospitalDataString(viewModel));
-    }
-
-    @NonNull
-    private String getHospitalDataString(HospitalActivityViewModel viewModel) {
-        return viewModel.getHospitalId() + "-"
-                + viewModel.getHospitalName() + "-"
-                + viewModel.getHospitalGrade();
     }
 
     static class ViewPagerAdapter extends FragmentPagerAdapter {
