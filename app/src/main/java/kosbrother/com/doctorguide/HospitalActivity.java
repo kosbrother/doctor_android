@@ -47,17 +47,20 @@ import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickAddCommentEvent;
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickCollectEvent;
+import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickFABEvent;
 import kosbrother.com.doctorguide.model.ClickAddCommentModel;
 import kosbrother.com.doctorguide.model.ClickProblemReportModel;
 import kosbrother.com.doctorguide.model.HospitalModel;
 import kosbrother.com.doctorguide.presenter.ClickAddCommentPresenter;
 import kosbrother.com.doctorguide.presenter.ClickProblemReportPresenter;
 import kosbrother.com.doctorguide.presenter.ClickSharePresenter;
+import kosbrother.com.doctorguide.presenter.HospitalFabPresenter;
 import kosbrother.com.doctorguide.presenter.HospitalPresenter;
 import kosbrother.com.doctorguide.view.ClickAddCommentView;
 import kosbrother.com.doctorguide.view.ClickAddDoctorView;
 import kosbrother.com.doctorguide.view.ClickProblemReportView;
 import kosbrother.com.doctorguide.view.ClickShareView;
+import kosbrother.com.doctorguide.view.HospitalFabView;
 import kosbrother.com.doctorguide.view.HospitalView;
 import kosbrother.com.doctorguide.viewmodel.AddCommentViewModel;
 import kosbrother.com.doctorguide.viewmodel.AddDoctorViewModel;
@@ -71,7 +74,7 @@ public class HospitalActivity extends GoogleSignInActivity implements
         ClickAddCommentView,
         ClickAddDoctorView,
         ClickProblemReportView,
-        ClickShareView {
+        ClickShareView, HospitalFabView {
 
     private GoogleApiClient mClient;
 
@@ -82,6 +85,7 @@ public class HospitalActivity extends GoogleSignInActivity implements
 
     private ProgressDialog progressDialog;
     private Dialog dialog;
+    private HospitalFabPresenter hospitalFabPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +99,8 @@ public class HospitalActivity extends GoogleSignInActivity implements
         clickAddCommentPresenter = new ClickAddCommentPresenter(this, new ClickAddCommentModel(viewModel));
         clickProblemReportPresenter = new ClickProblemReportPresenter(this, new ClickProblemReportModel(viewModel));
         clickSharePresenter = new ClickSharePresenter(this);
+
+        hospitalFabPresenter = new HospitalFabPresenter(this);
     }
 
     @Override
@@ -361,6 +367,16 @@ public class HospitalActivity extends GoogleSignInActivity implements
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void onFabAddCommentClick(View view) {
+        hospitalFabPresenter.onFabAddCommentClick();
+        clickAddCommentPresenter.startAddComment();
+    }
+
+    @Override
+    public void sendClickAddCommentFabEvent(String label) {
+        GAManager.sendEvent(new HospitalClickFABEvent(label));
     }
 
     static class ViewPagerAdapter extends FragmentPagerAdapter {
