@@ -1,6 +1,7 @@
 package kosbrother.com.doctorguide;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -39,11 +40,11 @@ public class BrowseActivity extends AppCompatActivity {
     }
 
     private String getHospitalName(String data) {
-        return getSplit(data)[1];
+        return Uri.decode(getSplit(data)[1]);
     }
 
     private String getHospitalGrade(String data) {
-        return getSplit(data)[2];
+        return Uri.decode(getSplit(data)[2]);
     }
 
     @NonNull
