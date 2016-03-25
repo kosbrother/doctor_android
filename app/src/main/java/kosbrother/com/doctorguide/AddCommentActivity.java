@@ -120,13 +120,18 @@ public class AddCommentActivity extends BaseActivity implements
         setSpinner(drs, position, dr_spinner);
     }
 
-    private void setSpinner(ArrayList<String> data, int position, Spinner spinner) {
+    private void setSpinner(ArrayList<String> data, int position, final Spinner spinner) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, data);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner.setAdapter(adapter);
         spinner.setSelection(position, false);
-        spinner.setOnItemSelectedListener(this);
+        spinner.post(new Runnable() {
+            @Override
+            public void run() {
+                spinner.setOnItemSelectedListener(AddCommentActivity.this);
+            }
+        });
     }
 
     @Override
