@@ -30,6 +30,5 @@ public class DivisionFabPresenter {
             view.hideAddDoctorFab();
             view.showAddCommentFab();
         }
-        model.setLastPagePosition(position);
     }
 }

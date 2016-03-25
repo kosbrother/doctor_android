@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -48,17 +47,20 @@ import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickAddCommentEvent;
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickCollectEvent;
+import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickFABEvent;
 import kosbrother.com.doctorguide.model.ClickAddCommentModel;
 import kosbrother.com.doctorguide.model.ClickProblemReportModel;
 import kosbrother.com.doctorguide.model.HospitalModel;
 import kosbrother.com.doctorguide.presenter.ClickAddCommentPresenter;
 import kosbrother.com.doctorguide.presenter.ClickProblemReportPresenter;
 import kosbrother.com.doctorguide.presenter.ClickSharePresenter;
+import kosbrother.com.doctorguide.presenter.HospitalFabPresenter;
 import kosbrother.com.doctorguide.presenter.HospitalPresenter;
 import kosbrother.com.doctorguide.view.ClickAddCommentView;
 import kosbrother.com.doctorguide.view.ClickAddDoctorView;
 import kosbrother.com.doctorguide.view.ClickProblemReportView;
 import kosbrother.com.doctorguide.view.ClickShareView;
+import kosbrother.com.doctorguide.view.HospitalFabView;
 import kosbrother.com.doctorguide.view.HospitalView;
 import kosbrother.com.doctorguide.viewmodel.AddCommentViewModel;
 import kosbrother.com.doctorguide.viewmodel.AddDoctorViewModel;
@@ -72,13 +74,7 @@ public class HospitalActivity extends GoogleSignInActivity implements
         ClickAddCommentView,
         ClickAddDoctorView,
         ClickProblemReportView,
-        ClickShareView {
-
-    private static final String appUriString = "android-app://kosbrother.com.doctorguide/http/doctorguide.tw/hospitals/";
-    static Uri appUri;
-
-    private static final String webUriString = "http://doctorguide.tw/hospitals/";
-    static Uri webUrl;
+        ClickShareView, HospitalFabView {
 
     private GoogleApiClient mClient;
 
@@ -89,13 +85,12 @@ public class HospitalActivity extends GoogleSignInActivity implements
 
     private ProgressDialog progressDialog;
     private Dialog dialog;
+    private HospitalFabPresenter hospitalFabPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         HospitalActivityViewModel viewModel = new HospitalActivityViewModel(getIntent());
-        setAppUri(viewModel);
-        setWebUrl(viewModel);
 
         Realm realm = Realm.getInstance(getBaseContext());
         hospitalPresenter = new HospitalPresenter(this, new HospitalModel(viewModel, realm));
@@ -104,6 +99,8 @@ public class HospitalActivity extends GoogleSignInActivity implements
         clickAddCommentPresenter = new ClickAddCommentPresenter(this, new ClickAddCommentModel(viewModel));
         clickProblemReportPresenter = new ClickProblemReportPresenter(this, new ClickProblemReportModel(viewModel));
         clickSharePresenter = new ClickSharePresenter(this);
+
+        hospitalFabPresenter = new HospitalFabPresenter(this);
     }
 
     @Override
@@ -372,19 +369,14 @@ public class HospitalActivity extends GoogleSignInActivity implements
         }
     }
 
-    private void setAppUri(HospitalActivityViewModel viewModel) {
-        appUri = Uri.parse(appUriString + getHospitalDataString(viewModel));
+    public void onFabAddCommentClick(View view) {
+        hospitalFabPresenter.onFabAddCommentClick();
+        clickAddCommentPresenter.startAddComment();
     }
 
-    private void setWebUrl(HospitalActivityViewModel viewModel) {
-        webUrl = Uri.parse(webUriString + getHospitalDataString(viewModel));
-    }
-
-    @NonNull
-    private String getHospitalDataString(HospitalActivityViewModel viewModel) {
-        return viewModel.getHospitalId() + "-"
-                + viewModel.getHospitalName() + "-"
-                + viewModel.getHospitalGrade();
+    @Override
+    public void sendClickAddCommentFabEvent(String label) {
+        GAManager.sendEvent(new HospitalClickFABEvent(label));
     }
 
     static class ViewPagerAdapter extends FragmentPagerAdapter {
