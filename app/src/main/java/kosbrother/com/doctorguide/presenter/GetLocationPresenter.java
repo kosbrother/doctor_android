@@ -10,10 +10,11 @@ public class GetLocationPresenter {
     }
 
     public void onCreate(int sdkInt) {
+        view.setGoogleClient();
         if (sdkInt >= 23) {
             view.checkLocationPermission();
         } else {
-            view.setGoogleClient();
+            view.connectGoogleClient();
         }
     }
 
@@ -22,7 +23,7 @@ public class GetLocationPresenter {
     }
 
     public void onPermissionGranted() {
-        view.setGoogleClient();
+        view.connectGoogleClient();
     }
 
     public void onPermissionNotGranted() {
@@ -30,23 +31,31 @@ public class GetLocationPresenter {
     }
 
     public void onShouldShowRequestPermissionRationale() {
+        view.showPermissionExplanationSnackBar();
         view.requestLocationPermission();
     }
 
     public void onShouldNotShowRequestPermissionRationale() {
-        view.showRequestPermissionSnackBar();
         view.requestLocationPermission();
     }
 
-    public void onRequestPermissionResultSuccess() {
-        view.setGoogleClient();
-    }
-
     public void onRequestPermissionResultDenied() {
-        view.showRequestPermissionDeniedSnackBar();
+        view.showRequestPermissionSnackBar();
     }
 
     public void onGetLastLocationNull() {
+        view.requestEnableLocationSetting();
+    }
+
+    public void onLocationSettingEnable() {
         view.requestLocationUpdates();
+    }
+
+    public void onLocationSettingDisable() {
+        view.showEnableLocationSettingDialog();
+    }
+
+    public void onRequestLocationSettingResultCancel() {
+        view.showRequestLocationSettingSnackBar();
     }
 }
