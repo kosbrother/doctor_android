@@ -24,4 +24,6 @@ public interface GetLocationView {
     void disconnectGoogleClient();
 
     void requestLocationUpdates();
+
+    void setLoadingView();
 }

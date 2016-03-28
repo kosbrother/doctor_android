@@ -143,6 +143,11 @@ public abstract class GetLocationActivity extends BaseActivity implements
     }
 
     @Override
+    public void setLoadingView() {
+        setContentView(R.layout.loading);
+    }
+
+    @Override
     public void showEnableLocationSettingDialog() {
         try {
             // Show the dialog by calling startResolutionForResult(),

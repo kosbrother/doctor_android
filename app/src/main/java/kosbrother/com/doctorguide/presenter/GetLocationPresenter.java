@@ -48,6 +48,7 @@ public class GetLocationPresenter {
     }
 
     public void onLocationSettingEnable() {
+        view.setLoadingView();
         view.requestLocationUpdates();
     }
 

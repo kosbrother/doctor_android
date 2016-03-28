@@ -44,7 +44,6 @@ public class AreaPresenterTest {
     public void testOnCreate() throws Exception {
         presenter.onCreate();
 
-        verify(view).setContentView();
         verify(view).setActionBar();
         verify(view).setActionBarTitle(model.getAreaName());
     }
@@ -56,6 +55,7 @@ public class AreaPresenterTest {
         presenter.onGetLocationSuccess(latLng);
 
         verify(model).setLatLng(latLng);
+        verify(view).setContentView();
         verify(view).setOrderSpinner(model.getSortPosition(), model.getOrderStringNameArray());
         verify(view).setAreaSpinner(model.getAreaPosition(), model.getAreaStringArray());
         verify(presenter).requestHospitalsWithProgressDialog();

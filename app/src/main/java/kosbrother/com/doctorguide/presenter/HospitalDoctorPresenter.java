@@ -19,11 +19,11 @@ public class HospitalDoctorPresenter implements GetDivisionsListener {
     }
 
     public void onCreate() {
-        view.setContentView();
         view.setActionBar();
     }
 
     public void onGetLocationSuccess() {
+        view.setContentView();
         view.setViewPager();
     }
 
