@@ -31,7 +31,6 @@ public class HospitalDoctorPresenterTest {
     public void testOnCreate() throws Exception {
         presenter.onCreate();
 
-        verify(view).setContentView();
         verify(view).setActionBar();
     }
 
@@ -39,6 +38,7 @@ public class HospitalDoctorPresenterTest {
     public void testOnGetLocationSuccess() throws Exception {
         presenter.onGetLocationSuccess();
 
+        verify(view).setContentView();
         verify(view).setViewPager();
     }
 

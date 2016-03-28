@@ -23,6 +23,7 @@ public class GetLocationPresenterTest {
     public void testOnCreate_sdkInkAbove23() throws Exception {
         presenter.onCreate(23);
 
+        verify(view).setGoogleClient();
         verify(view).checkLocationPermission();
     }
 
@@ -31,13 +32,14 @@ public class GetLocationPresenterTest {
         presenter.onCreate(22);
 
         verify(view).setGoogleClient();
+        verify(view).connectGoogleClient();
     }
 
     @Test
     public void testOnPermissionGranted() throws Exception {
         presenter.onPermissionGranted();
 
-        verify(view).setGoogleClient();
+        verify(view).connectGoogleClient();
     }
 
     @Test
@@ -51,6 +53,7 @@ public class GetLocationPresenterTest {
     public void testOnShouldShowRequestPermissionRationale() throws Exception {
         presenter.onShouldShowRequestPermissionRationale();
 
+        verify(view).showPermissionExplanationSnackBar();
         verify(view).requestLocationPermission();
     }
 
@@ -58,29 +61,21 @@ public class GetLocationPresenterTest {
     public void testOnShouldNotShowRequestPermissionRationale() throws Exception {
         presenter.onShouldNotShowRequestPermissionRationale();
 
-        verify(view).showRequestPermissionSnackBar();
         verify(view).requestLocationPermission();
-    }
-
-    @Test
-    public void testOnRequestPermissionResultSuccess() throws Exception {
-        presenter.onRequestPermissionResultSuccess();
-
-        verify(view).setGoogleClient();
     }
 
     @Test
     public void testOnRequestPermissionResultDenied() throws Exception {
         presenter.onRequestPermissionResultDenied();
 
-        verify(view).showRequestPermissionDeniedSnackBar();
+        verify(view).showRequestPermissionSnackBar();
     }
 
     @Test
     public void testOnGetLastLocationNull() throws Exception {
         presenter.onGetLastLocationNull();
 
-        verify(view).requestLocationUpdates();
+        verify(view).requestEnableLocationSetting();
     }
 
     @Test
@@ -88,6 +83,27 @@ public class GetLocationPresenterTest {
         presenter.onStop();
 
         verify(view).disconnectGoogleClient();
+    }
+
+    @Test
+    public void testOnLocationSettingEnable() throws Exception {
+        presenter.onLocationSettingEnable();
+
+        verify(view).requestLocationUpdates();
+    }
+
+    @Test
+    public void testOnLocationSettingDisable() {
+        presenter.onLocationSettingDisable();
+
+        verify(view).showEnableLocationSettingDialog();
+    }
+
+    @Test
+    public void onRequestLocationSettingResultCancel() {
+        presenter.onRequestLocationSettingResultCancel();
+
+        verify(view).showRequestLocationSettingSnackBar();
     }
 
 }

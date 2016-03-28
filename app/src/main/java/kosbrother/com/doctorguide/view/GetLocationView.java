@@ -3,17 +3,27 @@ package kosbrother.com.doctorguide.view;
 public interface GetLocationView {
     void checkLocationPermission();
 
-    void setGoogleClient();
-
     void checkShouldShowRequestPermissionRationale();
 
     void requestLocationPermission();
 
-    void requestLocationUpdates();
+    void showPermissionExplanationSnackBar();
 
     void showRequestPermissionSnackBar();
 
-    void showRequestPermissionDeniedSnackBar();
+    void requestEnableLocationSetting();
+
+    void showRequestLocationSettingSnackBar();
+
+    void showEnableLocationSettingDialog();
+
+    void setGoogleClient();
+
+    void connectGoogleClient();
 
     void disconnectGoogleClient();
+
+    void requestLocationUpdates();
+
+    void setLoadingView();
 }

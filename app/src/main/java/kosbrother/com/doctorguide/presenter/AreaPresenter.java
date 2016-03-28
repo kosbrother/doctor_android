@@ -19,13 +19,13 @@ public class AreaPresenter implements GetHospitalsByAreaListener {
     }
 
     public void onCreate() {
-        view.setContentView();
         view.setActionBar();
         view.setActionBarTitle(model.getAreaName());
     }
 
     public void onGetLocationSuccess(LatLng latLng) {
         model.setLatLng(latLng);
+        view.setContentView();
         view.setOrderSpinner(model.getSortPosition(), model.getOrderStringNameArray());
         view.setAreaSpinner(model.getAreaPosition(), model.getAreaStringArray());
 
