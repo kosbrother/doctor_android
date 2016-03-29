@@ -145,7 +145,7 @@ public class MainActivity extends GoogleSignInActivity implements
         navigationView.addHeaderView(header);
 
         logInEmail = (TextView) header.findViewById(R.id.log_in_email);
-        signInBtn = (SignInButton) header.findViewById(R.id.sign_in_button);
+        signInBtn = (SignInButton) header.findViewById(R.id.google_sign_in_button);
         signInBtn.setSize(SignInButton.SIZE_WIDE);
         signInBtn.setOnClickListener(new Button.OnClickListener() {
             @Override

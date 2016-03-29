@@ -1,8 +1,9 @@
 package kosbrother.com.doctorguide;
 
-import com.crashlytics.android.Crashlytics;
-
 import android.app.Application;
+
+import com.crashlytics.android.Crashlytics;
+import com.facebook.FacebookSdk;
 
 import io.fabric.sdk.android.Fabric;
 import kosbrother.com.doctorguide.google_analytics.GAManager;
@@ -15,6 +16,7 @@ public class DoctorGuideApplication extends Application {
         super.onCreate();
         GAManager.init(this);
         GoogleSignInManager.getInstance().init(this);
+        FacebookSdk.sdkInitialize(this);
         if (!BuildConfig.DEBUG) {
             Fabric.with(this, new Crashlytics());
         }

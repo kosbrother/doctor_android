@@ -297,7 +297,7 @@ public class HospitalActivity extends GoogleSignInActivity implements
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_login);
 
-        SignInButton signInBtn = (SignInButton) dialog.findViewById(R.id.sign_in_button);
+        SignInButton signInBtn = (SignInButton) dialog.findViewById(R.id.google_sign_in_button);
         signInBtn.setSize(SignInButton.SIZE_WIDE);
         signInBtn.setOnClickListener(new Button.OnClickListener() {
             @Override
