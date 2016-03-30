@@ -46,6 +46,8 @@ import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickA
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickAddDoctorEvent;
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickDivisionSpinnerEvent;
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickFABEvent;
+import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickFacebookSignInEvent;
+import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickGoogleSignInEvent;
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickHospitalTextEvent;
 import kosbrother.com.doctorguide.model.ClickAddCommentModel;
 import kosbrother.com.doctorguide.model.ClickAddDoctorModel;
@@ -363,6 +365,16 @@ public class DivisionActivity extends SignInActivity implements
     @Override
     protected void afterCreateUserSuccess() {
         clickAddCommentPresenter.afterCreateUserSuccess();
+    }
+
+    @Override
+    protected void sendGoogleSignInEvent() {
+        GAManager.sendEvent(new DivisionClickGoogleSignInEvent());
+    }
+
+    @Override
+    protected void sendFacebookSignInEvent() {
+        GAManager.sendEvent(new DivisionClickFacebookSignInEvent());
     }
 
     @Override

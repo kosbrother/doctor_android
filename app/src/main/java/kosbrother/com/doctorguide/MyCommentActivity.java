@@ -13,7 +13,10 @@ import kosbrother.com.doctorguide.Util.SignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.CommentAdapter;
 import kosbrother.com.doctorguide.entity.Comment;
+import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.category.GACategory;
+import kosbrother.com.doctorguide.google_analytics.event.mycomment.MyCommentClickFacebookSignInEvent;
+import kosbrother.com.doctorguide.google_analytics.event.mycomment.MyCommentClickGoogleSignInEvent;
 import kosbrother.com.doctorguide.model.MyCommentModel;
 import kosbrother.com.doctorguide.presenter.MyCommentPresenter;
 import kosbrother.com.doctorguide.view.MyCommentView;
@@ -70,6 +73,16 @@ public class MyCommentActivity extends SignInActivity implements
     @Override
     protected void afterCreateUserSuccess() {
         presenter.afterCreateUserSuccess();
+    }
+
+    @Override
+    protected void sendGoogleSignInEvent() {
+        GAManager.sendEvent(new MyCommentClickGoogleSignInEvent());
+    }
+
+    @Override
+    protected void sendFacebookSignInEvent() {
+        GAManager.sendEvent(new MyCommentClickFacebookSignInEvent());
     }
 
 }

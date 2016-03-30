@@ -54,6 +54,7 @@ public abstract class SignInActivity extends BaseActivity implements
     private FacebookCallback<LoginResult> fbCallback = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {
+            sendFacebookSignInEvent();
             dialog.dismiss();
             GraphRequest request = getGraphRequest(loginResult);
             Bundle parameters = new Bundle();
@@ -176,6 +177,7 @@ public abstract class SignInActivity extends BaseActivity implements
         signInBtn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendGoogleSignInEvent();
                 dialog.dismiss();
                 signIn();
             }
@@ -250,5 +252,9 @@ public abstract class SignInActivity extends BaseActivity implements
     }
 
     protected abstract void afterCreateUserSuccess();
+
+    protected abstract void sendGoogleSignInEvent();
+
+    protected abstract void sendFacebookSignInEvent();
 
 }

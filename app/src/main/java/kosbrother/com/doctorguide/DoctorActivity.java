@@ -35,6 +35,8 @@ import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickAddCommentEvent;
 import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickCollectEvent;
 import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickFABEvent;
+import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickFacebookSignInEvent;
+import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickGoogleSignInEvent;
 import kosbrother.com.doctorguide.model.ClickAddCommentModel;
 import kosbrother.com.doctorguide.model.ClickProblemReportModel;
 import kosbrother.com.doctorguide.model.DoctorModel;
@@ -182,6 +184,16 @@ public class DoctorActivity extends SignInActivity implements
     @Override
     protected void afterCreateUserSuccess() {
         clickAddCommentPresenter.afterCreateUserSuccess();
+    }
+
+    @Override
+    protected void sendGoogleSignInEvent() {
+        GAManager.sendEvent(new DoctorClickGoogleSignInEvent());
+    }
+
+    @Override
+    protected void sendFacebookSignInEvent() {
+        GAManager.sendEvent(new DoctorClickFacebookSignInEvent());
     }
 
     @Override

@@ -42,6 +42,8 @@ import kosbrother.com.doctorguide.fragments.MainAreaFragment;
 import kosbrother.com.doctorguide.fragments.MainDivisionFragment;
 import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.event.main.MainClickAccountEvent;
+import kosbrother.com.doctorguide.google_analytics.event.main.MainClickFacebookSignInEvent;
+import kosbrother.com.doctorguide.google_analytics.event.main.MainClickGoogleSignInEvent;
 import kosbrother.com.doctorguide.google_analytics.event.main.MainClickSearchIconEvent;
 import kosbrother.com.doctorguide.google_analytics.event.main.MainSubmitSearchTextEvent;
 import kosbrother.com.doctorguide.model.MainModel;
@@ -107,6 +109,16 @@ public class MainActivity extends SignInActivity implements
     @Override
     protected void afterCreateUserSuccess() {
         presenter.afterCreateUserSuccess();
+    }
+
+    @Override
+    protected void sendGoogleSignInEvent() {
+        GAManager.sendEvent(new MainClickGoogleSignInEvent());
+    }
+
+    @Override
+    protected void sendFacebookSignInEvent() {
+        GAManager.sendEvent(new MainClickFacebookSignInEvent());
     }
 
     @Override

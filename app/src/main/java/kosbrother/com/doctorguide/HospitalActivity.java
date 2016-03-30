@@ -44,6 +44,8 @@ import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickAddCommentEvent;
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickCollectEvent;
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickFABEvent;
+import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickFacebookSignInEvent;
+import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickGoogleSignInEvent;
 import kosbrother.com.doctorguide.model.ClickAddCommentModel;
 import kosbrother.com.doctorguide.model.ClickProblemReportModel;
 import kosbrother.com.doctorguide.model.HospitalModel;
@@ -275,6 +277,16 @@ public class HospitalActivity extends SignInActivity implements
     @Override
     protected void afterCreateUserSuccess() {
         clickAddCommentPresenter.afterCreateUserSuccess();
+    }
+
+    @Override
+    protected void sendGoogleSignInEvent() {
+        GAManager.sendEvent(new HospitalClickGoogleSignInEvent());
+    }
+
+    @Override
+    protected void sendFacebookSignInEvent() {
+        GAManager.sendEvent(new HospitalClickFacebookSignInEvent());
     }
 
     @Override

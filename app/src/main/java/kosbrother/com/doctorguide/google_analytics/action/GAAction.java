@@ -26,6 +26,9 @@ public class GAAction {
     public static final String CLICK_COLLECT = "CLICK_COLLECT";
     public static final String CLICK_FAB = "CLICK_FAB";
 
+    public static final String CLICK_GOOGLE_SIGN_IN = "CLICK_GOOGLE_SIGN_IN";
+    public static final String CLICK_FACEBOOK_SIGN_IN = "CLICK_FACEBOOK_SIGN_IN";
+
     public static final String SUBMIT_SEARCH_TEXT = "SUBMIT_SEARCH_TEXT";
     public static final String SUBMIT_COMMENT = "SUBMIT_COMMENT";
     public static final String SUBMIT_ADD_DOCTOR = "SUBMIT_ADD_DOCTOR";
