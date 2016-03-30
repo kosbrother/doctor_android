@@ -46,7 +46,7 @@ public class MyCommentPresenterTest {
 
         verify(view).setContentView();
         verify(view).setActionBar();
-        verify(view).showSingInDialog();
+        verify(view).showMyCommentSingInDialog();
     }
 
     @Test
@@ -71,43 +71,10 @@ public class MyCommentPresenterTest {
     }
 
     @Test
-    public void testOnSignInButtonClick_networkConnected() throws Exception {
-        when(view.isNetworkConnected()).thenReturn(true);
-
-        presenter.onSignInButtonClick();
-
-        verify(view).signIn();
-    }
-
-    @Test
-    public void testOnSignInButtonClick_networkNotConnected() throws Exception {
-        when(view.isNetworkConnected()).thenReturn(false);
-
-        presenter.onSignInButtonClick();
-
-        verify(view).showRequireNetworkDialog();
-    }
-
-    @Test
-    public void testOnSignInSuccess() throws Exception {
-        presenter.onSignInSuccess();
+    public void testAfterCreateUserSuccess() {
+        presenter.afterCreateUserSuccess();
 
         verify(view).showProgressDialog();
-        verify(model).requestCreateUser(presenter);
-    }
-
-    @Test
-    public void testOnCreateUserSuccess() throws Exception {
-        presenter.onCreateUserSuccess();
-
         verify(model).requestGetMyComments(presenter);
-    }
-
-    @Test
-    public void testOnCreateUserFail() throws Exception {
-        presenter.onCreateUserFail();
-
-        verify(view).hideProgressDialog();
-        verify(view).showCreateUserFailToast();
     }
 }

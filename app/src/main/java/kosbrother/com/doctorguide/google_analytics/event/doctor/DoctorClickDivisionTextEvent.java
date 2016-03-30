@@ -23,7 +23,7 @@ public class DoctorClickDivisionTextEvent implements GAEvent {
 
     @Override
     public String getLabel() {
-        return null;
+        return label;
     }
 
     @Override

@@ -1,41 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
+    android:background="@mipmap/header_v1"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:background="@mipmap/header_v1"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:theme="@style/ThemeOverlay.AppCompat.Light">
 
     <ImageView
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:src="@mipmap/head"
         android:layout_marginLeft="24dp"
-        android:layout_marginTop="32dp"/>
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:src="@mipmap/head" />
 
     <TextView
         android:id="@+id/log_in_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="chunyuko@gmail.com"
         android:layout_alignParentBottom="true"
-        android:textColor="@color/textColorPrimary"
-        android:layout_marginLeft="24dp"
         android:layout_marginBottom="14dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
+        android:textColor="@color/textColorPrimary"
         android:textSize="18sp"
-        android:visibility="gone"
         android:textStyle="bold"
-        />
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/google_sign_in_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:layout_alignParentRight="true"
+        android:visibility="gone"
+        tools:text="chunyuko@gmail.com" />
+
+    <Button
+        android:id="@+id/sign_in_button"
+        android:background="@color/mdtp_white"
+        android:layout_width="76dp"
+        android:layout_height="37dp"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="14dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        />
+        android:text="登入"
+        android:textSize="14sp"
+        android:visibility="visible" />
 
 </RelativeLayout>

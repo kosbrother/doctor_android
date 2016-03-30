@@ -1,7 +1,6 @@
 package kosbrother.com.doctorguide.model;
 
-import kosbrother.com.doctorguide.google_signin.GoogleSignInManager;
-import kosbrother.com.doctorguide.task.CreateUserTask;
+import kosbrother.com.doctorguide.google_signin.SignInManager;
 import kosbrother.com.doctorguide.viewmodel.AddCommentViewModel;
 import kosbrother.com.doctorguide.viewmodel.DivisionActivityViewModel;
 import kosbrother.com.doctorguide.viewmodel.DoctorActivityViewModel;
@@ -20,28 +19,24 @@ public class ClickAddCommentModel {
         hospitalId = viewModel.getHospitalId();
         divisionId = viewModel.getDivisionId();
         doctorId = viewModel.getDivisionId();
-        user = GoogleSignInManager.getInstance().getEmail();
+        user = SignInManager.getInstance().getEmail();
     }
 
     public ClickAddCommentModel(DoctorActivityViewModel viewModel) {
         hospitalName = viewModel.getHospitalName();
         hospitalId = viewModel.getHospitalId();
         doctorId = viewModel.getDoctorId();
-        user = GoogleSignInManager.getInstance().getEmail();
+        user = SignInManager.getInstance().getEmail();
     }
 
     public ClickAddCommentModel(HospitalActivityViewModel viewModel) {
         hospitalName = viewModel.getHospitalName();
         hospitalId = viewModel.getHospitalId();
-        user = GoogleSignInManager.getInstance().getEmail();
+        user = SignInManager.getInstance().getEmail();
     }
 
     public boolean isSignIn() {
-        return GoogleSignInManager.getInstance().isSignIn();
-    }
-
-    public void requestCreateUser(CreateUserTask.CreateUserListener listener) {
-        new CreateUserTask(listener).execute(GoogleSignInManager.getInstance().getUser());
+        return SignInManager.getInstance().isSignIn();
     }
 
     public AddCommentViewModel getAddCommentViewModel() {

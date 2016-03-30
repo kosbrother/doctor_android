@@ -9,19 +9,10 @@ public interface MyCommentView extends ProgressDialogView {
 
     void setActionBar();
 
-    void showSingInDialog();
+    void showMyCommentSingInDialog();
 
     void showNoCommentLayout();
 
     void setRecyclerView(ArrayList<Comment> comments);
 
-    boolean isNetworkConnected();
-
-    void showRequireNetworkDialog();
-
-    void showCreateUserFailToast();
-
-    void signIn();
-
-    void dismissSignInDialog();
 }

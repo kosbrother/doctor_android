@@ -10,17 +10,11 @@ import kosbrother.com.doctorguide.task.GetDivisionsByHospitalAndCategoryTask.Get
 
 public class HospitalDoctorModel {
     private final int categoryId;
-    private final int sdkInt;
     private Hospital hospital;
     private ArrayList<Division> divisions;
 
-    public HospitalDoctorModel(int categoryId, int sdkInt) {
+    public HospitalDoctorModel(int categoryId) {
         this.categoryId = categoryId;
-        this.sdkInt = sdkInt;
-    }
-
-    public int getSdkInt() {
-        return sdkInt;
     }
 
     public void setHospital(Hospital hospital) {

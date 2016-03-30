@@ -8,6 +8,7 @@ import kosbrother.com.doctorguide.model.MainModel;
 import kosbrother.com.doctorguide.view.MainView;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -21,7 +22,7 @@ public class MainPresenterTest {
     public void setUp() throws Exception {
         view = mock(MainView.class);
         model = mock(MainModel.class);
-        presenter = new MainPresenter(view, model);
+        presenter = spy(new MainPresenter(view, model));
     }
 
     @Test
@@ -42,7 +43,7 @@ public class MainPresenterTest {
 
         presenter.onStart();
 
-        verify(view).silentSignIn();
+        verify(presenter).handleSignInInfo();
         verify(view).connectAppIndexClient();
         verify(view).startAppIndexApi(MainModel.WEB_URL, MainModel.APP_URI);
     }
@@ -70,7 +71,8 @@ public class MainPresenterTest {
 
         presenter.onSignInButtonClick();
 
-        verify(view).signIn();
+        verify(view).closeDrawer();
+        verify(view).showSignInDialog();
     }
 
     @Test
@@ -80,40 +82,6 @@ public class MainPresenterTest {
         presenter.onSignInButtonClick();
 
         verify(view).showRequireNetworkDialog();
-    }
-
-    @Test
-    public void testOnSignInSuccess() throws Exception {
-        presenter.onSignInSuccess();
-
-        verify(view).showProgressDialog();
-        verify(model).requestCreateUser(presenter);
-    }
-
-    @Test
-    public void testOnCreateUserSuccess() throws Exception {
-        presenter.onCreateUserSuccess();
-
-        verify(view).hideProgressDialog();
-        verify(view).setUserName(model.getUserName());
-        verify(view).showUserName();
-        verify(view).hideSignInButton();
-    }
-
-    @Test
-    public void testOnCreateUserFail() throws Exception {
-        presenter.onCreateUserFail();
-
-        verify(view).hideProgressDialog();
-        verify(view).showCreateUserFailToast();
-    }
-
-    @Test
-    public void testOnSignInFail() throws Exception {
-        presenter.onSignInFail();
-
-        verify(view).hideUserName();
-        verify(view).showSignInButton();
     }
 
     @Test
@@ -163,7 +131,7 @@ public class MainPresenterTest {
 
         verify(view).closeDrawer();
         verify(view).sendMainClickAccountEvent(GALabel.MY_COMMENT);
-        verify(view).startMyCommentActivity(model.getUserEmail());
+        verify(view).startMyCommentActivity();
     }
 
     @Test
@@ -193,9 +161,37 @@ public class MainPresenterTest {
     }
 
     @Test
-    public void testOnConnectionFailed() throws Exception {
-        presenter.onConnectionFailed();
+    public void testAfterCreateUserSuccess() {
+        presenter.afterCreateUserSuccess();
 
-        verify(view).showConnectionFailedToast();
+        verify(presenter).showUserInfo();
+    }
+
+    @Test
+    public void handleSignInInfo_signIn() {
+        when(model.isSignIn()).thenReturn(true);
+
+        presenter.handleSignInInfo();
+
+        verify(presenter).showUserInfo();
+    }
+
+    @Test
+    public void handleSignInInfo_notSignIn() {
+        when(model.isSignIn()).thenReturn(false);
+
+        presenter.handleSignInInfo();
+
+        verify(view).hideUserName();
+        verify(view).showSignInButton();
+    }
+
+    @Test
+    public void testShowUserInfo() {
+        presenter.showUserInfo();
+
+        verify(view).setUserName(model.getUserName());
+        verify(view).showUserName();
+        verify(view).hideSignInButton();
     }
 }

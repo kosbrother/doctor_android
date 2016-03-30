@@ -3,7 +3,6 @@ package kosbrother.com.doctorguide;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -50,7 +49,7 @@ public class HospitalDoctorActivity extends GetLocationActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getExtras();
-        HospitalDoctorModel model = new HospitalDoctorModel(categoryId, Build.VERSION.SDK_INT);
+        HospitalDoctorModel model = new HospitalDoctorModel(categoryId);
         presenter = new HospitalDoctorPresenter(this, model);
         presenter.onCreate();
     }

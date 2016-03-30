@@ -42,46 +42,9 @@ public class ClickAddCommentPresenterTest {
     }
 
     @Test
-    public void testOnSignInButtonClick_networkConnected() throws Exception {
-        when(view.isNetworkConnected()).thenReturn(true);
+    public void testAfterCreateUserSuccess() throws Exception {
+        presenter.afterCreateUserSuccess();
 
-        presenter.onSignInButtonClick();
-
-        verify(view).dismissSignInDialog();
-        verify(view).signIn();
-    }
-
-    @Test
-    public void testOnSignInButtonClick_networkNotConnected() throws Exception {
-        when(view.isNetworkConnected()).thenReturn(false);
-
-        presenter.onSignInButtonClick();
-
-        verify(view).dismissSignInDialog();
-        verify(view).showRequireNetworkDialog();
-    }
-
-    @Test
-    public void testOnSignInActivityResultSuccess() throws Exception {
-        presenter.onSignInActivityResultSuccess();
-
-        verify(view).showProgressDialog();
-        verify(model).requestCreateUser(presenter);
-    }
-
-    @Test
-    public void testOnCreateUserSuccess() throws Exception {
-        presenter.onCreateUserSuccess();
-
-        verify(view).hideProgressDialog();
         verify(view).startAddCommentActivity(model.getAddCommentViewModel());
-    }
-
-    @Test
-    public void testOnCreateUserFail() throws Exception {
-        presenter.onCreateUserFail();
-
-        verify(view).hideProgressDialog();
-        verify(view).showCreateUserFailToast();
     }
 }

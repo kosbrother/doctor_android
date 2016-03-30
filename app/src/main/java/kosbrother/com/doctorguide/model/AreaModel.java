@@ -75,10 +75,6 @@ public class AreaModel {
         this.hospitals = hospitals;
     }
 
-    public ArrayList<Hospital> getHospitals() {
-        return hospitals;
-    }
-
     public void addHospitals(ArrayList<Hospital> hospitals) {
         this.hospitals.addAll(hospitals);
     }

@@ -2,10 +2,9 @@ package kosbrother.com.doctorguide.presenter;
 
 import kosbrother.com.doctorguide.google_analytics.label.GALabel;
 import kosbrother.com.doctorguide.model.MainModel;
-import kosbrother.com.doctorguide.task.CreateUserTask;
 import kosbrother.com.doctorguide.view.MainView;
 
-public class MainPresenter implements CreateUserTask.CreateUserListener {
+public class MainPresenter {
     private MainView view;
     private MainModel model;
 
@@ -27,7 +26,7 @@ public class MainPresenter implements CreateUserTask.CreateUserListener {
         if (!view.isNetworkConnected()) {
             view.showRequireNetworkDialog();
         } else {
-            view.silentSignIn();
+            handleSignInInfo();
             view.connectAppIndexClient();
             view.startAppIndexApi(MainModel.WEB_URL, MainModel.APP_URI);
         }
@@ -43,32 +42,9 @@ public class MainPresenter implements CreateUserTask.CreateUserListener {
         if (!view.isNetworkConnected()) {
             view.showRequireNetworkDialog();
         } else {
-            view.signIn();
+            view.closeDrawer();
+            view.showSignInDialog();
         }
-    }
-
-    public void onSignInSuccess() {
-        view.showProgressDialog();
-        model.requestCreateUser(this);
-    }
-
-    @Override
-    public void onCreateUserSuccess() {
-        view.hideProgressDialog();
-        view.setUserName(model.getUserName());
-        view.showUserName();
-        view.hideSignInButton();
-    }
-
-    @Override
-    public void onCreateUserFail() {
-        view.hideProgressDialog();
-        view.showCreateUserFailToast();
-    }
-
-    public void onSignInFail() {
-        view.hideUserName();
-        view.showSignInButton();
     }
 
     public void onBackPressedWhenDrawerOpen() {
@@ -98,7 +74,7 @@ public class MainPresenter implements CreateUserTask.CreateUserListener {
     public void onNavigationMyCommentClick() {
         view.closeDrawer();
         view.sendMainClickAccountEvent(GALabel.MY_COMMENT);
-        view.startMyCommentActivity(model.getUserEmail());
+        view.startMyCommentActivity();
     }
 
     public void onNavigationSettingClick() {
@@ -118,7 +94,22 @@ public class MainPresenter implements CreateUserTask.CreateUserListener {
         view.sendMainClickAccountEvent(GALabel.PLAY_STORE);
     }
 
-    public void onConnectionFailed() {
-        view.showConnectionFailedToast();
+    public void afterCreateUserSuccess() {
+        showUserInfo();
+    }
+
+    protected void handleSignInInfo() {
+        if (model.isSignIn()) {
+            showUserInfo();
+        } else {
+            view.hideUserName();
+            view.showSignInButton();
+        }
+    }
+
+    protected void showUserInfo() {
+        view.setUserName(model.getUserName());
+        view.showUserName();
+        view.hideSignInButton();
     }
 }
