@@ -4,13 +4,7 @@ import kosbrother.com.doctorguide.google_analytics.action.GAAction;
 import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 import kosbrother.com.doctorguide.google_analytics.event.GAEvent;
 
-public class DoctorClickDivisionTextEvent implements GAEvent {
-    private String label;
-
-    public DoctorClickDivisionTextEvent(String label) {
-        this.label = label;
-    }
-
+public class DoctorClickGoogleSignInEvent implements GAEvent {
     @Override
     public String getCategory() {
         return GACategory.DOCTOR;
@@ -18,12 +12,12 @@ public class DoctorClickDivisionTextEvent implements GAEvent {
 
     @Override
     public String getAction() {
-        return GAAction.CLICK_DIVISION_TEXT;
+        return GAAction.CLICK_GOOGLE_SIGN_IN;
     }
 
     @Override
     public String getLabel() {
-        return label;
+        return null;
     }
 
     @Override

@@ -35,9 +35,10 @@ public class DoctorGuideApi {
         return comments;
     }
 
-    public static int creatUser(User user) {
+    public static int createUser(User user) {
         OkHttpClient client = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder()
+                .add("app_id", user.id)
                 .add("name", user.name)
                 .add("email", user.email);
         if (user.pic_url != null)

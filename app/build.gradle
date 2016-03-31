@@ -75,5 +75,8 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    compile 'com.facebook.android:facebook-android-sdk:4.10.0'
+    compile 'com.facebook.android:audience-network-sdk:4.10.0'
+    // Solve facebook sdk contain com.google.android.gms:play-services-ads:8.1.0
+    compile 'com.google.android.gms:play-services-ads:8.4.0'
 }

@@ -2,7 +2,7 @@ package kosbrother.com.doctorguide.view;
 
 import android.net.Uri;
 
-public interface MainView extends ProgressDialogView{
+public interface MainView extends ProgressDialogView {
     void setContentView();
 
     void setToolBarAndDrawer();
@@ -33,13 +33,7 @@ public interface MainView extends ProgressDialogView{
 
     void showRequireNetworkDialog();
 
-    void showCreateUserFailToast();
-
-    void showConnectionFailedToast();
-
-    void silentSignIn();
-
-    void signIn();
+    void showSignInDialog();
 
     void sendMainClickAccountEvent(String label);
 
@@ -49,7 +43,7 @@ public interface MainView extends ProgressDialogView{
 
     void startMyCollectionActivity();
 
-    void startMyCommentActivity(String userName);
+    void startMyCommentActivity();
 
     void startSettingActivity();
 

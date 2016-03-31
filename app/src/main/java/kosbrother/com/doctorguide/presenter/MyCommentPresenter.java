@@ -4,12 +4,10 @@ import java.util.ArrayList;
 
 import kosbrother.com.doctorguide.entity.Comment;
 import kosbrother.com.doctorguide.model.MyCommentModel;
-import kosbrother.com.doctorguide.task.CreateUserTask;
 import kosbrother.com.doctorguide.task.GetMyCommentsTask;
 import kosbrother.com.doctorguide.view.MyCommentView;
 
-public class MyCommentPresenter implements GetMyCommentsTask.GetMyCommentsListener,
-        CreateUserTask.CreateUserListener {
+public class MyCommentPresenter implements GetMyCommentsTask.GetMyCommentsListener {
     private final MyCommentView view;
     private final MyCommentModel model;
 
@@ -26,7 +24,7 @@ public class MyCommentPresenter implements GetMyCommentsTask.GetMyCommentsListen
             view.showProgressDialog();
             model.requestGetMyComments(this);
         } else {
-            view.showSingInDialog();
+            view.showMyCommentSingInDialog();
         }
     }
 
@@ -40,28 +38,8 @@ public class MyCommentPresenter implements GetMyCommentsTask.GetMyCommentsListen
         view.hideProgressDialog();
     }
 
-    public void onSignInButtonClick() {
-        view.dismissSignInDialog();
-        if (view.isNetworkConnected()) {
-            view.signIn();
-        } else {
-            view.showRequireNetworkDialog();
-        }
-    }
-
-    public void onSignInSuccess() {
+    public void afterCreateUserSuccess() {
         view.showProgressDialog();
-        model.requestCreateUser(this);
-    }
-
-    @Override
-    public void onCreateUserSuccess() {
         model.requestGetMyComments(this);
-    }
-
-    @Override
-    public void onCreateUserFail() {
-        view.hideProgressDialog();
-        view.showCreateUserFailToast();
     }
 }

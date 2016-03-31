@@ -1,6 +1,5 @@
 package kosbrother.com.doctorguide;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,15 +18,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
@@ -35,7 +31,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import kosbrother.com.doctorguide.Util.ExtraKey;
-import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
+import kosbrother.com.doctorguide.Util.SignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.entity.Category;
 import kosbrother.com.doctorguide.entity.Division;
@@ -48,6 +44,8 @@ import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickAddCommentEvent;
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickCollectEvent;
 import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickFABEvent;
+import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickFacebookSignInEvent;
+import kosbrother.com.doctorguide.google_analytics.event.hospital.HospitalClickGoogleSignInEvent;
 import kosbrother.com.doctorguide.model.ClickAddCommentModel;
 import kosbrother.com.doctorguide.model.ClickProblemReportModel;
 import kosbrother.com.doctorguide.model.HospitalModel;
@@ -68,7 +66,7 @@ import kosbrother.com.doctorguide.viewmodel.HospitalActivityViewModel;
 import kosbrother.com.doctorguide.viewmodel.HospitalScoreViewModel;
 import kosbrother.com.doctorguide.viewmodel.ProblemReportViewModel;
 
-public class HospitalActivity extends GoogleSignInActivity implements
+public class HospitalActivity extends SignInActivity implements
         DivisionListFragment.OnListFragmentInteractionListener,
         HospitalView,
         ClickAddCommentView,
@@ -84,7 +82,6 @@ public class HospitalActivity extends GoogleSignInActivity implements
     private ClickSharePresenter clickSharePresenter;
 
     private ProgressDialog progressDialog;
-    private Dialog dialog;
     private HospitalFabPresenter hospitalFabPresenter;
 
     @Override
@@ -278,6 +275,21 @@ public class HospitalActivity extends GoogleSignInActivity implements
     }
 
     @Override
+    protected void afterCreateUserSuccess() {
+        clickAddCommentPresenter.afterCreateUserSuccess();
+    }
+
+    @Override
+    protected void sendGoogleSignInEvent() {
+        GAManager.sendEvent(new HospitalClickGoogleSignInEvent());
+    }
+
+    @Override
+    protected void sendFacebookSignInEvent() {
+        GAManager.sendEvent(new HospitalClickFacebookSignInEvent());
+    }
+
+    @Override
     public void startShareActivity() {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -289,33 +301,6 @@ public class HospitalActivity extends GoogleSignInActivity implements
     public void onAddCommentClick() {
         hospitalPresenter.onAddCommentClick();
         clickAddCommentPresenter.startAddComment();
-    }
-
-    @Override
-    public void showSignInDialog() {
-        dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_login);
-
-        SignInButton signInBtn = (SignInButton) dialog.findViewById(R.id.sign_in_button);
-        signInBtn.setSize(SignInButton.SIZE_WIDE);
-        signInBtn.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickAddCommentPresenter.onSignInButtonClick();
-            }
-        });
-        dialog.show();
-    }
-
-    @Override
-    public void dismissSignInDialog() {
-        dialog.dismiss();
-    }
-
-    @Override
-    public void showCreateUserFailToast() {
-        Toast.makeText(this, "登入失敗", Toast.LENGTH_SHORT).show();
     }
 
     @Override

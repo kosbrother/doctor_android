@@ -13,7 +13,6 @@ public class GALabel {
 
     //Floating Action Button
     public static final String FAB_MENU = "FAB_MENU";
-    public static final String PROBLEM_REPORT = "PROBLEM_REPORT";
     public static final String SHARE = "SHARE";
     public static final String COMMENT = "COMMENT";
     public static final String ADD_DOCTOR = "ADD_DOCTOR";

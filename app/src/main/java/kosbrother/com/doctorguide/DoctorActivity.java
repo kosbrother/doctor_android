@@ -1,6 +1,5 @@
 package kosbrother.com.doctorguide;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,21 +16,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.SignInButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
 import kosbrother.com.doctorguide.Util.ExtraKey;
-import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
+import kosbrother.com.doctorguide.Util.SignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.entity.Doctor;
 import kosbrother.com.doctorguide.fragments.CommentFragment;
@@ -42,6 +35,8 @@ import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickAddCommentEvent;
 import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickCollectEvent;
 import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickFABEvent;
+import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickFacebookSignInEvent;
+import kosbrother.com.doctorguide.google_analytics.event.doctor.DoctorClickGoogleSignInEvent;
 import kosbrother.com.doctorguide.model.ClickAddCommentModel;
 import kosbrother.com.doctorguide.model.ClickProblemReportModel;
 import kosbrother.com.doctorguide.model.DoctorModel;
@@ -60,7 +55,7 @@ import kosbrother.com.doctorguide.viewmodel.DoctorActivityViewModel;
 import kosbrother.com.doctorguide.viewmodel.DoctorScoreViewModel;
 import kosbrother.com.doctorguide.viewmodel.ProblemReportViewModel;
 
-public class DoctorActivity extends GoogleSignInActivity implements
+public class DoctorActivity extends SignInActivity implements
         DoctorScoreFragment.GetDoctor,
         DoctorView,
         DoctorFabView,
@@ -75,7 +70,6 @@ public class DoctorActivity extends GoogleSignInActivity implements
     private ClickProblemReportPresenter clickProblemReportPresenter;
 
     private ProgressDialog progressDialog;
-    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,42 +182,24 @@ public class DoctorActivity extends GoogleSignInActivity implements
     }
 
     @Override
+    protected void afterCreateUserSuccess() {
+        clickAddCommentPresenter.afterCreateUserSuccess();
+    }
+
+    @Override
+    protected void sendGoogleSignInEvent() {
+        GAManager.sendEvent(new DoctorClickGoogleSignInEvent());
+    }
+
+    @Override
+    protected void sendFacebookSignInEvent() {
+        GAManager.sendEvent(new DoctorClickFacebookSignInEvent());
+    }
+
+    @Override
     public Doctor getDodctor() {
         // TODO: 2016/3/7 refactoring
         return doctorPresenter.getDoctor();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
-                clickAddCommentPresenter.onSignInActivityResultSuccess();
-            }
-        }
-    }
-
-    @Override
-    public void showSignInDialog() {
-        dialog = new Dialog(DoctorActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_login);
-
-        SignInButton signInBtn = (SignInButton) dialog.findViewById(R.id.sign_in_button);
-        signInBtn.setSize(SignInButton.SIZE_WIDE);
-        signInBtn.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickAddCommentPresenter.onSignInButtonClick();
-            }
-        });
-        dialog.show();
-    }
-
-    @Override
-    public void showCreateUserFailToast() {
-        Toast.makeText(this, "登入失敗", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -235,11 +211,6 @@ public class DoctorActivity extends GoogleSignInActivity implements
         intent.putExtra(ExtraKey.HOSPITAL_NAME, addCommentViewModel.getHospitalName());
         intent.putExtra(ExtraKey.USER, addCommentViewModel.getUser());
         startActivity(intent);
-    }
-
-    @Override
-    public void dismissSignInDialog() {
-        dialog.dismiss();
     }
 
     @Override

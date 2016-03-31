@@ -1,7 +1,6 @@
 package kosbrother.com.doctorguide;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,26 +18,20 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.SignInButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
 import kosbrother.com.doctorguide.Util.ExtraKey;
-import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
+import kosbrother.com.doctorguide.Util.SignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.adapters.MyDoctorRecyclerViewAdapter;
 import kosbrother.com.doctorguide.entity.Division;
@@ -53,6 +46,8 @@ import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickA
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickAddDoctorEvent;
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickDivisionSpinnerEvent;
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickFABEvent;
+import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickFacebookSignInEvent;
+import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickGoogleSignInEvent;
 import kosbrother.com.doctorguide.google_analytics.event.division.DivisionClickHospitalTextEvent;
 import kosbrother.com.doctorguide.model.ClickAddCommentModel;
 import kosbrother.com.doctorguide.model.ClickAddDoctorModel;
@@ -77,7 +72,7 @@ import kosbrother.com.doctorguide.viewmodel.DivisionActivityViewModel;
 import kosbrother.com.doctorguide.viewmodel.DivisionScoreViewModel;
 import kosbrother.com.doctorguide.viewmodel.ProblemReportViewModel;
 
-public class DivisionActivity extends GoogleSignInActivity implements
+public class DivisionActivity extends SignInActivity implements
         DoctorFragment.OnListFragmentInteractionListener,
         DivisionScoreFragment.GetDivision,
         DivisionView,
@@ -91,7 +86,6 @@ public class DivisionActivity extends GoogleSignInActivity implements
 
     private ViewPagerAdapter adapter;
     private ProgressDialog progressDialog;
-    private Dialog dialog;
     private ClickAddDoctorPresenter clickAddDoctorPresenter;
     private ClickSharePresenter clickSharePresenter;
     private ClickProblemReportPresenter clickProblemReportPresenter;
@@ -209,26 +203,6 @@ public class DivisionActivity extends GoogleSignInActivity implements
         TextView tv = (TextView) snackBarView.findViewById(android.support.design.R.id.snackbar_text);
         tv.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary));
         snackbar.show();
-    }
-
-    public void showSignInDialog() {
-        dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_login);
-
-        SignInButton signInBtn = (SignInButton) dialog.findViewById(R.id.sign_in_button);
-        signInBtn.setSize(SignInButton.SIZE_WIDE);
-        signInBtn.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickAddCommentPresenter.onSignInButtonClick();
-            }
-        });
-        dialog.show();
-    }
-
-    public void showCreateUserFailToast() {
-        Toast.makeText(this, "登入失敗", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -378,10 +352,6 @@ public class DivisionActivity extends GoogleSignInActivity implements
         startActivity(intent);
     }
 
-    public void dismissSignInDialog() {
-        dialog.dismiss();
-    }
-
     @Override
     public void showProgressDialog() {
         progressDialog = Util.showProgressDialog(this);
@@ -390,6 +360,21 @@ public class DivisionActivity extends GoogleSignInActivity implements
     @Override
     public void hideProgressDialog() {
         progressDialog.dismiss();
+    }
+
+    @Override
+    protected void afterCreateUserSuccess() {
+        clickAddCommentPresenter.afterCreateUserSuccess();
+    }
+
+    @Override
+    protected void sendGoogleSignInEvent() {
+        GAManager.sendEvent(new DivisionClickGoogleSignInEvent());
+    }
+
+    @Override
+    protected void sendFacebookSignInEvent() {
+        GAManager.sendEvent(new DivisionClickFacebookSignInEvent());
     }
 
     @Override
@@ -403,17 +388,6 @@ public class DivisionActivity extends GoogleSignInActivity implements
 
     public void onHospitalClick(View v) {
         divisionPresenter.onHospitalTextViewClick();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
-                clickAddCommentPresenter.onSignInActivityResultSuccess();
-            }
-        }
     }
 
     @Override

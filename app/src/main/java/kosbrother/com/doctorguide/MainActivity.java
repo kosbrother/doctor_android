@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -28,40 +27,34 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import kosbrother.com.doctorguide.Util.ExtraKey;
-import kosbrother.com.doctorguide.Util.GoogleSignInActivity;
+import kosbrother.com.doctorguide.Util.SignInActivity;
 import kosbrother.com.doctorguide.Util.Util;
 import kosbrother.com.doctorguide.fragments.MainAreaFragment;
 import kosbrother.com.doctorguide.fragments.MainDivisionFragment;
 import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.event.main.MainClickAccountEvent;
+import kosbrother.com.doctorguide.google_analytics.event.main.MainClickFacebookSignInEvent;
+import kosbrother.com.doctorguide.google_analytics.event.main.MainClickGoogleSignInEvent;
 import kosbrother.com.doctorguide.google_analytics.event.main.MainClickSearchIconEvent;
 import kosbrother.com.doctorguide.google_analytics.event.main.MainSubmitSearchTextEvent;
-import kosbrother.com.doctorguide.google_analytics.label.GALabel;
-import kosbrother.com.doctorguide.google_signin.GoogleSignInManager;
 import kosbrother.com.doctorguide.model.MainModel;
 import kosbrother.com.doctorguide.presenter.MainPresenter;
 import kosbrother.com.doctorguide.view.MainView;
 
-public class MainActivity extends GoogleSignInActivity implements
+public class MainActivity extends SignInActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        GoogleApiClient.OnConnectionFailedListener,
         MainView {
 
-    private SignInButton signInBtn;
+    private View signInBtn;
     private TextView logInEmail;
     private DrawerLayout drawer;
     private ProgressDialog mProgressDialog;
@@ -84,6 +77,20 @@ public class MainActivity extends GoogleSignInActivity implements
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // Logs 'install' and 'app activate' App Events.
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Logs 'app deactivate' App Event.
+        AppEventsLogger.deactivateApp(this);
+    }
+
+    @Override
     protected void onStop() {
         presenter.onStop();
         super.onStop();
@@ -97,6 +104,21 @@ public class MainActivity extends GoogleSignInActivity implements
     @Override
     public void hideProgressDialog() {
         mProgressDialog.dismiss();
+    }
+
+    @Override
+    protected void afterCreateUserSuccess() {
+        presenter.afterCreateUserSuccess();
+    }
+
+    @Override
+    protected void sendGoogleSignInEvent() {
+        GAManager.sendEvent(new MainClickGoogleSignInEvent());
+    }
+
+    @Override
+    protected void sendFacebookSignInEvent() {
+        GAManager.sendEvent(new MainClickFacebookSignInEvent());
     }
 
     @Override
@@ -145,8 +167,7 @@ public class MainActivity extends GoogleSignInActivity implements
         navigationView.addHeaderView(header);
 
         logInEmail = (TextView) header.findViewById(R.id.log_in_email);
-        signInBtn = (SignInButton) header.findViewById(R.id.sign_in_button);
-        signInBtn.setSize(SignInButton.SIZE_WIDE);
+        signInBtn = header.findViewById(R.id.sign_in_button);
         signInBtn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,7 +195,7 @@ public class MainActivity extends GoogleSignInActivity implements
 
     @Override
     public void setUserName(String userName) {
-        logInEmail.setText(GoogleSignInManager.getInstance().getName());
+        logInEmail.setText(userName);
     }
 
     @Override
@@ -219,18 +240,8 @@ public class MainActivity extends GoogleSignInActivity implements
     }
 
     @Override
-    public void showCreateUserFailToast() {
-        Toast.makeText(this, "登入失敗", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showConnectionFailedToast() {
-        Toast.makeText(this, getString(R.string.login_fail), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
     public void sendMainClickAccountEvent(String label) {
-        GAManager.sendEvent(new MainClickAccountEvent(GALabel.SIGN_IN));
+        GAManager.sendEvent(new MainClickAccountEvent(label));
     }
 
     @Override
@@ -249,10 +260,8 @@ public class MainActivity extends GoogleSignInActivity implements
     }
 
     @Override
-    public void startMyCommentActivity(String userName) {
-        Intent intent = new Intent(this, MyCommentActivity.class);
-        intent.putExtra(ExtraKey.USER_EMAIL, userName);
-        startActivity(intent);
+    public void startMyCommentActivity() {
+        startActivity(new Intent(this, MyCommentActivity.class));
     }
 
     @Override
@@ -294,17 +303,6 @@ public class MainActivity extends GoogleSignInActivity implements
         Action viewAction = Action.newAction(Action.TYPE_VIEW, getTitle().toString(),
                 webUrl, appUri);
         AppIndex.AppIndexApi.end(mClient, viewAction);
-    }
-
-    @Override
-    protected void handleSignInResult(GoogleSignInResult result) {
-        super.handleSignInResult(result);
-        if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
-            presenter.onSignInSuccess();
-        } else {
-            presenter.onSignInFail();
-        }
     }
 
     @Override
@@ -368,29 +366,7 @@ public class MainActivity extends GoogleSignInActivity implements
         } else if (item.getItemId() == R.id.play_store) {
             presenter.onNavigationPlayStoreClick();
         }
-
         return true;
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        presenter.onConnectionFailed();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // Logs 'install' and 'app activate' App Events.
-        AppEventsLogger.activateApp(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        // Logs 'app deactivate' App Event.
-        AppEventsLogger.deactivateApp(this);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

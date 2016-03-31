@@ -20,7 +20,7 @@ public class CreateUserTask extends AsyncTask<User, Void, Integer> {
 
     @Override
     protected Integer doInBackground(User... params) {
-        return DoctorGuideApi.creatUser(params[0]);
+        return DoctorGuideApi.createUser(params[0]);
     }
 
     @Override
