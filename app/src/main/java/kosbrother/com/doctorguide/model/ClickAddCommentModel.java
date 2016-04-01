@@ -18,7 +18,6 @@ public class ClickAddCommentModel {
         hospitalName = viewModel.getHospitalName();
         hospitalId = viewModel.getHospitalId();
         divisionId = viewModel.getDivisionId();
-        doctorId = viewModel.getDivisionId();
         user = SignInManager.getInstance().getEmail();
     }
 
