@@ -68,9 +68,9 @@ public interface AddCommentView extends ProgressDialogView{
 
     void enableStep3NextButton();
 
-    void disableStep5FinishButton();
+    void disableStep5NextButton();
 
-    void enableStep5FinishButton();
+    void enableStep5NextButton();
 
     void setStep1CheckedAndClickable();
 

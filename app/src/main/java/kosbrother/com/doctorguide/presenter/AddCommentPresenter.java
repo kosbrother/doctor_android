@@ -44,25 +44,11 @@ public class AddCommentPresenter implements
     }
 
     public void onStep3NextButtonClick(String divisionComment) {
-        view.setStep3CheckedAndClickable();
-        model.setDivisionComment(divisionComment);
-        if (model.isDivisionComment()) {
-            view.showSubmitLayout();
-        } else {
-            view.switchStep3Info(divisionComment);
-            view.showStep4SwitchView();
-        }
+        handleStep3NextClick(divisionComment);
     }
 
     public void onStep3SkipButtonClick() {
-        view.setStep3CheckedAndClickable();
-        model.setDivisionComment("暫無評論");
-        view.switchStep3Info(model.getDivisionComment());
-        if (model.isDivisionComment()) {
-            view.showSubmitLayout();
-        } else {
-            view.showStep4SwitchView();
-        }
+        handleStep3NextClick("暫無評論");
     }
 
     public void onStep4NextButtonClick(AddCommentModel.DoctorScore doctorScore, boolean recommend) {
@@ -74,17 +60,11 @@ public class AddCommentPresenter implements
     }
 
     public void onStep5NextButtonClick(String doctorComment) {
-        view.setStep5CheckedAndClickable();
-        model.setDoctorComment(doctorComment);
-        view.switchStep5Info(doctorComment);
-        view.showSubmitLayout();
+        handleStep5NextClick(doctorComment);
     }
 
     public void onStep5SkipButtonClick() {
-        view.setStep5CheckedAndClickable();
-        model.setDoctorComment("暫無評論");
-        view.switchStep5Info("暫無評論");
-        view.showSubmitLayout();
+        handleStep5NextClick("暫無評論");
     }
 
     public void onSubmitButtonClick() {
@@ -113,18 +93,6 @@ public class AddCommentPresenter implements
     public void onPostCommentResultSuccess() {
         view.hideProgressDialog();
         view.showPostCommentResultSuccessDialog();
-    }
-
-    protected void handleDoctorCommentView() {
-        if (model.isDivisionComment()) {
-            view.hideDoctorCommentView();
-            view.setDivisionSkipButtonText("略過並預覽");
-            view.setDivisionNextButtonText("預覽");
-        } else {
-            view.showDoctorCommentView();
-            view.setDivisionSkipButtonText("略過");
-            view.setDivisionNextButtonText("下一步");
-        }
     }
 
     public void onDateButtonClick() {
@@ -168,7 +136,7 @@ public class AddCommentPresenter implements
         }
     }
 
-    public void afterDivisionCommentTextChanged(String string) {
+    public void afterStep3CommentTextChanged(String string) {
         if (string.isEmpty()) {
             view.disableStep3NextButton();
         } else {
@@ -178,9 +146,39 @@ public class AddCommentPresenter implements
 
     public void afterDoctorCommentTextChanged(String string) {
         if (string.isEmpty()) {
-            view.disableStep5FinishButton();
+            view.disableStep5NextButton();
         } else {
-            view.enableStep5FinishButton();
+            view.enableStep5NextButton();
         }
+    }
+
+    protected void handleDoctorCommentView() {
+        if (model.isDivisionComment()) {
+            view.hideDoctorCommentView();
+            view.setDivisionSkipButtonText("略過並預覽");
+            view.setDivisionNextButtonText("預覽");
+        } else {
+            view.showDoctorCommentView();
+            view.setDivisionSkipButtonText("略過");
+            view.setDivisionNextButtonText("下一步");
+        }
+    }
+
+    protected void handleStep3NextClick(String divisionComment) {
+        model.setDivisionComment(divisionComment);
+        view.setStep3CheckedAndClickable();
+        view.switchStep3Info(divisionComment);
+        if (model.isDivisionComment()) {
+            view.showSubmitLayout();
+        } else {
+            view.showStep4SwitchView();
+        }
+    }
+
+    protected void handleStep5NextClick(String doctorComment) {
+        model.setDoctorComment(doctorComment);
+        view.setStep5CheckedAndClickable();
+        view.switchStep5Info(doctorComment);
+        view.showSubmitLayout();
     }
 }

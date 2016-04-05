@@ -69,7 +69,7 @@ public class AddCommentActivity extends BaseActivity implements
 
         @Override
         public void afterTextChanged(Editable s) {
-            presenter.afterDivisionCommentTextChanged(s.toString());
+            presenter.afterStep3CommentTextChanged(s.toString());
         }
     };
     private TextWatcher doctorCommentEditTextListener = new TextWatcher() {
@@ -334,12 +334,12 @@ public class AddCommentActivity extends BaseActivity implements
     }
 
     @Override
-    public void disableStep5FinishButton() {
+    public void disableStep5NextButton() {
         getStep5NextButton().setEnabled(false);
     }
 
     @Override
-    public void enableStep5FinishButton() {
+    public void enableStep5NextButton() {
         getStep5NextButton().setEnabled(true);
     }
 
