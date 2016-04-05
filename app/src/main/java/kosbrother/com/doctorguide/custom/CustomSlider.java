@@ -16,9 +16,6 @@ import kosbrother.com.doctorguide.R;
 import kosbrother.com.doctorguide.google_analytics.GAManager;
 import kosbrother.com.doctorguide.google_analytics.event.addcomment.AddCommentSlideEvent;
 
-/**
- * Created by steven on 2/2/16.
- */
 public class CustomSlider extends LinearLayout {
 
     private SeekBar seekbar;
@@ -28,6 +25,12 @@ public class CustomSlider extends LinearLayout {
     private boolean isScroed;
     private int score;
     private String sliderLabel;
+    private OnProgressScoredListener progressScoredListener = new OnProgressScoredListener() {
+        @Override
+        public void onProgressScored() {
+
+        }
+    };
 
     public CustomSlider(Context context) {
         super(context);
@@ -61,15 +64,18 @@ public class CustomSlider extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        seekbar = (SeekBar)this.findViewById(R.id.seekbar);
-        checkImage = (ImageView)this.findViewById(R.id.check_image);
-        scoreText = (TextView)this.findViewById(R.id.score);
+        seekbar = (SeekBar) this.findViewById(R.id.seekbar);
+        checkImage = (ImageView) this.findViewById(R.id.check_image);
+        scoreText = (TextView) this.findViewById(R.id.score);
 
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 int value = seekBar.getProgress();
                 GAManager.sendEvent(new AddCommentSlideEvent(sliderLabel, value));
+                if (!isScroed) {
+                    progressScoredListener.onProgressScored();
+                }
                 isScroed = true;
                 score = value;
                 scoreText.setText(value + "");
@@ -90,15 +96,23 @@ public class CustomSlider extends LinearLayout {
 
     }
 
-    public boolean isScroed(){
+    public boolean isScroed() {
         return isScroed;
     }
 
-    public int getScore(){
-        return score;
+    public String getScore() {
+        return score + "";
     }
 
     public void setSliderLabel(String sliderLabel) {
         this.sliderLabel = sliderLabel;
+    }
+
+    public void setOnProgressScoredListener(OnProgressScoredListener onProgressScoredListener) {
+        this.progressScoredListener = onProgressScoredListener;
+    }
+
+    public interface OnProgressScoredListener {
+        void onProgressScored();
     }
 }

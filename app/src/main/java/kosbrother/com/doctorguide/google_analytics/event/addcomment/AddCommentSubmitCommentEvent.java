@@ -5,11 +5,6 @@ import kosbrother.com.doctorguide.google_analytics.category.GACategory;
 import kosbrother.com.doctorguide.google_analytics.event.GAEvent;
 
 public class AddCommentSubmitCommentEvent implements GAEvent {
-    private String label;
-
-    public AddCommentSubmitCommentEvent(String label) {
-        this.label = label;
-    }
 
     @Override
     public String getCategory() {
@@ -23,7 +18,7 @@ public class AddCommentSubmitCommentEvent implements GAEvent {
 
     @Override
     public String getLabel() {
-        return label;
+        return null;
     }
 
     @Override
