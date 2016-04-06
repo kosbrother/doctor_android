@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import kosbrother.com.doctorguide.model.AddCommentModel;
 import kosbrother.com.doctorguide.viewmodel.DatePickerViewModel;
 
-public interface AddCommentView extends ProgressDialogView{
+public interface AddCommentView extends ProgressDialogView {
     void setLoadingView();
 
     void setContentView();
@@ -23,6 +23,8 @@ public interface AddCommentView extends ProgressDialogView{
     void initViewSwitcher();
 
     void initButton();
+
+    void initEditIcon();
 
     void initSlider();
 
@@ -52,11 +54,17 @@ public interface AddCommentView extends ProgressDialogView{
 
     void showSubmitLayout();
 
+    void hideSubmitLayout();
+
+    void resetStep2View();
+
+    void resetStep3View();
+
+    void resetStep4View();
+
+    void resetStep5View();
+
     void showPostCommentResultSuccessDialog();
-
-    void setDivisionSkipButtonText(String text);
-
-    void setDivisionNextButtonText(String text);
 
     void showDatePickerDialog(DatePickerViewModel datePickerViewModel);
 
@@ -82,6 +90,16 @@ public interface AddCommentView extends ProgressDialogView{
 
     void setStep5CheckedAndClickable();
 
+    void switchStep1Edit();
+
+    void switchStep2();
+
+    void switchStep3();
+
+    void switchStep4();
+
+    void switchStep5();
+
     void sendAddCommentClickDateTextEvent(String dateText);
 
     void sendAddCommentClickDivisionSpinnerEvent(String divisionFromPosition);
@@ -89,4 +107,5 @@ public interface AddCommentView extends ProgressDialogView{
     void sendAddCommentClickDoctorSpinnerEvent(String doctorFromPosition);
 
     void sendAddCommentClickSubmitButtonEvent();
+
 }

@@ -46,7 +46,8 @@ public class AddCommentPresenterTest {
                 model.getHospitalName(),
                 model.getDivisionDoctorString(),
                 model.getDateString());
-        view.showStep2ViewSwitcher();
+        verify(view).showStep2ViewSwitcher();
+        verify(presenter).handleDoctorCommentView();
     }
 
     @Test
@@ -107,6 +108,56 @@ public class AddCommentPresenterTest {
     }
 
     @Test
+    public void testOnStep1EditLayoutClick() {
+        presenter.onStep1EditLayoutClick();
+
+        verify(view).switchStep1Edit();
+        verify(view).hideSubmitLayout();
+        verify(view).resetStep2View();
+        verify(view).resetStep3View();
+        verify(view).resetStep4View();
+        verify(view).resetStep5View();
+    }
+
+    @Test
+    public void testOnStep2EditLayoutClick() {
+        presenter.onStep2EditLayoutClick();
+
+        verify(view).switchStep2();
+        verify(view).hideSubmitLayout();
+        verify(view).resetStep3View();
+        verify(view).resetStep4View();
+        verify(view).resetStep5View();
+    }
+
+    @Test
+    public void testOnStep3EditLayoutClick() {
+        presenter.onStep3EditLayoutClick();
+
+        verify(view).switchStep3();
+        verify(view).hideSubmitLayout();
+        verify(view).resetStep4View();
+        verify(view).resetStep5View();
+    }
+
+    @Test
+    public void testOnStep4EditLayoutClick() {
+        presenter.onStep4EditLayoutClick();
+
+        verify(view).switchStep4();
+        verify(view).hideSubmitLayout();
+        verify(view).resetStep5View();
+    }
+
+    @Test
+    public void testOnStep5EditLayoutClick() {
+        presenter.onStep5EditLayoutClick();
+
+        verify(view).switchStep5();
+        verify(view).hideSubmitLayout();
+    }
+
+    @Test
     public void testOnSubmitButtonClick() throws Exception {
         presenter.onSubmitButtonClick();
 
@@ -129,6 +180,7 @@ public class AddCommentPresenterTest {
         verify(view).initViewSwitcher();
         verify(view).initButton();
         verify(view).initSlider();
+        verify(view).initEditIcon();
         verify(view).initEditTextListener();
         verify(presenter).handleDoctorCommentView();
     }
@@ -180,7 +232,6 @@ public class AddCommentPresenterTest {
 
         verify(model).updateDoctor(position);
         verify(view).sendAddCommentClickDoctorSpinnerEvent(model.getDoctorFromPosition(position));
-        verify(presenter).handleDoctorCommentView();
     }
 
     @Test
@@ -244,8 +295,6 @@ public class AddCommentPresenterTest {
         presenter.handleDoctorCommentView();
 
         verify(view).hideDoctorCommentView();
-        verify(view).setDivisionSkipButtonText("略過並預覽");
-        verify(view).setDivisionNextButtonText("預覽");
     }
 
     @Test
@@ -255,8 +304,6 @@ public class AddCommentPresenterTest {
         presenter.handleDoctorCommentView();
 
         verify(view).showDoctorCommentView();
-        verify(view).setDivisionSkipButtonText("略過");
-        verify(view).setDivisionNextButtonText("下一步");
     }
 
     @Test

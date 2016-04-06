@@ -10,7 +10,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -165,6 +164,15 @@ public class AddCommentActivity extends BaseActivity implements
     }
 
     @Override
+    public void initEditIcon() {
+        findViewById(R.id.step1_edit_image_view).setVisibility(View.GONE);
+        findViewById(R.id.step2_edit_image_view).setVisibility(View.GONE);
+        findViewById(R.id.step3_edit_image_view).setVisibility(View.GONE);
+        findViewById(R.id.step4_edit_image_view).setVisibility(View.GONE);
+        findViewById(R.id.step5_edit_image_view).setVisibility(View.GONE);
+    }
+
+    @Override
     public void initSlider() {
         CustomSlider divEnvSlider = getDivEnvSlider();
         divEnvSlider.setSliderLabel("divisionEnvSlide");
@@ -270,6 +278,59 @@ public class AddCommentActivity extends BaseActivity implements
         getSubmitButton().setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void hideSubmitLayout() {
+        getSubmitButton().setVisibility(View.GONE);
+    }
+
+    @Override
+    public void resetStep2View() {
+        ViewSwitcher viewSwitcher = getStep2ViewSwitcher();
+        viewSwitcher.setVisibility(View.GONE);
+        if (viewSwitcher.getCurrentView().getId() == R.id.step2_content_relative_layout) {
+            viewSwitcher.showNext();
+        }
+        ((ImageView) findViewById(R.id.step2_image_view)).setImageResource(R.mipmap.ic_two);
+        findViewById(R.id.step2_edit_image_view).setVisibility(View.GONE);
+        findViewById(R.id.step2_label_relative_layout).setClickable(false);
+    }
+
+    @Override
+    public void resetStep3View() {
+        ViewSwitcher viewSwitcher = getStep3ViewSwitcher();
+        viewSwitcher.setVisibility(View.GONE);
+        if (viewSwitcher.getCurrentView().getId() == R.id.step3_comment_text_view) {
+            viewSwitcher.showNext();
+        }
+        ((ImageView) findViewById(R.id.step3_image_view)).setImageResource(R.mipmap.ic_three);
+        findViewById(R.id.step3_edit_image_view).setVisibility(View.GONE);
+        findViewById(R.id.step3_label_relative_layout).setClickable(false);
+    }
+
+    @Override
+    public void resetStep4View() {
+        ViewSwitcher viewSwitcher = getStep4ViewSwitcher();
+        viewSwitcher.setVisibility(View.GONE);
+        if (viewSwitcher.getCurrentView().getId() == R.id.step4_content_linear_layout) {
+            viewSwitcher.showNext();
+        }
+        ((ImageView) findViewById(R.id.step4_image_view)).setImageResource(R.mipmap.ic_four);
+        findViewById(R.id.step4_edit_image_view).setVisibility(View.GONE);
+        findViewById(R.id.step4_label_relative_layout).setClickable(false);
+    }
+
+    @Override
+    public void resetStep5View() {
+        ViewSwitcher viewSwitcher = getStep5ViewSwitcher();
+        viewSwitcher.setVisibility(View.GONE);
+        if (viewSwitcher.getCurrentView().getId() == R.id.step5_comment_text_view) {
+            viewSwitcher.showNext();
+        }
+        ((ImageView) findViewById(R.id.step5_image_view)).setImageResource(R.mipmap.ic_five);
+        findViewById(R.id.step5_edit_image_view).setVisibility(View.GONE);
+        findViewById(R.id.step5_label_relative_layout).setClickable(false);
+    }
+
     private void setSpinner(ArrayList<String> data, int position, final Spinner spinner) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item_black_text, data);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -346,10 +407,13 @@ public class AddCommentActivity extends BaseActivity implements
     @Override
     public void setStep1CheckedAndClickable() {
         ((ImageView) findViewById(R.id.step1_image_view)).setImageResource(R.mipmap.ic_check);
-        findViewById(R.id.step1_label_relative_layout).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.step1_edit_image_view).setVisibility(View.VISIBLE);
+        final View label = findViewById(R.id.step1_label_relative_layout);
+        label.setClickable(true);
+        label.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getStep1ViewSwitcher().showPrevious();
+                presenter.onStep1EditLayoutClick();
             }
         });
     }
@@ -357,10 +421,13 @@ public class AddCommentActivity extends BaseActivity implements
     @Override
     public void setStep2CheckedAndClickable() {
         ((ImageView) findViewById(R.id.step2_image_view)).setImageResource(R.mipmap.ic_check);
-        findViewById(R.id.step2_label_relative_layout).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.step2_edit_image_view).setVisibility(View.VISIBLE);
+        final View label = findViewById(R.id.step2_label_relative_layout);
+        label.setClickable(true);
+        label.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getStep2ViewSwitcher().showPrevious();
+                presenter.onStep2EditLayoutClick();
             }
         });
     }
@@ -368,10 +435,13 @@ public class AddCommentActivity extends BaseActivity implements
     @Override
     public void setStep3CheckedAndClickable() {
         ((ImageView) findViewById(R.id.step3_image_view)).setImageResource(R.mipmap.ic_check);
-        findViewById(R.id.step3_label_relative_layout).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.step3_edit_image_view).setVisibility(View.VISIBLE);
+        final View label = findViewById(R.id.step3_label_relative_layout);
+        label.setClickable(true);
+        label.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getStep3ViewSwitcher().showPrevious();
+                presenter.onStep3EditLayoutClick();
             }
         });
     }
@@ -379,10 +449,13 @@ public class AddCommentActivity extends BaseActivity implements
     @Override
     public void setStep4CheckedAndClickable() {
         ((ImageView) findViewById(R.id.step4_image_view)).setImageResource(R.mipmap.ic_check);
-        findViewById(R.id.step4_label_relative_layout).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.step4_edit_image_view).setVisibility(View.VISIBLE);
+        final View label = findViewById(R.id.step4_label_relative_layout);
+        label.setClickable(true);
+        label.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getStep4ViewSwitcher().showPrevious();
+                presenter.onStep4EditLayoutClick();
             }
         });
     }
@@ -390,12 +463,55 @@ public class AddCommentActivity extends BaseActivity implements
     @Override
     public void setStep5CheckedAndClickable() {
         ((ImageView) findViewById(R.id.step5_image_view)).setImageResource(R.mipmap.ic_check);
-        findViewById(R.id.step5_label_relative_layout).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.step5_edit_image_view).setVisibility(View.VISIBLE);
+        final View label = findViewById(R.id.step5_label_relative_layout);
+        label.setClickable(true);
+        label.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getStep5ViewSwitcher().showPrevious();
+                presenter.onStep5EditLayoutClick();
             }
         });
+    }
+
+    @Override
+    public void switchStep1Edit() {
+        getStep1ViewSwitcher().showPrevious();
+        findViewById(R.id.step1_edit_image_view).setVisibility(View.GONE);
+        ((ImageView) findViewById(R.id.step1_image_view)).setImageResource(R.mipmap.ic_one);
+        findViewById(R.id.step1_label_relative_layout).setClickable(false);
+    }
+
+    @Override
+    public void switchStep2() {
+        getStep2ViewSwitcher().showPrevious();
+        findViewById(R.id.step2_edit_image_view).setVisibility(View.GONE);
+        ((ImageView) findViewById(R.id.step2_image_view)).setImageResource(R.mipmap.ic_two);
+        findViewById(R.id.step2_label_relative_layout).setClickable(false);
+    }
+
+    @Override
+    public void switchStep3() {
+        getStep3ViewSwitcher().showPrevious();
+        findViewById(R.id.step3_edit_image_view).setVisibility(View.GONE);
+        ((ImageView) findViewById(R.id.step3_image_view)).setImageResource(R.mipmap.ic_three);
+        findViewById(R.id.step3_label_relative_layout).setClickable(false);
+    }
+
+    @Override
+    public void switchStep4() {
+        getStep4ViewSwitcher().showPrevious();
+        findViewById(R.id.step4_edit_image_view).setVisibility(View.GONE);
+        ((ImageView) findViewById(R.id.step4_image_view)).setImageResource(R.mipmap.ic_four);
+        findViewById(R.id.step4_label_relative_layout).setClickable(false);
+    }
+
+    @Override
+    public void switchStep5() {
+        getStep5ViewSwitcher().showPrevious();
+        findViewById(R.id.step5_edit_image_view).setVisibility(View.GONE);
+        ((ImageView) findViewById(R.id.step5_image_view)).setImageResource(R.mipmap.ic_five);
+        findViewById(R.id.step5_label_relative_layout).setClickable(false);
     }
 
     @Override
@@ -410,16 +526,6 @@ public class AddCommentActivity extends BaseActivity implements
                     }
                 })
                 .show();
-    }
-
-    @Override
-    public void setDivisionSkipButtonText(String text) {
-        ((Button) findViewById(R.id.step3_skip_button)).setText(text);
-    }
-
-    @Override
-    public void setDivisionNextButtonText(String text) {
-        ((Button) findViewById(R.id.step3_next_button)).setText(text);
     }
 
     @Override

@@ -34,6 +34,7 @@ public class AddCommentPresenter implements
                 model.getDivisionDoctorString(),
                 model.getDateString());
         view.showStep2ViewSwitcher();
+        handleDoctorCommentView();
     }
 
     public void onStep2NextButtonClick(AddCommentModel.DivisionScore divisionScore) {
@@ -67,6 +68,41 @@ public class AddCommentPresenter implements
         handleStep5NextClick("暫無評論");
     }
 
+    public void onStep1EditLayoutClick() {
+        view.switchStep1Edit();
+        view.hideSubmitLayout();
+        view.resetStep2View();
+        view.resetStep3View();
+        view.resetStep4View();
+        view.resetStep5View();
+    }
+
+    public void onStep2EditLayoutClick() {
+        view.switchStep2();
+        view.hideSubmitLayout();
+        view.resetStep3View();
+        view.resetStep4View();
+        view.resetStep5View();
+    }
+
+    public void onStep3EditLayoutClick() {
+        view.switchStep3();
+        view.hideSubmitLayout();
+        view.resetStep4View();
+        view.resetStep5View();
+    }
+
+    public void onStep4EditLayoutClick() {
+        view.switchStep4();
+        view.hideSubmitLayout();
+        view.resetStep5View();
+    }
+
+    public void onStep5EditLayoutClick() {
+        view.switchStep5();
+        view.hideSubmitLayout();
+    }
+
     public void onSubmitButtonClick() {
         view.showProgressDialog();
         view.sendAddCommentClickSubmitButtonEvent();
@@ -84,6 +120,7 @@ public class AddCommentPresenter implements
         view.setDateText(model.getDateString());
         view.initViewSwitcher();
         view.initButton();
+        view.initEditIcon();
         view.initSlider();
         view.initEditTextListener();
         handleDoctorCommentView();
@@ -119,7 +156,6 @@ public class AddCommentPresenter implements
         model.updateDoctor(position);
 
         view.sendAddCommentClickDoctorSpinnerEvent(model.getDoctorFromPosition(position));
-        handleDoctorCommentView();
     }
 
     public void onDivisionScored() {
@@ -155,12 +191,8 @@ public class AddCommentPresenter implements
     protected void handleDoctorCommentView() {
         if (model.isDivisionComment()) {
             view.hideDoctorCommentView();
-            view.setDivisionSkipButtonText("略過並預覽");
-            view.setDivisionNextButtonText("預覽");
         } else {
             view.showDoctorCommentView();
-            view.setDivisionSkipButtonText("略過");
-            view.setDivisionNextButtonText("下一步");
         }
     }
 
@@ -181,4 +213,5 @@ public class AddCommentPresenter implements
         view.switchStep5Info(doctorComment);
         view.showSubmitLayout();
     }
+
 }

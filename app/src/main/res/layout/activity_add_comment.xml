@@ -15,20 +15,19 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:animateLayoutChanges="true">
+            android:layout_marginBottom="4dp">
 
             <RelativeLayout
                 android:id="@+id/step1_label_relative_layout"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:background="@color/gray_background"
-                android:gravity="center_vertical">
+                android:background="@drawable/gray_selectable_item_background">
 
                 <ImageView
                     android:id="@+id/step1_image_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginEnd="14dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="14dp"
@@ -37,15 +36,25 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_alignBottom="@id/step1_image_view"
-                    android:layout_alignTop="@id/step1_image_view"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_toEndOf="@id/step1_image_view"
                     android:layout_toRightOf="@id/step1_image_view"
-                    android:gravity="center_vertical"
                     android:text="評論基本資訊"
                     android:textColor="@color/green_text"
                     android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/step1_edit_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:src="@drawable/ic_mode_edit_grey_600_24dp" />
+
             </RelativeLayout>
 
             <ViewSwitcher
@@ -54,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/step1_label_relative_layout"
                 android:animateLayoutChanges="true"
+                android:animationCache="true"
                 android:measureAllChildren="false">
 
                 <RelativeLayout
@@ -137,6 +147,7 @@
                 </RelativeLayout>
 
                 <LinearLayout
+                    android:id="@+id/step1_content_linear_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/gray_background"
@@ -180,21 +191,19 @@
             android:id="@+id/step2_relative_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:animateLayoutChanges="true"
-            android:orientation="horizontal">
+            android:layout_marginBottom="4dp">
 
             <RelativeLayout
                 android:id="@+id/step2_label_relative_layout"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:background="@color/gray_background"
-                android:gravity="center_vertical">
+                android:background="@drawable/gray_selectable_item_background">
 
                 <ImageView
                     android:id="@+id/step2_image_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginEnd="14dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="14dp"
@@ -203,15 +212,25 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_alignBottom="@id/step2_image_view"
-                    android:layout_alignTop="@id/step2_image_view"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_toEndOf="@id/step2_image_view"
                     android:layout_toRightOf="@id/step2_image_view"
-                    android:gravity="center_vertical"
                     android:text="科別滿意度"
                     android:textColor="@color/green_text"
                     android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/step2_edit_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:src="@drawable/ic_mode_edit_grey_600_24dp" />
+
             </RelativeLayout>
 
             <ViewSwitcher
@@ -220,6 +239,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/step2_label_relative_layout"
                 android:animateLayoutChanges="true"
+                android:animationCache="true"
                 android:measureAllChildren="false">
 
                 <RelativeLayout
@@ -351,6 +371,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/step2_content_relative_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/gray_background"
@@ -409,21 +430,19 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:animateLayoutChanges="true"
-            android:orientation="horizontal">
+            android:layout_marginBottom="4dp">
 
             <RelativeLayout
                 android:id="@+id/step3_label_relative_layout"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:background="@color/gray_background"
-                android:gravity="center_vertical">
+                android:background="@drawable/gray_selectable_item_background">
 
                 <ImageView
                     android:id="@+id/step3_image_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginEnd="14dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="14dp"
@@ -432,15 +451,25 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_alignBottom="@id/step3_image_view"
-                    android:layout_alignTop="@id/step3_image_view"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_toEndOf="@id/step3_image_view"
                     android:layout_toRightOf="@id/step3_image_view"
-                    android:gravity="center_vertical"
                     android:text="給科別評論"
                     android:textColor="@color/green_text"
                     android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/step3_edit_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:src="@drawable/ic_mode_edit_grey_600_24dp" />
+
             </RelativeLayout>
 
             <ViewSwitcher
@@ -449,6 +478,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/step3_label_relative_layout"
                 android:animateLayoutChanges="true"
+                android:animationCache="true"
                 android:measureAllChildren="false">
 
                 <RelativeLayout
@@ -480,9 +510,9 @@
                         android:layout_marginRight="16dp"
                         android:background="@drawable/green_gray_button"
                         android:onClick="onStep3NextButtonClick"
+                        android:text="下一步"
                         android:textColor="@color/mdtp_white"
-                        android:textSize="14sp"
-                        tools:text="下一步" />
+                        android:textSize="14sp" />
 
                     <Button
                         android:id="@+id/step3_skip_button"
@@ -495,9 +525,9 @@
                         android:layout_toStartOf="@id/step3_next_button"
                         android:background="@color/mdtp_white"
                         android:onClick="onStep3SkipButtonClick"
+                        android:text="略過"
                         android:textColor="@color/green_text"
-                        android:textSize="14sp"
-                        tools:text="略過" />
+                        android:textSize="14sp" />
                 </RelativeLayout>
 
                 <TextView
@@ -521,21 +551,19 @@
             android:id="@+id/step4_relative_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:animateLayoutChanges="true"
-            android:orientation="horizontal">
+            android:layout_marginBottom="4dp">
 
             <RelativeLayout
                 android:id="@+id/step4_label_relative_layout"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:background="@color/gray_background"
-                android:gravity="center_vertical">
+                android:background="@drawable/gray_selectable_item_background">
 
                 <ImageView
                     android:id="@+id/step4_image_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginEnd="14dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="14dp"
@@ -544,15 +572,25 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_alignBottom="@id/step4_image_view"
-                    android:layout_alignTop="@id/step4_image_view"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_toEndOf="@id/step4_image_view"
                     android:layout_toRightOf="@id/step4_image_view"
-                    android:gravity="center_vertical"
                     android:text="醫師滿意度"
                     android:textColor="@color/green_text"
                     android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/step4_edit_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:src="@drawable/ic_mode_edit_grey_600_24dp" />
+
             </RelativeLayout>
 
             <ViewSwitcher
@@ -561,6 +599,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/step4_label_relative_layout"
                 android:animateLayoutChanges="true"
+                android:animationCache="true"
                 android:measureAllChildren="false">
 
                 <RelativeLayout
@@ -685,6 +724,7 @@
                 </RelativeLayout>
 
                 <LinearLayout
+                    android:id="@+id/step4_content_linear_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/gray_background"
@@ -720,21 +760,19 @@
             android:id="@+id/step5_relative_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:animateLayoutChanges="true"
-            android:orientation="horizontal">
+            android:layout_marginBottom="4dp">
 
             <RelativeLayout
                 android:id="@+id/step5_label_relative_layout"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:background="@color/gray_background"
-                android:gravity="center_vertical">
+                android:background="@drawable/gray_selectable_item_background">
 
                 <ImageView
                     android:id="@+id/step5_image_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginEnd="14dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="14dp"
@@ -743,15 +781,25 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_alignBottom="@id/step5_image_view"
-                    android:layout_alignTop="@id/step5_image_view"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_toEndOf="@id/step5_image_view"
                     android:layout_toRightOf="@id/step5_image_view"
-                    android:gravity="center_vertical"
                     android:text="給醫師評論"
                     android:textColor="@color/green_text"
                     android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/step5_edit_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:src="@drawable/ic_mode_edit_grey_600_24dp" />
+
             </RelativeLayout>
 
             <ViewSwitcher
@@ -760,6 +808,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/step5_label_relative_layout"
                 android:animateLayoutChanges="true"
+                android:animationCache="true"
                 android:measureAllChildren="false">
 
                 <RelativeLayout
@@ -788,7 +837,7 @@
                         android:layout_marginRight="20dp"
                         android:background="@drawable/green_gray_button"
                         android:onClick="onStep5NextButtonClick"
-                        android:text="預覽"
+                        android:text="下一步"
                         android:textColor="@color/mdtp_white"
                         android:textSize="14sp" />
 
@@ -803,7 +852,7 @@
                         android:layout_toStartOf="@+id/step5_next_button"
                         android:background="@color/mdtp_white"
                         android:onClick="onStep5SkipButtonClick"
-                        android:text="略過並預覽"
+                        android:text="略過"
                         android:textColor="@color/green_text"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -829,16 +878,14 @@
             android:id="@+id/submit_frame_layout"
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="12dp"
-            android:animateLayoutChanges="true">
+            android:layout_marginBottom="4dp">
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/primary_color_button"
                 android:onClick="onSubmitButtonClick"
-                android:text="送出"
+                android:text="送出評論"
                 android:textColor="@color/mdtp_white"
                 android:textSize="12sp" />
         </FrameLayout>
