@@ -3,6 +3,7 @@ package kosbrother.com.doctorguide;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -18,6 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +75,7 @@ public class DoctorActivity extends SignInActivity implements
     private ClickProblemReportPresenter clickProblemReportPresenter;
 
     private ProgressDialog progressDialog;
+    private GoogleApiClient mClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +91,49 @@ public class DoctorActivity extends SignInActivity implements
         clickProblemReportPresenter = new ClickProblemReportPresenter(this, new ClickProblemReportModel(viewModel));
 
         fabPresenter = new DoctorFabPresenter(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        doctorPresenter.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        doctorPresenter.onStop();
+        super.onStop();
+    }
+
+    @Override
+    public void buildAppIndexClient() {
+        mClient = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    @Override
+    public void connectAppIndexClient() {
+        mClient.connect();
+    }
+
+    @Override
+    public void disConnectAppIndexClient() {
+        mClient.disconnect();
+    }
+
+    @Override
+    public void startAppIndexApi(String doctorName, Uri webUrl, Uri appUri) {
+        // Construct the Action performed by the user
+        Action viewAction = Action.newAction(Action.TYPE_VIEW, doctorName,
+                webUrl, appUri);
+        // Call the App Indexing API start method after the view has completely rendered
+        AppIndex.AppIndexApi.start(mClient, viewAction);
+    }
+
+    @Override
+    public void endAppIndexApi(String doctorName, Uri webUrl, Uri appUri) {
+        Action viewAction = Action.newAction(Action.TYPE_VIEW, doctorName,
+                webUrl, appUri);
+        AppIndex.AppIndexApi.end(mClient, viewAction);
     }
 
     @Override

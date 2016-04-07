@@ -15,6 +15,7 @@ public class DoctorPresenter implements GetDoctorTask.GetDoctorListener {
     }
 
     public void onCreate() {
+        view.buildAppIndexClient();
         view.setContentView();
         view.initActionBar();
         view.initHeartButton();
@@ -22,6 +23,15 @@ public class DoctorPresenter implements GetDoctorTask.GetDoctorListener {
 
         view.showProgressDialog();
         model.requestGetDoctor(this);
+    }
+
+    public void onStart() {
+        view.connectAppIndexClient();
+    }
+
+    public void onStop() {
+        view.endAppIndexApi(model.getDoctorName(), model.getWebUrl(), model.getAppUri());
+        view.disConnectAppIndexClient();
     }
 
     public void onHeartButtonClick() {
@@ -43,6 +53,7 @@ public class DoctorPresenter implements GetDoctorTask.GetDoctorListener {
         view.setDoctorScore(model.getDoctorScoreViewModel());
         view.setViewPager(model.getDoctorId());
         view.hideProgressDialog();
+        view.startAppIndexApi(model.getDoctorName(), model.getWebUrl(), model.getAppUri());
     }
 
     public Doctor getDoctor() {
@@ -52,4 +63,5 @@ public class DoctorPresenter implements GetDoctorTask.GetDoctorListener {
     public void onAddCommentClick() {
         view.sendDoctorClickAddCommentEvent(model.getDoctorLabel());
     }
+
 }

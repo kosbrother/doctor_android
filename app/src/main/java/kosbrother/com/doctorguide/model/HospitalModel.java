@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import io.realm.Realm;
 import kosbrother.com.doctorguide.R;
+import kosbrother.com.doctorguide.Util.AppIndexString;
 import kosbrother.com.doctorguide.entity.Hospital;
 import kosbrother.com.doctorguide.entity.realm.RealmHospital;
 import kosbrother.com.doctorguide.factory.HospitalFactory;
@@ -13,11 +14,6 @@ import kosbrother.com.doctorguide.viewmodel.HospitalActivityViewModel;
 import kosbrother.com.doctorguide.viewmodel.HospitalScoreViewModel;
 
 public class HospitalModel {
-    private static final String appUriString =
-            "android-app://kosbrother.com.doctorguide/http/doctorguide.tw/hospitals/";
-    private static final String webUriString =
-            "http://doctorguide.tw/hospitals/";
-
     private Uri appUri;
     private Uri webUrl;
 
@@ -28,8 +24,8 @@ public class HospitalModel {
     public HospitalModel(HospitalActivityViewModel viewModel, Realm realm) {
         this.viewModel = viewModel;
         this.realm = realm;
-        setAppUri(viewModel);
-        setWebUrl(viewModel);
+        appUri = Uri.parse(AppIndexString.appUriString + appendUriString());
+        webUrl = Uri.parse(AppIndexString.webUriString + appendUriString());
     }
 
     public Uri getAppUri() {
@@ -104,17 +100,10 @@ public class HospitalModel {
         return "醫院: " + viewModel.getHospitalName();
     }
 
-    private void setAppUri(HospitalActivityViewModel viewModel) {
-        appUri = Uri.parse(appUriString + getHospitalDataString(viewModel));
-    }
-
-    private void setWebUrl(HospitalActivityViewModel viewModel) {
-        webUrl = Uri.parse(webUriString + getHospitalDataString(viewModel));
-    }
-
     @NonNull
-    private String getHospitalDataString(HospitalActivityViewModel viewModel) {
-        return viewModel.getHospitalId() + "-"
+    private String appendUriString() {
+        return "/hospitals/"
+                + viewModel.getHospitalId() + "-"
                 + viewModel.getHospitalName() + "-"
                 + viewModel.getHospitalGrade();
     }
