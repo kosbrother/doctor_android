@@ -6,9 +6,9 @@ import android.os.Bundle;
 import kosbrother.com.doctorguide.Util.ExtraKey;
 
 public class AddCommentViewModelImpl implements AddCommentViewModel {
-    private int hospitalId;
-    private int divisionId;
-    private int doctorId;
+    private int hospitalId = 0;
+    private int divisionId = 0;
+    private int doctorId = 0;
     private String hospitalName = "";
     private String user = "";
 

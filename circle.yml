@@ -1,3 +1,7 @@
+general:
+  artifacts:
+    - "~/build_output.zip" # Save APK's, Lint Results, and Test Results
+
 machine:
   environment:
     ANDROID_HOME: /usr/local/android-sdk-linux
@@ -9,10 +13,18 @@ dependencies:
     - source scripts/environmentSetup.sh && getAndroidSDK
 
 test:
+  pre:
+    - $ANDROID_HOME/tools/emulator -avd testAVD -no-skin -no-audio -no-window:
+        background: true
+        parallel: true
+    - ./gradlew assembleDebug:
+        timeout: 360
+        parallel: true
   override:
     - ./gradlew app:check
     - ./gradlew test --continue:
         timeout: 360
         parallel: true
+    - zip -r ~/build_output.zip app/build/outputs/
     # copy the test results to the test results directory.
     - cp -r app/build/reports/lint/* $CIRCLE_TEST_REPORTS

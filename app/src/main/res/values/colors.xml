@@ -15,10 +15,13 @@
     <color name="black_text">#4a4a4a</color>
     <color name="bluegreen_text_color">#3BA543</color>
 
-    <color name="grey_divider_color">#aadadada</color>
+    <color name="grey_divider_color">#dadada</color>
     <color name="grey_pretty_light">#62D8D8D8</color>
 
     <color name="orange_text_link">#FFA726</color>
 
     <color name="green_text">#329834</color>
+    <color name="gray_background">#f8f8f8</color>
+    <color name="gray_button_bg">#c2c2c2</color>
+    <color name="green_button_bg">#66bb6a</color>
 </resources>

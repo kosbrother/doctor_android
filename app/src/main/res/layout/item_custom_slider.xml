@@ -1,56 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <TextView
         android:id="@+id/score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0"
-        android:textSize="@dimen/doctor_fragment_text_size"
-        android:textColor="@color/grey_text_light_color"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_centerVertical="true"/>
+        android:text="0"
+        android:textColor="@color/grey_text_light_color"
+        android:textSize="14sp" />
+
     <ImageView
         android:id="@+id/check_image"
-        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_check_circle"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
-        android:visibility="invisible"/>
+        android:src="@mipmap/ic_check_circle"
+        android:visibility="invisible" />
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/score"
-        android:layout_toLeftOf="@+id/check_image"
         android:layout_centerVertical="true"
         android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp">
+        android:layout_marginRight="4dp"
+        android:layout_toEndOf="@id/score"
+        android:layout_toLeftOf="@id/check_image"
+        android:layout_toRightOf="@id/score"
+        android:layout_toStartOf="@id/check_image">
+
         <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/seekbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/seekbar"
             android:layout_marginTop="10dp"
-            android:max="5"
-            />
+            android:max="5" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/seekbar"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/seekbar"
             android:text="不滿意"
-            android:textSize="@dimen/add_comment_sub_text_size"/>
+            android:textSize="8sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/seekbar"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_below="@+id/seekbar"
             android:text="滿意"
-            android:textSize="@dimen/add_comment_sub_text_size"/>
+            android:textSize="8sp" />
     </RelativeLayout>
 </RelativeLayout>

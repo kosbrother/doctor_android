@@ -1,109 +1,895 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@color/mdtp_white"
+    android:orientation="vertical"
+    tools:context="kosbrother.com.doctorguide.AddCommentActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/hospial_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                android:textColor="@color/textColorPrimary"
-                android:textSize="@dimen/doctor_fragment_title_size"
-                tools:text="高雄市立小港醫院（委託財團法人私立高雄醫學大學經營）" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="end">
-
-                    <Spinner
-                        android:id="@+id/div_selector"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/view1"
-                    android:layout_width="1dp"
-                    android:layout_height="16dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@color/textColorPrimary" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <Spinner
-                        android:id="@+id/dr_selector"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-            </LinearLayout>
+            android:layout_marginBottom="4dp">
 
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp">
+                android:id="@+id/step1_label_relative_layout"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/gray_selectable_item_background">
 
-                <TextView
-                    android:id="@+id/dateTitleTextView"
+                <ImageView
+                    android:id="@+id/step1_image_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/add_comment_date_title"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="@dimen/comment_score_size" />
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginLeft="26dp"
+                    android:layout_marginRight="14dp"
+                    android:layout_marginStart="26dp"
+                    android:src="@mipmap/ic_one" />
 
                 <TextView
-                    android:id="@+id/date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/dateTitleTextView"
-                    android:layout_toRightOf="@+id/dateTitleTextView"
-                    android:clickable="true"
-                    android:onClick="onDateButtonClick"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="@dimen/comment_score_size"
-                    tools:text="2015年12月10日" />
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/step1_image_view"
+                    android:layout_toRightOf="@id/step1_image_view"
+                    android:text="評論基本資訊"
+                    android:textColor="@color/green_text"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/step1_edit_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:src="@drawable/ic_mode_edit_grey_600_24dp" />
+
             </RelativeLayout>
-        </LinearLayout>
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
-            style="@style/MyCustomTabLayout"
+            <ViewSwitcher
+                android:id="@+id/step1_view_switcher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/step1_label_relative_layout"
+                android:animateLayoutChanges="true"
+                android:animationCache="true"
+                android:measureAllChildren="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp">
+
+                    <View
+                        android:id="@+id/step_one_divider"
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:layout_alignBottom="@+id/step1_edit_linear_layout"
+                        android:layout_alignTop="@+id/step1_edit_linear_layout"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginLeft="36dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginStart="36dp"
+                        android:background="@color/grey_divider_color" />
+
+                    <LinearLayout
+                        android:id="@+id/step1_edit_linear_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_toEndOf="@id/step_one_divider"
+                        android:layout_toRightOf="@id/step_one_divider"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/hospital_name_edit_text_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="12dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginStart="4dp"
+                            android:textColor="@color/black_text"
+                            android:textSize="14sp"
+                            tools:text="台北市立聯合醫院" />
+
+                        <Spinner
+                            android:id="@+id/division_spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="12dp" />
+
+                        <Spinner
+                            android:id="@+id/doctor_spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="12dp" />
+
+                        <TextView
+                            android:id="@+id/date"
+                            style="@style/Widget.AppCompat.Spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
+                            android:onClick="onDateButtonClick"
+                            android:textColor="@color/black_text"
+                            android:textSize="14sp"
+                            tools:text="就診日期：2015年12月10日" />
+
+                        <Button
+                            android:id="@+id/step1_next_button"
+                            android:layout_width="74dp"
+                            android:layout_height="36dp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginStart="4dp"
+                            android:background="@color/green_button_bg"
+                            android:onClick="onStep1NextButtonClick"
+                            android:text="下一步"
+                            android:textColor="@color/mdtp_white"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/step1_content_linear_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray_background"
+                    android:orientation="vertical"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="72dp"
+                    android:paddingStart="72dp">
+
+                    <TextView
+                        android:id="@+id/hospital_name_info_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="@color/black_text"
+                        android:textSize="12sp"
+                        tools:text="台北市立聯合醫院" />
+
+                    <TextView
+                        android:id="@+id/division_doctor_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="@color/black_text"
+                        android:textSize="12sp"
+                        tools:text="泌尿科　|　陳坤在 醫師" />
+
+                    <TextView
+                        android:id="@+id/date_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black_text"
+                        android:textSize="12sp"
+                        tools:text="就診日期：2016/12/12" />
+                </LinearLayout>
+
+            </ViewSwitcher>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/step2_relative_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabGravity="fill"
-            app:tabMode="fixed" />
-    </android.support.design.widget.AppBarLayout>
+            android:layout_marginBottom="4dp">
 
-    <kosbrother.com.doctorguide.custom.CustomViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            <RelativeLayout
+                android:id="@+id/step2_label_relative_layout"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/gray_selectable_item_background">
 
-</android.support.design.widget.CoordinatorLayout>
+                <ImageView
+                    android:id="@+id/step2_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginLeft="26dp"
+                    android:layout_marginRight="14dp"
+                    android:layout_marginStart="26dp"
+                    android:src="@mipmap/ic_two" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/step2_image_view"
+                    android:layout_toRightOf="@id/step2_image_view"
+                    android:text="科別滿意度"
+                    android:textColor="@color/green_text"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/step2_edit_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:src="@drawable/ic_mode_edit_grey_600_24dp" />
+
+            </RelativeLayout>
+
+            <ViewSwitcher
+                android:id="@+id/step2_view_switcher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/step2_label_relative_layout"
+                android:animateLayoutChanges="true"
+                android:animationCache="true"
+                android:measureAllChildren="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp">
+
+                    <View
+                        android:id="@+id/step_two_divider"
+                        android:layout_width="1dp"
+                        android:layout_height="208dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginLeft="36dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_marginStart="36dp"
+                        android:background="@color/grey_divider_color" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/step_two_divider"
+                        android:layout_toRightOf="@id/step_two_divider"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/division_env_text_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="4dp"
+                                android:layout_marginRight="4dp"
+                                android:text="環境衛生"
+                                android:textSize="14sp" />
+
+                            <kosbrother.com.doctorguide.custom.CustomSlider
+                                android:id="@+id/division_env_slide"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toEndOf="@id/division_env_text_view"
+                                android:layout_toRightOf="@id/division_env_text_view" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/division_equipment_text_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="4dp"
+                                android:layout_marginRight="4dp"
+                                android:text="醫療設備"
+                                android:textSize="14sp" />
+
+                            <kosbrother.com.doctorguide.custom.CustomSlider
+                                android:id="@+id/division_equipment_slide"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toEndOf="@id/division_equipment_text_view"
+                                android:layout_toRightOf="@id/division_equipment_text_view" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/division_spe_title_text_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="4dp"
+                                android:layout_marginRight="4dp"
+                                android:text="醫護專業"
+                                android:textSize="14sp" />
+
+                            <kosbrother.com.doctorguide.custom.CustomSlider
+                                android:id="@+id/division_spe_slide"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toEndOf="@id/division_spe_title_text_view"
+                                android:layout_toRightOf="@id/division_spe_title_text_view" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/division_friendly_text_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="4dp"
+                                android:layout_marginRight="4dp"
+                                android:text="服務態度"
+                                android:textSize="14sp" />
+
+                            <kosbrother.com.doctorguide.custom.CustomSlider
+                                android:id="@+id/division_friendly_slide"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toEndOf="@id/division_friendly_text_view"
+                                android:layout_toRightOf="@id/division_friendly_text_view" />
+                        </RelativeLayout>
+
+                        <Button
+                            android:id="@+id/step2_next_button"
+                            android:layout_width="74dp"
+                            android:layout_height="36dp"
+                            android:background="@drawable/green_gray_button"
+                            android:onClick="onStep2NextButtonClick"
+                            android:text="下一步"
+                            android:textColor="@color/mdtp_white"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/step2_content_relative_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray_background"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="72dp"
+                    android:paddingStart="72dp">
+
+                    <TextView
+                        android:id="@+id/div_env_score_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginEnd="56dp"
+                        android:layout_marginRight="56dp"
+                        android:textColor="@color/black_text"
+                        android:textSize="12sp"
+                        tools:text="環境衛生：4" />
+
+                    <TextView
+                        android:id="@+id/div_spe_score_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/div_env_score_text_view"
+                        android:layout_toRightOf="@id/div_env_score_text_view"
+                        android:textColor="@color/black_text"
+                        android:textSize="12sp"
+                        tools:text="醫護專業：4" />
+
+                    <TextView
+                        android:id="@+id/div_equipment_score_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/div_env_score_text_view"
+                        android:layout_marginEnd="56dp"
+                        android:layout_marginRight="56dp"
+                        android:textColor="@color/black_text"
+                        android:textSize="12sp"
+                        tools:text="醫療設備：2" />
+
+                    <TextView
+                        android:id="@+id/div_friendly_score_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/div_env_score_text_view"
+                        android:layout_toEndOf="@id/div_equipment_score_text_view"
+                        android:layout_toRightOf="@id/div_equipment_score_text_view"
+                        android:textColor="@color/black_text"
+                        android:textSize="12sp"
+                        tools:text="服務態度：3" />
+                </RelativeLayout>
+
+            </ViewSwitcher>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp">
+
+            <RelativeLayout
+                android:id="@+id/step3_label_relative_layout"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/gray_selectable_item_background">
+
+                <ImageView
+                    android:id="@+id/step3_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginLeft="26dp"
+                    android:layout_marginRight="14dp"
+                    android:layout_marginStart="26dp"
+                    android:src="@mipmap/ic_three" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/step3_image_view"
+                    android:layout_toRightOf="@id/step3_image_view"
+                    android:text="給科別評論"
+                    android:textColor="@color/green_text"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/step3_edit_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:src="@drawable/ic_mode_edit_grey_600_24dp" />
+
+            </RelativeLayout>
+
+            <ViewSwitcher
+                android:id="@+id/step3_view_switcher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/step3_label_relative_layout"
+                android:animateLayoutChanges="true"
+                android:animationCache="true"
+                android:measureAllChildren="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/step3_comment_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:hint="歡迎您為該科別評論"
+                        android:textSize="14sp" />
+
+                    <Button
+                        android:id="@+id/step3_next_button"
+                        android:layout_width="74dp"
+                        android:layout_height="36dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/step3_comment_edit_text"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
+                        android:background="@drawable/green_gray_button"
+                        android:onClick="onStep3NextButtonClick"
+                        android:text="下一步"
+                        android:textColor="@color/mdtp_white"
+                        android:textSize="14sp" />
+
+                    <Button
+                        android:id="@+id/step3_skip_button"
+                        android:layout_width="74dp"
+                        android:layout_height="36dp"
+                        android:layout_below="@id/step3_comment_edit_text"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_toLeftOf="@id/step3_next_button"
+                        android:layout_toStartOf="@id/step3_next_button"
+                        android:background="@color/mdtp_white"
+                        android:onClick="onStep3SkipButtonClick"
+                        android:text="略過"
+                        android:textColor="@color/green_text"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/step3_comment_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray_background"
+                    android:paddingBottom="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingLeft="72dp"
+                    android:paddingRight="16dp"
+                    android:paddingStart="72dp"
+                    android:textColor="@color/black_text"
+                    android:textSize="12sp"
+                    tools:text="醫院的服務很用心，非常感謝！但是護士小姐的動作太粗魯，家裡長輩打針時，找不到血管，要找……" />
+
+            </ViewSwitcher>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/step4_relative_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp">
+
+            <RelativeLayout
+                android:id="@+id/step4_label_relative_layout"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/gray_selectable_item_background">
+
+                <ImageView
+                    android:id="@+id/step4_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginLeft="26dp"
+                    android:layout_marginRight="14dp"
+                    android:layout_marginStart="26dp"
+                    android:src="@mipmap/ic_four" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/step4_image_view"
+                    android:layout_toRightOf="@id/step4_image_view"
+                    android:text="醫師滿意度"
+                    android:textColor="@color/green_text"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/step4_edit_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:src="@drawable/ic_mode_edit_grey_600_24dp" />
+
+            </RelativeLayout>
+
+            <ViewSwitcher
+                android:id="@+id/step4_view_switcher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/step4_label_relative_layout"
+                android:animateLayoutChanges="true"
+                android:animationCache="true"
+                android:measureAllChildren="false">
+
+                <RelativeLayout
+                    android:id="@+id/step4_edit_relative_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <View
+                        android:id="@+id/step_four_divider"
+                        android:layout_width="1dp"
+                        android:layout_height="175dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginLeft="36dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_marginStart="36dp"
+                        android:background="@color/grey_divider_color" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/step_four_divider"
+                        android:layout_toRightOf="@id/step_four_divider"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/doctor_friendly_text_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="4dp"
+                                android:layout_marginRight="4dp"
+                                android:text="醫師態度"
+                                android:textSize="14sp" />
+
+                            <kosbrother.com.doctorguide.custom.CustomSlider
+                                android:id="@+id/doctor_friendly_slide"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toEndOf="@id/doctor_friendly_text_view"
+                                android:layout_toRightOf="@id/doctor_friendly_text_view" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/doctor_spe_text_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="4dp"
+                                android:layout_marginRight="4dp"
+                                android:text="醫師專業"
+                                android:textSize="14sp" />
+
+                            <kosbrother.com.doctorguide.custom.CustomSlider
+                                android:id="@+id/doctor_spe_slide"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toEndOf="@id/doctor_spe_text_view"
+                                android:layout_toRightOf="@id/doctor_spe_text_view" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginTop="18dp">
+
+                            <TextView
+                                android:id="@+id/rgroup_text_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="我想推薦此位醫生"
+                                android:textSize="14sp" />
+
+                            <RadioGroup
+                                android:id="@+id/rgroup"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toEndOf="@id/rgroup_text_view"
+                                android:layout_toRightOf="@id/rgroup_text_view"
+                                android:orientation="horizontal">
+
+                                <RadioButton
+                                    android:id="@+id/radio_recommend_yes"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:checked="true"
+                                    android:text="是" />
+
+                                <RadioButton
+                                    android:id="@+id/radio_recommend_no"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="否" />
+                            </RadioGroup>
+                        </RelativeLayout>
+
+                        <Button
+                            android:id="@+id/step4_next_button"
+                            android:layout_width="74dp"
+                            android:layout_height="36dp"
+                            android:layout_marginBottom="16dp"
+                            android:background="@drawable/green_gray_button"
+                            android:onClick="onStep4NextButtonClick"
+                            android:text="下一步"
+                            android:textColor="@color/mdtp_white"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/step4_content_linear_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray_background"
+                    android:orientation="horizontal"
+                    android:paddingBottom="16dp">
+
+                    <TextView
+                        android:id="@+id/doctor_friend_score_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="56dp"
+                        android:layout_marginLeft="72dp"
+                        android:layout_marginRight="56dp"
+                        android:layout_marginStart="72dp"
+                        android:textColor="@color/black_text"
+                        android:textSize="12sp"
+                        tools:text="醫師態度：4" />
+
+                    <TextView
+                        android:id="@+id/doctor_spe_score_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black_text"
+                        android:textSize="12sp"
+                        tools:text="醫師專業：4" />
+                </LinearLayout>
+
+            </ViewSwitcher>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/step5_relative_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp">
+
+            <RelativeLayout
+                android:id="@+id/step5_label_relative_layout"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/gray_selectable_item_background">
+
+                <ImageView
+                    android:id="@+id/step5_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginLeft="26dp"
+                    android:layout_marginRight="14dp"
+                    android:layout_marginStart="26dp"
+                    android:src="@mipmap/ic_five" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/step5_image_view"
+                    android:layout_toRightOf="@id/step5_image_view"
+                    android:text="給醫師評論"
+                    android:textColor="@color/green_text"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/step5_edit_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:src="@drawable/ic_mode_edit_grey_600_24dp" />
+
+            </RelativeLayout>
+
+            <ViewSwitcher
+                android:id="@+id/step5_view_switcher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/step5_label_relative_layout"
+                android:animateLayoutChanges="true"
+                android:animationCache="true"
+                android:measureAllChildren="false">
+
+                <RelativeLayout
+                    android:id="@+id/step5_content_relative_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/doctor_comment_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:hint="歡迎您為醫師評論"
+                        android:textSize="14sp" />
+
+                    <Button
+                        android:id="@+id/step5_next_button"
+                        android:layout_width="74dp"
+                        android:layout_height="36dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/doctor_comment_edit_text"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/green_gray_button"
+                        android:onClick="onStep5NextButtonClick"
+                        android:text="下一步"
+                        android:textColor="@color/mdtp_white"
+                        android:textSize="14sp" />
+
+                    <Button
+                        android:id="@+id/step5_skip_and_submit_button"
+                        android:layout_width="74dp"
+                        android:layout_height="36dp"
+                        android:layout_below="@id/doctor_comment_edit_text"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_toLeftOf="@+id/step5_next_button"
+                        android:layout_toStartOf="@+id/step5_next_button"
+                        android:background="@color/mdtp_white"
+                        android:onClick="onStep5SkipButtonClick"
+                        android:text="略過"
+                        android:textColor="@color/green_text"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/step5_comment_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gray_background"
+                    android:paddingBottom="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingLeft="72dp"
+                    android:paddingRight="16dp"
+                    android:paddingStart="72dp"
+                    android:textColor="@color/black_text"
+                    android:textSize="12sp"
+                    tools:text="醫院的服務很用心，非常感謝！但是護士小姐的動作太粗魯，家裡長輩打針時，找不到血管，要找……" />
+            </ViewSwitcher>
+
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/submit_frame_layout"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginBottom="4dp">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/primary_color_button"
+                android:onClick="onSubmitButtonClick"
+                android:text="送出評論"
+                android:textColor="@color/mdtp_white"
+                android:textSize="12sp" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+</ScrollView>
