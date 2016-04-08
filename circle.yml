@@ -17,7 +17,7 @@ test:
     - $ANDROID_HOME/tools/emulator -avd testAVD -no-skin -no-audio -no-window:
         background: true
         parallel: true
-    - ./gradlew assembleDebug:
+    - ./gradlew assembleRelease:
         timeout: 360
         parallel: true
   override:
