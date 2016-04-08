@@ -19,6 +19,12 @@ function getAndroidSDK {
   fi
 }
 
+function setSigningConfigs {
+    sed -i -e 's/store_password/$STORE_PASSWORD/g' ../app/build.gradle
+    sed -i -e 's/key_alias/$KEY_ALIAS/g' ../app/build.gradle
+    sed -i -e 's/key_password/$KEY_PASSWORD/g' ../app/build.gradle
+}
+
 # For Android Instrumentation test
 function waitForAVD {
   local bootanim=""
