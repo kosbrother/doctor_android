@@ -14,19 +14,10 @@ android {
         versionName "1.2"
         multiDexEnabled true
     }
-    signingConfigs {
-        release {
-            storeFile file("doctor.jks")
-            storePassword "store_password"
-            keyAlias "key_alias"
-            keyPassword "key_password"
-        }
-    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
     }
     packagingOptions {
