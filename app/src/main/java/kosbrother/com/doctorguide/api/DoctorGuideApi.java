@@ -19,7 +19,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class DoctorGuideApi {
-    final static String HOST = "http://doctorguide.tw";
+    final static String HOST = "https://doctorguide.tw";
     private final static ObjectMapper mapper = new ObjectMapper();
 
     public static ArrayList<Comment> getUserComments(String email) {
