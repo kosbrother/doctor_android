@@ -30,6 +30,7 @@ public class DoctorPresenterTest {
     public void testOnCreate() throws Exception {
         presenter.onCreate();
 
+        verify(view).buildAppIndexClient();
         verify(view).setContentView();
         verify(view).initActionBar();
         verify(view).initHeartButton();
@@ -37,6 +38,21 @@ public class DoctorPresenterTest {
 
         verify(view).showProgressDialog();
         verify(model).requestGetDoctor(presenter);
+    }
+
+    @Test
+    public void testOnStart() throws Exception {
+        presenter.onStart();
+
+        verify(view).connectAppIndexClient();
+    }
+
+    @Test
+    public void testOnStop() throws Exception {
+        presenter.onStop();
+
+        verify(view).endAppIndexApi(model.getDoctorName(), model.getWebUrl(), model.getAppUri());
+        verify(view).disConnectAppIndexClient();
     }
 
     @Test
@@ -74,6 +90,7 @@ public class DoctorPresenterTest {
         verify(view).setDoctorName(model.getDoctorName());
         verify(view).setDoctorScore(model.getDoctorScoreViewModel());
         verify(view).hideProgressDialog();
+        verify(view).startAppIndexApi(model.getDoctorName(), model.getWebUrl(), model.getAppUri());
     }
 
     @Test

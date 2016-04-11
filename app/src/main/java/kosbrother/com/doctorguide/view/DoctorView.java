@@ -1,8 +1,20 @@
 package kosbrother.com.doctorguide.view;
 
+import android.net.Uri;
+
 import kosbrother.com.doctorguide.viewmodel.DoctorScoreViewModel;
 
 public interface DoctorView extends ProgressDialogView {
+    void buildAppIndexClient();
+
+    void connectAppIndexClient();
+
+    void disConnectAppIndexClient();
+
+    void startAppIndexApi(String doctorName, Uri webUrl, Uri appUri);
+
+    void endAppIndexApi(String doctorName, Uri webUrl, Uri appUri);
+
     void setContentView();
 
     void initActionBar();

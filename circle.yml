@@ -17,7 +17,7 @@ test:
     - $ANDROID_HOME/tools/emulator -avd testAVD -no-skin -no-audio -no-window:
         background: true
         parallel: true
-    - ./gradlew assembleDebug:
+    - ./gradlew assembleRelease -Pandroid.injected.signing.store.file=app/doctor.jks -Pandroid.injected.signing.store.password=$STORE_PASSWORD -Pandroid.injected.signing.key.alias=$KEY_ALIAS -Pandroid.injected.signing.key.password=$KEY_PASSWORD:
         timeout: 360
         parallel: true
   override:
